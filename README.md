@@ -4,8 +4,9 @@ to Apache Spark. Casper works by synthesizing high level MapReduce program speci
 from raw un-annotated sequential Java source code and using the synthesized specificiations 
 to generate Apache Spark code.
 
-### Getting Started
+To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read our [paper](http://homes.cs.washington.edu/~maazsaf/synt16.pdf) or [email us](https://mailman.cs.washington.edu/mailman/listinfo/casper-users)!
 
+### Getting Started
     Dependencies:
         Java 7+                 - http://www.oracle.com/technetwork/java/javase/overview/index.html
         SKETCH                  - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
