@@ -8,6 +8,7 @@ function require-program {
     fi
 }
 
+require-program java;
 require-program nodejs;
 require-program dafny;
 require-program sketch;
