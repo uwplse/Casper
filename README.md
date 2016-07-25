@@ -8,7 +8,7 @@ to generate Apache Spark code.
 
     Dependencies:
         Java 7+                 - http://www.oracle.com/technetwork/java/javase/overview/index.html
-        SKETCH                  - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home
+        SKETCH                  - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
         Dafny                   - https://dafny.codeplex.com/
         
     To check for the necessary dependencies, you can run:
@@ -17,8 +17,7 @@ to generate Apache Spark code.
     To run the tool:
         $ ./bin/run.sh [input-file] [output-file]
 
-    To help you get started, we have added two simple benchmarks under /bin/benchmarks. In
-    some cases the synthesizer may run for a very long time or require a significant amount of
-    memory. Casper is currently under development and we are rolling out new features and bug
-    fixes frequently. If you experience any difficulties, contact us through our mailing-list
-    (https://mailman.cs.washington.edu/mailman/listinfo/casper-users).
+To help you get started, we have added two simple benchmarks under /bin/benchmarks. In
+some cases the synthesizer may run for a very long time or require a significant amount of
+memory. Casper is currently under development and we are rolling out new features and bug
+fixes frequently. If you experience any difficulties, contact us through our [mailing-list](https://mailman.cs.washington.edu/mailman/listinfo/casper-users).
