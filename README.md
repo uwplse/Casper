@@ -1,5 +1,4 @@
 # Casper
--------------------------------------------------------------------------------------------
 Casper is a compiler for automatically re-targeting sequential Java code fragments
 to Apache Spark. Casper works by synthesizing high level MapReduce program specifications
 from raw un-annotated sequential Java source code and using the synthesized specificiations 
