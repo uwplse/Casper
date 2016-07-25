@@ -17,7 +17,7 @@ to generate Apache Spark code.
     To run the tool:
         $ ./bin/run.sh [input-file] [output-file]
 
-    To help you get started. We have added two simple benchmarks under /bin/benchmarks. In
+    To help you get started, we have added two simple benchmarks under /bin/benchmarks. In
     some cases the synthesizer may run for a very long time or require a significant amount of
     memory. Casper is currently under development and we are rolling out new features and bug
     fixes frequently. If you experience any difficulties, contact us through our mailing-list
