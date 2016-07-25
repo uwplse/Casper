@@ -23,3 +23,6 @@ To help you get started, we have added two simple benchmarks under /bin/benchmar
 some cases the synthesizer may run for a very long time or require a significant amount of
 memory. Casper is currently under development and we are rolling out new features and bug
 fixes frequently. If you experience any difficulties, contact us through our [mailing-list](https://mailman.cs.washington.edu/mailman/listinfo/casper-users).
+
+### Contact
+Casper is written by [Maaz Ahmad](http://homes.cs.washington.edu/~maazsaf/) at the [University of Washington](http://www.washington.edu/).
