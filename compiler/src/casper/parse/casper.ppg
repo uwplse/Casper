@@ -1,0 +1,24 @@
+// Assumes polyglot.jar is in classpath
+include "jl7.ppg"
+
+package javatosketch.parse;
+
+import javatosketch.types.JavaTypeSystem;
+import javatosketch.ast.JavaNodeFactory;
+//import polyglot.parse.Name;
+//import polyglot.parse.VarDeclarator;
+
+parser Grm extends polyglot.ext.jl7.parse.Grm {:
+    public final JavaTypeSystem ts;
+    public final JavaNodeFactory nf;
+
+    public Grm(Lexer l, TypeSystem t, NodeFactory n, ErrorQueue q) {
+        super(l, t, n, q);
+        ts = (JavaTypeSystem) t;
+        nf = (JavaNodeFactory) n;
+    }
+:};
+
+start with goal;
+
+// TODO: modify the default Java grammar using PPG operations

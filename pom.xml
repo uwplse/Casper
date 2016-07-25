@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>Java2Sketch</groupId>
+  <artifactId>Java2Sketch</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Java2Sketch</name>
+  <description>A compiler that generates mapreduce sketch spec file for a java program</description>
+  <build>
+    <sourceDirectory>compiler/src</sourceDirectory>
+    <testSourceDirectory>tests</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>compiler/src</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>tests</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source/>
+          <target/>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
