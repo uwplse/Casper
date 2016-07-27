@@ -8,11 +8,11 @@ To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read
 
 ### Getting Started
     Dependencies:
-        Java 7+                                             - http://www.oracle.com/technetwork/java/javase/overview/index.html
-        SKETCH                                              - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
-        Dafny                                               - https://dafny.codeplex.com/
-        Nodejs (for generated code formatting, optional)    - https://nodejs.org/en/
-        
+        Java 7+                     - http://www.oracle.com/technetwork/java/javase/overview/index.html
+        SKETCH                      - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
+        Dafny                       - https://dafny.codeplex.com/
+        Nodejs*                     - https://nodejs.org/en/
+        * optional, for generated code formatting 
     To check for the necessary dependencies, you can run:
         $ ./bin/check.sh
 
