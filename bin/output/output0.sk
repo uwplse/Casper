@@ -18,5 +18,8 @@ package Output;
 /* Class encapsulating all output variables                                    */
 
 struct Output{
-	<output-variable-list>
+	bit foundKey1;
+	bit foundKey2;
+	bit foundKey3;
+	
 }

@@ -628,10 +628,10 @@ public class GenerateScaffold extends NodeVisitor{
 						generateScaffold(sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, n, var.type);
 						
 						/* Run synthesizer to generate summary */
-						runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk");
+						//runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk");
 						
 						/* Run theorem prover to verify summary */
-						verifySummary("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".dfy", n, ext, sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, var.type);
+						//verifySummary("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".dfy", n, ext, sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, var.type);
 					}
 					
 					// Increment id counter

@@ -254,7 +254,8 @@ public class MyWhileExt extends MyStmtExt {
     			}
     		}
     		
-    		return varType;
+    		String[] components = varType.split("\\.");
+    		return components[components.length-1];
     	}
     	
     	public String getOriginalType(){		

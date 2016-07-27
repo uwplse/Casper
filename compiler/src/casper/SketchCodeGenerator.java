@@ -181,10 +181,12 @@ public class SketchCodeGenerator {
 				}
 			}
 			else {
-				for(FieldDecl fdecl : ext.globalDataTypesFields.get(vartype)){
-					String fieldname = fdecl.id().toString();
-					String fieldtype = fdecl.type().toString();
-					inputInit += handleInputVarInit(fieldtype,varname+"."+fieldname,ext,argsList);
+				if(ext.globalDataTypesFields.containsKey(vartype)){
+					for(FieldDecl fdecl : ext.globalDataTypesFields.get(vartype)){
+						String fieldname = fdecl.id().toString();
+						String fieldtype = fdecl.type().toString();
+						inputInit += handleInputVarInit(fieldtype,varname+"."+fieldname,ext,argsList);
+					}
 				}
 			}
 		}

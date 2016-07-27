@@ -5,7 +5,7 @@ struct Pair{
 	int intkey;
 	int intkey2;
 	int stringkey;
-	<value-type> value;
+	bit value;
 }
 
 /* List Nodes */
@@ -13,7 +13,7 @@ struct ListNode{
 	int intkey;
 	int intkey2;
 	int stringkey;
-	<value-type> value;
+	bit value;
 	ListNode next;
 }
 
@@ -188,26 +188,26 @@ void stringlist_put(List l, Pair kvPair){
 }
 
 /* Emits */
-void int_emit(List l, int key, <value-type> value){
+void int_emit(List l, int key, bit value){
 	Pair kv = new Pair();
 	kv.intkey = key;
 	kv.value = value;
 	intlist_put(l,kv);
 }
-void int_emit_tuple(List l, int key, int key2, <value-type> value){
+void int_emit_tuple(List l, int key, int key2, bit value){
 	Pair kv = new Pair();
 	kv.intkey = key;
 	kv.intkey2 = key2;
 	kv.value = value;
 	intlist_put(l,kv);
 }
-void string_emit(List l, int key, <value-type> value){
+void string_emit(List l, int key, bit value){
 	Pair kv = new Pair();
 	kv.stringkey = key;
 	kv.value = value;
 	stringlist_put(l,kv);
 }
-void string_emit_tuple(List l, int key, int key2, <value-type> value){
+void string_emit_tuple(List l, int key, int key2, bit value){
 	Pair kv = new Pair();
 	kv.intkey = key;
 	kv.stringkey = key2;
@@ -216,45 +216,49 @@ void string_emit_tuple(List l, int key, int key2, <value-type> value){
 }
 
 /* Get functions */
-<value-type> int_get(List l, int key, <value-type> initial){
+bit int_get(List l, int key, bit initial){
 	ListNode ptr = l.handle;
 	while(ptr != null){
 		if(ptr.intkey == key){
-			<expressions>
-			return <options>;
+			bit option0 = ptr.value || initial;
+	bit option1 = ptr.value && initial;
+			return  {| option0 | option1 |};
 		}
 		ptr = ptr.next;
 	}
 	return initial;
 }
-<value-type> int_get_tuple(List l, int key, int key2, <value-type> initial){
+bit int_get_tuple(List l, int key, int key2, bit initial){
 	ListNode ptr = l.handle;
 	while(ptr != null){
 		if(ptr.intkey == key && ptr.intkey2 == key2){
-			<expressions>
-			return <options>;
+			bit option0 = ptr.value || initial;
+	bit option1 = ptr.value && initial;
+			return  {| option0 | option1 |};
 		}
 		ptr = ptr.next;
 	}
 	return initial;
 }
-<value-type> string_get(List l, int key, <value-type> initial){
+bit string_get(List l, int key, bit initial){
 	ListNode ptr = l.handle;
 	while(ptr != null){
 		if(ptr.stringkey == key){
-			<expressions>
-			return <options>;
+			bit option0 = ptr.value || initial;
+	bit option1 = ptr.value && initial;
+			return  {| option0 | option1 |};
 		}
 		ptr = ptr.next;
 	}
 	return initial;
 }
-<value-type> string_get_tuple(List l, int key, int key2, <value-type> initial){
+bit string_get_tuple(List l, int key, int key2, bit initial){
 	ListNode ptr = l.handle;
 	while(ptr != null){
 		if(ptr.intkey == key && ptr.stringkey == key2){
-			<expressions>
-			return <options>;
+			bit option0 = ptr.value || initial;
+	bit option1 = ptr.value && initial;
+			return  {| option0 | option1 |};
 		}
 		ptr = ptr.next;
 	}
