@@ -19,7 +19,7 @@ To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read
     To run the tool:
         $ ./bin/run.sh [input-file] [output-file]
 
-To help you get started, we have added two simple benchmarks under /bin/benchmarks. In
+To help you get started, check out the benchmarks under `/bin/benchmarks`. In
 some cases the synthesizer may run for a very long time or require a significant amount of
 memory. Casper is currently under development and we are rolling out new features and bug
 fixes frequently. If you experience any difficulties, contact us through our [mailing-list](https://mailman.cs.washington.edu/mailman/listinfo/casper-users).
