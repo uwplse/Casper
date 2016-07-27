@@ -3,7 +3,7 @@
 function require-program {
     echo -n "checking for $1... "
     if ! which $1; then
-        err "missing!"
+        echo "missing!"
         return 1
     fi
 }
