@@ -1,0 +1,262 @@
+package KvPairList;
+
+/* Pair structs */
+struct Pair{
+	int intkey;
+	int intkey2;
+	int stringkey;
+	<value-type> value;
+}
+
+/* List Nodes */
+struct ListNode{
+	int intkey;
+	int intkey2;
+	int stringkey;
+	<value-type> value;
+	ListNode next;
+}
+
+/* Lists */
+struct List{
+	ListNode handle;
+	int length;
+}
+
+/* Merge lists */
+void intlist_merge(List result, List kvPairs){
+	// If list is empty
+	if(result.handle == null){
+		result.handle = kvPairs.handle;
+		result.length = kvPairs.length;
+		return;
+	}
+
+	// Check all nodes except the last
+	ListNode ptr = kvPairs.handle;
+	while(ptr != null){
+		Pair kvPair= new Pair();
+		kvPair.intkey = ptr.intkey;
+		kvPair.intkey2 = ptr.intkey2;
+		kvPair.value = ptr.value;
+		intlist_put(result,kvPair);
+
+		ptr = ptr.next;
+	}
+}
+void stringlist_merge(List result, List kvPairs){
+	// If list is empty
+	if(result.handle == null){
+		result.handle = kvPairs.handle;
+		result.length = kvPairs.length;
+		return;
+	}
+
+	// Check all nodes except the last
+	ListNode ptr = kvPairs.handle;
+	while(ptr != null){
+		Pair kvPair= new Pair();
+		kvPair.intkey = ptr.intkey;
+		kvPair.stringkey = ptr.stringkey;
+		kvPair.value = ptr.value;
+		stringlist_put(result,kvPair);
+
+		ptr = ptr.next;
+	}
+}
+
+/* List inserts */
+void intlist_insert(List l, Pair kvPair){
+	ListNode ptr = l.handle;
+
+	l.handle = new ListNode();
+	l.handle.intkey = kvPair.intkey;
+	l.handle.intkey2 = kvPair.intkey2;
+	l.handle.value = kvPair.value;
+	l.handle.next = ptr;
+
+	if(ptr == null)
+		l.length = 1;
+	else
+		l.length = l.length + 1;
+}
+void stringlist_insert(List l, Pair kvPair){
+	ListNode ptr = l.handle;
+
+	l.handle = new ListNode();
+	l.handle.intkey = kvPair.intkey;
+	l.handle.stringkey = kvPair.stringkey;
+	l.handle.value = kvPair.value;
+	l.handle.next = ptr;
+
+	if(ptr == null)
+		l.length = 1;
+	else
+		l.length = l.length + 1;
+}
+
+/* List puts */
+void intlist_put(List l, Pair kvPair){
+	// If list is empty
+	if(l.handle == null){
+		l.handle = new ListNode();
+		l.handle.intkey = kvPair.intkey;
+		l.handle.intkey2 = kvPair.intkey2;
+		l.handle.value = kvPair.value;
+		l.handle.next = null;
+		l.length = 1;
+		return;
+	}
+
+	// List was not empty. Node with this key may already exist. For ease, lets
+	// insert all same key nodes together.
+
+	// Check all nodes except the last
+	ListNode ptr = l.handle;
+	while(ptr.next != null){
+		// Does key match?
+		if(ptr.intkey == kvPair.intkey && ptr.intkey2 == kvPair.intkey2){
+			// Yes, insert after this node
+			ListNode temp = ptr.next;
+			ptr.next = new ListNode();
+			ptr.next.intkey = kvPair.intkey;
+			ptr.next.intkey2 = kvPair.intkey2;
+			ptr.next.value = kvPair.value;
+			ptr.next.next = temp;
+			l.length = l.length + 1;
+			return;
+		}
+		else{
+			// No, keep checking
+			ptr = ptr.next;
+		}
+	}
+
+	// We are at last node, insert to the end of the list
+	ptr.next = new ListNode();
+	ptr.next.intkey = kvPair.intkey;
+	ptr.next.intkey2 = kvPair.intkey2;
+	ptr.next.value = kvPair.value;
+	ptr.next.next = null;
+	l.length = l.length + 1;
+	return;
+}
+void stringlist_put(List l, Pair kvPair){
+	// If list is empty
+	if(l.handle == null){
+		l.handle = new ListNode();
+		l.handle.intkey = kvPair.intkey;
+		l.handle.stringkey = kvPair.stringkey;
+		l.handle.value = kvPair.value;
+		l.handle.next = null;
+		l.length = 1;
+		return;
+	}
+
+	// List was not empty. Node with this key may already exist. For ease, lets
+	// insert all same key nodes together.
+
+	// Check all nodes except the last
+	ListNode ptr = l.handle;
+	while(ptr.next != null){
+		// Does key match?
+		if(ptr.intkey == kvPair.intkey && ptr.stringkey == kvPair.stringkey){
+			// Yes, insert after this node
+			ListNode temp = ptr.next;
+			ptr.next = new ListNode();
+			ptr.next.intkey = kvPair.intkey;
+			ptr.next.stringkey = kvPair.stringkey;
+			ptr.next.value = kvPair.value;
+			ptr.next.next = temp;
+			l.length = l.length + 1;
+			return;
+		}
+		else{
+			// No, keep checking
+			ptr = ptr.next;
+		}
+	}
+
+	// We are at last node, insert to the end of the list
+	ptr.next = new ListNode();
+	ptr.next.intkey = kvPair.intkey;
+	ptr.next.stringkey = kvPair.stringkey;
+	ptr.next.value = kvPair.value;
+	ptr.next.next = null;
+	l.length = l.length + 1;
+	return;
+}
+
+/* Emits */
+void int_emit(List l, int key, <value-type> value){
+	Pair kv = new Pair();
+	kv.intkey = key;
+	kv.value = value;
+	intlist_put(l,kv);
+}
+void int_emit_tuple(List l, int key, int key2, <value-type> value){
+	Pair kv = new Pair();
+	kv.intkey = key;
+	kv.intkey2 = key2;
+	kv.value = value;
+	intlist_put(l,kv);
+}
+void string_emit(List l, int key, <value-type> value){
+	Pair kv = new Pair();
+	kv.stringkey = key;
+	kv.value = value;
+	stringlist_put(l,kv);
+}
+void string_emit_tuple(List l, int key, int key2, <value-type> value){
+	Pair kv = new Pair();
+	kv.intkey = key;
+	kv.stringkey = key2;
+	kv.value = value;
+	stringlist_put(l,kv);
+}
+
+/* Get functions */
+<value-type> int_get(List l, int key, <value-type> initial){
+	ListNode ptr = l.handle;
+	while(ptr != null){
+		if(ptr.intkey == key){
+			<expressions>
+			return <options>;
+		}
+		ptr = ptr.next;
+	}
+	return initial;
+}
+<value-type> int_get_tuple(List l, int key, int key2, <value-type> initial){
+	ListNode ptr = l.handle;
+	while(ptr != null){
+		if(ptr.intkey == key && ptr.intkey2 == key2){
+			<expressions>
+			return <options>;
+		}
+		ptr = ptr.next;
+	}
+	return initial;
+}
+<value-type> string_get(List l, int key, <value-type> initial){
+	ListNode ptr = l.handle;
+	while(ptr != null){
+		if(ptr.stringkey == key){
+			<expressions>
+			return <options>;
+		}
+		ptr = ptr.next;
+	}
+	return initial;
+}
+<value-type> string_get_tuple(List l, int key, int key2, <value-type> initial){
+	ListNode ptr = l.handle;
+	while(ptr != null){
+		if(ptr.intkey == key && ptr.stringkey == key2){
+			<expressions>
+			return <options>;
+		}
+		ptr = ptr.next;
+	}
+	return initial;
+}

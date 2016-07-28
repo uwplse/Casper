@@ -115,7 +115,7 @@ public class MyWhileExt extends MyStmtExt {
 	public String mapKeyType;
 
 	// Save how values change in loop body
-	public Map<String,CustomASTNode> wpcValues;
+	public Map<String,CustomASTNode> wpcValues;	
 	
    	// Custom class to represent an expression.
     public class Expression{

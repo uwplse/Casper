@@ -7,12 +7,15 @@ import java.util.Map;
 import casper.JavaLibModel;
 import polyglot.ast.ArrayAccess;
 import polyglot.ast.Binary;
+import polyglot.ast.BooleanLit;
 import polyglot.ast.Call;
 import polyglot.ast.Cast;
 import polyglot.ast.Expr;
 import polyglot.ast.Field;
+import polyglot.ast.IntLit;
 import polyglot.ast.Lit;
 import polyglot.ast.Local;
+import polyglot.ast.StringLit;
 import polyglot.ast.Unary;
 
 abstract public class CustomASTNode {
@@ -58,7 +61,18 @@ abstract public class CustomASTNode {
 			node = new IdentifierNode(exp.toString());
 		}
 		else if(exp instanceof Lit){
-			node = new ConstantNode(exp.toString());
+			if(exp instanceof IntLit){
+				node = new ConstantNode(exp.toString(),ConstantNode.INTLIT);
+			}
+			else if(exp instanceof StringLit){
+				node = new ConstantNode(exp.toString(),ConstantNode.STRINGLIT);
+			}
+			else if(exp instanceof BooleanLit){
+				node = new ConstantNode(exp.toString(),ConstantNode.BOOLEANLIT);
+			}
+			else{
+				node = new ConstantNode(exp.toString(),ConstantNode.UNKNOWNLIT);
+			}
 		}
 		else if(exp instanceof Field){
 			CustomASTNode container = new IdentifierNode(((Field) exp).target().toString());
@@ -88,7 +102,7 @@ abstract public class CustomASTNode {
 					case "java.lang.Integer":
 					case "java.lang.Float":
 					case "java.lang.Double":
-						operandRight = new ConstantNode("0");
+						operandRight = new ConstantNode("0",ConstantNode.INTLIT);
 					default:
 						break;
 				}
@@ -99,7 +113,7 @@ abstract public class CustomASTNode {
 					case "Integer":
 					case "Float":
 					case "Double":
-						operandLeft = new ConstantNode("0");
+						operandLeft = new ConstantNode("0",ConstantNode.INTLIT);
 					default:
 						break;
 				}

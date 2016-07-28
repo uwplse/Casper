@@ -2,7 +2,7 @@
 /* Include necessory packages                                                 */
 
 include "output/utils.sk";
-include "output/StringMatchJava.sk";
+include "output/StringMatch.sk";
 include "output/output0.sk";
 include "output/kvpair_list_bit0.sk";
 
@@ -37,9 +37,9 @@ harness void main(bit[3] bitSet, int[4] intSet){
 	
     // Initialize input broadcast variables
     loop0 = false;
-	key1 = "key1";
-	key2 = "key2";
-	key3 = "key3";
+	key1 = 2;
+	key2 = 1;
+	key3 = 0;
 	
     // Initialize loop counters
     int i0 = 0;
@@ -49,19 +49,19 @@ harness void main(bit[3] bitSet, int[4] intSet){
 	assert loopInvariant(words,false,false,false,false,false,false);
 	if(loopInvariant(words,foundKey3,false,foundKey2,false,foundKey1,false) && (i<3)) {
 		bit ind_foundKey3 = foundKey3;
-		if(){
-			ind_foundKey3 = casper.types.ConditionalNode@4f139c27;
+		if(str_equal(key3,words[i])){
+			ind_foundKey3 = true;
 		} else {
-			ind_foundKey3 = casper.types.ConditionalNode@1070ed00;
+			ind_foundKey3 = foundKey3;
 		}
 		bit ind_foundKey2 = foundKey2;
-		if(){
-			ind_foundKey2 = casper.types.ConditionalNode@65d7a36e;
+		if(str_equal(key2,words[i])){
+			ind_foundKey2 = true;
 		} else {
-			ind_foundKey2 = casper.types.ConditionalNode@302abefe;
+			ind_foundKey2 = foundKey2;
 		}
 		bit ind_foundKey1 = foundKey1;
-		if(){
+		if(str_equal(key1,words[i])){
 			ind_foundKey1 = true;
 		} else {
 			ind_foundKey1 = foundKey1;

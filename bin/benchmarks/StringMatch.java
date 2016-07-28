@@ -1,9 +1,7 @@
-package experiments;
-
 import java.lang.String;
 import java.util.List;
 
-public class StringMatchJava {
+public class StringMatch {
 	
 	public static void main(String[] args) {
 		matchWords(null);

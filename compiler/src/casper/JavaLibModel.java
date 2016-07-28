@@ -13,6 +13,7 @@ import java.util.List;
 
 import casper.types.ArrayAccessNode;
 import casper.types.ArrayUpdateNode;
+import casper.types.CallNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
 import polyglot.ast.Call;
@@ -306,7 +307,7 @@ public class JavaLibModel {
 		    					return currVerifCondition.replaceAll(target,upd);
 		    				default:
 		    					if(debug){
-		    						System.out.println("Currently not handling Map of custom types");
+		    						System.err.println("Currently not handling Map of custom types");
 		    					}
 		    						
 		    					break;
@@ -314,12 +315,12 @@ public class JavaLibModel {
 						break;
 					default:
 						if(debug){
-							System.out.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
+							System.err.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
 				break;
-			case "java.util.List":
+			/*case "java.util.List":
 				switch(id){
 					case "get":
 						List<Expr> args = c.arguments();
@@ -327,14 +328,14 @@ public class JavaLibModel {
 						return currVerifCondition.replaceAll(target,acc);
 					default:
 						if(debug){
-							System.out.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
+							System.err.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
-				break;
+				break;*/
 			default:
 				if(debug){
-					System.out.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
+					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
 				}
 		}
 		
@@ -368,14 +369,14 @@ public class JavaLibModel {
 		    					return new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
 		    				default:
 		    					if(debug){
-		    						System.out.println("Currently not handling Map of type: " + targetSubTypes[0]);
+		    						System.err.println("Currently not handling Map of type: " + targetSubTypes[0]);
 		    					}
 		    					break;
 	    				}
 						break;
 					default:
 						if(debug){
-							System.out.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
+							System.err.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
@@ -387,14 +388,27 @@ public class JavaLibModel {
 						return new ArrayAccessNode(target+"["+args.get(0)+"]",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
 					default:
 						if(debug){
-							System.out.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
+							System.err.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
 				break;
+			case "java.lang.String":
+				switch(id){
+					case "equals":
+						ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
+						args.add(new IdentifierNode(target));
+						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+						return new CallNode("str_equal",args);
+					default:
+						if(debug){
+							System.err.println("Method " + id + " of java.lang.String not currently supported. Please extend the JavaLibModel.");
+						}
+						break;
+				}
 			default:
 				if(debug){
-					System.out.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
+					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
 				}
 		}
 		

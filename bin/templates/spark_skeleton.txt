@@ -1,0 +1,22 @@
+SparkConf conf = new SparkConf().setAppName("spark");
+JavaSparkContext sc = new JavaSparkContext(conf);
+
+<create-rdd>
+
+JavaPairRDD<<map-key-type>, <output-type>> mapEmits = <rdd-name>.flatMapToPair(new PairFlatMapFunction<<input-type>, <map-key-type>, <output-type>>() {
+	public Iterable<Tuple2<<map-key-type>, <output-type>>> call(<input-type> <input-name>) throws Exception {
+		List<Tuple2<<map-key-type>, <output-type>>> emits = new ArrayList<Tuple2<<map-key-type>, <output-type>>>();
+		
+		<map-emits>
+		
+		return emits;
+	}
+});
+
+JavaPairRDD<<map-key-type>, <output-type>> reduceEmits = mapEmits.reduceByKey(new Function2<<output-type>,<output-type>,<output-type>>(){
+	public <output-type> call(<output-type> val1, <output-type> val2) throws Exception {
+		return <reduce-exp>;
+	}
+});
+
+<reconstruct-output>

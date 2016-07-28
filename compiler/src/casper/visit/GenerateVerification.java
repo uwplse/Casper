@@ -123,7 +123,7 @@ public class GenerateVerification extends NodeVisitor {
 					
 					// And consequent or alternative does not contain a break
 					if(!casper.Util.containsBreak(cons) && !casper.Util.containsBreak(alt)){
-						// Must be the increment if, process it first
+						// Must be the increment if, process it firs
 						for(String varname : wpcValues.keySet()){
 							wpcValues.put(varname, generatePreCondition(type,((If) currStatement).consequent(),wpcValues.get(varname)));
 						}
@@ -195,27 +195,43 @@ public class GenerateVerification extends NodeVisitor {
 		addStatementsBeforeWhile(n, ext.parent,filteredStmts);
 		Stmt block = nf.Block(ext.parent.position(),filteredStmts);
 		
+		// Mapping of string literals to integers
+		Map<String,Integer> strToIntMap = new HashMap<String,Integer>();
+		int intVal = 0;
+		
 		for(Variable var : ext.inputVars){
 			CustomASTNode n1 = new IdentifierNode(var.varName);
 			CustomASTNode n2 = generatePreCondition("initValExt",block,n1);
-			if(!n1.equals(n2))
-				ext.initVals.put(var.varName.replace("$", ""),n2);
+			if(!n1.equals(n2) && n2 instanceof ConstantNode){
+				if(casper.Util.getSketchTypeFromRaw(var.varType) == "int" && ((ConstantNode)n2).type == ConstantNode.STRINGLIT){
+					if(!strToIntMap.containsKey(n2.toString())){
+						strToIntMap.put(n2.toString(), intVal);
+						intVal++;
+					}
+					ext.initVals.put(var.varName.replace("$", ""),new ConstantNode(strToIntMap.get(n2.toString()).toString(),ConstantNode.INTLIT));
+				}
+				else{
+					ext.initVals.put(var.varName.replace("$", ""),n2);
+				}
+			}
 		}
 		
 		for(Variable var : ext.outputVars){
 			if(!ext.inputVars.contains(var)){
 				CustomASTNode n1 = new IdentifierNode(var.varName);
 				CustomASTNode n2 = generatePreCondition("initValExt",block,n1);
-				if(!n1.equals(n2))
+				if(!n1.equals(n2) && n2 instanceof ConstantNode){
 					ext.initVals.put(var.varName.replace("$", ""),n2);
+				}
 			}
 		}
 		
 		for(Variable var : ext.loopCounters){
 			CustomASTNode n1 = new IdentifierNode(var.varName);
 			CustomASTNode n2 = generatePreCondition("initValExt",block,n1);
-			if(!n1.equals(n2))
+			if(!n1.equals(n2) && n2 instanceof ConstantNode){
 				ext.initVals.put(var.varName.replace("$", ""),n2);
+			}
 		}
 		
 		if(debug)

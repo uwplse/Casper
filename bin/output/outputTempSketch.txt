@@ -1,0 +1,3 @@
+SKETCH version 1.6.9
+Benchmark = output/main_bit0.sk
+Total time = 267

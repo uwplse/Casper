@@ -64,6 +64,10 @@ public class ConditionalNode extends CustomASTNode{
 		}
 		return output;
 	}
+	
+	public String toString(){
+		return "Cond: " + cond + "\n" + "Cons: " + cons + "\n" + "Alt: " + alt;
+	}
 
 	@Override
 	public void getIndexes(String arrname, Map<String, List<CustomASTNode>> indexes) {

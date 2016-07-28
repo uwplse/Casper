@@ -54,7 +54,7 @@ public class GenerateSparkCode extends NodeVisitor{
 							e.printStackTrace();
 						}
 						
-						String mapEmits = generateMapEmits(ext.mapEmits);
+						/*String mapEmits = generateMapEmits(ext.mapEmits);
 						String createRDD = generateCreateRDD(ext);
 						String inputDataType = generateInputDataType(ext);
 						String inputDataName = ext.inputDataCollections.get(0).name;
@@ -75,7 +75,7 @@ public class GenerateSparkCode extends NodeVisitor{
 						
 						n = nf.Eval(n.position(), nf.ExprFromQualifiedName(n.position(), template.substring(0,template.length()-2)));
 						
-						typeid++;
+						typeid++;*/
 					}
 				}
 				

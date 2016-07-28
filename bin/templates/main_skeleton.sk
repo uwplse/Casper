@@ -1,0 +1,162 @@
+/******************************************************************************/
+/* Include necessory packages                                                 */
+
+include "output/utils.sk";
+<include-libs>
+
+/******************************************************************************/
+/* Global Control Variables                                                   */
+int mapKeyType = ??(1);
+
+// Input variables decl
+<decl-broadcast-vars>
+/******************************************************************************/
+/* Main function to verify the two results generated are equal                */
+
+harness void main(<main-args-decl>){
+	// Initialize output variables.
+	<output-vars-initialize>
+
+	// Initialize input data and variables
+    <input-data-initialize>
+    // Initialize input broadcast variables
+    <input-vars-initialize>
+    // Initialize loop counters
+    <loop-counters-initialize>
+
+	// Verification code
+	<verif-conditions>
+}
+
+/******************************************************************************/
+/* Verification functions                                                     */
+
+bit postCondition(<post-cond-args-decl>){
+	Output resMR = collect(reduce(map(<map-args-call>)),<collect-args-call>);
+	<post-cond-body>
+}
+
+bit loopInvariant(<loop-inv-args-decl>){
+	Output resMR = collect(reduce(map(<map-args-call>)),<collect-args-call>);
+	<loop-inv-body>
+}
+
+/******************************************************************************/
+/* MapReduce Implementation                                                   */
+
+<generate-int-map>
+
+<generate-string-map>
+
+<generate-bit-map>
+
+List do_map(<domap-func-args-decl>){
+	List result = new List();
+
+	<do-map-emits>
+
+	return result;
+}
+
+<generate-reduce-exp>
+
+Pair do_reduce(ListNode values){
+	Pair p = new Pair();
+
+	if(values == null)
+		return p;
+
+	if(mapKeyType == 0){
+		p.intkey = values.intkey;
+		p.intkey2 = values.intkey2;
+	}
+	else if(mapKeyType == 1){
+		p.intkey = values.intkey;
+		p.stringkey = values.stringkey;
+	}
+
+	<do-reduce-emits>
+
+	return p;
+}
+
+// Calls do_map on each index of the collection
+// Equivelant to flatmap() in functional programming
+List map(<map-args-decl>){
+	List result = new List(handle = null);
+	
+	<map-loop-init>
+	while(<map-loop-cond>){
+		
+		List kvPairs = do_map(<domap-func-args-call>);
+		
+		if(mapKeyType == 0){
+			intlist_merge(result, kvPairs);
+		}
+		else if(mapKeyType == 1){
+			stringlist_merge(result, kvPairs);
+		}
+
+		<map-loop-increment>
+	}
+	return result;
+}
+
+// Groups kvPairs by key and calls do_reduce for each key-values pair
+// Equivelant to reduce() in functional programming
+List reduce(List kvPairs){
+	List result = new List(handle = null);
+	
+	// If map did not emit anything, we are done.
+	if(kvPairs.handle == null) return result;
+
+	// Create value arrays by grouping on keys and run reduce function for 
+	// each key
+	ListNode ptr_st = kvPairs.handle;
+	ListNode ptr_end = kvPairs.handle;
+
+	while(ptr_end.next != null){
+		if( (mapKeyType == 0 && ptr_end.next.intkey == ptr_st.intkey && ptr_end.next.intkey2 == ptr_st.intkey2) 		||
+		    (mapKeyType == 1 && ptr_end.next.intkey == ptr_st.intkey && ptr_end.next.stringkey == ptr_st.stringkey) )
+		{
+			ptr_end = ptr_end.next;
+		}
+		else{
+			// break chain
+			ListNode ptr_temp = ptr_end.next;
+			ptr_end.next = null;
+
+			// Run for this key
+			Pair kv = do_reduce(ptr_st);
+			if(mapKeyType == 0){
+				intlist_insert(result,kv);
+			}
+			else if(mapKeyType == 1){
+				stringlist_insert(result,kv);
+			}
+			
+			// Reset for next key
+			ptr_st = ptr_temp;
+			ptr_end = ptr_temp;
+		}
+	}
+
+	// Run for last key
+	Pair kv = do_reduce(ptr_st);
+	if(mapKeyType == 0){
+		intlist_insert(result,kv);
+	}
+	else if(mapKeyType == 1){
+		stringlist_insert(result,kv);
+	}
+
+	return result;
+}
+
+Output collect(List resMR,<collect-func-args-decl>){
+	Output output = new Output();
+
+	<output-reconstruction>
+
+	return output;
+}
