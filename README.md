@@ -13,6 +13,7 @@ To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read
         Dafny                       - https://dafny.codeplex.com/
         Nodejs*                     - https://nodejs.org/en/
         * optional, for generated code formatting 
+        
     To check for the necessary dependencies, you can run:
         $ ./bin/check.sh
 
