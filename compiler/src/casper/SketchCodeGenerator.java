@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import casper.JavaLibModel.SketchCall;
 import casper.extension.MyWhileExt;
 import casper.extension.MyWhileExt.Variable;
 import casper.types.ArrayUpdateNode;
@@ -381,7 +382,7 @@ public class SketchCodeGenerator {
 		return args;
 	}
 	
-	public static String generateDomapEmits(MyWhileExt ext, List<SketchVariable> sketchLoopCounters, int emitCount, String outputType) {
+	public static String generateDomapEmits(MyWhileExt ext, List<SketchVariable> sketchLoopCounters, String outputType) {
 		String emits = "";
 		
 		// Generate args for generator functions
@@ -406,7 +407,7 @@ public class SketchCodeGenerator {
 		// Include conditionals?
 		if(Configuration.useConditionals){
 			// Generate emit code
-			for(int i=0; i<emitCount; i++){
+			for(int i=0; i<Configuration.emitCount; i++){
 				emits += 	"if(condMapGenerator(input, i)){\n\t\t" +
 								"if(mapKeyType == 0){\n\t\t\t" +
 									"Pair kvp = new Pair();\n\t\t\t" +
@@ -427,7 +428,7 @@ public class SketchCodeGenerator {
 		}
 		else{
 			// Generate emit code
-			for(int i=0; i<emitCount; i++){
+			for(int i=0; i<Configuration.emitCount; i++){
 				emits += 	"if(mapKeyType == 0){\n\t\t" +
 								"Pair kvp = new Pair();\n\t\t" +
 								"kvp.intkey = intMapGenerator("+args+");\n\t\t" +
@@ -899,6 +900,32 @@ public class SketchCodeGenerator {
 					getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid);
 				}
 			}
+			for(SketchCall op : ext.methodOperators){
+				if(casper.Util.getOpClassForType(casper.Util.getSketchTypeFromRaw(op.returnType)) == casper.Util.getOpClassForType(type)){
+					String call = op.name+"(";
+					for(String argType : op.args){
+						if(casper.Util.getSketchTypeFromRaw(argType).equals(type)){
+							call += "<-expr->,";
+						}
+						else{
+							// Generate args for generator functions
+							String args = ext.inputDataCollections.get(0).name;
+							for(SketchVariable var : sketchLoopCounters){
+								args += ", " + var.name + ", ";
+							}
+							args = args.substring(0, args.length()-2);
+							if(argType.equals("java.lang.String"))
+								call += "stringMapGenerator("+args+"),";
+							else
+								call += casper.Util.getSketchTypeFromRaw(argType).toLowerCase()+"MapGenerator("+args+"),";
+						}
+						 
+					}
+					call = call.substring(0,call.length()-1) + ")";
+					String newExprString = exprString.replace("<-expr->", call);
+					getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid);
+				}
+			}
 			
 			return;
 		}
@@ -1106,8 +1133,19 @@ public class SketchCodeGenerator {
 	public static String generateDoreduceEmits(MyWhileExt ext, List<SketchVariable> sketchLoopCounters, int size, String outputType) {
 		String type = outputType.replace("["+Configuration.arraySizeBound+"]", "");
 		
+		String initOpts = "";
+		switch(type){
+		case "bit":
+			initOpts = "true | false";
+			break;
+		case "int":
+		default:
+			initOpts = "0 | 1";
+			break;
+		}
+		
 		// Generate emit code
-		String emits = 	"p.value = {| 0 | 1 |};\n\t" +
+		String emits = 	"p.value = {| " + initOpts + " |};\n\t" +
 						"while(values != null){\n\t\t" +
 							"p.value = "+type+"ReduceGenerator(p.value, values.value);\n\t\t" +
 							"values = values.next;\n\t" +
@@ -1155,7 +1193,15 @@ public class SketchCodeGenerator {
 		String type = outputType.replace("["+Configuration.arraySizeBound+"]", "");
 		
 		// Terminal options
-		String terminalOpts = "?? | val1 | val2";
+		String terminalOpts = "val1 | val2";
+		switch(outputType){
+			case "int":
+				terminalOpts += " | ??";
+				break;
+			case "bit":
+				terminalOpts += " | true | false";
+				break;
+		}
 		for(SketchVariable var : sketchInputVars){
 			if(sketchOutputVars.contains(var))
 				continue;
@@ -1202,7 +1248,8 @@ public class SketchCodeGenerator {
 			opts += "_option"+id+ " | ";
 			id++;
 		}
-		opts = opts.substring(0, opts.length()-3);
+		if(!opts.equals("")) opts = opts.substring(0, opts.length()-3);
+		else opts = "";
 		
 		// Generator code		
 		generator += "generator "+type+" "+type+"ReduceGenerator("+type+" val1, "+type+" val2){\n\t" + terminals + expressions + "return {| " + opts + " |};\n}";
@@ -1219,7 +1266,7 @@ public class SketchCodeGenerator {
 			return;
 		}
 		else{
-			exprs.add(exprString.replace("<-expr->","terminal"+depth));
+			//exprs.add(exprString.replace("<-expr->","terminal"+depth));
 			
 			for(String op : ext.binaryOperators){
 				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
@@ -1231,6 +1278,27 @@ public class SketchCodeGenerator {
 				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
 					String newExprString = exprString.replace("<-expr->", op + "(<-expr->)");
 					getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
+				}
+			}
+			for(SketchCall op : ext.methodOperators){
+				if(casper.Util.getOpClassForType(casper.Util.getSketchTypeFromRaw(op.returnType)) == casper.Util.getOpClassForType(type)){
+					String call = op.name+"(";
+					boolean ignore = false;
+					for(String argType : op.args){
+						if(casper.Util.getSketchTypeFromRaw(argType).equals(type)){
+							call += "<-expr->,";
+						}
+						else{
+							ignore = true;
+							break;
+						}
+						 
+					}
+					if(!ignore){
+						call = call.substring(0,call.length()-1) + ")";
+						String newExprString = exprString.replace("<-expr->", call);
+						getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
+					}
 				}
 			}
 			

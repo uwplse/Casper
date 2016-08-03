@@ -550,14 +550,11 @@ public class GenerateVerification extends NodeVisitor {
 		
 		// Add loop counters
 		for(Variable var : loopCounters){
-			// If desired type, add as option
-			if(casper.Util.getSketchType(var.getType()).equals(outputType) || casper.Util.getSketchType(var.getType()).equals(outputType.replace("["+Configuration.arraySizeBound+"]", ""))){
-				String varname = var.varName.replace("$", "");
-				order.add(varname);
-				order.add(varname+"0");
-			}
+			String varname = var.varName.replace("$", "");
+			order.add(varname);
+			order.add(varname+"0");
 		}
-		
+
 		return order;
 	}
 
@@ -578,12 +575,9 @@ public class GenerateVerification extends NodeVisitor {
 		
 		// Add loop counters
 		for(Variable var : loopCounters){
-			// If desired type, add as option
-			if(casper.Util.getSketchType(var.getType()).equals(outputType) || casper.Util.getSketchType(var.getType()).equals(outputType.replace("["+Configuration.arraySizeBound+"]", ""))){
-				String varname = var.varName.replace("$", "");
-				order.add(varname);
-				order.add(varname+"0");
-			}
+			String varname = var.varName.replace("$", "");
+			order.add(varname);
+			order.add(varname+"0");
 		}
 		return order;
 	}

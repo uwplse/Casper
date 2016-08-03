@@ -233,6 +233,7 @@ public class Util {
 		case "char":
 			return "char";
 		case "int":
+		case "string":
 			return "int";
 		case "float":
 		case "double":
@@ -302,5 +303,20 @@ public class Util {
 			default:
 				return 0;
 		}
+	}
+	
+	static public String join(List<String> list, String conjunction)
+	{
+	   StringBuilder sb = new StringBuilder();
+	   boolean first = true;
+	   for (String item : list)
+	   {
+	      if (first)
+	         first = false;
+	      else
+	         sb.append(conjunction);
+	      sb.append(item);
+	   }
+	   return sb.toString();
 	}
 }

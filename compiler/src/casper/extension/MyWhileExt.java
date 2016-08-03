@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import casper.JavaLibModel.SketchCall;
 import casper.types.CustomASTNode;
 import casper.visit.GenerateScaffold;
 import casper.visit.GenerateScaffold.SketchVariable;
@@ -105,6 +105,9 @@ public class MyWhileExt extends MyStmtExt {
 	// Operators found in the loop body
 	public Set<String> binaryOperators = new HashSet<String>();
 	public Set<String> unaryOperators = new HashSet<String>();
+
+	// Library functions found in the loop body
+	public Set<SketchCall> methodOperators = new HashSet<SketchCall>();
 	
 	// Map Emits
 	public List<GenerateScaffold.KvPair> mapEmits = null;
@@ -115,7 +118,7 @@ public class MyWhileExt extends MyStmtExt {
 	public String mapKeyType;
 
 	// Save how values change in loop body
-	public Map<String,CustomASTNode> wpcValues;	
+	public Map<String,CustomASTNode> wpcValues;
 	
    	// Custom class to represent an expression.
     public class Expression{
@@ -150,6 +153,7 @@ public class MyWhileExt extends MyStmtExt {
     
     // Custom class to represent a variable
     public class Variable{
+    	public String varNameOrig;
     	public String varName;
     	public String varType;
     	public String containerType;
@@ -161,6 +165,7 @@ public class MyWhileExt extends MyStmtExt {
     	public static final int CONST_ARRAY_ACCESS = 3;
     	
     	public Variable(String n, String t, String c, int cat){
+    		varNameOrig = n;
     		varName = n;
     		varType = t;
     		containerType = c;

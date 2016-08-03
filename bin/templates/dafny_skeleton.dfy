@@ -1,3 +1,9 @@
+/***************************** UTIL Functions *******************************/
+function str_equal(val1: int, val2: int) : bool
+{
+  val1 == val2
+}
+
 /***************************** DO MAP ***************************************/
 function domap (<mapper-args-decl>) : <domap-emit-type>
   <loop-counter-range-domap>
@@ -31,7 +37,7 @@ function doreduce(input: <domap-emit-type>, key: <doreduce-key-type>) : <output-
 /******************************* HARNESS ************************************/  
 
 lemma Lemma2 (a: <domap-emit-type>, b: <domap-emit-type>, key: <doreduce-key-type>)
-  ensures doreduce(a+b,key) == (doreduce(a,key) + doreduce(b,key))
+  ensures doreduce(a+b,key) == <reduce-exp-lemma>
 {
   if a != []
   {
