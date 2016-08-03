@@ -7,7 +7,10 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import casper.JavaLibModel.SketchCall;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
 import casper.extension.MyWhileExt.Variable;
@@ -54,13 +57,14 @@ public class GenerateSparkCode extends NodeVisitor{
 							e.printStackTrace();
 						}
 						
-						String mapEmits = generateMapEmits(ext.mapEmits);
+						String mapEmits = generateMapEmits(ext);
 						String createRDD = generateCreateRDD(ext);
 						String inputDataType = generateInputDataType(ext);
 						String inputDataName = ext.inputDataCollections.get(0).name;
 						String lcName = ext.loopCounters.get(0).varName;
 						String rddName = "rdd_"+typeid+"_"+id;
 						String reconOutput = generateOutputReconstruction(ext,var.varType);
+						String dupInputVars = generateDuplicateVarInit(ext);
 						
 						template = template.replace("<reconstruct-output>", reconOutput);
 						template = template.replace("<create-rdd>", createRDD);
@@ -72,6 +76,13 @@ public class GenerateSparkCode extends NodeVisitor{
 						template = template.replace("<input-type>", inputDataType);
 						template = template.replace("<input-name>", inputDataName+"_"+lcName);
 						template = template.replace(inputDataName+"["+lcName+"]", inputDataName+"_"+lcName);
+						
+						for(Variable inVar : ext.inputVars){
+							if(!ext.outputVars.contains(inVar) && inVar.category != Variable.ARRAY_ACCESS)
+								template = template.replaceAll("\\b"+inVar.varName+"\\b",inVar.varName+"_final");
+						}
+						
+						template = template.replace("<duplicate-input-vars>", dupInputVars);
 						
 						n = nf.Eval(n.position(), nf.ExprFromQualifiedName(n.position(), template.substring(0,template.length()-2)));
 						
@@ -102,6 +113,15 @@ public class GenerateSparkCode extends NodeVisitor{
 		return n;
 	}
    
+	private String generateDuplicateVarInit(MyWhileExt ext) {
+		String code = "";
+		for(Variable var : ext.inputVars){
+			if(!ext.outputVars.contains(var) && var.category != Variable.ARRAY_ACCESS)
+				code += "final " + var.varType + " " + var.varName + "_final = "+var.varNameOrig+";\n";
+		}
+		return code;
+	}
+
 	private String generateOutputReconstruction(MyWhileExt ext, String type) {
 		String code = "Map<<map-key-type>, <output-type>> output_<rdd-name> = reduceEmits.collectAsMap();\n";
 		
@@ -147,13 +167,43 @@ public class GenerateSparkCode extends NodeVisitor{
 		return code;
 	}
 
-	private String generateMapEmits(List<GenerateScaffold.KvPair> mapEmits) {
+	private String generateMapEmits(MyWhileExt ext) {
 		String emits = "";
-		for(GenerateScaffold.KvPair kvp : mapEmits){
-			if(kvp.key2 == "")
-				emits += "emits.add(new Tuple2("+kvp.key+","+kvp.value+"));";
-			else
-				emits += "emits.add(new Tuple2(new Tuple2("+kvp.key+","+kvp.key2+"), "+kvp.value+"));";
+		for(GenerateScaffold.KvPair kvp : ext.mapEmits){
+			// Fix function calls
+			for(SketchCall call : ext.methodOperators){
+				Pattern r = Pattern.compile("^("+call.name+")\\((..*)\\)$");
+				Matcher m;
+				
+				m = r.matcher(kvp.key);
+				if(m.find()){
+					System.err.println("key:" + m);
+				}
+				
+				m = r.matcher(kvp.key2);
+				if(m.find()){
+					System.err.println("key2:" + m);
+				}
+				
+				m = r.matcher(kvp.value);
+				if(m.find()){
+					if(call.target.equals("first-arg")){
+						String target = m.group(2).substring(0, m.group(2).indexOf(","));
+						String args = m.group(2).substring(m.group(2).indexOf(",")+1, m.group(2).length());
+						kvp.value = kvp.value.replace(m.group(0), target+"."+call.nameOrig+"("+args+")");
+					}
+					else{
+						String args = m.group(2);
+						kvp.value = kvp.value.replace(m.group(0), call.nameOrig+"("+args+")");
+					}
+				}
+			}
+			if(kvp.key2 == ""){
+				emits += "emits.add(new Tuple2("+kvp.key+","+kvp.value+"));\n";
+			}
+			else{
+				emits += "emits.add(new Tuple2(new Tuple2("+kvp.key+","+kvp.key2+"), "+kvp.value+"));\n";
+			}
 		}
 		return emits;
 	}
@@ -162,6 +212,8 @@ public class GenerateSparkCode extends NodeVisitor{
 		switch(varType){
 		case "int":
 			return "Integer";
+		case "boolean":
+			return "Boolean";
 		case "(int,int)":
 			return "Tuple2<Integer,Integer>";
 		case "(int,string)":

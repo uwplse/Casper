@@ -13,12 +13,12 @@ import java.util.List;
 
 import casper.types.ArrayAccessNode;
 import casper.types.ArrayUpdateNode;
+import casper.types.CallNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
 import polyglot.ast.Call;
 import polyglot.ast.Expr;
 import polyglot.ast.Node;
-import polyglot.ast.Receiver;
 
 public class JavaLibModel {
 	
@@ -27,9 +27,20 @@ public class JavaLibModel {
 	// A class used to encapsulate a function call in Sketch.
 	// SketchCall objects are used to generate sketch code.
 	public static class SketchCall{
-		public String name;
+		public String nameOrig;
 		public String target;
-		public List<Expr> args = new ArrayList<Expr>();
+		public String name;
+		public String returnType;
+		public List<String> args = new ArrayList<String>();
+		public String toString(){ return "["+returnType+", "+name+", "+args+"]"; }
+		public boolean equals(Object o){ return name.equals(((SketchCall)o).name) && returnType.equals(((SketchCall)o).returnType) && args.equals(((SketchCall)o).args); }
+		public int hashCode(){ return 0; }
+		public String resolve(String exp, List<String> argsR) {
+			if(argsR.indexOf(exp) >= args.size()){
+				return name+"("+casper.Util.join(argsR.subList(0, argsR.size()-1),",")+")";
+			}
+			return exp;
+		}
 	}
 	
 	// Extract all expressions being read by this function call
@@ -45,37 +56,51 @@ public class JavaLibModel {
 		
 		List<Node> reads = new ArrayList<Node>();
 		
-		// Add reads based on container and method name
-		// This 'knowledge' is meant to be input manually
-		if(targetType.equals("java.lang.String")){
-			if(exp.id().toString().equals("equals")){
-				reads.addAll(exp.arguments());
-				reads.add(exp.target());
-			}
-			else if(exp.id().toString().equals("split")){
-				reads.add(exp.target());
-			}
-		}
-		else if(targetType.equals("java.util.List")){
-			if(exp.id().toString().equals("size")){
-				reads.add(exp.target());
-			}
-			else if(exp.id().toString().equals("get")){
-				reads.add(exp.target());
-				reads.addAll(exp.arguments());
-			}
-			else if(exp.id().toString().equals("add")){
-				reads.addAll(exp.arguments());
-			}
-		}
-		else if(targetType.equals("java.util.Map")){
-			if(exp.id().toString().equals("get")){
-				reads.add(exp.target());
-				reads.addAll(exp.arguments());
-			}
-			else if(exp.id().toString().equals("put")){
-				reads.addAll(exp.arguments());
-			}
+		switch(targetType){
+			case "java.lang.String":
+				switch(exp.id().toString()){
+					case "equals":
+						reads.addAll(exp.arguments());
+						reads.add(exp.target());
+						break;
+					case "split":
+						reads.add(exp.target());
+						break;
+					default:
+						break;
+				}
+				break;
+			case "java.util.List":
+				switch(exp.id().toString()){
+					case "size":
+						reads.add(exp.target());
+						break;
+					case "get":
+						reads.add(exp.target());
+						reads.addAll(exp.arguments());
+						break;
+					case "add":
+						reads.addAll(exp.arguments());
+						break;
+					default:
+						break;
+				}
+				break;
+			case "java.util.Map":
+				switch(exp.id().toString()){
+					case "get":
+						reads.add(exp.target());
+						reads.addAll(exp.arguments());
+						break;
+					case "put":
+						reads.addAll(exp.arguments());
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
 		}
 		
 		return reads;
@@ -90,34 +115,43 @@ public class JavaLibModel {
 		
 		List<Node> writes = new ArrayList<Node>();
 		
-		// Add writes based on container and method name
-		// This 'knowledge' is meant to be input manually
-		if(targetType.equals("java.lang.String")){
-			if(exp.id().toString().equals("equals")){
-				return writes;
-			}
-			else if(exp.id().toString().equals("split")){
-				return writes;
-			}
-		}
-		else if(targetType.equals("java.util.List")){
-			if(exp.id().toString().equals("size")){
-				return writes;
-			}
-			else if(exp.id().toString().equals("get")){
-				return writes;
-			}
-			else if(exp.id().toString().equals("add")){
-				writes.add(exp.target());
-			}
-		}
-		else if(targetType.equals("java.util.Map")){
-			if(exp.id().toString().equals("get")){
-				return writes;
-			}
-			else if(exp.id().toString().equals("put")){
-				writes.add(exp.target());
-			}
+		switch(targetType){
+			case "java.lang.String":
+				switch(exp.id().toString()){
+					case "equals":
+						break;
+					case "split":
+						break;
+					default:
+						break;
+				}
+				break;
+			case "java.util.List":
+				switch(exp.id().toString()){
+					case "size":
+						break;
+					case "add":
+						writes.add(exp.target());
+						break;
+					case "get":
+						break;
+					default:
+						break;
+				}
+				break;
+			case "java.util.Map":
+				switch(exp.id().toString()){
+					case "get":
+						break;
+					case "put":
+						writes.add(exp.target());
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
 		}
 		
 		return writes;
@@ -131,29 +165,36 @@ public class JavaLibModel {
 		if(end != -1)
 			targetType = targetType.substring(0, end);
 		
-		if(targetType.equals("java.lang.String")){
-			if(exp.id().toString().equals("equals"))
-				return true;
-			else if(exp.id().toString().equals("split"))
-				// return true
+		switch(targetType){
+			case "java.lang.String":
+				switch(exp.id().toString()){
+					case "equals":
+						return true;
+					case "split":
+						return false;
+					default:
+						return false;
+				}
+			case "java.util.List":
+				switch(exp.id().toString()){
+					case "size":
+					case "get":
+					case "add":
+						return true;
+					default:
+						return false;
+				}
+			case "java.util.Map":
+				switch(exp.id().toString()){
+					case "get":
+					case "put":
+						return true;
+					default:
+						return false;
+				}
+			default:
 				return false;
 		}
-		else if(targetType.equals("java.util.List")){
-			if(exp.id().toString().equals("size"))
-				return true;
-			else if(exp.id().toString().equals("get"))
-				return true;
-			else if(exp.id().toString().equals("add"))
-				return true;
-		}
-		else if(targetType.equals("java.util.Map")){
-			if(exp.id().toString().equals("get"))
-				return true;
-			else if(exp.id().toString().equals("put"))
-				return true;
-		}
-		
-		return false;
 	}
 	
 	// This method will translate a Java Call expression
@@ -173,54 +214,42 @@ public class JavaLibModel {
 			templateType = translateToSketchType(templateType);
 		}
 			
-		// Translate based on container type and method
-		// name. Translation is hardcoded by the user.
-		if(targetType.equals("java.lang.String")){
-			if(exp.id().toString().equals("equals")){
-				res.name = "str_equal";
-				res.target = exp.target().toString();
-				res.args.addAll(exp.arguments());
+		switch(targetType){
+			case "java.lang.String":
+				switch(exp.id().toString()){
+					case "equals":
+						res.target = "first-arg";
+						res.name = "str_equal";
+						res.nameOrig = "equals";
+						res.args.add(targetType);
+						for(Expr arg : exp.arguments()){
+							res.args.add(arg.type().toString());
+						}
+						res.returnType = exp.type().toString();
+						return res;
+					case "split":
+						return res;
+					default:
+						return res;
+				}
+			case "java.util.List":
+				switch(exp.id().toString()){
+					case "size":
+					case "get":
+					case "add":
+					default:
+						return res;
+				}
+			case "java.util.Map":
+				switch(exp.id().toString()){
+					case "get":
+					case "put":
+					default:
+						return res;
+				}
+			default:
 				return res;
-			}
-			else if(exp.id().toString().equals("split")){
-				return res;
-			}
 		}
-		else if(targetType.equals("java.util.List")){
-			if(exp.id().toString().equals("size")){
-				res.name = templateType + "_list_size";
-				res.target = exp.target().toString();
-				return res;
-			}
-			else if(exp.id().toString().equals("get")){
-				res.name = templateType + "_list_get";
-				res.target = exp.target().toString();
-				res.args.addAll(exp.arguments());
-				return res;
-			}
-			else if(exp.id().toString().equals("add"));{
-				res.name = templateType + "_list_add";
-				res.target = exp.target().toString();
-				res.args.addAll(exp.arguments());
-				return res;
-			}
-		}
-		else if(targetType.equals("java.util.Map")){
-			if(exp.id().toString().equals("get")){
-				res.name = templateType + "_map_get";
-				res.target = exp.target().toString();
-				res.args.addAll(exp.arguments());
-				return res;
-			}
-			else if(exp.id().toString().equals("put")){
-				res.name = templateType + "_map_put";
-				res.target = exp.target().toString();
-				res.args.addAll(exp.arguments());
-				return res;
-			}
-		}
-		
-		return res;
 	}
 
 	// Currently cannot handle data structures containing non primitive types
@@ -306,7 +335,7 @@ public class JavaLibModel {
 		    					return currVerifCondition.replaceAll(target,upd);
 		    				default:
 		    					if(debug){
-		    						System.out.println("Currently not handling Map of custom types");
+		    						System.err.println("Currently not handling Map of custom types");
 		    					}
 		    						
 		    					break;
@@ -314,12 +343,12 @@ public class JavaLibModel {
 						break;
 					default:
 						if(debug){
-							System.out.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
+							System.err.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
 				break;
-			case "java.util.List":
+			/*case "java.util.List":
 				switch(id){
 					case "get":
 						List<Expr> args = c.arguments();
@@ -327,14 +356,14 @@ public class JavaLibModel {
 						return currVerifCondition.replaceAll(target,acc);
 					default:
 						if(debug){
-							System.out.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
+							System.err.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
-				break;
+				break;*/
 			default:
 				if(debug){
-					System.out.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
+					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
 				}
 		}
 		
@@ -368,14 +397,14 @@ public class JavaLibModel {
 		    					return new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
 		    				default:
 		    					if(debug){
-		    						System.out.println("Currently not handling Map of type: " + targetSubTypes[0]);
+		    						System.err.println("Currently not handling Map of type: " + targetSubTypes[0]);
 		    					}
 		    					break;
 	    				}
 						break;
 					default:
 						if(debug){
-							System.out.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
+							System.err.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
@@ -387,14 +416,27 @@ public class JavaLibModel {
 						return new ArrayAccessNode(target+"["+args.get(0)+"]",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
 					default:
 						if(debug){
-							System.out.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
+							System.err.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
 				break;
+			case "java.lang.String":
+				switch(id){
+					case "equals":
+						ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
+						args.add(new IdentifierNode(target));
+						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+						return new CallNode("str_equal",args);
+					default:
+						if(debug){
+							System.err.println("Method " + id + " of java.lang.String not currently supported. Please extend the JavaLibModel.");
+						}
+						break;
+				}
 			default:
 				if(debug){
-					System.out.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
+					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
 				}
 		}
 		

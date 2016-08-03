@@ -2,10 +2,13 @@ package casper.visit;
 
 import java.util.ArrayList;
 
+import casper.JavaLibModel;
+import casper.JavaLibModel.SketchCall;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import polyglot.ast.Binary;
+import polyglot.ast.Call;
 import polyglot.ast.If;
 import polyglot.ast.Node;
 import polyglot.ast.Unary;
@@ -52,6 +55,17 @@ public class ExtractOperators  extends NodeVisitor {
 				ext.binaryOperators.add(((Unary) n).operator().toString());
 			}
 		}
+		else if(n instanceof Call){
+			for(MyWhileExt ext : extensions){
+				if(JavaLibModel.recognizes((Call)n)){
+					SketchCall call = JavaLibModel.translate((Call)n);
+					if(call.returnType != null && !ext.methodOperators.contains(call)){
+						ext.methodOperators.add(call);
+					}
+				}
+					
+			}
+		}
 		
 		return this;
 	}
@@ -67,6 +81,7 @@ public class ExtractOperators  extends NodeVisitor {
 				if(debug){
 					System.err.println("Binary Operators:\n"+((MyWhileExt)JavaExt.ext(n)).binaryOperators.toString());
 					System.err.println("Unary Operators:\n"+((MyWhileExt)JavaExt.ext(n)).unaryOperators.toString());
+					System.err.println("Method Operators:\n"+((MyWhileExt)JavaExt.ext(n)).methodOperators.toString());
 				}
 				
 				this.extensions.remove(((MyWhileExt)JavaExt.ext(n)));

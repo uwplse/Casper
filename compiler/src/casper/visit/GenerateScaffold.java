@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 
 import casper.Configuration;
 import casper.DafnyCodeGenerator;
+import casper.JavaLibModel.SketchCall;
 import casper.SketchCodeGenerator;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
@@ -172,14 +173,13 @@ public class GenerateScaffold extends NodeVisitor{
 		String domapFuncArgsDecl = SketchCodeGenerator.generateDomapFuncArgsDecl(ext,sketchLoopCounters);
 		
 		// Generate domap function emit code
-		String domapEmits = SketchCodeGenerator.generateDomapEmits(ext,sketchLoopCounters,sketchOutputVars.size(),outputType);
+		String domapEmits = SketchCodeGenerator.generateDomapEmits(ext,sketchLoopCounters,outputType);
 		
 		// Generate int expression generator for map
 		String intMapGen = SketchCodeGenerator.generateMapGrammarInlined("int",sketchInputVars,sketchOutputVars,sketchLoopCounters,ext);
 		
 		// Generate bit expression generator for map
 		String bitMapGen = SketchCodeGenerator.generateMapGrammarInlined("bit",sketchInputVars,sketchOutputVars,sketchLoopCounters,ext);
-		if(!Configuration.useConditionals) bitMapGen = "";
 		
 		// Generate string expression generator for map
 		String stringMapGen = SketchCodeGenerator.generateMapGrammarInlined("String",sketchInputVars,sketchOutputVars,sketchLoopCounters,ext);
@@ -612,7 +612,12 @@ public class GenerateScaffold extends NodeVisitor{
 						}
 						handledTypes.add(var.type);
 						
-						System.err.println("Output type: " + var.type.replace("["+Configuration.arraySizeBound+"]", "[]"));
+						for(Variable v : ext.outputVars){
+							if(v.varName.equals(var.name)){
+								System.err.println("Output type: " + v.varType);
+								break;
+							}
+						}
 						
 						Set<SketchVariable> sketchFilteredOutputVars = new HashSet<SketchVariable>();
 						for(SketchVariable v : sketchOutputVars){
@@ -621,17 +626,27 @@ public class GenerateScaffold extends NodeVisitor{
 							}
 						}
 						
+						// Calculate number of emits
+						Configuration.emitCount = 0;
+						for(SketchVariable v : sketchOutputVars){ if(var.type.equals(v.type)) Configuration.emitCount++; }
+						
 						/* Generate Key-Value pair list */
 						generateKvListClass(n, var.type);
 						
-						/* Generate main scaffold */
-						generateScaffold(sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, n, var.type);
-						
-						/* Run synthesizer to generate summary */
-						runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk");
-						
-						/* Run theorem prover to verify summary */
-						verifySummary("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".dfy", n, ext, sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, var.type);
+						while(true){
+							/* Generate main scaffold */
+							generateScaffold(sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, n, var.type);
+							
+							/* Run synthesizer to generate summary */
+							if(runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk",var.type,ext)){
+								/* Run theorem prover to verify summary */
+								verifySummary("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".dfy", n, ext, sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, var.type);
+								break;
+							}
+							
+							// Clear data structures before next run
+							ext.inputDataCollections.clear();
+						}
 					}
 					
 					// Increment id counter
@@ -645,9 +660,9 @@ public class GenerateScaffold extends NodeVisitor{
 		return this;
 	}
 
-	private void runSynthesizer(String filename) throws IOException, InterruptedException {		
+	private boolean runSynthesizer(String filename, String type, MyWhileExt ext) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
-		Process pr = rt.exec("sketch -V 10 --bnd-inbits 2 --bnd-unroll-amnt 4 "+ filename);
+		Process pr = rt.exec("sketch -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
 
 		PrintWriter writer = new PrintWriter("output/outputTempSketch.txt", "UTF-8");
 		
@@ -660,15 +675,34 @@ public class GenerateScaffold extends NodeVisitor{
 
         int exitVal = pr.waitFor();
         
-        if(exitVal == 0)
+        if(exitVal == 0){
         	System.err.println("Summary successfully synthesized");
-        else
+        	writer.close();
+        	return true;
+        }
+        else{
         	System.err.println("Synthesizer exited with error code "+exitVal);
-        
-		writer.close();
+        	writer.close();
+        	
+        	// TODO: Add machinery for incrementally adding options (something more sophisticated / less ad hoc)
+        	
+        	switch(type){
+        	case "bit":
+        		ext.unaryOperators.add("!");
+        		ext.binaryOperators.add("&&");
+        		ext.binaryOperators.add("||");
+        		ext.binaryOperators.add("==");
+        		System.err.println("Incrementing grammar...");
+        		return false;
+    		default:
+    			System.err.println("Giving up.");
+    			// TODO: Add more cases
+    			return true; // Give up after first try - break the loop.
+        	}
+        }
 	}
 	
-	private String resolve(String exp, List<String> mapLines, int i) {
+	private String resolve(String exp, List<String> mapLines, int i, MyWhileExt ext) {
 		String[] binaryOps = {"\\+","\\-","\\*","\\/","\\%","\\&\\&","\\|\\|","\\=\\=","\\!\\=","\\>","\\>\\=","\\<","\\<\\=","\\^","\\&","\\|","\\>\\>\\>","\\>\\>","\\<\\<","instanceof"};
 		String[] unaryOps = {"!"};
 		
@@ -681,14 +715,14 @@ public class GenerateScaffold extends NodeVisitor{
 		for(String op : binaryOps){
 			if(exp.contains(op)){
 				String[] expComponents = exp.split(op);
-				return resolve(expComponents[0].trim(),mapLines,i) + " " + op + " " + resolve(expComponents[1].trim(),mapLines,i);
+				return resolve(expComponents[0].trim(),mapLines,i,ext) + " " + op + " " + resolve(expComponents[1].trim(),mapLines,i,ext);
 			}
 		}
 		// If unary expression
 		for(String op : unaryOps){
 			if(exp.contains(op)){
 				String[] expComponents = exp.split(op);
-				return op + " " + resolve(expComponents[0].trim(),mapLines,i);
+				return op + " " + resolve(expComponents[0].trim(),mapLines,i,ext);
 			}
 		}
 		// If generated variable
@@ -703,7 +737,7 @@ public class GenerateScaffold extends NodeVisitor{
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i);
+						return resolve(stmt[1].trim(),mapLines,i,ext);
 					}
 				}
 				// Function call
@@ -715,13 +749,24 @@ public class GenerateScaffold extends NodeVisitor{
 					for(String arg : m.group(2).split(",")){
 						args.add(arg.trim());
 					}
-					String argsR = "";
+					List<String> argsR = new ArrayList<String>();
 					for(String arg : args){
-						argsR += resolve(arg,mapLines,i) + ", ";
+						if(!arg.equals(exp)){
+							argsR.add(resolve(arg,mapLines,i,ext));
+						}
+						else {
+							argsR.add(exp);
+						}
 					}
-					argsR = argsR.substring(0,argsR.length()-1);
-					
-					return funcName + "(" + argsR + ")";
+					for(SketchCall op : ext.methodOperators){
+						if(funcName.equals(op.name)){
+							String expR = op.resolve(exp,argsR);
+							if(!expR.equals(exp)){
+								return expR;
+							}
+							break;
+						}
+					}
 				}
 				
 				i = i - 1;
@@ -753,13 +798,13 @@ public class GenerateScaffold extends NodeVisitor{
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i);
+						return resolve(stmt[1].trim(),mapLines,i,ext);
 					}
 					
 					r = Pattern.compile("\\b"+container+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim() + "." + field,mapLines,i);
+						return resolve(stmt[1].trim() + "." + field,mapLines,i,ext);
 					}
 				}
 				// Function call
@@ -779,7 +824,7 @@ public class GenerateScaffold extends NodeVisitor{
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i);
+						return resolve(stmt[1].trim(),mapLines,i,ext);
 					}
 				}
 				// Function call
@@ -803,19 +848,19 @@ public class GenerateScaffold extends NodeVisitor{
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i);
+						return resolve(stmt[1].trim(),mapLines,i,ext);
 					}
 					
 					r = Pattern.compile("\\b"+container+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim()+"["+index+"]",mapLines,i);
+						return resolve(stmt[1].trim()+"["+index+"]",mapLines,i,ext);
 					}
 					
 					r = Pattern.compile("\\b"+index+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(container+"["+stmt[1].trim()+"]",mapLines,i);
+						return resolve(container+"["+stmt[1].trim()+"]",mapLines,i,ext);
 					}
 				}
 				// Function call
@@ -839,19 +884,19 @@ public class GenerateScaffold extends NodeVisitor{
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i);
+						return resolve(stmt[1].trim(),mapLines,i,ext);
 					}
 					
 					r = Pattern.compile("\\b"+container+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim()+"["+index+"]",mapLines,i);
+						return resolve(stmt[1].trim()+"["+index+"]",mapLines,i,ext);
 					}
 					
 					r = Pattern.compile("\\b"+index+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(container+"["+stmt[1].trim()+"]",mapLines,i);
+						return resolve(container+"["+stmt[1].trim()+"]",mapLines,i,ext);
 					}
 				}
 				// Function call
@@ -888,6 +933,7 @@ public class GenerateScaffold extends NodeVisitor{
 		} finally {
 		    br.close();
 		}
+		text = text.replace("@KvPairList", "");
 		
 		/****** Extract candidate summary from sketch output ******/
 		
@@ -916,23 +962,24 @@ public class GenerateScaffold extends NodeVisitor{
 			String mapKey = "";
 			String mapKey2 = "";
 			String mapValue = "";
+			mapKeyType = "";
 			for(int i=0; i<mapLines.size(); i++){
-				r = Pattern.compile(kvpName + ".(.*?)key = (.*)");
+				r = Pattern.compile(kvpName + ".intkey = (.*)");
 				m = r.matcher(mapLines.get(i));
 				if(m.find()){
-					mapKey = m.group(2).trim();
-					mapKeyType = m.group(1);
-					mapKey = resolve(mapKey,mapLines,i);
+					mapKey = m.group(1).trim();
+					mapKey = resolve(mapKey,mapLines,i,ext);
+					mapKeyType = "int";
 					break;
 				}
 			}
 			for(int i=0; i<mapLines.size(); i++){
-				r = Pattern.compile(kvpName + ".(.*?)key2 = (.*)");
+				r = Pattern.compile(kvpName + ".intkey2 = (.*)");
 				m = r.matcher(mapLines.get(i));
 				if(m.find()){
-					mapKey2 = m.group(2).trim();
-					mapKeyType = "("+mapKeyType+","+m.group(1)+")";
-					mapKey2 = resolve(mapKey2,mapLines,i);
+					mapKey2 = m.group(1).trim();
+					mapKey2 = resolve(mapKey2,mapLines,i,ext);
+					mapKeyType = "("+mapKeyType+",int)";
 					break;
 				}
 			}
@@ -940,9 +987,16 @@ public class GenerateScaffold extends NodeVisitor{
 				r = Pattern.compile(kvpName + ".stringkey = (.*)");
 				m = r.matcher(mapLines.get(i));
 				if(m.find()){
-					mapKey2 = m.group(1).trim();
-					mapKeyType = "("+mapKeyType+",string)";
-					mapKey2 = resolve(mapKey2,mapLines,i);
+					if(mapKeyType.equals("")){
+						mapKey = m.group(1).trim();
+						mapKey = resolve(mapKey,mapLines,i,ext);
+						mapKeyType = "string";
+					}
+					else{
+						mapKey2 = m.group(1).trim();
+						mapKey2 = resolve(mapKey2,mapLines,i,ext);
+						mapKeyType = "("+mapKeyType+",string)";
+					}
 					break;
 				}
 			}
@@ -951,15 +1005,29 @@ public class GenerateScaffold extends NodeVisitor{
 				m = r.matcher(mapLines.get(i));
 				if(m.find()){
 					mapValue = m.group(2).trim();
-					mapValue = resolve(mapValue,mapLines,i);
+					mapValue = resolve(mapValue,mapLines,i,ext);
+					if(outputType.equals("bit")){
+						switch(mapValue){
+							case "0":
+								mapValue = "false";
+								break;
+							case "1":
+								mapValue = "true";
+								break;
+						}
+					}
 					break;
 				}
 			}
 			if(debug){
-				if(mapKey2 == "")
+				if(mapKey2.equals("")){
 					System.err.println(mapKey + ", " + mapValue);
-				else
+					System.err.println(mapKeyType);
+				}
+				else{
 					System.err.println("(" + mapKey + "," + mapKey2 + "), " + mapValue);
+					System.err.println(mapKeyType);
+				}
 			}
 		
 			mapEmits.add(new KvPair(mapKey,mapKey2,mapValue));
@@ -992,6 +1060,16 @@ public class GenerateScaffold extends NodeVisitor{
 			m = r.matcher(reduceLines.get(i));
 			if(m.find()){
 				reduceInitValue = m.group(2).trim();
+				if(outputType.equals("bit")){
+					switch(reduceInitValue){
+						case "0":
+							reduceInitValue = "false";
+							break;
+						case "1":
+							reduceInitValue = "true";
+							break;
+					}
+				}
 				break;
 			}
 		}
@@ -1001,7 +1079,17 @@ public class GenerateScaffold extends NodeVisitor{
 			m = r.matcher(aggLines.get(i));
 			if(m.find()){
 				reduceValue = m.group(2).trim();
-				reduceValue = resolve(reduceValue,aggLines,i);
+				reduceValue = resolve(reduceValue,aggLines,i,ext);
+				if(outputType.equals("bit")){
+					switch(reduceValue){
+						case "0":
+							reduceValue = "false";
+							break;
+						case "1":
+							reduceValue = "true";
+							break;
+					}
+				}
 				break;
 			}
 		}
@@ -1021,15 +1109,14 @@ public class GenerateScaffold extends NodeVisitor{
 		String initVars = DafnyCodeGenerator.generateVarInit(ext,sketchInputVars,sketchOutputVars,sketchLoopCounters);
 		
 		// Generate verification code
-		String preC = ext.preConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
+		String preC = DafnyCodeGenerator.generatePreCondition(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
 		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(((While)n).body()));
 		String loopCond = "("+sketchLoopCounters.get(0).name+"<|"+ext.inputDataCollections.get(0).name+"|)";
 		String loopCondFalse = loopCond; if(ext.condInv) loopCondFalse = "!" + loopCondFalse;
-		String invariant = ext.invariants.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
+		String invariant = DafnyCodeGenerator.generateInvariant(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
 		String lemma = invariant.replace("loopInvariant", "Lemma");
-		
-		String wpc = bodyExt.preConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
-		String postC = ext.postConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
+		String wpc = DafnyCodeGenerator.generateWPC(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters,bodyExt);
+		String postC = DafnyCodeGenerator.generatePostCondStmt(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
 		
 		// Weakest pre condition value updates
 		String wpcInits = DafnyCodeGenerator.generateWPCInits(ext.wpcValues,sketchOutputVars,sketchLoopCounters);
@@ -1045,21 +1132,21 @@ public class GenerateScaffold extends NodeVisitor{
 		verifCode += "if(" + invariant + " && " + loopCondFalse + ")\n\t{\n\t\tassert " + postC + ";\n\t}";
 		
 		// Generate args for invariant and post condition
-		String invPcArgs = DafnyCodeGenerator.generateInvPcAargs(ext,ext.postConditionArgsOrder.get(outputType),sketchOutputVars,sketchLoopCounters);
+		String invPcArgs = DafnyCodeGenerator.generateInvPcAargs(ext,ext.postConditionArgsOrder.get(outputType),sketchOutputVars,sketchLoopCounters,sketchInputVars);
 		
 		// Generate invariant
-		String loopInv = DafnyCodeGenerator.generateLoopInv(ext, outputType, sketchOutputVars, sketchLoopCounters);
+		String loopInv = DafnyCodeGenerator.generateLoopInv(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars);
 		
 		// Generate post condition
-		String postCond = DafnyCodeGenerator.generatePostCond(ext, outputType, sketchOutputVars, sketchLoopCounters);
+		String postCond = DafnyCodeGenerator.generatePostCond(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars);
 		
 		// Generate mapper function args declaration
-		String mapperArgsDecl = DafnyCodeGenerator.generateMapperArgsDecl(ext, sketchLoopCounters);
+		String mapperArgsDecl = DafnyCodeGenerator.generateMapperArgsDecl(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
 		
 		// Generate mapper function args call
-		String mapperArgsCall = DafnyCodeGenerator.generateMapperArgsCall(ext, sketchLoopCounters);
-		String mapperArgsCallInd = DafnyCodeGenerator.generateMapperArgsCallInd(ext, sketchLoopCounters);
-		String mapperArgsCallInd2 = DafnyCodeGenerator.generateMapperArgsCallInd2(ext, sketchLoopCounters);
+		String mapperArgsCall = DafnyCodeGenerator.generateMapperArgsCall(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
+		String mapperArgsCallInd = DafnyCodeGenerator.generateMapperArgsCallInd(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
+		String mapperArgsCallInd2 = DafnyCodeGenerator.generateMapperArgsCallInd2(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
 		
 		// Generate domap pre condition
 		String preCondDomap = DafnyCodeGenerator.generateDomapPreCond(ext, sketchLoopCounters);
@@ -1077,10 +1164,13 @@ public class GenerateScaffold extends NodeVisitor{
 		String doreduceKeyType = DafnyCodeGenerator.generateDoreduceKeyType(mapKeyType,mapEmits);
 		
 		// Generate reduce expression
-		String reduceExp = DafnyCodeGenerator.generateReduceExp(reduceValue);
+		String reduceExp = DafnyCodeGenerator.generateReduceExp(reduceValue,reduceInitValue);
+		
+		// Generate reduce expression for lemma
+		String reduceExpLemma = DafnyCodeGenerator.generateReduceExpLemma(reduceValue);
 		
 		// Generate lemma proof for map emits
-		String emitLemmas = DafnyCodeGenerator.generateEmitLemmas(outputType,mapEmits,mapperArgsCall,mapperArgsCallInd2);
+		String emitLemmas = DafnyCodeGenerator.generateEmitLemmas(outputType,mapEmits,mapperArgsCall,mapperArgsCallInd2,reduceValue);
 		
 		// Generate terminate condition for map recursion
 		String tCond = DafnyCodeGenerator.generateMapTerminateCondition(sketchLoopCounters);
@@ -1103,9 +1193,10 @@ public class GenerateScaffold extends NodeVisitor{
 		template = template.replace("<domap-emit-type>", domapEmitType);
 		template = template.replace("<mapper-args-call-inductive>", mapperArgsCallInd);
 		template = template.replace("<doreduce-key-type>", doreduceKeyType);
-		template = template.replace("<output-type>", outputType.replace("["+Configuration.arraySizeBound+"]",""));
+		template = template.replace("<output-type>", casper.Util.getDafnyType(outputType.replace("["+Configuration.arraySizeBound+"]","")));
 		template = template.replace("<reduce-init-value>", reduceInitValue);
 		template = template.replace("<reduce-exp>",reduceExp);
+		template = template.replace("<reduce-exp-lemma>",reduceExpLemma);
 		template = template.replace("<invariant>",invariant + " && " + loopCond);
 		template = template.replace("<wpc>",wpc);
 		template = template.replace("<mapper-args-call-inductive-2>", mapperArgsCallInd2);
