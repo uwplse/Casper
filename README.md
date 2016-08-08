@@ -20,7 +20,7 @@ To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read
     you can run:
         $ ./bin/check.sh
 
-   	You can compile the project by running ant in the project's root directory. Once compiled, 
+   	You can compile the project by running 'ant' in the project's root directory. Once compiled, 
    	you run the tool as follows:
         $ ./bin/run.sh [input-file] [output-file]
 
