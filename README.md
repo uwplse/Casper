@@ -8,17 +8,17 @@ To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read
 
 ### Getting Started
     Dependencies:
-        Java 7+                     - http://www.oracle.com/technetwork/java/javase/overview/index.html
+        JDK 7 or greater            - http://www.oracle.com/technetwork/java/javase/overview/index.html
         SKETCH                      - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
         Dafny                       - https://dafny.codeplex.com/
         ant							- http://ant.apache.org/
         Nodejs*                     - https://nodejs.org/en/
         * optional, for generated code formatting 
         
-    To check for the necessary dependencies, you can run:
+    You must set environment variables for Sketch and Dafny for Casper to run successfully. To check whether you have all the necessary dependencies installed and properly configured, you can run:
         $ ./bin/check.sh
 
-    To run the tool:
+	You can compile the project by running ant in the project's root directory. Once compiled, you run the tool as follows:
         $ ./bin/run.sh [input-file] [output-file]
 
 To help you get started, check out the benchmarks under `/bin/benchmarks`. In
