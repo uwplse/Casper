@@ -15,10 +15,13 @@ To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read
         Nodejs*                     - https://nodejs.org/en/
         * optional, for generated code formatting 
         
-    You must set environment variables for Sketch and Dafny for Casper to run successfully. To check whether you have all the necessary dependencies installed and properly configured, you can run:
+    You must set environment variables for Sketch and Dafny for Casper to run successfully. To 
+    check whether you have all the necessary dependencies installed and properly configured, 
+    you can run:
         $ ./bin/check.sh
 
-	You can compile the project by running ant in the project's root directory. Once compiled, you run the tool as follows:
+   	You can compile the project by running ant in the project's root directory. Once compiled, 
+   	you run the tool as follows:
         $ ./bin/run.sh [input-file] [output-file]
 
 To help you get started, check out the benchmarks under `/bin/benchmarks`. In
