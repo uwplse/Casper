@@ -20,11 +20,13 @@ import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import casper.extension.MyWhileExt.Variable;
+import casper.types.ArrayUpdateNode;
 import casper.types.CallNode;
 import casper.types.ConditionalNode;
 import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
+import polyglot.ast.ArrayAccess;
 import polyglot.ast.Assign;
 import polyglot.ast.Block;
 import polyglot.ast.Call;
@@ -333,8 +335,10 @@ public class GenerateVerification extends NodeVisitor {
 				Stmt currStatement = statements.get(i);
 				
 				if(debug){
+					System.err.println("---------------------------");
 					System.err.println(currVerifCondition);
 					System.err.println(currStatement);
+					System.err.println("---------------------------");
 				}
 				
 				// Get extension of statement
@@ -347,11 +351,16 @@ public class GenerateVerification extends NodeVisitor {
 						// Save post-condition
 						ext.postConditions.put(type,currVerifCondition);
 						
-						// Derive pre-condition 
-						String lhs = ((Assign)expr).left().toString();
+						// Derive pre-condition
+						Expr lhs = ((Assign)expr).left();
 						Expr rhs = ((Assign)expr).right();
 						
-						currVerifCondition = currVerifCondition.replaceAll(lhs, CustomASTNode.convertToAST(rhs));
+						if(lhs instanceof ArrayAccess){
+							currVerifCondition = currVerifCondition.replaceAll(((ArrayAccess) lhs).array().toString(), new ArrayUpdateNode(CustomASTNode.convertToAST(((ArrayAccess) lhs).array()),CustomASTNode.convertToAST(((ArrayAccess) lhs).index()),CustomASTNode.convertToAST(rhs)));
+						}
+						else {
+							currVerifCondition = currVerifCondition.replaceAll(lhs.toString(), CustomASTNode.convertToAST(rhs));
+						}
 						
 						// Save pre-condition
 						ext.preConditions.put(type,currVerifCondition);

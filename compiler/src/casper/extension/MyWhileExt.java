@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import casper.JavaLibModel.SketchCall;
 import casper.types.CustomASTNode;
 import casper.visit.GenerateScaffold;
@@ -267,6 +268,7 @@ public class MyWhileExt extends MyStmtExt {
     		String targetType = varType;
     		String templateType = varType;
     		int end = targetType.indexOf('<');
+    		
     		if(end != -1){
     			targetType = targetType.substring(0, end);
     			
@@ -274,8 +276,9 @@ public class MyWhileExt extends MyStmtExt {
     				case "java.util.List":
     				case "java.util.ArrayList":
     					templateType = templateType.substring(end+1,templateType.length()-1);
+    					String[] components = templateType.split("\\.");
     					this.category = Variable.ARRAY_ACCESS;
-    					return templateType+"[]";
+    					return components[components.length-1]+"[]";
     				case "java.util.Map":
     					templateType = templateType.substring(end+1,templateType.length()-1);
         				String[] subTypes = templateType.split(",");
@@ -295,12 +298,13 @@ public class MyWhileExt extends MyStmtExt {
 	        					return templateType + "Map";
         				}
     				default:
-    					String[] components = varType.split("\\.");
-    	        		return components[components.length-1];
+    					String[] components2 = varType.split("\\.");
+    	        		return components2[components2.length-1];
     			}
     		}
     		
-    		return varType;
+    		String[] components = varType.split("\\.");
+    		return components[components.length-1];
     	}
     	
     	// Should only be called for input data variable

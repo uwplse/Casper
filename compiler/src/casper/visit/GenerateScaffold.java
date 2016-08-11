@@ -126,11 +126,11 @@ public class GenerateScaffold extends NodeVisitor{
 		// 1. Assert loop invariant is true before the loop executes.
 		String verifCode = "assert " + preC + ";\n\t";
 		
-		// 2. Assert loop invariant is preserved if the loop continues: I ∧ loop condition is true → wp(c, I), 
+		// 2. Assert loop invariant is preserved if the loop continues: I && loop condition is true --> wp(c, I), 
 		//    where wp(c, I) is the weakest precondition of the body of the loop with I as the post-condition
 		verifCode += "if(" + invariant + " && " + loopCond + ") {\n\t\t"+wpcValuesInit+"assert " + wpc + ";\n\t}\n\t";
 		
-		// 2. Assert loop invariant implies the post condition if the loop terminates: I ∧ loop condition is false → POST
+		// 2. Assert loop invariant implies the post condition if the loop terminates: I && loop condition is false --> POST
 		verifCode += "if(" + invariant + " && " + loopCondFalse + ") {\n\t\tassert " + postC + ";\n\t}";
 	
 		// Generate post condition args
@@ -662,7 +662,7 @@ public class GenerateScaffold extends NodeVisitor{
 
 	private boolean runSynthesizer(String filename, String type, MyWhileExt ext) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
-		Process pr = rt.exec("sketch -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
+		Process pr = rt.exec("sketch --slv-seed 1 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
 
 		PrintWriter writer = new PrintWriter("output/outputTempSketch.txt", "UTF-8");
 		
@@ -1124,11 +1124,11 @@ public class GenerateScaffold extends NodeVisitor{
 		// 1. Assert loop invariant is true before the loop executes.
 		String verifCode = "assert " + preC + ";\n\n\t";
 		
-		// 2. Assert loop invariant is preserved if the loop continues: I ∧ loop condition is true → wp(c, I), 
+		// 2. Assert loop invariant is preserved if the loop continues: I && loop condition is true --> wp(c, I), 
 		//    where wp(c, I) is the weakest precondition of the body of the loop with I as the post-condition
 		verifCode += "if(" + invariant + " && " + loopCond + ")\n\t{\n\t\t" + lemma + ";\n\t\t"+wpcInits+"assert " + wpc + ";\n\t}\n\n\t";
 		
-		// 2. Assert loop invariant implies the post condition if the loop terminates: I ∧ loop condition is false → POST
+		// 2. Assert loop invariant implies the post condition if the loop terminates: I && loop condition is false --> POST
 		verifCode += "if(" + invariant + " && " + loopCondFalse + ")\n\t{\n\t\tassert " + postC + ";\n\t}";
 		
 		// Generate args for invariant and post condition

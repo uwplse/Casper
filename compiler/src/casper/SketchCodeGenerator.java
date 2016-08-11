@@ -765,7 +765,7 @@ public class SketchCodeGenerator {
 	        			if(!ext.inputDataCollections.contains(var) || true){
 		        			for(FieldDecl field : ext.globalDataTypesFields.get(globalVar)){
 		        				// Add an option for each field (of an arbitrary array index) that matches type
-		        				if(casper.Util.compatibleTypes(type,field.type().toString()) == 2){
+		        				if(casper.Util.compatibleTypes(type,field.type().toString()) == 1){
 		        					for(SketchVariable lc : sketchLoopCounters){
 		        						terminalOpts += " | " + var.varName + "["+lc.name+"]." + field.id().toString();
 		        					}

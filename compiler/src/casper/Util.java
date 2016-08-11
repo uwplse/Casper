@@ -273,7 +273,7 @@ public class Util {
 					case "long":
 					case "float":
 					case "double":
-					case "java.lang.Integer":
+					case "Integer":
 						return 1;
 					case "short[]":
 					case "byte[]":
@@ -281,7 +281,7 @@ public class Util {
 					case "long[]":
 					case "float[]":
 					case "double[]":
-					case "java.lang.Integer[]":
+					case "Integer[]":
 						return 2;
 					default:
 						return 0;
@@ -293,9 +293,9 @@ public class Util {
 				}
 			case "String":
 				switch(type2){
-					case "java.lang.String":
+					case "String":
 						return 1;
-					case "java.lang.String[]":
+					case "String[]":
 						return 2;
 					default:
 						return 0; // TODO: Implement this.

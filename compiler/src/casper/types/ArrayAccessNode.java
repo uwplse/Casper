@@ -3,8 +3,6 @@ package casper.types;
 import java.util.List;
 import java.util.Map;
 
-import polyglot.ast.Expr;
-
 public class ArrayAccessNode extends CustomASTNode{
 
 	public CustomASTNode array;
@@ -23,7 +21,7 @@ public class ArrayAccessNode extends CustomASTNode{
 		}
 		CustomASTNode newIndex = index.replaceAll(lhs, rhs);
 		CustomASTNode newArray = array.replaceAll(lhs, rhs);
-		String newName = array.toString() + "[" + index.toString() + "]";
+		String newName = newArray.toString() + "[" + newIndex.toString() + "]";
 		return new ArrayAccessNode(newName,newArray,newIndex);
 	}
 	
