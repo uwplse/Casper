@@ -6,6 +6,8 @@ to generate Apache Spark code.
 
 To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read our [paper](http://homes.cs.washington.edu/~maazsaf/synt16.pdf) or [email us](https://mailman.cs.washington.edu/mailman/listinfo/casper-users)!
 
+Casper has been implemented as an extension of [Polyglot 2.6.1](https://www.cs.cornell.edu/projects/polyglot/).
+
 ### Getting Started
     Dependencies:
         JDK 7 or greater            - http://www.oracle.com/technetwork/java/javase/overview/index.html
