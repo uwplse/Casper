@@ -1194,14 +1194,14 @@ public class SketchCodeGenerator {
 		
 		// Terminal options
 		String terminalOpts = "val1 | val2";
-		switch(outputType){
+		/*switch(outputType){
 			case "int":
 				terminalOpts += " | ??";
 				break;
 			case "bit":
 				terminalOpts += " | true | false";
 				break;
-		}
+		}*/
 		for(SketchVariable var : sketchInputVars){
 			if(sketchOutputVars.contains(var))
 				continue;

@@ -662,7 +662,7 @@ public class GenerateScaffold extends NodeVisitor{
 
 	private boolean runSynthesizer(String filename, String type, MyWhileExt ext) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
-		Process pr = rt.exec("sketch --slv-seed 1 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
+		Process pr = rt.exec("sketch --slv-seed 1 --slv-parallel --bnd-int-range 10 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
 
 		PrintWriter writer = new PrintWriter("output/outputTempSketch.txt", "UTF-8");
 		
