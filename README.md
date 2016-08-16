@@ -9,6 +9,8 @@ To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read
 Casper has been implemented as an extension of [Polyglot 2.6.1](https://www.cs.cornell.edu/projects/polyglot/).
 
 ### Getting Started
+    The most recent release version for Casper is v0.0.1.
+    
     Dependencies:
         JDK 7 or greater            - http://www.oracle.com/technetwork/java/javase/overview/index.html
         SKETCH                      - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
