@@ -17,8 +17,16 @@ Casper has been implemented as an extension of [Polyglot 2.6.1](https://www.cs.c
         Nodejs*                     - https://nodejs.org/en/
         * optional, for generated code formatting 
         
-    You must set environment variables for Sketch and Dafny for Casper to run successfully. To 
-    check whether you have all the necessary dependencies installed and properly configured, 
+    You must set environment variables for Sketch and Dafny for Casper to run successfully. To
+    allow Casper to use your sketch installation, run the following commands under your
+    sketch-frontend directory:
+        $ export PATH="$PATH:`pwd`"
+        $ export SKETCH_HOME="`pwd`/runtime"
+        
+    Similarly, to allow Casper to use your Dafny installation, run the following command:
+        $ export PATH=$PATH:/path/to/dafny
+    
+    To check whether you have all the necessary dependencies installed and properly configured, 
     you can run:
         $ ./bin/check.sh
 
