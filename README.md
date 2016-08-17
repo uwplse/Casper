@@ -34,31 +34,39 @@ to one of the stable release commits:
 
     $ git reset --hard <commit hash or release tag>
     
-### Build Casper from source code (Docker image already includes all software prerequisites)
-    Dependencies:
-        JDK 7 or greater            - http://www.oracle.com/technetwork/java/javase/overview/index.html
-        SKETCH                      - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
-        Dafny                       - https://dafny.codeplex.com/
-        ant							- http://ant.apache.org/
-        Nodejs*                     - https://nodejs.org/en/
-        * optional, for generated code formatting 
-        
-    You must set environment variables for Sketch and Dafny for Casper to run successfully. To
-    allow Casper to use your sketch installation, run the following commands under your
-    sketch-frontend directory:
-        $ export PATH="$PATH:`pwd`"
-        $ export SKETCH_HOME="`pwd`/runtime"
-        
-    Similarly, to allow Casper to use your Dafny installation, run the following command:
-        $ export PATH=$PATH:/path/to/dafny
-    
-    To check whether you have all the necessary dependencies installed and properly configured, 
-    you can run:
-        $ ./bin/check.sh
+### Build Casper from source code 
 
-   	You can compile the project by running 'ant' in the project's root directory. Once compiled, 
-   	you run the tool as follows:
-        $ ./bin/run.sh [input-file] [output-file]
+Note: You only need to do this if you are building Casper from scratch. The Docker image already includes all software prerequisites.
+
+Dependencies:
+        
+    JDK 7 or greater            - http://www.oracle.com/technetwork/java/javase/overview/index.html
+    SKETCH                      - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
+    Dafny                       - https://dafny.codeplex.com/
+    ant							- http://ant.apache.org/
+    Nodejs*                     - https://nodejs.org/en/
+    * optional, for generated code formatting 
+        
+You must set environment variables for Sketch and Dafny for Casper to run successfully. To
+allow Casper to use your sketch installation, run the following commands under your
+sketch-frontend directory:
+
+    $ export PATH="$PATH:`pwd`"
+    $ export SKETCH_HOME="`pwd`/runtime"
+        
+Similarly, to allow Casper to use your Dafny installation, run the following command:
+
+    $ export PATH=$PATH:/path/to/dafny
+    
+To check whether you have all the necessary dependencies installed and properly configured, 
+you can run:
+
+    $ ./bin/check.sh
+
+You can compile the project by running 'ant' in the project's root directory. Once compiled, 
+you run the tool as follows:
+
+    $ ./bin/run.sh [input-file] [output-file]
 
 ### Benchmarks
 To help you get started, we have added some example programs under `/bin/benchmarks`. In
