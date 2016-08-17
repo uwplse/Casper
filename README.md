@@ -40,12 +40,11 @@ Note: You only need to do this if you are building Casper from scratch. The Dock
 
 Dependencies:
         
-    JDK 7 or greater            - http://www.oracle.com/technetwork/java/javase/overview/index.html
-    SKETCH                      - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
-    Dafny                       - https://dafny.codeplex.com/
-    ant							- http://ant.apache.org/
-    Nodejs*                     - https://nodejs.org/en/
-    * optional, for generated code formatting 
+- [JDK 7 or greater](http://www.oracle.com/technetwork/java/javase/overview/index.html)
+- [SKETCH](https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home)
+- [Dafny](https://dafny.codeplex.com/)
+- [Apache ant](http://ant.apache.org/)
+- [Nodejs](https://nodejs.org/en/) (this is optional for formatting the generated code)
         
 You must set environment variables for Sketch and Dafny for Casper to run successfully. To
 allow Casper to use your sketch installation, run the following commands under your
