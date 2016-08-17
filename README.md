@@ -28,13 +28,13 @@ Once the image is downloaded, use it to run a Docker container:
 
     $ docker run -t -i maazsaf/casper-ubuntu /bin/bash
     
-Once inside the Docker container, you will find a Clone of this repository in the root directory.
+Once inside the Docker container, you will find a clone the Casper repository in the root directory.
 Pull the latest changes from git to bring the repository up to date. Optionally, you may want to reset
 to one of the stable release commits:
 
-    $ git reset --hard <FETCH_HEAD>
+    $ git reset --hard <commit hash or release tag>
     
-### Build Casper
+### Build Casper from source code (Docker image already includes all software prerequisites)
     Dependencies:
         JDK 7 or greater            - http://www.oracle.com/technetwork/java/javase/overview/index.html
         SKETCH                      - https://bitbucket.org/gatoatigrado/sketch-frontend/wiki/Home        
