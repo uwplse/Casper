@@ -28,9 +28,13 @@ Once the image is downloaded, use it to run a Docker container:
 
     $ docker run -t -i maazsaf/casper-ubuntu /bin/bash
     
-Once inside the Docker container, you will find a clone the Casper repository in the root directory.
-Pull the latest changes from git to bring the repository up to date. Optionally, you may want to reset
-to one of the stable release commits:
+Once inside the Docker container, you will find a clone of this repository in the root directory.
+Pull the latest changes from git to bring the repository up to date. Build casper using ant as follows:
+    
+    $ cd Casper/
+    $ ant
+    
+Optionally, you may want to reset to one of the stable release commits:
 
     $ git reset --hard <commit hash or release tag>
     
