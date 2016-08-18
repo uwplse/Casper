@@ -1,0 +1,248 @@
+/******************************************************************************/
+/* Include necessory packages                                                 */
+
+include "output/utils.sk";
+include "output/WordCountJava.sk";
+include "output/output0.sk";
+include "output/kvpair_list_int0.sk";
+
+
+/******************************************************************************/
+/* Global Control Variables                                                   */
+int mapKeyType = ??(1);
+
+// Input variables decl
+bit loop0;
+
+/******************************************************************************/
+/* Main function to verify the two results generated are equal                */
+
+harness void main(int[12] intSet){
+	// Initialize output variables.
+	int[4] counts0;
+	counts0[0] = intSet[11];
+	counts0[1] = intSet[10];
+	counts0[2] = intSet[9];
+	counts0[3] = intSet[8];
+	int[4] counts;
+	counts[0] = intSet[7];
+	counts[1] = intSet[6];
+	counts[2] = intSet[5];
+	counts[3] = intSet[4];
+
+	// Initialize input data and variables
+    int[3] words;
+	words[0] = intSet[3];
+	words[1] = intSet[2];
+	words[2] = intSet[1];
+	
+    // Initialize input broadcast variables
+    loop0 = false;
+	
+    // Initialize loop counters
+    int j0 = 0;
+	int j = intSet[0];
+
+	// Verification code
+	assert loopInvariant(words,counts0,counts0,0,0);
+	if(loopInvariant(words,counts,counts0,j,0) && (j<3)) {
+		int[4] ind_counts = counts;
+		if((counts[words[j]]==0)){
+			ind_counts[words[j]] = (0+1);
+		} else {
+			ind_counts[words[j]] = (counts[words[j]]+1);
+		}
+		int ind_j = j;
+		ind_j = (j+1);
+		assert loopInvariant(words,ind_counts,counts0,ind_j,0);
+	}
+	if(loopInvariant(words,counts,counts0,j,0) && !(j<3)) {
+		assert postCondition(words,counts,counts0,j,0);
+	}
+}
+
+/******************************************************************************/
+/* Verification functions                                                     */
+
+bit postCondition(int[3] words, int[4] counts, int[4] counts0, int j, int j0){
+	Output resMR = collect(reduce(map(words,j0,j)), counts0);
+	return resMR.counts == counts;
+}
+
+bit loopInvariant(int[3] words, int[4] counts, int[4] counts0, int j, int j0){
+	Output resMR = collect(reduce(map(words,j0,j)), counts0);
+	return resMR.counts == counts && 0 <= j && j <= 3;
+}
+
+/******************************************************************************/
+/* MapReduce Implementation                                                   */
+
+generator int intMapGenerator(int[3] words, int j){
+	int _terminal1 = {| ?? | j |};
+	int _terminal2 = {| ?? | j |};
+	int _option0 = _terminal1;
+	int _option1 = _terminal1 + _terminal2;
+	return {| _option0 | _option1 |};
+}
+
+generator int stringMapGenerator(int[3] words, int j){
+	int _terminal1 = {| words[j] |};
+	int _terminal2 = {| words[j] |};
+	int _option0 = _terminal1;
+	return {| _option0 |};
+}
+
+generator bit bitMapGenerator(int[3] words, int j){
+	bit _terminal1 = {| true | false |};
+	bit _terminal2 = {| true | false |};
+	bit _option0 = _terminal1;
+	bit _option1 = intMapGenerator(words, j)== intMapGenerator(words, j);
+	return {| _option0 | _option1 |};
+}
+
+List do_map(int[3] words, int j){
+	List result = new List();
+
+	if(mapKeyType == 0){
+		Pair kvp = new Pair();
+		kvp.intkey = intMapGenerator(words, j);
+		kvp.intkey2 = intMapGenerator(words, j);
+		kvp.value = intMapGenerator(words, j);
+		intlist_put(result, kvp);
+	}
+	else if(mapKeyType == 1){
+		Pair kvp = new Pair();
+		kvp.intkey = intMapGenerator(words, j);
+		kvp.stringkey = stringMapGenerator(words, j);
+		kvp.value = intMapGenerator(words, j);
+		stringlist_put(result, kvp);
+	}
+	
+
+	return result;
+}
+
+generator int intReduceGenerator(int val1, int val2){
+	int terminal1 = {| val1 | val2 |};
+	int terminal2 = {| val1 | val2 |};
+	int _option0 = terminal2 + terminal1;
+	return {| _option0 |};
+}
+
+Pair do_reduce(ListNode values){
+	Pair p = new Pair();
+
+	if(values == null)
+		return p;
+
+	if(mapKeyType == 0){
+		p.intkey = values.intkey;
+		p.intkey2 = values.intkey2;
+	}
+	else if(mapKeyType == 1){
+		p.intkey = values.intkey;
+		p.stringkey = values.stringkey;
+	}
+
+	p.value = {| 0 | 1 |};
+	while(values != null){
+		p.value = intReduceGenerator(p.value, values.value);
+		values = values.next;
+	}
+
+	return p;
+}
+
+// Calls do_map on each index of the collection
+// Equivelant to flatmap() in functional programming
+List map(int[3] words, int j0, int j){
+	List result = new List(handle = null);
+	
+	int _j = j0;
+	
+	while((_j<j) && (_j<3)){
+		
+		List kvPairs = do_map(words, _j);
+		
+		if(mapKeyType == 0){
+			intlist_merge(result, kvPairs);
+		}
+		else if(mapKeyType == 1){
+			stringlist_merge(result, kvPairs);
+		}
+
+		_j = (_j+1);
+	
+	}
+	return result;
+}
+
+// Groups kvPairs by key and calls do_reduce for each key-values pair
+// Equivelant to reduce() in functional programming
+List reduce(List kvPairs){
+	List result = new List(handle = null);
+	
+	// If map did not emit anything, we are done.
+	if(kvPairs.handle == null) return result;
+
+	// Create value arrays by grouping on keys and run reduce function for 
+	// each key
+	ListNode ptr_st = kvPairs.handle;
+	ListNode ptr_end = kvPairs.handle;
+
+	while(ptr_end.next != null){
+		if( (mapKeyType == 0 && ptr_end.next.intkey == ptr_st.intkey && ptr_end.next.intkey2 == ptr_st.intkey2) 		||
+		    (mapKeyType == 1 && ptr_end.next.intkey == ptr_st.intkey && ptr_end.next.stringkey == ptr_st.stringkey) )
+		{
+			ptr_end = ptr_end.next;
+		}
+		else{
+			// break chain
+			ListNode ptr_temp = ptr_end.next;
+			ptr_end.next = null;
+
+			// Run for this key
+			Pair kv = do_reduce(ptr_st);
+			if(mapKeyType == 0){
+				intlist_insert(result,kv);
+			}
+			else if(mapKeyType == 1){
+				stringlist_insert(result,kv);
+			}
+			
+			// Reset for next key
+			ptr_st = ptr_temp;
+			ptr_end = ptr_temp;
+		}
+	}
+
+	// Run for last key
+	Pair kv = do_reduce(ptr_st);
+	if(mapKeyType == 0){
+		intlist_insert(result,kv);
+	}
+	else if(mapKeyType == 1){
+		stringlist_insert(result,kv);
+	}
+
+	return result;
+}
+
+Output collect(List resMR, int[4] counts0){
+	Output output = new Output();
+
+	if(mapKeyType == 0){
+		output.counts[0] = int_get_tuple(resMR,0,0,counts0[0]);
+		output.counts[1] = int_get_tuple(resMR,0,1,counts0[1]);
+		output.counts[2] = int_get_tuple(resMR,0,2,counts0[2]);
+		output.counts[3] = int_get_tuple(resMR,0,3,counts0[3]);
+	}
+	else if(mapKeyType == 1){
+		output.counts[0] = string_get_tuple(resMR,0,0,counts0[0]);
+		output.counts[1] = string_get_tuple(resMR,0,1,counts0[1]);
+		output.counts[2] = string_get_tuple(resMR,0,2,counts0[2]);
+		output.counts[3] = string_get_tuple(resMR,0,3,counts0[3]);
+	}
+
+	return output;
+}

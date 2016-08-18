@@ -890,8 +890,35 @@ public class SketchCodeGenerator {
 			
 			for(String op : ext.binaryOperators){
 				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
-					String newExprString = exprString.replace("<-expr->", "_terminal" + terminalid + " " + op + " <-expr->");
-					getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid+1);
+					if(type.equals("bit")){
+						if(casper.Util.operandType(op) == casper.Util.BIT_ONLY){
+							String newExprString = exprString.replace("<-expr->", "_terminal" + terminalid + " " + op + " <-expr->");
+							getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid+1);
+						}
+						else if(casper.Util.operandType(op) == casper.Util.INT_ONLY){
+							String args = ext.inputDataCollections.get(0).name;
+							for(SketchVariable var : sketchLoopCounters){
+								args += ", " + var.name + ", ";
+							}
+							args = args.substring(0, args.length()-2);
+							exprs.add(exprString.replace("<-expr->", "intMapGenerator("+args+")" + op + " intMapGenerator("+args+")"));
+						}
+						else if(casper.Util.operandType(op) == casper.Util.ALL_TYPES){
+							String args = ext.inputDataCollections.get(0).name;
+							for(SketchVariable var : sketchLoopCounters){
+								args += ", " + var.name + ", ";
+							}
+							args = args.substring(0, args.length()-2);
+							exprs.add(exprString.replace("<-expr->", "intMapGenerator("+args+")" + op + " intMapGenerator("+args+")"));
+							exprs.add(exprString.replace("<-expr->", "stringMapGenerator("+args+")" + op + " stringMapGenerator("+args+")"));
+							String newExprString = exprString.replace("<-expr->", "_terminal" + terminalid + " " + op + " <-expr->");
+							getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid+1);
+						}
+					}
+					else{
+						String newExprString = exprString.replace("<-expr->", "_terminal" + terminalid + " " + op + " <-expr->");
+						getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid+1);
+					}
 				}
 			}
 			for(String op : ext.unaryOperators){
@@ -1274,10 +1301,12 @@ public class SketchCodeGenerator {
 					getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
 				}
 			}
-			for(String op : ext.unaryOperators){
-				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
-					String newExprString = exprString.replace("<-expr->", op + "(<-expr->)");
-					getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
+			if(depth != 2){
+				for(String op : ext.unaryOperators){
+					if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
+						String newExprString = exprString.replace("<-expr->", op + "(<-expr->)");
+						getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
+					}
 				}
 			}
 			for(SketchCall op : ext.methodOperators){

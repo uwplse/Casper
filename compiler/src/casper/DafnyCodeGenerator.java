@@ -288,12 +288,12 @@ public class DafnyCodeGenerator {
 		if(type.contains("["+Configuration.arraySizeBound+"]")){
 			for(GenerateScaffold.KvPair kvp : mapEmits){
 				if(kvp.key2 == ""){
-					code += "assert doreduce(domap("+mapperArgsCall+"),"+kvp.key+") == "+kvp.value+";\n\t";
+					code += "assert doreduce(domap("+mapperArgsCall+"),"+kvp.key+") == ("+kvp.value+");\n\t";
 					code += "Lemma2(domap("+mapperArgsCall+"),mapper("+mapperArgsCall+"),"+kvp.key+");\n\t";
 				}
 				else{
-					code += "assert doreduce(domap("+mapperArgsCall+"),("+kvp.key+","+kvp.key2+")) == "+kvp.value+";\n\t";
-					code += "assert doreduce(domap("+mapperArgsCall+"),("+kvp.key+","+kvp.key2+")) == "+kvp.value+";\n\t";
+					code += "assert doreduce(domap("+mapperArgsCall+"),("+kvp.key+","+kvp.key2+")) == ("+kvp.value+");\n\t";
+					code += "assert doreduce(domap("+mapperArgsCall+"),("+kvp.key+","+kvp.key2+")) == ("+kvp.value+");\n\t";
 				}
 				
 				//code += "assert forall k :: (0 <= k < |" + var.name  + "| && k != " + indexes.get(var.name).get(0) + ") ==> " + var.name + "[k] == doreduce(mapper("+mapperArgsCallInd2+"),k);\n\t";
@@ -305,9 +305,9 @@ public class DafnyCodeGenerator {
 				String exp = reduceValue;
 				exp = exp.replace("val2", "doreduce(domap("+mapperArgsCall+"),"+kvp.key+")");
 				exp = exp.replace("val1", "doreduce(mapper("+mapperArgsCall+"),"+kvp.key+")");
-				code += "assert doreduce(domap("+mapperArgsCall+"),"+kvp.key+") == "+kvp.value+";\n\t";
+				code += "assert doreduce(domap("+mapperArgsCall+"),"+kvp.key+") == ("+kvp.value+");\n\t";
 				code += "Lemma2(domap("+mapperArgsCall+"),mapper("+mapperArgsCall+"),"+kvp.key+");\n\t";
-				code += "assert doreduce(mapper("+mapperArgsCallInd2+"),"+kvp.key+") == "+exp+";\n\n\t";
+				code += "assert doreduce(mapper("+mapperArgsCallInd2+"),"+kvp.key+") == ("+exp+");\n\n\t";
 			}
 		}
 		

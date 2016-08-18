@@ -1,0 +1,23 @@
+/******************************************************************************/
+/* Declare package                                                            */
+
+package Output;
+
+
+/******************************************************************************/
+/* Include necessory packages                                                 */
+
+//<include-libs>
+
+
+/*
+<insert-output-variable-comment>
+*/
+
+/******************************************************************************/
+/* Class encapsulating all output variables                                    */
+
+struct Output{
+	bit equal;
+	
+}

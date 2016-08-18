@@ -226,6 +226,31 @@ public class Util {
 		}
 	}
 	
+	public static final int INT_ONLY = 1;
+	public static final int BIT_ONLY = 2;
+	public static final int ALL_TYPES = 3;
+	
+	public static int operandType(String op) {
+		switch(op){
+		case "&&":
+		case "||":
+		case "!":
+			return BIT_ONLY;
+		case "<":
+		case ">":
+		case "<=":
+		case ">=":
+		case "&":
+		case "^":
+		case "|":
+		case "==":
+		case "!=":
+			return INT_ONLY;
+		default:
+			return ALL_TYPES;
+		}
+	}
+	
 	public static String getDafnyType(String original){
 		switch(original){
 		case "bit":

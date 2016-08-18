@@ -1,0 +1,4 @@
+Dafny program verifier version 1.9.7.30401, Copyright (c) 2003-2016, Microsoft.
+
+Dafny program verifier finished with 12 verified, 0 errors
+Compiled assembly into main_bit0.dll

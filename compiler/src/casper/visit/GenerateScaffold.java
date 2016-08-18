@@ -10,6 +10,7 @@ package casper.visit;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -282,77 +283,6 @@ public class GenerateScaffold extends NodeVisitor{
 			writer.print(text);
 			writer.close();
 		}
-	}
-	*/
-
-	/*
-	// Generate code that defines the input class
-	public void generateInputClass(Node n, Set<SketchVariable> sketchInputVars) throws Exception{
-		// Create input class file
-		PrintWriter writer = new PrintWriter("output/input"+id+".sk", "UTF-8");
-		
-		// Read template
-		String text = new String(Files.readAllBytes(Paths.get("templates/input_skeleton.sk")), StandardCharsets.UTF_8);
-		
-		// Modify template
-		MyWhileExt ext = (MyWhileExt)JavaExt.ext(n);
-		String varList = "";
-		String includeList = "";
-		for(Variable var : ext.inputVars){
-			var.varName = var.varName.replace("$", "");
-			switch(var.getType()){
-				case "boolean":
-				case "char":
-				case "short":
-				case "byte":
-				case "int":
-				case "long":
-				case "float":
-				case "double":
-				case "String":
-					varList += javatosketch.Util.getSketchType(var.getType()) + " " + var.varName + ";\n\t";
-					sketchInputVars.add(new SketchVariable(var.varName,javatosketch.Util.getSketchType(var.getType())));
-					break;
-				case "boolean[]":
-				case "char[]":
-				case "short[]":
-				case "byte[]":
-				case "int[]":
-				case "long[]":
-				case "float[]":
-				case "double[]":
-				case "String[]":
-					varList += javatosketch.Util.getSketchType(var.getType()) + " " + var.varName + ";\n\t";
-					// includeList += "include \""+ getSketchType(var.varType) +".sk\";\n";
-					sketchInputVars.add(new SketchVariable(var.varName,javatosketch.Util.getSketchType(var.getType())));
-					break;
-				default:
-					if(var.category == Variable.VAR){
-						varList += var.getType() + " " + var.varName + ";\n\t";
-						includeList += "include \"" + var.getType() + ".sk\";\n";
-						sketchInputVars.add(new SketchVariable(var.varName,var.getType()));
-					}
-					else if(var.category == Variable.FIELD_ACCESS){
-						varList += var.getType() + " " + var.varName + ";\n\t";
-						includeList += "include \"" + var.getType() + ".sk\";\n";
-						sketchInputVars.add(new SketchVariable(var.varName,var.getType()));
-					}
-					else if(var.category == Variable.ARRAY_ACCESS){
-						// varList += var.getType().replace("[]", "") + "Array " + var.varName + ";\n\t";
-						varList += var.getType().replace("[]", "["+Configuration.arraySizeBound+"]") + " " + var.varName + ";\n\t";
-						// includeList += "include \"" + var.getType().replace("[]", "") + "Array.sk\";\n";
-						includeList += "include \"" + var.getType().replace("[]", "") + ".sk\";\n";
-						sketchInputVars.add(new SketchVariable(var.varName, var.getType().replace("[]", "["+Configuration.arraySizeBound+"]")));
-						// arrays.add(var.getType().replace("[]", ""));
-					}
-					break;
-			}
-		}
-		text = text.replace("<insert-input-variable-comment>", ext.inputVars.toString());
-		text = text.replace("<input-variable-list>", varList);
-		text = text.replace("<include-libs>",includeList);
-		writer.print(text);
-		writer.close();
 	}
 	*/
 
@@ -659,19 +589,51 @@ public class GenerateScaffold extends NodeVisitor{
 		
 		return this;
 	}
+	
+	public class ReadStream implements Runnable {
+	    String name;
+	    InputStream is;
+	    Thread thread;      
+	    PrintWriter writer;
+	    
+	    public ReadStream(String name, InputStream is, PrintWriter writer) {
+	        this.name = name;
+	        this.is = is;
+	        this.writer = writer;
+	    }       
+	    public void start () {
+	        thread = new Thread (this);
+	        thread.start ();
+	    }       
+	    public void run () {
+	        try {
+	            InputStreamReader isr = new InputStreamReader (is);
+	            BufferedReader br = new BufferedReader (isr);   
+	            while (true) {
+	                String s = br.readLine ();
+	                if (s == null) break;
+	                if (name.equals("stdin"))
+	                	writer.print(s+"\n");
+	            }
+	            is.close ();    
+	        } catch (Exception ex) {
+	            System.out.println ("Problem reading stream " + name + "... :" + ex);
+	            ex.printStackTrace ();
+	        }
+	    }
+	}
 
 	private boolean runSynthesizer(String filename, String type, MyWhileExt ext) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
-		Process pr = rt.exec("sketch --slv-seed 1 --slv-parallel --bnd-int-range 10 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
+		
+		Process pr = rt.exec("sketch --slv-seed 1 --slv-parallel --bnd-int-range 20 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
 
 		PrintWriter writer = new PrintWriter("output/outputTempSketch.txt", "UTF-8");
 		
-		BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-			 
-        String line=null;
-        while((line=input.readLine()) != null) {
-        	writer.print(line+"\n");
-        }
+		ReadStream instream = new ReadStream("stdin", pr.getInputStream(),writer);
+		ReadStream errstream = new ReadStream("stderr", pr.getErrorStream(),null);
+		instream.start();
+		errstream.start();
 
         int exitVal = pr.waitFor();
         
@@ -712,9 +674,10 @@ public class GenerateScaffold extends NodeVisitor{
 		}
 		
 		// If binary expression
-		for(String op : binaryOps){
+		for(String op_esc : binaryOps){
+			String op = op_esc.replace("\\", "");
 			if(exp.contains(op)){
-				String[] expComponents = exp.split(op);
+				String[] expComponents = exp.split(op_esc);
 				return resolve(expComponents[0].trim(),mapLines,i,ext) + " " + op + " " + resolve(expComponents[1].trim(),mapLines,i,ext);
 			}
 		}

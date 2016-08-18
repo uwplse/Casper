@@ -1,0 +1,1269 @@
+SKETCH version 1.6.9
+Benchmark = output/main_bit0.sk
+[SATBackend] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[SATBackend] MAX LOOP UNROLLING = 3
+[SATBackend] MAX FUNC INLINING  = 5
+[SATBackend] After prog.accept(partialEval)
+[SATBackend] OFILE = null
+[SATBackend] OFILE = null
+[SATBackend] OFILE = null
+searching for file null
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/cegis/src/SketchSolver/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/cegis
+searching for file cegis/src/SketchSolver/cegis
+searching for file ../sketch-backend/src/SketchSolver/cegis
+searching for file ../sketch-backend/bindings/cegis
+searching for file null
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/cegis/src/SketchSolver/cegis
+searching for file /home/Maaz/.sketch/cegis-1.6.9
+searching for file /home/Maaz/.sketch/cegis
+searching for file /opt/apache-maven-3.0.5/bin/cegis
+searching for file /opt/apache-maven-3.0.5/bin/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/bindings/cegis
+searching for file /usr/lib64/qt-3.3/bin/cegis
+searching for file /usr/lib64/qt-3.3/bin/src/SketchSolver/cegis
+searching for file /usr/lib64/qt-3.3/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/lib64/qt-3.3/bin/../sketch-backend/bindings/cegis
+searching for file /opt/apache-maven-3.0.5/bin/cegis
+searching for file /opt/apache-maven-3.0.5/bin/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/bindings/cegis
+searching for file /usr/local/bin/cegis
+searching for file /usr/local/bin/src/SketchSolver/cegis
+searching for file /usr/local/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/local/bin/../sketch-backend/bindings/cegis
+searching for file /usr/bin/cegis
+searching for file /usr/bin/src/SketchSolver/cegis
+searching for file /usr/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/bin/../sketch-backend/bindings/cegis
+searching for file /bin/cegis
+searching for file /bin/src/SketchSolver/cegis
+searching for file /bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /bin/../sketch-backend/bindings/cegis
+searching for file /usr/local/sbin/cegis
+searching for file /usr/local/sbin/src/SketchSolver/cegis
+searching for file /usr/local/sbin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/local/sbin/../sketch-backend/bindings/cegis
+searching for file /usr/sbin/cegis
+searching for file /usr/sbin/src/SketchSolver/cegis
+searching for file /usr/sbin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/sbin/../sketch-backend/bindings/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/src/SketchSolver/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/../sketch-backend/src/SketchSolver/cegis
+resolved cegis to path /home/Maaz/Downloads/sketch-1.6.9/sketch-backend/src/SketchSolver/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/cegis
+searching for file cegis/src/SketchSolver/cegis
+searching for file ../sketch-backend/src/SketchSolver/cegis
+searching for file ../sketch-backend/bindings/cegis
+searching for file /home/Maaz/.sketch/cegis-1.6.9
+searching for file /home/Maaz/.sketch/cegis
+searching for file /opt/apache-maven-3.0.5/bin/cegis
+searching for file /opt/apache-maven-3.0.5/bin/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/bindings/cegis
+searching for file /usr/lib64/qt-3.3/bin/cegis
+searching for file /usr/lib64/qt-3.3/bin/src/SketchSolver/cegis
+searching for file /usr/lib64/qt-3.3/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/lib64/qt-3.3/bin/../sketch-backend/bindings/cegis
+searching for file /opt/apache-maven-3.0.5/bin/cegis
+searching for file /opt/apache-maven-3.0.5/bin/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/bindings/cegis
+searching for file /usr/local/bin/cegis
+searching for file /usr/local/bin/src/SketchSolver/cegis
+searching for file /usr/local/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/local/bin/../sketch-backend/bindings/cegis
+searching for file /usr/bin/cegis
+searching for file /usr/bin/src/SketchSolver/cegis
+searching for file /usr/bin/../sketch-backend/src/SketchSolver/cegis
+[SATBackend] Launching: /home/Maaz/Downloads/sketch-1.6.9/sketch-backend/src/SketchSolver/cegis --bnd-inbits 2 --boundmode CALLNAME --verbosity 10 --print-version -simiters 4 --assumebcheck --bnd-inline-amnt 5 --bndwrand 20 --seed 1 -o /home/Maaz/.sketch/tmp/main_bit0.sk/solution0-0 /home/Maaz/.sketch/tmp/main_bit0.sk/input0.tmp 
+searching for file null
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/cegis/src/SketchSolver/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/cegis
+searching for file cegis/src/SketchSolver/cegis
+searching for file ../sketch-backend/src/SketchSolver/cegis
+searching for file ../sketch-backend/bindings/cegis
+searching for file /home/Maaz/.sketch/cegis-1.6.9
+searching for file /usr/bin/../sketch-backend/bindings/cegis
+searching for file /home/Maaz/.sketch/cegis
+searching for file /opt/apache-maven-3.0.5/bin/cegis
+searching for file /opt/apache-maven-3.0.5/bin/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/bindings/cegis
+searching for file /usr/lib64/qt-3.3/bin/cegis
+searching for file /usr/lib64/qt-3.3/bin/src/SketchSolver/cegis
+searching for file /usr/lib64/qt-3.3/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/lib64/qt-3.3/bin/../sketch-backend/bindings/cegis
+searching for file /opt/apache-maven-3.0.5/bin/cegis
+searching for file /bin/cegis
+searching for file /bin/src/SketchSolver/cegis
+searching for file /bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /bin/../sketch-backend/bindings/cegis
+searching for file /usr/local/sbin/cegis
+searching for file /usr/local/sbin/src/SketchSolver/cegis
+searching for file /usr/local/sbin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/local/sbin/../sketch-backend/bindings/cegis
+searching for file /usr/sbin/cegis
+searching for file /usr/sbin/src/SketchSolver/cegis
+searching for file /usr/sbin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/sbin/../sketch-backend/bindings/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/src/SketchSolver/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/../sketch-backend/src/SketchSolver/cegis
+resolved cegis to path /home/Maaz/Downloads/sketch-1.6.9/sketch-backend/src/SketchSolver/cegis
+[SATBackend] Launching: /home/Maaz/Downloads/sketch-1.6.9/sketch-backend/src/SketchSolver/cegis --bnd-inbits 2 --boundmode CALLNAME --verbosity 10 --print-version -simiters 4 --assumebcheck --bnd-inline-amnt 5 --bndwrand 20 --seed 3 -o /home/Maaz/.sketch/tmp/main_bit0.sk/solution0-2 /home/Maaz/.sketch/tmp/main_bit0.sk/input0.tmp 
+searching for file /opt/apache-maven-3.0.5/bin/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /opt/apache-maven-3.0.5/bin/../sketch-backend/bindings/cegis
+searching for file /usr/local/bin/cegis
+searching for file /usr/local/bin/src/SketchSolver/cegis
+searching for file /usr/local/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/local/bin/../sketch-backend/bindings/cegis
+searching for file /usr/bin/cegis
+searching for file /usr/bin/src/SketchSolver/cegis
+searching for file /usr/bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/bin/../sketch-backend/bindings/cegis
+searching for file /bin/cegis
+searching for file /bin/src/SketchSolver/cegis
+searching for file /bin/../sketch-backend/src/SketchSolver/cegis
+searching for file /bin/../sketch-backend/bindings/cegis
+searching for file /usr/local/sbin/cegis
+searching for file /usr/local/sbin/src/SketchSolver/cegis
+searching for file /usr/local/sbin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/local/sbin/../sketch-backend/bindings/cegis
+searching for file /usr/sbin/cegis
+searching for file /usr/sbin/src/SketchSolver/cegis
+searching for file /usr/sbin/../sketch-backend/src/SketchSolver/cegis
+searching for file /usr/sbin/../sketch-backend/bindings/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/src/SketchSolver/cegis
+searching for file /home/Maaz/Downloads/sketch-1.6.9/sketch-frontend/../sketch-backend/src/SketchSolver/cegis
+resolved cegis to path /home/Maaz/Downloads/sketch-1.6.9/sketch-backend/src/SketchSolver/cegis
+[SATBackend] Launching: /home/Maaz/Downloads/sketch-1.6.9/sketch-backend/src/SketchSolver/cegis --bnd-inbits 2 --boundmode CALLNAME --verbosity 10 --print-version -simiters 4 --assumebcheck --bnd-inline-amnt 5 --bndwrand 20 --seed 2 -o /home/Maaz/.sketch/tmp/main_bit0.sk/solution0-1 /home/Maaz/.sketch/tmp/main_bit0.sk/input0.tmp 
+[SATBackend] Stats for last run:
+      [solution stats]
+      successful? ---------------------> true
+      elapsed time (s) ----------------> 2.232
+      model building time (s) ---------> 0.043
+      solution time (s) ---------------> 2.147
+      max memory usage (MiB) ----------> 187.28906
+      [SAT-specific solution stats]
+      initial number of nodes ---------> 10
+      number of nodes after opts ------> 11604
+      number of controls --------------> 49
+      total number of control bits ----> 146
+
+[SATBackend] Solver exit value: 0
+[SATBackend] === parallel trial (0) start ===
+Overriding inputs with 2
+boundmode = CALLNAME
+assuming  bounds checks
+BND W RAND = 20
+SOLVER RAND SEED = 1
+ optimization level = 6
+Reading SKETCH Program in File /home/Maaz/.sketch/tmp/main_bit0.sk/input0.tmp
+CREATING main__Wrapper_ANONYMOUS
+size = 10
+after ba size = 10
+CREATING main__WrapperNospec_ANONYMOUS
+size = 6
+after ba size = 6
+CREATING main_ANONYMOUS
+size = 202
+after ba size = 202
+CREATING loopInvariant_ANONYMOUS
+size = 82
+after ba size = 82
+CREATING postCondition_ANONYMOUS
+size = 74
+after ba size = 74
+CREATING map_ANONYMOUS
+size = 331
+after ba size = 331
+CREATING reduce_ANONYMOUS
+size = 509
+after ba size = 509
+CREATING collect_ANONYMOUS
+size = 39
+after ba size = 39
+CREATING do_map_ANONYMOUS
+size = 456
+after ba size = 456
+CREATING intlist_merge_KvPairList
+size = 188
+after ba size = 188
+CREATING stringlist_merge_KvPairList
+size = 188
+after ba size = 188
+CREATING do_reduce_ANONYMOUS
+size = 156
+after ba size = 156
+CREATING intlist_insert_KvPairList
+size = 85
+after ba size = 85
+CREATING stringlist_insert_KvPairList
+size = 85
+after ba size = 85
+CREATING int_get_KvPairList
+size = 98
+after ba size = 98
+CREATING string_get_KvPairList
+size = 98
+after ba size = 98
+CREATING intlist_put_KvPairList
+size = 310
+after ba size = 310
+CREATING stringlist_put_KvPairList
+size = 310
+after ba size = 310
+End of File
+* before  EVERYTHING: main__WrapperNospec_ANONYMOUS::SPEC nodes = 6	 main__Wrapper_ANONYMOUS::SKETCH nodes = 10
+ INBITS = 2
+ CBITS  = 5
+ input_ints = 5 	 input_bits = 1
+ Inlining amount = 5
+ Inlining functions in the sketch.
+inlined 1 new size =134
+inlined 5 new size =277
+inlined 15 new size =3020
+inlined 94 new size =7502
+inlined 72 new size =12670
+inlined 0 new size =11814
+END OF STEP 0
+ Inlining functions in the spec.
+inlined 0 new size =6
+END OF STEP 0
+Bailing out
+after Creating Miter: Problem nodes = 11604
+* Final Problem size: Problem nodes = 11604
+  # OF CONTROLS:    49
+ control_ints = 41 	 control_bits = 8
+inputSize = 11	ctrlSize = 146
+Random seeds = 1
+!+ 00000001000000001011010000000000000001000000100100000110001000101000001000000100011011000011110100000000000001110100001010000000000100000001101000
+!+ H__8_21:0
+H__9_21:0
+H__7_22:0
+H__8_22_17:1
+H__9_22_17:0
+H__8_22_18:0
+H__9_22_18:0
+H__8_22_19:2
+H__9_22_19:2
+H__8_22_20:1
+H__9_22_20:1
+H__7_25:0
+H__8_25_17:0
+H__9_25_17:0
+H__8_25_18:0
+H__9_25_18:0
+H__8_25_19:0
+H__9_25_19:2
+H__8_25_20:0
+H__9_25_20:0
+H__0:0
+H__1_21:18
+H__11_27:0
+H__12_27:0
+H__13_27:2
+H__4:1
+H__5_22:0
+H__1_22_18:4
+H__1_22_17:10
+H__6_22:0
+H__1_22_20:8
+H__1_22_19:0
+H__5_25:1
+H__1_25_18:24
+H__1_25_17:6
+H__6_25:0
+H__1_25_20:30
+H__1_25_19:2
+H__10:0
+H__3:0
+H__2_21:0
+H__2_22_17:24
+H__2_22_18:5
+H__2_22_19:20
+H__2_22_20:0
+H__2_25_17:0
+H__2_25_18:1
+H__2_25_19:24
+H__2_25_20:2
+
+BEG CHECK
+ * After optims it became = 5288 was 11604
+Simulation found a cex by random testing:  3.797 ms 
+END CHECK
+********  0	ftime= 0	ctime= 18.293
+!% 10000011011
+!% bitSet_5_21_idx_0_0:1
+intSet_6_22_idx_0_0:0
+intSet_6_22_idx_1_0:0
+intSet_6_22_idx_2_0:2
+intSet_6_22_idx_3_0:1
+intSet_6_22_idx_4_0:3
+
+BEG FIND
+Level 1  intsize = 2
+ * After optims it became = 854 was 11604
+ * After all optims it became = 823
+ finder  hits = 85	 bstoreObjs=1956	 sstorePages=2
+hitcount 	0	1872	0
+hitcount 	1	83	0
+hitcount 	2	1	1
+bucketsPerDepth 	0	298
+bucketsPerDepth 	1	432
+bucketsPerDepth 	2	165
+bucketsPerDepth 	3	32
+bucketsPerDepth 	4	2
+* TIME TO ADD INPUT :  16.589 ms 
+f# %assign: 17 clauses: 5258 learn: 105 restart: 2 decision: 5399 propagated: 16216
+END FIND
+!+ 10001010100100110010010100101011100000010000100000100110100100000110000110101110101001000000011100010000000011000000000010000100100000011000100011
+!+ H__8_21:1
+H__9_21:0
+H__7_22:5
+H__8_22_17:2
+H__9_22_17:0
+H__8_22_18:1
+H__9_22_18:2
+H__8_22_19:1
+H__9_22_19:2
+H__8_22_20:0
+H__9_22_20:1
+H__7_25:1
+H__8_25_17:1
+H__9_25_17:1
+H__8_25_18:3
+H__9_25_18:1
+H__8_25_19:0
+H__9_25_19:0
+H__8_25_20:2
+H__9_25_20:0
+H__0:0
+H__1_21:2
+H__11_27:0
+H__12_27:1
+H__13_27:2
+H__4:1
+H__5_22:0
+H__1_22_18:9
+H__1_22_17:16
+H__6_22:1
+H__1_22_20:16
+H__1_22_19:21
+H__5_25:1
+H__1_25_18:21
+H__1_25_17:4
+H__6_25:0
+H__1_25_20:16
+H__1_25_19:3
+H__10:1
+H__3:0
+H__2_21:0
+H__2_22_17:12
+H__2_22_18:0
+H__2_22_19:16
+H__2_22_20:16
+H__2_25_17:4
+H__2_25_18:16
+H__2_25_19:17
+H__2_25_20:24
+
+BEG CHECK
+ * After optims it became = 4892 was 11604
+Simulation found a cex by random testing:  8.428 ms 
+END CHECK
+********  1	ftime= 18.57	ctime= 26.858
+!% 10011110000
+!% bitSet_5_21_idx_0_0:1
+intSet_6_22_idx_0_0:0
+intSet_6_22_idx_1_0:3
+intSet_6_22_idx_2_0:3
+intSet_6_22_idx_3_0:0
+intSet_6_22_idx_4_0:0
+
+BEG FIND
+Level 1  intsize = 2
+ * After optims it became = 854 was 11604
+ * After all optims it became = 823
+ finder  hits = 1664	 bstoreObjs=2007	 sstorePages=2
+hitcount 	0	388	0
+hitcount 	1	1586	0
+hitcount 	2	21	1
+hitcount 	3	12	1
+bucketsPerDepth 	0	280
+bucketsPerDepth 	1	439
+bucketsPerDepth 	2	178
+bucketsPerDepth 	3	32
+bucketsPerDepth 	4	3
+* TIME TO ADD INPUT :  22.931 ms 
+f# %assign: 16 clauses: 5821 learn: 112 restart: 3 decision: 5609 propagated: 18310
+END FIND
+!+ 10101000100100100100000010100111000001000100001000100010000100001010000110000010110101101000011000000000000010000001000010000110100000010000100011
+!+ H__8_21:1
+H__9_21:1
+H__7_22:1
+H__8_22_17:2
+H__9_22_17:0
+H__8_22_18:1
+H__9_22_18:2
+H__8_22_19:0
+H__9_22_19:1
+H__8_22_20:0
+H__9_22_20:0
+H__7_25:2
+H__8_25_17:1
+H__9_25_17:2
+H__8_25_18:3
+H__9_25_18:0
+H__8_25_19:0
+H__9_25_19:2
+H__8_25_20:0
+H__9_25_20:2
+H__0:0
+H__1_21:8
+H__11_27:0
+H__12_27:1
+H__13_27:0
+H__4:1
+H__5_22:0
+H__1_22_18:8
+H__1_22_17:8
+H__6_22:1
+H__1_22_20:16
+H__1_22_19:1
+H__5_25:0
+H__1_25_18:13
+H__1_25_17:13
+H__6_25:1
+H__1_25_20:16
+H__1_25_19:1
+H__10:0
+H__3:0
+H__2_21:0
+H__2_22_17:4
+H__2_22_18:16
+H__2_22_19:16
+H__2_22_20:16
+H__2_25_17:5
+H__2_25_18:16
+H__2_25_19:16
+H__2_25_20:24
+
+BEG CHECK
+ * After optims it became = 5400 was 11604
+Simulation found a cex by random testing:  7.146 ms 
+END CHECK
+********  2	ftime= 23.566	ctime= 21.584
+!% 11000010000
+!% bitSet_5_21_idx_0_0:1
+intSet_6_22_idx_0_0:1
+intSet_6_22_idx_1_0:0
+intSet_6_22_idx_2_0:2
+intSet_6_22_idx_3_0:0
+intSet_6_22_idx_4_0:0
+
+BEG FIND
+Level 1  intsize = 2
+ * After optims it became = 3489 was 11604
+ * After all optims it became = 3460
+ finder  hits = 3643	 bstoreObjs=1707	 sstorePages=2
+hitcount 	1	147	0
+hitcount 	2	1250	0
+hitcount 	3	298	0
+hitcount 	8	10	0
+hitcount 	11	2	0
+bucketsPerDepth 	0	326
+bucketsPerDepth 	1	489
+bucketsPerDepth 	2	65
+* TIME TO ADD INPUT :  18.608 ms 
+f# %assign: 19 clauses: 6716 learn: 271 restart: 5 decision: 7798 propagated: 33407
+END FIND
+!+ 00000010100000110101101000000110000000110000000001100010100000001010000110100100001001100000011100000000000011000001000010000100100000011000100011
+!+ H__8_21:0
+H__9_21:0
+H__7_22:4
+H__8_22_17:2
+H__9_22_17:0
+H__8_22_18:0
+H__9_22_18:2
+H__8_22_19:1
+H__9_22_19:1
+H__8_22_20:3
+H__9_22_20:2
+H__7_25:0
+H__8_25_17:0
+H__9_25_17:2
+H__8_25_18:1
+H__9_25_18:0
+H__8_25_19:0
+H__9_25_19:0
+H__8_25_20:3
+H__9_25_20:0
+H__0:0
+H__1_21:0
+H__11_27:2
+H__12_27:1
+H__13_27:0
+H__4:1
+H__5_22:0
+H__1_22_18:1
+H__1_22_17:8
+H__6_22:1
+H__1_22_20:16
+H__1_22_19:5
+H__5_25:1
+H__1_25_18:16
+H__1_25_17:12
+H__6_25:0
+H__1_25_20:16
+H__1_25_19:3
+H__10:0
+H__3:0
+H__2_21:0
+H__2_22_17:12
+H__2_22_18:16
+H__2_22_19:16
+H__2_22_20:16
+H__2_25_17:4
+H__2_25_18:16
+H__2_25_19:17
+H__2_25_20:24
+
+BEG CHECK
+ * After optims it became = 2398 was 11604
+Simulation found a cex by random testing:  1.634 ms 
+END CHECK
+********  3	ftime= 21.097	ctime= 13.69
+!% 10000000001
+!% bitSet_5_21_idx_0_0:1
+intSet_6_22_idx_0_0:0
+intSet_6_22_idx_1_0:0
+intSet_6_22_idx_2_0:0
+intSet_6_22_idx_3_0:0
+intSet_6_22_idx_4_0:2
+
+BEG FIND
+Level 1  intsize = 2
+ * After optims it became = 855 was 11604
+ * After all optims it became = 824
+ finder  hits = 5125	 bstoreObjs=1766	 sstorePages=2
+hitcount 	0	27	1
+hitcount 	1	147	0
+hitcount 	2	128	0
+hitcount 	3	1188	0
+hitcount 	4	264	0
+hitcount 	8	10	0
+hitcount 	11	2	0
+bucketsPerDepth 	0	306
+bucketsPerDepth 	1	496
+bucketsPerDepth 	2	83
+* TIME TO ADD INPUT :  18.431 ms 
+f# %assign: 20 clauses: 6937 learn: 309 restart: 6 decision: 8830 propagated: 43413
+END FIND
+!+ 00000010100000010010101000100000111000110000000001100011001000000100001000100110000001010000010010100000000011000001000010000100100000011000100011
+!+ H__8_21:0
+H__9_21:0
+H__7_22:4
+H__8_22_17:2
+H__9_22_17:0
+H__8_22_18:0
+H__9_22_18:0
+H__8_22_19:1
+H__9_22_19:2
+H__8_22_20:2
+H__9_22_20:2
+H__7_25:0
+H__8_25_17:1
+H__9_25_17:0
+H__8_25_18:0
+H__9_25_18:3
+H__8_25_19:1
+H__9_25_19:0
+H__8_25_20:3
+H__9_25_20:0
+H__0:0
+H__1_21:0
+H__11_27:2
+H__12_27:1
+H__13_27:0
+H__4:1
+H__5_22:1
+H__1_22_18:4
+H__1_22_17:16
+H__6_22:0
+H__1_22_20:8
+H__1_22_19:4
+H__5_25:1
+H__1_25_18:1
+H__1_25_17:20
+H__6_25:0
+H__1_25_20:16
+H__1_25_19:20
+H__10:0
+H__3:0
+H__2_21:0
+H__2_22_17:12
+H__2_22_18:16
+H__2_22_19:16
+H__2_22_20:16
+H__2_25_17:4
+H__2_25_18:16
+H__2_25_19:17
+H__2_25_20:24
+
+BEG CHECK
+ * After optims it became = 2398 was 11604
+ TESTING HYPOTHESIS ITER 1
+dagmain__WrapperNospec_ANONYMOUS{
+0= (4)
+1= (0)
+intSet_6_22_idx_0_0
+3= (0) < intSet_6_22_idx_0_0 
+4= (-1)
+5= [3]$(-1), (0), $
+6= 5 == (-1) 
+7= (3)
+8= (-1){(3)->5}
+9= [6]$(0), 8, $
+10= (2)
+11= 8{(2)->5}
+12= [3]$9, 11, $
+13= 12[(4)]
+14= 3 | 6 
+15= (-1){(-1)->(0)}
+16= 15{(0)->(-1)}
+17= [3]$16, (-1), $
+18= [14]$(0), 17, $
+19= 18[13]
+20= (0)
+21= 19 == (0) 
+22= ASSERT 21 : 
+}
+SLICE SIZE = 23
+c# %assign: 12 clauses: 12 learn: 0 restart: 0 decision: 0 propagated: 1
+ FOUND CONST: 27= 26[13] = 0
+ reduced size from 2398 to 2387
+Simulation found a cex by random testing:  4.854 ms 
+END CHECK
+********  4	ftime= 20.114	ctime= 23.83
+!% 10000001000
+!% bitSet_5_21_idx_0_0:1
+intSet_6_22_idx_0_0:0
+intSet_6_22_idx_1_0:0
+intSet_6_22_idx_2_0:0
+intSet_6_22_idx_3_0:1
+intSet_6_22_idx_4_0:0
+
+BEG FIND
+Level 1  intsize = 2
+ * After optims it became = 854 was 11604
+ * After all optims it became = 823
+ finder  hits = 6607	 bstoreObjs=1825	 sstorePages=2
+hitcount 	0	54	1
+hitcount 	1	147	0
+hitcount 	2	148	0
+hitcount 	3	58	0
+hitcount 	4	1142	0
+hitcount 	5	264	0
+hitcount 	8	10	0
+hitcount 	11	2	0
+bucketsPerDepth 	0	301
+bucketsPerDepth 	1	486
+bucketsPerDepth 	2	105
+bucketsPerDepth 	3	1
+* TIME TO ADD INPUT :  13.31 ms 
+f# %assign: 20 clauses: 7525 learn: 326 restart: 7 decision: 9264 propagated: 49692
+END FIND
+!+ 00001000100110000011000010100010000000011000000001101110001000000100001000001000010001011000011000000000000010000000000010000100100000011000100011
+!+ H__8_21:0
+H__9_21:0
+H__7_22:1
+H__8_22_17:2
+H__9_22_17:0
+H__8_22_18:3
+H__9_22_18:0
+H__8_22_19:0
+H__9_22_19:2
+H__8_22_20:1
+H__9_22_20:0
+H__7_25:2
+H__8_25_17:1
+H__9_25_17:0
+H__8_25_18:1
+H__9_25_18:0
+H__8_25_19:0
+H__9_25_19:0
+H__8_25_20:2
+H__9_25_20:1
+H__0:0
+H__1_21:0
+H__11_27:2
+H__12_27:1
+H__13_27:3
+H__4:1
+H__5_22:0
+H__1_22_18:4
+H__1_22_17:16
+H__6_22:0
+H__1_22_20:8
+H__1_22_19:16
+H__5_25:0
+H__1_25_18:8
+H__1_25_17:20
+H__6_25:1
+H__1_25_20:16
+H__1_25_19:1
+H__10:0
+H__3:0
+H__2_21:0
+H__2_22_17:4
+H__2_22_18:0
+H__2_22_19:16
+H__2_22_20:16
+H__2_25_17:4
+H__2_25_18:16
+H__2_25_19:17
+H__2_25_20:24
+
+BEG CHECK
+ * After optims it became = 2383 was 11604
+ TESTING HYPOTHESIS ITER 1
+dagmain__WrapperNospec_ANONYMOUS{
+0= (4)
+1= (0)
+intSet_6_22_idx_0_0
+3= (0) < intSet_6_22_idx_0_0 
+4= (-1)
+5= [3]$(-1), (0), $
+6= 5 == (-1) 
+7= (3)
+8= (-1){(3)->5}
+9= [6]$(0), 8, $
+10= (2)
+11= 8{(2)->5}
+12= [3]$9, 11, $
+13= 12[(4)]
+14= 3 | 6 
+15= (-1){(-1)->(0)}
+16= 15{(0)->(-1)}
+17= [3]$16, (-1), $
+18= [14]$(0), 17, $
+19= 18[13]
+20= (0)
+21= 19 == (0) 
+22= ASSERT 21 : 
+}
+SLICE SIZE = 23
+c# %assign: 12 clauses: 12 learn: 0 restart: 0 decision: 0 propagated: 1
+ FOUND CONST: 27= 26[13] = 0
+ reduced size from 2383 to 2372
+Simulation found a cex by random testing:  5.916 ms 
+END CHECK
+********  5	ftime= 14.466	ctime= 17.695
+!% 01001000100
+!% bitSet_5_21_idx_0_0:0
+intSet_6_22_idx_0_0:1
+intSet_6_22_idx_1_0:2
+intSet_6_22_idx_2_0:0
+intSet_6_22_idx_3_0:2
+intSet_6_22_idx_4_0:0
+
+BEG FIND
+Level 1  intsize = 2
+ * After optims it became = 3489 was 11604
+ * After all optims it became = 3460
+ finder  hits = 8504	 bstoreObjs=1867	 sstorePages=2
+hitcount 	1	172	0
+hitcount 	2	184	0
+hitcount 	3	86	0
+hitcount 	4	1	0
+hitcount 	5	1142	0
+hitcount 	6	4	0
+hitcount 	7	264	0
+hitcount 	8	11	0
+hitcount 	10	1	0
+hitcount 	11	2	0
+bucketsPerDepth 	0	291
+bucketsPerDepth 	1	521
+bucketsPerDepth 	2	86
+* TIME TO ADD INPUT :  17.38 ms 
+f# %assign: 18 clauses: 8828 learn: 390 restart: 8 decision: 10229 propagated: 62926
+END FIND
+!+ 00101001100010111010010010010011010000101000000000101011001000000100001000001000100000001000011100000000000010000000000010000100100000010000100011
+!+ H__8_21:0
+H__9_21:1
+H__7_22:1
+H__8_22_17:3
+H__9_22_17:0
+H__8_22_18:2
+H__9_22_18:2
+H__8_22_19:3
+H__9_22_19:2
+H__8_22_20:0
+H__9_22_20:1
+H__7_25:2
+H__8_25_17:2
+H__9_25_17:0
+H__8_25_18:3
+H__9_25_18:2
+H__8_25_19:0
+H__9_25_19:0
+H__8_25_20:1
+H__9_25_20:1
+H__0:0
+H__1_21:0
+H__11_27:0
+H__12_27:1
+H__13_27:1
+H__4:1
+H__5_22:1
+H__1_22_18:4
+H__1_22_17:16
+H__6_22:0
+H__1_22_20:8
+H__1_22_19:16
+H__5_25:0
+H__1_25_18:4
+H__1_25_17:0
+H__6_25:1
+H__1_25_20:16
+H__1_25_19:3
+H__10:0
+H__3:0
+H__2_21:0
+H__2_22_17:4
+H__2_22_18:0
+H__2_22_19:16
+H__2_22_20:16
+H__2_25_17:4
+H__2_25_18:16
+H__2_25_19:16
+H__2_25_20:24
+
+BEG CHECK
+ * After optims it became = 2379 was 11604
+ TESTING HYPOTHESIS ITER 1
+dagmain__WrapperNospec_ANONYMOUS{
+0= (4)
+1= (0)
+intSet_6_22_idx_0_0
+3= (0) < intSet_6_22_idx_0_0 
+4= (-1)
+5= [3]$(-1), (0), $
+6= 5 == (-1) 
+7= (3)
+8= (-1){(3)->5}
+9= [6]$(0), 8, $
+10= (2)
+11= 8{(2)->5}
+12= [3]$9, 11, $
+13= 12[(4)]
+14= 3 | 6 
+15= (-1){(-1)->(0)}
+16= 15{(0)->(-1)}
+17= [3]$16, (-1), $
+18= [14]$(0), 17, $
+19= 18[13]
+20= (0)
+21= 19 == (0) 
+22= ASSERT 21 : 
+}
+SLICE SIZE = 23
+c# %assign: 12 clauses: 12 learn: 0 restart: 0 decision: 0 propagated: 1
+ FOUND CONST: 27= 26[13] = 0
+ reduced size from 2379 to 2368
+ TESTING HYPOTHESIS ITER 2
+dagmain__WrapperNospec_ANONYMOUS{
+0= (0)
+intSet_6_22_idx_0_0
+2= (0) < intSet_6_22_idx_0_0 
+3= (-1)
+4= [2]$(-1), (0), $
+5= 4 == (-1) 
+6= 2 | 5 
+7= (-1){(-1)->(0)}
+8= 7{(0)->(-1)}
+9= [2]$8, (-1), $
+10= [6]$(0), 9, $
+11= 10[(0)]
+12= (-1)
+13= 11 == (-1) 
+14= ASSERT 13 : 
+}
+SLICE SIZE = 15
+c# %assign: 12 clauses: 12 learn: 0 restart: 0 decision: 0 propagated: 1
+ FOUND CONST: 45= 44[(0)] = -1
+ reduced size from 2368 to 2354
+ TESTING HYPOTHESIS ITER 3
+SLICE SIZE = 68
+c# %assign: 64 clauses: 263 learn: 0 restart: 0 decision: 0 propagated: 32
+ FOUND CONST: 90= 89 | 31  = 1
+ reduced size from 2354 to 2270
+ TESTING HYPOTHESIS ITER 4
+SLICE SIZE = 160
+c# %assign: 33 clauses: 3478 learn: 0 restart: 0 decision: 0 propagated: 222
+ FOUND CONST: 213= 212 | 147  = 1
+ reduced size from 2270 to 2186
+ * Simulation optimized it to = 2186
+Simulation didn't find a cex:  37.47 ms 
+After all optim
+c# %assign: 8 clauses: 842107 learn: 61 restart: 1 decision: 192 propagated: 2113955
+END CHECK
+********  6	ftime= 19.904	ctime= 1759.35
+ *GOT THE CORRECT ANSWER IN 7 iterations.
+ *FIND TIME 117.717 CHECK TIME 1881.3 TOTAL TIME 2000.62
+RESULT = 0  
+**ROUND 0 : 1 Round time:  2147.28 ms 
+
+----- Statistics -----
+Total elapsed time (ms):  2195.68
+Model building time (ms): 43.03
+Solution time (ms):       2147.32
+Max virtual mem (bytes):  196386816
+Max resident mem (bytes): 101261312
+Max private mem (bytes):  192737280
+ALL CORRECT
+
+[SATBackend] === parallel trial (0) solved ===
+[SATBackend] === resolved within 1 complete parallel trial(s)
+[SATBackend] destroying java.lang.UNIXProcess@4c11ba7f
+[SATBackend] destroying java.lang.UNIXProcess@1feb0edd
+/* BEGIN PACKAGE KvPairList*/
+package KvPairList{
+  struct Pair {
+      int intkey;
+      int intkey2;
+      int stringkey;
+      bit value;
+  }
+  struct ListNode {
+      int intkey;
+      int intkey2;
+      int stringkey;
+      bit value;
+      ListNode next;
+  }
+  struct List {
+      ListNode handle;
+      int length;
+  }
+  /*kvpair_..t_bit0.sk:219*/
+  
+void int_get (List l, int key, bit initial, ref bit _out)/*kvpair_..t_bit0.sk:219*/
+  {
+    _out = 0;
+    ListNode ptr = l.handle;
+    while(ptr != (null))
+    {
+      if((ptr.intkey) == key)/*kvpair_..t_bit0.sk:222*/
+      {
+        bit option1 = (ptr.value) && initial;
+        _out = option1;
+        return;
+      }
+      ptr = ptr.next;
+    }
+    _out = initial;
+    return;
+  }
+  /*kvpair_..t_bit0.sk:69*/
+  
+void intlist_insert (List l, Pair kvPair)/*kvpair_..t_bit0.sk:69*/
+  {
+    ListNode ptr = l.handle;
+    l.handle = new ListNode();
+    l.handle.intkey = kvPair.intkey;
+    l.handle.intkey2 = kvPair.intkey2;
+    l.handle.value = kvPair.value;
+    l.handle.next = ptr;
+    if(ptr == (null))/*kvpair_..t_bit0.sk:78*/
+    {
+      l.length = 1;
+    }
+    else
+    {
+      l.length = (l.length) + 1;
+    }
+  }
+  /*kvpair_..t_bit0.sk:27*/
+  
+void intlist_merge (List result, List kvPairs)/*kvpair_..t_bit0.sk:27*/
+  {
+    if((result.handle) == (null))/*kvpair_..t_bit0.sk:29*/
+    {
+      result.handle = kvPairs.handle;
+      result.length = kvPairs.length;
+      return;
+    }
+    ListNode ptr = kvPairs.handle;
+    while(ptr != (null))
+    {
+      Pair kvPair = new Pair();
+      kvPair.intkey = ptr.intkey;
+      kvPair.intkey2 = ptr.intkey2;
+      kvPair.value = ptr.value;
+      intlist_put(result, kvPair);
+      ptr = ptr.next;
+    }
+  }
+  /*kvpair_..t_bit0.sk:99*/
+  
+void intlist_put (List l, Pair kvPair)/*kvpair_..t_bit0.sk:99*/
+  {
+    if((l.handle) == (null))/*kvpair_..t_bit0.sk:101*/
+    {
+      l.handle = new ListNode();
+      l.handle.intkey = kvPair.intkey;
+      l.handle.intkey2 = kvPair.intkey2;
+      l.handle.value = kvPair.value;
+      l.handle.next = null;
+      l.length = 1;
+      return;
+    }
+    ListNode ptr = l.handle;
+    bit __sa1 = (ptr.next) != (null);
+    while(__sa1)
+    {
+      if(((ptr.intkey) == (kvPair.intkey)) && ((ptr.intkey2) == (kvPair.intkey2)))/*kvpair_..t_bit0.sk:118*/
+      {
+        ListNode temp = ptr.next;
+        ptr.next = new ListNode();
+        ptr.next.intkey = kvPair.intkey;
+        ptr.next.intkey2 = kvPair.intkey2;
+        ptr.next.value = kvPair.value;
+        ptr.next.next = temp;
+        l.length = (l.length) + 1;
+        return;
+      }
+      else
+      {
+        ptr = ptr.next;
+      }
+      __sa1 = (ptr.next) != (null);
+    }
+    ptr.next = new ListNode();
+    ptr.next.intkey = kvPair.intkey;
+    ptr.next.intkey2 = kvPair.intkey2;
+    ptr.next.value = kvPair.value;
+    ptr.next.next = null;
+    l.length = (l.length) + 1;
+    return;
+  }
+  /* END PACKAGE KvPairList*/
+}
+/* BEGIN PACKAGE Output*/
+package Output{
+  struct Output {
+      bit equal;
+  }
+  /* END PACKAGE Output*/
+}
+/* BEGIN PACKAGE ANONYMOUS*/
+struct Equal {
+}
+/*main_bit0.sk:21*/
+
+void _main (bit[1] bitSet, int[5] intSet, ref global bit loop0__ANONYMOUS_s68, ref global int val__ANONYMOUS_s69)/*main_bit0.sk:21*/
+{
+  int[3] data = {0,0,0};
+  data[0] = intSet[3];
+  data[1] = intSet[2];
+  data[2] = intSet[1];
+  loop0__ANONYMOUS_s68 = 0;
+  val__ANONYMOUS_s69 = intSet[4];
+  int i;
+  i = intSet[0];
+  bit _out_s15 = 0;
+  loopInvariant(data, 1, 1, 0, 0, _out_s15, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
+  assert (_out_s15); //Assert at main_bit0.sk:41 (-854494550734743208)
+  bit _pac_sc_s16_s18 = 0;
+  loopInvariant(data, bitSet[0], 1, i, 0, _pac_sc_s16_s18, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
+  bit _pac_sc_s16;
+  _pac_sc_s16 = _pac_sc_s16_s18;
+  if(_pac_sc_s16_s18)/*main_bit0.sk:42*/
+  {
+    _pac_sc_s16 = i < 3;
+  }
+  if(_pac_sc_s16)/*main_bit0.sk:42*/
+  {
+    bit ind_equal = 0;
+    if(val__ANONYMOUS_s69 != (data[i]))/*main_bit0.sk:44*/
+    {
+      ind_equal = 0;
+    }
+    else
+    {
+      ind_equal = bitSet[0];
+    }
+    bit _out_s20 = 0;
+    loopInvariant(data, ind_equal, 1, i + 1, 0, _out_s20, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
+    assert (_out_s20); //Assert at main_bit0.sk:51 (-437550944703921002)
+  }
+  bit _pac_sc_s21_s23 = 0;
+  loopInvariant(data, bitSet[0], 1, i, 0, _pac_sc_s21_s23, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
+  bit _pac_sc_s21;
+  _pac_sc_s21 = _pac_sc_s21_s23;
+  if(_pac_sc_s21_s23)/*main_bit0.sk:53*/
+  {
+    _pac_sc_s21 = !(i < 3);
+  }
+  if(_pac_sc_s21)/*main_bit0.sk:53*/
+  {
+    bit _out_s25 = 0;
+    postCondition(data, bitSet[0], 1, i, 0, _out_s25, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
+    assert (_out_s25); //Assert at main_bit0.sk:54 (-7674586664579459152)
+  }
+}
+/*main_bit0.sk:229*/
+
+void collect (List resMR, bit equal0, ref Output _out)/*main_bit0.sk:229*/
+{
+  _out = null;
+  _out = new Output();
+  bit _out_s57 = 0;
+  int_get(resMR, 0, equal0, _out_s57);
+  _out.equal = _out_s57;
+  return;
+}
+/*main_bit0.sk:100*/
+
+void do_map (int[3] data, int i, ref List _out, ref global int val__ANONYMOUS_s70)/*main_bit0.sk:100*/
+{
+  _out = null;
+  _out = new List();
+  Pair kvp = new Pair();
+  kvp.intkey = 0;
+  int _terminal1 = data[i];
+  kvp.value = _terminal1 == val__ANONYMOUS_s70;
+  intlist_put(_out, kvp);
+  return;
+}
+/*main_bit0.sk:130*/
+
+void do_reduce (ListNode values_0, ref Pair _out, ref global bit loop0__ANONYMOUS_s80)/*main_bit0.sk:130*/
+{
+  _out = null;
+  ListNode values = values_0;
+  _out = new Pair();
+  if(values_0 == (null))/*main_bit0.sk:133*/
+  {
+    return;
+  }
+  _out.intkey = values_0.intkey;
+  _out.intkey2 = values_0.intkey2;
+  _out.value = 1;
+  while(values != (null))
+  {
+    bit val1 = _out.value;
+    bit val2 = values.value;
+    _out.value = val2 && val1;
+    values = values.next;
+  }
+  return;
+}
+/*main_bit0.sk:12*/
+
+void glblInit_mapKeyType__ANONYMOUS_s82 (ref int mapKeyType__ANONYMOUS_s81)/*main_bit0.sk:12*/
+{
+  mapKeyType__ANONYMOUS_s81 = 0;
+}
+/*main_bit0.sk:66*/
+
+void loopInvariant (int[3] data, bit equal, bit equal0, int i, int i0, ref bit _out, ref global bit loop0__ANONYMOUS_s71, ref global int val__ANONYMOUS_s74)/*main_bit0.sk:66*/
+{
+  _out = 0;
+  List@KvPairList resMR_s61 = null;
+  map(data, i0, i, resMR_s61, val__ANONYMOUS_s74);
+  List@KvPairList resMR_s63 = null;
+  reduce(resMR_s61, resMR_s63, loop0__ANONYMOUS_s71);
+  Output@Output resMR_s65 = null;
+  collect(resMR_s63, equal0, resMR_s65);
+  _out = (((resMR_s65.equal) == equal) && (0 <= i)) && (i <= 3);
+  return;
+}
+/*main_bit0.sk:21*/
+
+void main__Wrapper (bit[1] bitSet, int[5] intSet)  implements main__WrapperNospec/*main_bit0.sk:21*/
+{
+  global int val__ANONYMOUS_s75 = 0;
+  global bit loop0__ANONYMOUS_s73 = 0;
+  _main(bitSet, intSet, loop0__ANONYMOUS_s73, val__ANONYMOUS_s75);
+}
+/*main_bit0.sk:21*/
+
+void main__WrapperNospec (bit[1] bitSet, int[5] intSet)/*main_bit0.sk:21*/
+{ }
+/*main_bit0.sk:156*/
+
+void map (int[3] data, int i0, int i, ref List _out, ref global int val__ANONYMOUS_s72)/*main_bit0.sk:156*/
+{
+  _out = null;
+  _out = new List(handle=null);
+  int _i = i0;
+  while((_i < i) && (_i < 3))
+  {
+    List@KvPairList kvPairs_s33 = null;
+    do_map(data, _i, kvPairs_s33, val__ANONYMOUS_s72);
+    intlist_merge(_out, kvPairs_s33);
+    _i = _i + 1;
+  }
+  return;
+}
+/*main_bit0.sk:61*/
+
+void postCondition (int[3] data, bit equal, bit equal0, int i, int i0, ref bit _out, ref global bit loop0__ANONYMOUS_s78, ref global int val__ANONYMOUS_s76)/*main_bit0.sk:61*/
+{
+  _out = 0;
+  List@KvPairList resMR_s27 = null;
+  map(data, i0, i, resMR_s27, val__ANONYMOUS_s76);
+  List@KvPairList resMR_s29 = null;
+  reduce(resMR_s27, resMR_s29, loop0__ANONYMOUS_s78);
+  Output@Output resMR_s31 = null;
+  collect(resMR_s29, equal0, resMR_s31);
+  _out = (resMR_s31.equal) == equal;
+  return;
+}
+/*main_bit0.sk:180*/
+
+void reduce (List kvPairs, ref List _out, ref global bit loop0__ANONYMOUS_s79)/*main_bit0.sk:180*/
+{
+  _out = null;
+  _out = new List(handle=null);
+  if((kvPairs.handle) == (null))/*main_bit0.sk:184*/
+  {
+    return;
+  }
+  ListNode ptr_st = kvPairs.handle;
+  ListNode ptr_end = kvPairs.handle;
+  bit __sa2 = (ptr_end.next) != (null);
+  while(__sa2)
+  {
+    if(((1 && ((ptr_end.next.intkey) == (ptr_st.intkey))) && ((ptr_end.next.intkey2) == (ptr_st.intkey2))) || 0)/*main_bit0.sk:192*/
+    {
+      ptr_end = ptr_end.next;
+    }
+    else
+    {
+      ListNode ptr_temp = ptr_end.next;
+      ptr_end.next = null;
+      Pair@KvPairList kv_s51 = null;
+      do_reduce(ptr_st, kv_s51, loop0__ANONYMOUS_s79);
+      intlist_insert(_out, kv_s51);
+      ptr_st = ptr_temp;
+      ptr_end = ptr_temp;
+    }
+    __sa2 = (ptr_end.next) != (null);
+  }
+  Pair@KvPairList kv_s53 = null;
+  do_reduce(ptr_st, kv_s53, loop0__ANONYMOUS_s79);
+  intlist_insert(_out, kv_s53);
+  return;
+}
+/* END PACKAGE ANONYMOUS*/
+[SKETCH] DONE
+Total time = 3426
