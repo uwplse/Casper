@@ -34,7 +34,7 @@ Pull the latest changes from git to bring the repository up to date. Build caspe
     $ cd Casper/
     $ ant
     
-Optionally, you may want to reset to one of the stable release commits:
+Optionally, you may want to reset to one of the stable release commits before you build:
 
     $ git reset --hard <commit hash or release tag>
     
