@@ -1,10 +1,12 @@
 import java.lang.String;
+import java.util.Arrays;
 import java.util.List;
 
 public class StringMatch {
 	
 	public static void main(String[] args) {
-		matchWords(null);
+		List<String> words = Arrays.asList("foo", "key1", "cat", "bar", "dog");
+		matchWords(words);
 	}
 	
 	public static boolean[] matchWords(List<String> words) {

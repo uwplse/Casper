@@ -1,5 +1,5 @@
 import java.util.List;
-import java.lang.Integer;
+import java.util.Arrays;
 
 class HistogramJava {
 	
@@ -14,7 +14,11 @@ class HistogramJava {
 	}
 	
 	public static void main(String[] args) {
-		histogram(null, null, null, null);
+		List<Pixel> pixels = Arrays.asList(new Pixel(10, 10, 10), new Pixel(120, 120, 120), new Pixel(210, 210, 210), new Pixel(10, 120, 210));
+		int[] hR = new int[256];
+		int[] hG = new int[256];
+		int[] hB = new int[256];
+		histogram(pixels, hR, hG, hB);
 	}
 
 	@SuppressWarnings("unchecked")

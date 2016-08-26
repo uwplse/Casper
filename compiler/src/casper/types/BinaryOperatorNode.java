@@ -36,4 +36,31 @@ public class BinaryOperatorNode extends CustomASTNode{
 		operandRight.getIndexes(arrname, indexes);
 	}
 	
+	
+
+	@Override
+	public int convertConstToIDs(Map<String,String> constMapping, int constID){
+		if(casper.Util.operatorType(name) == casper.Util.RELATIONAL_OP){
+			if(operandLeft instanceof ConstantNode){
+				if(((ConstantNode) operandLeft).type == ConstantNode.INTLIT){
+					if(!constMapping.containsKey(operandLeft.toString())){
+						constMapping.put(operandLeft.toString(), "casperConst"+constID);
+						constID++;
+					}
+					operandLeft = new IdentifierNode(constMapping.get(operandLeft.toString()));
+				}
+			}
+			if(operandRight instanceof ConstantNode){
+				if(((ConstantNode) operandRight).type == ConstantNode.INTLIT){
+					if(!constMapping.containsKey(operandRight.toString())){
+						constMapping.put(operandRight.toString(), "casperConst"+constID);
+						constID++;
+					}
+					operandRight = new IdentifierNode(constMapping.get(operandRight.toString()));
+				}
+			}
+		}
+		return constID;
+	}
+	
 }

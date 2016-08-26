@@ -568,14 +568,23 @@ public class GenerateScaffold extends NodeVisitor{
 							generateScaffold(sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, n, var.type);
 							
 							/* Run synthesizer to generate summary */
-							if(runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk",var.type,ext)){
+							int exitCode = runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk",var.type,ext);
+							if(exitCode == 0){
 								/* Run theorem prover to verify summary */
 								verifySummary("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".dfy", n, ext, sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, var.type);
+								ext.generateCode.put(var.type, true);
 								break;
 							}
-							
-							// Clear data structures before next run
-							ext.inputDataCollections.clear();
+							else if(exitCode == 1){
+								// Clear data structures before next run
+								ext.inputDataCollections.clear();
+							}
+							else if(exitCode == 2){
+								System.err.println("Casper failed to synthesize a summary for this code fragment.\nPlease submit your code example at our"
+													+ " GitHub Issues tracker (https://github.com/uwplse/Casper/issues)");
+								ext.generateCode.put(var.type, false);
+								break;
+							}
 						}
 					}
 					
@@ -584,6 +593,8 @@ public class GenerateScaffold extends NodeVisitor{
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				Configuration.useConditionals = false;
 			}
 		}		
 		
@@ -623,10 +634,13 @@ public class GenerateScaffold extends NodeVisitor{
 	    }
 	}
 
-	private boolean runSynthesizer(String filename, String type, MyWhileExt ext) throws IOException, InterruptedException {		
+	private int runSynthesizer(String filename, String type, MyWhileExt ext) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
 		
-		Process pr = rt.exec("sketch --slv-seed 1 --slv-parallel --bnd-int-range 20 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
+		if(debug)
+			System.err.println("sketch --slv-simiters 40 --slv-seed 1 --slv-parallel --bnd-int-range 20 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
+		
+		Process pr = rt.exec("sketch --slv-simiters 40 --slv-seed 1 --slv-parallel --bnd-int-range 20 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
 
 		PrintWriter writer = new PrintWriter("output/outputTempSketch.txt", "UTF-8");
 		
@@ -640,7 +654,7 @@ public class GenerateScaffold extends NodeVisitor{
         if(exitVal == 0){
         	System.err.println("Summary successfully synthesized");
         	writer.close();
-        	return true;
+        	return 0;
         }
         else{
         	System.err.println("Synthesizer exited with error code "+exitVal);
@@ -648,18 +662,24 @@ public class GenerateScaffold extends NodeVisitor{
         	
         	// TODO: Add machinery for incrementally adding options (something more sophisticated / less ad hoc)
         	
-        	switch(type){
-        	case "bit":
-        		ext.unaryOperators.add("!");
-        		ext.binaryOperators.add("&&");
-        		ext.binaryOperators.add("||");
-        		ext.binaryOperators.add("==");
+        	if(ext.useConditionals && !Configuration.useConditionals){
         		System.err.println("Incrementing grammar...");
-        		return false;
-    		default:
-    			System.err.println("Giving up.");
-    			// TODO: Add more cases
-    			return true; // Give up after first try - break the loop.
+        		Configuration.useConditionals = true;
+        		return 1;
+        	}
+        	else{
+        		switch(type){
+	            	case "bit":
+	            		ext.unaryOperators.add("!");
+	            		ext.binaryOperators.add("&&");
+	            		ext.binaryOperators.add("||");
+	            		ext.binaryOperators.add("==");
+	            		System.err.println("Incrementing grammar...");
+	            		return 1;
+	        		default:
+	        			// TODO: Add more cases
+	        			return 2; // Give up after first try - break the loop.
+            	}
         	}
         }
 	}
@@ -1098,10 +1118,10 @@ public class GenerateScaffold extends NodeVisitor{
 		String invPcArgs = DafnyCodeGenerator.generateInvPcAargs(ext,ext.postConditionArgsOrder.get(outputType),sketchOutputVars,sketchLoopCounters,sketchInputVars);
 		
 		// Generate invariant
-		String loopInv = DafnyCodeGenerator.generateLoopInv(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars);
+		String loopInv = DafnyCodeGenerator.generateLoopInv(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars, reduceValue);
 		
 		// Generate post condition
-		String postCond = DafnyCodeGenerator.generatePostCond(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars);
+		String postCond = DafnyCodeGenerator.generatePostCond(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars, reduceValue);
 		
 		// Generate mapper function args declaration
 		String mapperArgsDecl = DafnyCodeGenerator.generateMapperArgsDecl(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
@@ -1119,6 +1139,12 @@ public class GenerateScaffold extends NodeVisitor{
 		
 		// Generate map emits
 		String domapEmits = DafnyCodeGenerator.generateMapEmits(ext, mapEmits);
+		
+		// Do reduce args declaration
+		String reducerArgsDecl = DafnyCodeGenerator.generatedReducerArgsDecl(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
+		
+		// Do reduce args call
+		String reducerArgsCall = DafnyCodeGenerator.generatedReducerArgsCall(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
 		
 		// Generate map outputType
 		String domapEmitType = DafnyCodeGenerator.generateDomapEmitType(mapKeyType,outputType,mapEmits);
@@ -1169,6 +1195,8 @@ public class GenerateScaffold extends NodeVisitor{
 		template = template.replace("<inv-requires>", mainReqStmts);
 		template = template.replace("<pcond-requires>", mainReqStmts);
 		template = template.replace("<lemma-requires>", mainReqStmts);
+		template = template.replace("<reducer-args-decl>", reducerArgsDecl);
+		template = template.replace("<reducer-args-call>", reducerArgsCall);
 		
 		writer.print(template);
 		writer.close();

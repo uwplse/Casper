@@ -44,10 +44,14 @@ public class GenerateVerification extends NodeVisitor {
 	
 	boolean debug;
 	NodeFactory nf;
+	Map<String,String> constMapping;
+	int constID;
 	
 	public GenerateVerification (NodeFactory nf) {
 		this.debug = false;
 		this.nf = nf;
+		this.constMapping = new HashMap<String,String>();
+		this.constID = 0;
 	}
 	
 	public NodeVisitor enter(Node parent, Node n){
@@ -61,6 +65,10 @@ public class GenerateVerification extends NodeVisitor {
 			
 			// Extract Loop Increment
 			extractLoopIncrement((While)n, ext);
+			
+			// Reset constant mappings
+			this.constMapping.clear();
+			this.constID = 0;
 			
 			// If the loop was marked as interesting
 			if(ext.interesting){
@@ -103,6 +111,10 @@ public class GenerateVerification extends NodeVisitor {
 					MyStmtExt blockExt = (MyStmtExt) JavaExt.ext(loopBody);
 					blockExt.preConditions.put(sketchType, preCondBlock);
 					ext.wpcValues = generateWPCValues(sketchType,wpcValues,loopBody);
+					
+					// Save constant mapping
+					ext.constCount = constID;
+					ext.constMapping = constMapping;
 				}
 			}
 		}
@@ -210,7 +222,7 @@ public class GenerateVerification extends NodeVisitor {
 						strToIntMap.put(n2.toString(), intVal);
 						intVal++;
 					}
-					ext.initVals.put(var.varName.replace("$", ""),new ConstantNode(strToIntMap.get(n2.toString()).toString(),ConstantNode.INTLIT));
+					ext.initVals.put(var.varName.replace("$", ""),new ConstantNode(strToIntMap.get(n2.toString()).toString(),ConstantNode.STRINGLIT));
 				}
 				else{
 					ext.initVals.put(var.varName.replace("$", ""),n2);
@@ -355,11 +367,14 @@ public class GenerateVerification extends NodeVisitor {
 						Expr lhs = ((Assign)expr).left();
 						Expr rhs = ((Assign)expr).right();
 						
+						CustomASTNode rhsAST = CustomASTNode.convertToAST(rhs);
+						constID = rhsAST.convertConstToIDs(constMapping,constID);
+						
 						if(lhs instanceof ArrayAccess){
-							currVerifCondition = currVerifCondition.replaceAll(((ArrayAccess) lhs).array().toString(), new ArrayUpdateNode(CustomASTNode.convertToAST(((ArrayAccess) lhs).array()),CustomASTNode.convertToAST(((ArrayAccess) lhs).index()),CustomASTNode.convertToAST(rhs)));
+							currVerifCondition = currVerifCondition.replaceAll(((ArrayAccess) lhs).array().toString(), new ArrayUpdateNode(CustomASTNode.convertToAST(((ArrayAccess) lhs).array()),CustomASTNode.convertToAST(((ArrayAccess) lhs).index()),rhsAST));
 						}
 						else {
-							currVerifCondition = currVerifCondition.replaceAll(lhs.toString(), CustomASTNode.convertToAST(rhs));
+							currVerifCondition = currVerifCondition.replaceAll(lhs.toString(), rhsAST);
 						}
 						
 						// Save pre-condition
@@ -385,8 +400,11 @@ public class GenerateVerification extends NodeVisitor {
 					// Derive pre-condition
 					String lhs = ((LocalDecl)currStatement).name();
 					Expr rhs = ((LocalDecl)currStatement).init();
+					
+					CustomASTNode rhsAST = CustomASTNode.convertToAST(rhs);
+					constID = rhsAST.convertConstToIDs(constMapping,constID);
  
-					currVerifCondition = currVerifCondition.replaceAll(lhs, CustomASTNode.convertToAST(rhs));
+					currVerifCondition = currVerifCondition.replaceAll(lhs, rhsAST);
 					
 					// Save pre-condition
 					ext.preConditions.put(type,currVerifCondition);
@@ -401,6 +419,7 @@ public class GenerateVerification extends NodeVisitor {
 					Expr cond = ((If) currStatement).cond();
 					
 					CustomASTNode loopCond = CustomASTNode.convertToAST(cond);
+					constID = loopCond.convertConstToIDs(constMapping,constID);
 					
 					CustomASTNode verifCondCons = generatePreCondition(type,cons,currVerifCondition);
 					

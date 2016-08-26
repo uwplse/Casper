@@ -225,6 +225,31 @@ public class Util {
 			return UNKNOWN_OP;
 		}
 	}
+
+	public static boolean isAggOperator(String op) {
+		switch(op){
+		case "+":
+		case "-":
+		case "*":
+		case "/":
+		case "%":
+		case ">>":
+		case "<<":
+		case ">>>":
+		case "<":
+		case ">":
+		case "<=":
+		case ">=":
+		case "&":
+		case "^":
+		case "|":
+		case "&&":
+		case "||":
+			return true;
+		default:
+			return false;
+		}
+	}
 	
 	public static final int INT_ONLY = 1;
 	public static final int BIT_ONLY = 2;
@@ -344,4 +369,71 @@ public class Util {
 	   }
 	   return sb.toString();
 	}
+
+	public static String getOperatorFromExp(String reduceValue) {
+		if(reduceValue.contains("+")){
+			return "+";
+		}
+		else if(reduceValue.contains("-")){
+			return "-";
+		}
+		else if(reduceValue.contains("*")){
+			return "*";
+		}
+		else if(reduceValue.contains("/")){
+			return "/";
+		}
+		else if(reduceValue.contains("%")){
+			return "%";
+		}
+		else if(reduceValue.contains(">>>")){
+			return ">>>";
+		}
+		else if(reduceValue.contains(">>")){
+			return ">>";
+		}
+		else if(reduceValue.contains("<<")){
+			return "<<";
+		}
+		else if(reduceValue.contains("<=")){
+			return "<=";
+		}
+		else if(reduceValue.contains(">=")){
+			return ">=";
+		}
+		else if(reduceValue.contains(">")){
+			return ">";
+		}
+		else if(reduceValue.contains("<")){
+			return "<";
+		}
+		else if(reduceValue.contains("==")){
+			return "==";
+		}
+		else if(reduceValue.contains("!=")){
+			return "!=";
+		}
+		else if(reduceValue.contains("!")){
+			return "!";
+		}
+		else if(reduceValue.contains("||")){
+			return "||";
+		}
+		else if(reduceValue.contains("&&")){
+			return "&&";
+		}
+		else if(reduceValue.contains("&")){
+			return "&";
+		}
+		else if(reduceValue.contains("|")){
+			return "|";
+		}
+		else if(reduceValue.contains("^")){
+			return "^";
+		}
+		else{
+			return "unknownOP";
+		}
+	}
+	
 }

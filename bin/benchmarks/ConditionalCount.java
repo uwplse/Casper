@@ -1,17 +1,18 @@
 import java.util.List;
-import java.util.Arrays;
 import java.lang.Integer;
 
-public class Count {	
+public class ConditionalCount {	
 	public static void main(String[] args) {
-		List<Integer> numbers = Arrays.asList(10, 5, 7, 12, 3);
-		countList(numbers);
+		countList(null);
 	}
 	
 	public static int countList(List<Integer> data) {
 		int count = 0;
 		for(int i=0; i<data.size(); i++) {
-			count++;
+			int var = data.get(i);
+			if(var < 100){
+				count++;
+			}
 		}
 		return count;
 	}

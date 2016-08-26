@@ -117,9 +117,17 @@ public class MyWhileExt extends MyStmtExt {
 	public String reduceExp = null;
 
 	public String mapKeyType;
+	
+	public Map<String,Boolean> generateCode = new HashMap<String,Boolean>();
 
 	// Save how values change in loop body
 	public Map<String,CustomASTNode> wpcValues;
+
+	// Save mappings of const ints to vars
+	public int constCount;
+	public Map<String, String> constMapping;
+
+	public boolean useConditionals = false;
 	
    	// Custom class to represent an expression.
     public class Expression{

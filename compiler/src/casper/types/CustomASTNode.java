@@ -1,6 +1,5 @@
 package casper.types;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +49,10 @@ abstract public class CustomASTNode {
 	abstract public CustomASTNode replaceAll(String lhs, CustomASTNode rhs);
 	
 	abstract public void getIndexes(String arrname, Map<String, List<CustomASTNode>> indexes);
+	
+	public int convertConstToIDs(Map<String,String> constMapping, int constID){
+		return constID;
+	}
 	
 	public static CustomASTNode convertToAST(Expr exp){
 		CustomASTNode node = null;
@@ -102,7 +105,7 @@ abstract public class CustomASTNode {
 					case "java.lang.Integer":
 					case "java.lang.Float":
 					case "java.lang.Double":
-						operandRight = new ConstantNode("0",ConstantNode.INTLIT);
+						operandRight = new ConstantNode("0",ConstantNode.NULLLIT);
 					default:
 						break;
 				}
@@ -113,7 +116,7 @@ abstract public class CustomASTNode {
 					case "Integer":
 					case "Float":
 					case "Double":
-						operandLeft = new ConstantNode("0",ConstantNode.INTLIT);
+						operandLeft = new ConstantNode("0",ConstantNode.NULLLIT);
 					default:
 						break;
 				}

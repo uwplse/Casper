@@ -8,7 +8,8 @@ public class ConstantNode extends CustomASTNode {
 	public static final int INTLIT = 0;
 	public static final int STRINGLIT = 1;
 	public static final int BOOLEANLIT = 2;
-	public static final int UNKNOWNLIT = 3;
+	public static final int NULLLIT = 3;
+	public static final int UNKNOWNLIT = 4;
 
 	public int type;
 	

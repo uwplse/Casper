@@ -11,6 +11,6 @@ public class Configuration {
 	static final public int arraySizeBound = 4;
 	static final public int mapEmitCountBound = 5;
 	static final public int recursionDepth = 2;
-	static final public boolean useConditionals = false;
+	static public boolean useConditionals = false;
 	public static int emitCount = 0;
 }

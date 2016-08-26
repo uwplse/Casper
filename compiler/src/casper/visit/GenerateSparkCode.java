@@ -48,6 +48,8 @@ public class GenerateSparkCode extends NodeVisitor{
 					if(!handledTypes.contains(var.varType)){
 						handledTypes.add(var.varType);
 						
+						if(!ext.generateCode.get(casper.Util.getSketchType(var.getType()))) continue;
+						
 						String template = "";
 						
 						try {

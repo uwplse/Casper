@@ -23,25 +23,25 @@ function mapper (<mapper-args-decl>) : <domap-emit-type>
 
 /***************************** DO REDUCE ************************************/
 
-function doreduce(input: <domap-emit-type>, key: <doreduce-key-type>) : <output-type>
+function doreduce(input: <domap-emit-type>, key: <doreduce-key-type><reducer-args-decl>) : <output-type>
   ensures (|input| > 0 && input[0].0 == key) ==> 
-      doreduce(input, key) == (<reduce-exp>)
+      doreduce(input, key<reducer-args-call>) == (<reduce-exp>)
   ensures (|input| > 0 && input[0].0 != key) ==> 
-      doreduce(input, key) == doreduce(input[1..], key)
+      doreduce(input, key<reducer-args-call>) == doreduce(input[1..], key<reducer-args-call>)
 {
   if input == [] then <reduce-init-value> 
   else if input[0].0 == key then (<reduce-exp>)
-  else doreduce(input[1..], key)
+  else doreduce(input[1..], key<reducer-args-call>)
 }
 
 /******************************* HARNESS ************************************/  
 
-lemma Lemma2 (a: <domap-emit-type>, b: <domap-emit-type>, key: <doreduce-key-type>)
-  ensures doreduce(a+b,key) == (<reduce-exp-lemma>)
+lemma Lemma2 (a: <domap-emit-type>, b: <domap-emit-type>, key: <doreduce-key-type><reducer-args-decl>)
+  ensures doreduce(a+b, key<reducer-args-call>) == (<reduce-exp-lemma>)
 {
   if a != []
   {
-    Lemma2(a[1..], b, key);
+    Lemma2(a[1..], b, key<reducer-args-call>);
     assert a + b == [a[0]] + (a[1..] + b);
   }
 }

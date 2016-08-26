@@ -68,7 +68,6 @@ public class SketchCodeGenerator {
 				handleVarArgs(fieldType, category, ext, argsList, increment, isInputVar);
 			}
 		}
-		
 	}
 		
 	// Generate code that initializes main function args
@@ -77,7 +76,7 @@ public class SketchCodeGenerator {
 		
 		for(SketchVariable var : sketchInputVars){
 			if(!sketchOutputVars.contains(var)){
-				if(!ext.initVals.containsKey(var.name) || !(ext.initVals.get(var.name) instanceof ConstantNode)){
+				if(!ext.initVals.containsKey(var.name) || !(ext.initVals.get(var.name) instanceof ConstantNode) || ((ConstantNode)ext.initVals.get(var.name)).type == ConstantNode.STRINGLIT){
 					handleVarArgs(var.type,var.category,ext,argsList,1,true);
 				}
 			}
@@ -98,6 +97,8 @@ public class SketchCodeGenerator {
 				handleVarArgs(var.type,var.category,ext,argsList,1,false);
 			}
 		}
+		argsList.put("int", argsList.get("int")+ext.constCount);
+		
 		for(String type : argsList.keySet()){
 			mainFuncArgs += type + "[" + argsList.get(type) + "] " + type + "Set, ";
 		}
@@ -153,7 +154,14 @@ public class SketchCodeGenerator {
 		String inputInit = "";
 		if(casper.Util.getTypeClass(vartype) == casper.Util.PRIMITIVE){
 			if(ext.initVals.containsKey(varname)){
-				inputInit += varname + " = " + ext.initVals.get(varname) +";\n\t";
+				CustomASTNode initVal = ext.initVals.get(varname);
+				if(initVal instanceof ConstantNode && ((ConstantNode) initVal).type == ConstantNode.STRINGLIT){
+					inputInit += varname + " = " + vartype + "Set["+(argsList.get(vartype)-1)+"];\n\t";
+					argsList.put(vartype, argsList.get(vartype) - 1);
+				}
+				else{
+					inputInit += varname + " = " + ext.initVals.get(varname) +";\n\t";
+				}
 			}
 			else{
 				inputInit += varname + " = " + vartype + "Set["+(argsList.get(vartype)-1)+"];\n\t";
@@ -214,6 +222,11 @@ public class SketchCodeGenerator {
 					inputInit += handleInputVarInit(var.type,var.name,ext,argsList);
 				}
 			}
+		}
+		for(int i=0; i<ext.constCount; i++){
+			inputInit += "casperConst"+i+" = intSet["+(argsList.get("int")-1)+"];\n\t";
+			argsList.put("int", argsList.get("int") - 1);
+			
 		}
 		
 		return inputInit;
@@ -329,6 +342,9 @@ public class SketchCodeGenerator {
 				}
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			declBrdcstVars += "int casperConst" + i+";\n";
+		}
 		
 		return declBrdcstVars;
 	}
@@ -402,23 +418,21 @@ public class SketchCodeGenerator {
 			stringkey2decl = "kvp.intkey = intMapGenerator("+args+");\n\t\t";
 		}
 		
-		
-		
 		// Include conditionals?
 		if(Configuration.useConditionals){
 			// Generate emit code
 			for(int i=0; i<Configuration.emitCount; i++){
-				emits += 	"if(condMapGenerator(input, i)){\n\t\t" +
+				emits += 	"if(bitMapGenerator("+args+")){\n\t\t" +
 								"if(mapKeyType == 0){\n\t\t\t" +
 									"Pair kvp = new Pair();\n\t\t\t" +
 									"kvp.intkey = intMapGenerator("+args+");\n\t\t\t" +
-									intkey2decl +
+									intkey2decl + "\t" +
 									"kvp.value = "+valType+"MapGenerator("+args+");\n\t\t\t" +
 									"intlist_put(result, kvp);\n\t\t" +
 								"}\n\t\t" +
 								"else if(mapKeyType == 1){\n\t\t\t" +
 									"Pair kvp = new Pair();\n\t\t\t" +
-									stringkey2decl +
+									stringkey2decl + "\t" +
 									"kvp.stringkey = stringMapGenerator("+args+");\n\t\t\t" +
 									"kvp.value = "+valType+"MapGenerator("+args+");\n\t\t\t" +
 									"stringlist_put(result, kvp);\n\t\t" +
@@ -776,6 +790,11 @@ public class SketchCodeGenerator {
 				}
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			if(casper.Util.compatibleTypes(type,"int") == 1){
+				terminalOpts += " | casperConst" + i;
+			}
+		}
 		
 		switch(type){
 			case "int":
@@ -901,7 +920,7 @@ public class SketchCodeGenerator {
 								args += ", " + var.name + ", ";
 							}
 							args = args.substring(0, args.length()-2);
-							exprs.add(exprString.replace("<-expr->", "intMapGenerator("+args+")" + op + " intMapGenerator("+args+")"));
+							exprs.add(exprString.replace("<-expr->", "intMapGenerator("+args+") " + op + " intMapGenerator("+args+")"));
 						}
 						else if(casper.Util.operandType(op) == casper.Util.ALL_TYPES){
 							String args = ext.inputDataCollections.get(0).name;
@@ -1257,6 +1276,11 @@ public class SketchCodeGenerator {
 				}
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			if(casper.Util.compatibleTypes(type,"int") == 1){
+				terminalOpts += " | casperConst" + i;
+			}
+		}
 		
 		// Terminals
 		String terminals = "";
@@ -1296,7 +1320,7 @@ public class SketchCodeGenerator {
 			//exprs.add(exprString.replace("<-expr->","terminal"+depth));
 			
 			for(String op : ext.binaryOperators){
-				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
+				if(casper.Util.isAggOperator(op) && (casper.Util.operatorType(op) == casper.Util.getOpClassForType(type))){
 					String newExprString = exprString.replace("<-expr->", "terminal" + depth + " " + op + " <-expr->");
 					getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
 				}

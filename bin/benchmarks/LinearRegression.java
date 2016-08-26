@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Arrays;
 
 public class LinearRegression {	
 
@@ -12,7 +13,8 @@ public class LinearRegression {
 	}
 
 	public static void main(String[] args) {
-		regress(null);
+		List<Point> points = Arrays.asList(new Point(100, 500), new Point(3, 1000), new Point(7, 600), new Point(300, 34));
+		regress(points);
 	}
 	
 	public static int[] regress(List<Point> points) {

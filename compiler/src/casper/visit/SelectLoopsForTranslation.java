@@ -22,6 +22,7 @@ import casper.extension.MyWhileExt;
 import polyglot.ast.Block;
 import polyglot.ast.Branch;
 import polyglot.ast.Call;
+import polyglot.ast.If;
 import polyglot.ast.MethodDecl;
 import polyglot.ast.Node;
 import polyglot.ast.While;
@@ -81,6 +82,10 @@ public class SelectLoopsForTranslation extends NodeVisitor{
 				for(MyWhileExt ext : this.extensions)
 					ext.interesting = false;
 			}
+		}
+		else if(n instanceof If){
+			for(MyWhileExt ext : this.extensions)
+				ext.useConditionals = true;
 		}
    		// If the node is a branching statement
 		else if(n instanceof Branch){
