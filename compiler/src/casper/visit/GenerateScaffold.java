@@ -638,9 +638,9 @@ public class GenerateScaffold extends NodeVisitor{
 		Runtime rt = Runtime.getRuntime();
 		
 		if(debug)
-			System.err.println("sketch --slv-simiters 40 --slv-seed 1 --slv-parallel --bnd-int-range 20 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
+			System.err.println("sketch --slv-simiters 200 --slv-lightverif --slv-parallel --bnd-int-range 20 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
 		
-		Process pr = rt.exec("sketch --slv-simiters 40 --slv-seed 1 --slv-parallel --bnd-int-range 20 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
+		Process pr = rt.exec("sketch --slv-simiters 200 --slv-lightverif --slv-parallel --bnd-int-range 20 -V 10 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+(((int)Math.pow(Configuration.inbits,2)-1)*Configuration.emitCount)+" "+ filename);
 
 		PrintWriter writer = new PrintWriter("output/outputTempSketch.txt", "UTF-8");
 		
