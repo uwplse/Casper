@@ -572,7 +572,7 @@ public class GenerateScaffold extends NodeVisitor{
 							generateScaffold(sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, n, var.type);
 							
 							/* Run synthesizer to generate summary */
-							int exitCode = 0;//runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk",var.type,ext);
+							int exitCode = runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk",var.type,ext);
 							if(exitCode == 0){
 								/* Run theorem prover to verify summary */
 								verifySummary("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".dfy", n, ext, sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, var.type);
