@@ -34,7 +34,9 @@ import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import casper.extension.MyWhileExt.Variable;
 import casper.types.IdentifierNode;
+import polyglot.ast.Expr;
 import polyglot.ast.Node;
+import polyglot.ast.NodeFactory;
 import polyglot.ast.While;
 import polyglot.visit.NodeVisitor;
 
@@ -42,12 +44,14 @@ public class GenerateScaffold extends NodeVisitor{
 	boolean debug;
 	int id;
 	Set<String> arrays;
+	NodeFactory nf;
 	
 	@SuppressWarnings("deprecation")
-	public GenerateScaffold(){
+	public GenerateScaffold(NodeFactory nf){
 		this.debug = false;
 		this.id = 0;
 		this.arrays = new HashSet<String>();
+		this.nf = nf;
 	}
 	
 	public static class SketchVariable{
@@ -568,7 +572,7 @@ public class GenerateScaffold extends NodeVisitor{
 							generateScaffold(sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, n, var.type);
 							
 							/* Run synthesizer to generate summary */
-							int exitCode = runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk",var.type,ext);
+							int exitCode = 0;//runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk",var.type,ext);
 							if(exitCode == 0){
 								/* Run theorem prover to verify summary */
 								verifySummary("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".dfy", n, ext, sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, var.type);
@@ -693,11 +697,20 @@ public class GenerateScaffold extends NodeVisitor{
 			exp = exp.substring(0,exp.length()-1);
 		}
 		
+		// Remove brackets
+		if(exp.charAt(0) == '('){
+			exp = exp.substring(1,exp.length());
+		}
+		if(exp.charAt(exp.length()-1) == ')'){
+			exp = exp.substring(0,exp.length()-1);
+		}
+			
+				
 		// If binary expression
 		for(String op_esc : binaryOps){
 			String op = op_esc.replace("\\", "");
 			if(exp.contains(op)){
-				String[] expComponents = exp.split(op_esc);
+				String[] expComponents = exp.split(op_esc,2);
 				return resolve(expComponents[0].trim(),mapLines,i,ext) + " " + op + " " + resolve(expComponents[1].trim(),mapLines,i,ext);
 			}
 		}
@@ -892,10 +905,12 @@ public class GenerateScaffold extends NodeVisitor{
 	}
 	
 	public class KvPair{
+		public String name;
 		public String key;
 		public String key2;
 		public String value;
-		KvPair(String k, String k2, String v){ key = k; key2 = k2; value = v; }
+		KvPair(String n, String k, String k2, String v){ name = n; key = k; key2 = k2; value = v; }
+		public String toString(){ return  name + "["+key+","+key2+""+value+"]"; }
 	}
 	
 	private void verifySummary(String filename, Node n, MyWhileExt ext, Set<SketchVariable> sketchInputVars, Set<SketchVariable> sketchOutputVars, List<SketchVariable> sketchLoopCounters, String outputType) throws IOException, InterruptedException {
@@ -920,27 +935,312 @@ public class GenerateScaffold extends NodeVisitor{
 		
 		/****** Extract candidate summary from sketch output ******/
 		
-		// Extract map function
+		/** Extract map function **/
 		Pattern r = Pattern.compile("void do_map(.*?)\\{(.*?)return;\n\\}",Pattern.DOTALL);
 		Matcher m = r.matcher(text);
 		m.find();
-		String map = m.group(0);
-			
+		String map = m.group(0); 
+		
 		List<String> mapLines = new ArrayList<String>();
 		for(String line : map.split("\n")){
 			mapLines.add(line.trim());
 		}
-
-		// Extract map emits
-		r = Pattern.compile("Pair(.*?)= new Pair\\(\\);");
+		
+		/** Extract map emits **/
+		// First look for emits wrapped in if conditions
+		r = Pattern.compile("if(.*?)\\{(.*?)\\}",Pattern.DOTALL);
 		m = r.matcher(map);
-		List<String> mapKvpNames = new ArrayList<String>();
+		Map<String,String> conditionals = new HashMap<String,String>();
 		while(m.find()){
-			mapKvpNames.add(m.group(1).trim());
+			conditionals.put(m.group(1).substring(1, m.group(1).lastIndexOf(")")),m.group(2));
 		}
 		
-		List<KvPair> mapEmits = new ArrayList<KvPair>();
-		String mapKeyType = "";
+		Map<String,List<KvPair>> mapEmits = new HashMap<String,List<KvPair>>();
+		
+		for(String conditional : conditionals.keySet()){
+			String conditional_res = conditional;
+			for(int i=0; i<mapLines.size(); i++){
+				if(mapLines.get(i).contains("if("+conditional+")")){
+					conditional_res = resolve(conditional,mapLines,i,ext);
+					break;
+				}
+			}
+			mapEmits.put(conditional_res,extractMapEmits(conditionals.get(conditional),ext,outputType,mapEmits));
+		}
+		
+		// Remaining emits
+		mapEmits.put("noCondition",extractMapEmits(map,ext,outputType,mapEmits));
+		
+		ext.mapEmits = mapEmits;
+		
+		/** Extract reduce emits **/
+		r = Pattern.compile("void do_reduce(.*?)\\{(.*?)return;\n\\}",Pattern.DOTALL);
+		m = r.matcher(text);
+		m.find();
+		String reduce = m.group(0);
+		
+		List<String> reduceLines = new ArrayList<String>();
+		for(String line : reduce.split("\n")){
+			reduceLines.add(line.trim());
+		}
+		
+		r = Pattern.compile("while\\(values != \\(null\\)\\)\\s*\\{(.*?)\\}",Pattern.DOTALL);
+		m = r.matcher(text);
+		m.find();
+		String agg = m.group(0);
+		
+		List<String> aggLines = new ArrayList<String>();
+		for(String line : agg.split("\n")){
+			aggLines.add(line.trim());
+		}
+		
+		String reduceInitValue = "";
+		for(int i=0; i<reduceLines.size(); i++){
+			r = Pattern.compile("_out.(.*?)value = (.*);");
+			m = r.matcher(reduceLines.get(i));
+			if(m.find()){
+				reduceInitValue = m.group(2).trim();
+				if(outputType.equals("bit")){
+					switch(reduceInitValue){
+						case "0":
+							reduceInitValue = "false";
+							break;
+						case "1":
+							reduceInitValue = "true";
+							break;
+					}
+				}
+				break;
+			}
+		}
+		String reduceValue = "";
+		for(int i=0; i<aggLines.size(); i++){
+			r = Pattern.compile("_out.(.*?)value = (.*)");
+			m = r.matcher(aggLines.get(i));
+			if(m.find()){
+				reduceValue = m.group(2).trim();
+				reduceValue = resolve(reduceValue,aggLines,i,ext);
+				if(outputType.equals("bit")){
+					switch(reduceValue){
+						case "0":
+							reduceValue = "false";
+							break;
+						case "1":
+							reduceValue = "true";
+							break;
+					}
+				}
+				break;
+			}
+		}
+		
+		if(debug)
+			System.err.println(reduceInitValue + ", " + reduceValue);
+		
+		
+		/** Extract merge operator **/
+		r = Pattern.compile("void int_get (.*?)\\{(.*?)\\}",Pattern.DOTALL);
+		m = r.matcher(text);
+		String mergeOp = "";
+		if(!m.find()){
+			r = Pattern.compile("void string_get (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+			m = r.matcher(text);
+			if(!m.find()){
+				r = Pattern.compile("void int_get_tuple (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+				m = r.matcher(text);
+				if(!m.find()){
+					r = Pattern.compile("void string_get_tuple (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+					m = r.matcher(text);
+					m.find();
+				}
+			}
+		}
+		mergeOp = m.group(2);
+		r = Pattern.compile(outputType.replace("["+Configuration.arraySizeBound+"]", "") + " option(.*?) = (.*?);",Pattern.DOTALL);
+		m = r.matcher(mergeOp);
+		m.find();
+		mergeOp = casper.Util.getOperatorFromExp(m.group(2));
+		
+		/****** Generate dafny verification file ******/
+		
+		// Generate main harness args
+		String harnessArgs = DafnyCodeGenerator.generateDafnyHarnessArgs(ext,sketchInputVars,sketchOutputVars,sketchLoopCounters);
+		
+		// Generate require statements for dafny main function
+		String mainReqStmts = DafnyCodeGenerator.generateRequireStatements(sketchOutputVars,sketchLoopCounters,ext.wpcValues);
+		
+		// Init variables in main
+		String initVars = DafnyCodeGenerator.generateVarInit(ext,sketchInputVars,sketchOutputVars,sketchLoopCounters);
+		
+		// Generate verification code
+		String preC = DafnyCodeGenerator.generatePreCondition(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
+		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(((While)n).body()));
+		String loopCond = "("+sketchLoopCounters.get(0).name+"<|"+ext.inputDataCollections.get(0).name+"|)";
+		String loopCondFalse = loopCond; if(ext.condInv) loopCondFalse = "!" + loopCondFalse;
+		String invariant = DafnyCodeGenerator.generateInvariant(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
+		String lemma = invariant.replace("loopInvariant", "Lemma");
+		String wpc = DafnyCodeGenerator.generateWPC(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters,bodyExt);
+		String postC = DafnyCodeGenerator.generatePostCondStmt(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
+		
+		// Weakest pre condition value updates
+		String wpcInits = DafnyCodeGenerator.generateWPCInits(ext.wpcValues,sketchOutputVars,sketchLoopCounters);
+		
+		// 1. Assert loop invariant is true before the loop executes.
+		String verifCode = "assert " + preC + ";\n\n\t";
+		
+		// 2. Assert loop invariant is preserved if the loop continues: I && loop condition is true --> wp(c, I), 
+		//    where wp(c, I) is the weakest precondition of the body of the loop with I as the post-condition
+		verifCode += "if(" + invariant + " && " + loopCond + ")\n\t{\n\t\t" + lemma + ";\n\t\t"+wpcInits+"assert " + wpc + ";\n\t}\n\n\t";
+		
+		// 2. Assert loop invariant implies the post condition if the loop terminates: I && loop condition is false --> POST
+		verifCode += "if(" + invariant + " && " + loopCondFalse + ")\n\t{\n\t\tassert " + postC + ";\n\t}";
+		
+		// Generate args for invariant and post condition
+		String invPcArgs = DafnyCodeGenerator.generateInvPcAargs(ext,ext.postConditionArgsOrder.get(outputType),sketchOutputVars,sketchLoopCounters,sketchInputVars);
+		
+		// Generate invariant
+		String loopInv = DafnyCodeGenerator.generateLoopInv(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars, mergeOp, reduceValue);
+		
+		// Generate post condition
+		String postCond = DafnyCodeGenerator.generatePostCond(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars, mergeOp, reduceValue);
+		
+		// Generate mapper function args declaration
+		String mapperArgsDecl = DafnyCodeGenerator.generateMapperArgsDecl(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
+		
+		// Generate mapper function args call
+		String mapperArgsCall = DafnyCodeGenerator.generateMapperArgsCall(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
+		String mapperArgsCallInd = DafnyCodeGenerator.generateMapperArgsCallInd(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
+		String mapperArgsCallInd2 = DafnyCodeGenerator.generateMapperArgsCallInd2(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
+		
+		// Generate domap pre condition
+		String preCondDomap = DafnyCodeGenerator.generateDomapPreCond(ext, sketchLoopCounters);
+		
+		// Generate map pre condition
+		String preCondMap = DafnyCodeGenerator.generateMapPreCond(ext, sketchLoopCounters);
+		
+		// Generate map emits
+		String domapEmits = DafnyCodeGenerator.generateMapEmits(mapEmits, mapperArgsCall);
+		String emitFuncs = DafnyCodeGenerator.generateEmitFuncs(mapEmits);
+		
+		// Do reduce args declaration
+		String reducerArgsDecl = DafnyCodeGenerator.generatedReducerArgsDecl(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
+		
+		// Do reduce args call
+		String reducerArgsCall = DafnyCodeGenerator.generatedReducerArgsCall(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
+		
+		// Generate map outputType
+		String domapEmitType = DafnyCodeGenerator.generateDomapEmitType(ext.mapKeyType,outputType);
+
+		// Generate do reduce key type
+		String doreduceKeyType = DafnyCodeGenerator.generateDoreduceKeyType(ext.mapKeyType);
+		
+		// Generate reduce expression
+		String reduceExp = DafnyCodeGenerator.generateReduceExp(reduceValue,reduceInitValue);
+		
+		// Generate reduce expression for lemma
+		String reduceExpLemma = DafnyCodeGenerator.generateReduceLemma(reduceValue,reduceInitValue);
+		
+		// Generate lemma proof for map emits
+		String emitLemmas = DafnyCodeGenerator.generateEmitLemmas(outputType,mapEmits,mapperArgsCall,mapperArgsCallInd2,reduceValue);
+		
+		// Generate terminate condition for map recursion
+		String tCond = DafnyCodeGenerator.generateMapTerminateCondition(sketchLoopCounters);
+		
+		// Plug all the generated code into the template
+		String template = new String(Files.readAllBytes(Paths.get("templates/dafny_skeleton.dfy")), StandardCharsets.UTF_8);
+		PrintWriter writer = new PrintWriter(filename, "UTF-8");
+		
+		template = template.replace("<reduce-exp-lemma>",reduceExpLemma);
+		template = template.replace("<emit-funcs>", emitFuncs);
+		template = template.replace("<harness-args>", harnessArgs);
+		template = template.replace("<init-vars>", initVars);
+		template = template.replace("<verif-code>", verifCode);
+		template = template.replace("<inv-pc-args>", invPcArgs);
+		template = template.replace("<loop-inv>", loopInv);
+		template = template.replace("<post-cond>", postCond);
+		template = template.replace("<mapper-args-decl>", mapperArgsDecl);
+		template = template.replace("<mapper-args-call>", mapperArgsCall);
+		template = template.replace("<loop-counter-range-domap>", preCondDomap);
+		template = template.replace("<loop-counter-range-map>", preCondMap);
+		template = template.replace("<domap-emits>", domapEmits);
+		template = template.replace("<domap-emit-type>", domapEmitType);
+		template = template.replace("<mapper-args-call-inductive>", mapperArgsCallInd);
+		template = template.replace("<doreduce-key-type>", doreduceKeyType);
+		template = template.replace("<output-type>", casper.Util.getDafnyType(outputType.replace("["+Configuration.arraySizeBound+"]","")));
+		template = template.replace("<reduce-init-value>", reduceInitValue);
+		template = template.replace("<reduce-exp>",reduceExp);
+		template = template.replace("<invariant>",invariant + " && " + loopCond);
+		template = template.replace("<wpc>",wpc);
+		template = template.replace("<mapper-args-call-inductive-2>", mapperArgsCallInd2);
+		template = template.replace("<emit-lemmas>", emitLemmas);
+		template = template.replace("<terminate-condition>", tCond);
+		template = template.replace("<main-requires>", mainReqStmts);
+		template = template.replace("<inv-requires>", mainReqStmts);
+		template = template.replace("<pcond-requires>", mainReqStmts);
+		template = template.replace("<lemma-requires>", mainReqStmts);
+		template = template.replace("<reducer-args-decl>", reducerArgsDecl);
+		template = template.replace("<reducer-args-call>", reducerArgsCall);
+		
+		writer.print(template);
+		writer.close();
+		
+		/****** Run dafny ******/
+		Runtime rt = Runtime.getRuntime();
+		Process pr = rt.exec("dafny "+ filename);
+
+		writer = new PrintWriter("output/outputTempDafny.txt", "UTF-8");
+		
+		BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+			 
+        String line=null;
+        while((line=input.readLine()) != null) {
+        	writer.print(line+"\n");
+        }
+
+        int exitVal = pr.waitFor();
+        if(exitVal == 0)
+        	System.err.println("Summary successfully verified");
+        else
+        	System.err.println("Verifier exited with error code "+exitVal);
+        
+		writer.close();
+		
+		// If summary successfully verifies, save relevant info
+		
+		ext.reduceExp = reduceValue;
+	}
+
+	private List<KvPair> extractMapEmits(String body, MyWhileExt ext, String outputType, Map<String, List<KvPair>> mapEmits) {
+		List<String> mapLines = new ArrayList<String>();
+		
+		for(String line : body.split("\n")){
+			mapLines.add(line.trim());
+		}
+
+		// Extract map emits
+		Pattern r = Pattern.compile("Pair(.*?)= new Pair\\(\\);");
+		Matcher m = r.matcher(body);
+		List<String> mapKvpNames = new ArrayList<String>();
+		while(m.find()){
+			String kvpName = m.group(1).trim();
+			boolean exists = false;
+			for(String key : mapEmits.keySet()){
+				List<KvPair> kvps = mapEmits.get(key);
+				for(KvPair kvp : kvps){
+					if(kvp.name.equals(kvpName)){
+						exists = true;
+						break;
+					}
+				}
+				if(exists) break;
+			}
+			if(!exists)
+				mapKvpNames.add(kvpName);
+		}
+		
+		List<KvPair> emits = new ArrayList<KvPair>();
+		
+		String mapKeyType = ext.mapKeyType;
 		for(String kvpName : mapKvpNames){
 			String mapKey = "";
 			String mapKey2 = "";
@@ -1012,220 +1312,13 @@ public class GenerateScaffold extends NodeVisitor{
 					System.err.println(mapKeyType);
 				}
 			}
-		
-			mapEmits.add(new KvPair(mapKey,mapKey2,mapValue));
+			
+			emits.add(new KvPair(kvpName,mapKey,mapKey2,mapValue));
 		}
 		
-		// Extract reduce emits
-		r = Pattern.compile("void do_reduce(.*?)\\{(.*?)return;\n\\}",Pattern.DOTALL);
-		m = r.matcher(text);
-		m.find();
-		String reduce = m.group(0);
-		
-		List<String> reduceLines = new ArrayList<String>();
-		for(String line : reduce.split("\n")){
-			reduceLines.add(line.trim());
-		}
-		
-		r = Pattern.compile("while\\(values != \\(null\\)\\)\\s*\\{(.*?)\\}",Pattern.DOTALL);
-		m = r.matcher(text);
-		m.find();
-		String agg = m.group(0);
-		
-		List<String> aggLines = new ArrayList<String>();
-		for(String line : agg.split("\n")){
-			aggLines.add(line.trim());
-		}
-		
-		String reduceInitValue = "";
-		for(int i=0; i<reduceLines.size(); i++){
-			r = Pattern.compile("_out.(.*?)value = (.*);");
-			m = r.matcher(reduceLines.get(i));
-			if(m.find()){
-				reduceInitValue = m.group(2).trim();
-				if(outputType.equals("bit")){
-					switch(reduceInitValue){
-						case "0":
-							reduceInitValue = "false";
-							break;
-						case "1":
-							reduceInitValue = "true";
-							break;
-					}
-				}
-				break;
-			}
-		}
-		String reduceValue = "";
-		for(int i=0; i<aggLines.size(); i++){
-			r = Pattern.compile("_out.(.*?)value = (.*)");
-			m = r.matcher(aggLines.get(i));
-			if(m.find()){
-				reduceValue = m.group(2).trim();
-				reduceValue = resolve(reduceValue,aggLines,i,ext);
-				if(outputType.equals("bit")){
-					switch(reduceValue){
-						case "0":
-							reduceValue = "false";
-							break;
-						case "1":
-							reduceValue = "true";
-							break;
-					}
-				}
-				break;
-			}
-		}
-		
-		if(debug)
-			System.err.println(reduceInitValue + ", " + reduceValue);
-		
-		/****** Generate dafny verification file ******/
-		
-		// Generate main harness args
-		String harnessArgs = DafnyCodeGenerator.generateDafnyHarnessArgs(ext,sketchInputVars,sketchOutputVars,sketchLoopCounters);
-		
-		// Generate require statements for dafny main function
-		String mainReqStmts = DafnyCodeGenerator.generateRequireStatements(sketchOutputVars,sketchLoopCounters,ext.wpcValues);
-		
-		// Init variables in main
-		String initVars = DafnyCodeGenerator.generateVarInit(ext,sketchInputVars,sketchOutputVars,sketchLoopCounters);
-		
-		// Generate verification code
-		String preC = DafnyCodeGenerator.generatePreCondition(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
-		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(((While)n).body()));
-		String loopCond = "("+sketchLoopCounters.get(0).name+"<|"+ext.inputDataCollections.get(0).name+"|)";
-		String loopCondFalse = loopCond; if(ext.condInv) loopCondFalse = "!" + loopCondFalse;
-		String invariant = DafnyCodeGenerator.generateInvariant(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
-		String lemma = invariant.replace("loopInvariant", "Lemma");
-		String wpc = DafnyCodeGenerator.generateWPC(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters,bodyExt);
-		String postC = DafnyCodeGenerator.generatePostCondStmt(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
-		
-		// Weakest pre condition value updates
-		String wpcInits = DafnyCodeGenerator.generateWPCInits(ext.wpcValues,sketchOutputVars,sketchLoopCounters);
-		
-		// 1. Assert loop invariant is true before the loop executes.
-		String verifCode = "assert " + preC + ";\n\n\t";
-		
-		// 2. Assert loop invariant is preserved if the loop continues: I && loop condition is true --> wp(c, I), 
-		//    where wp(c, I) is the weakest precondition of the body of the loop with I as the post-condition
-		verifCode += "if(" + invariant + " && " + loopCond + ")\n\t{\n\t\t" + lemma + ";\n\t\t"+wpcInits+"assert " + wpc + ";\n\t}\n\n\t";
-		
-		// 2. Assert loop invariant implies the post condition if the loop terminates: I && loop condition is false --> POST
-		verifCode += "if(" + invariant + " && " + loopCondFalse + ")\n\t{\n\t\tassert " + postC + ";\n\t}";
-		
-		// Generate args for invariant and post condition
-		String invPcArgs = DafnyCodeGenerator.generateInvPcAargs(ext,ext.postConditionArgsOrder.get(outputType),sketchOutputVars,sketchLoopCounters,sketchInputVars);
-		
-		// Generate invariant
-		String loopInv = DafnyCodeGenerator.generateLoopInv(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars, reduceValue);
-		
-		// Generate post condition
-		String postCond = DafnyCodeGenerator.generatePostCond(ext, outputType, sketchOutputVars, sketchLoopCounters, sketchInputVars, reduceValue);
-		
-		// Generate mapper function args declaration
-		String mapperArgsDecl = DafnyCodeGenerator.generateMapperArgsDecl(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
-		
-		// Generate mapper function args call
-		String mapperArgsCall = DafnyCodeGenerator.generateMapperArgsCall(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
-		String mapperArgsCallInd = DafnyCodeGenerator.generateMapperArgsCallInd(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
-		String mapperArgsCallInd2 = DafnyCodeGenerator.generateMapperArgsCallInd2(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
-		
-		// Generate domap pre condition
-		String preCondDomap = DafnyCodeGenerator.generateDomapPreCond(ext, sketchLoopCounters);
-		
-		// Generate map pre condition
-		String preCondMap = DafnyCodeGenerator.generateMapPreCond(ext, sketchLoopCounters);
-		
-		// Generate map emits
-		String domapEmits = DafnyCodeGenerator.generateMapEmits(ext, mapEmits);
-		
-		// Do reduce args declaration
-		String reducerArgsDecl = DafnyCodeGenerator.generatedReducerArgsDecl(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
-		
-		// Do reduce args call
-		String reducerArgsCall = DafnyCodeGenerator.generatedReducerArgsCall(ext, sketchLoopCounters, sketchInputVars, sketchOutputVars);
-		
-		// Generate map outputType
-		String domapEmitType = DafnyCodeGenerator.generateDomapEmitType(mapKeyType,outputType,mapEmits);
-
-		// Generate do reduce key type
-		String doreduceKeyType = DafnyCodeGenerator.generateDoreduceKeyType(mapKeyType,mapEmits);
-		
-		// Generate reduce expression
-		String reduceExp = DafnyCodeGenerator.generateReduceExp(reduceValue,reduceInitValue);
-		
-		// Generate reduce expression for lemma
-		String reduceExpLemma = DafnyCodeGenerator.generateReduceExpLemma(reduceValue);
-		
-		// Generate lemma proof for map emits
-		String emitLemmas = DafnyCodeGenerator.generateEmitLemmas(outputType,mapEmits,mapperArgsCall,mapperArgsCallInd2,reduceValue);
-		
-		// Generate terminate condition for map recursion
-		String tCond = DafnyCodeGenerator.generateMapTerminateCondition(sketchLoopCounters);
-		
-		// Plug all the generated code into the template
-		String template = new String(Files.readAllBytes(Paths.get("templates/dafny_skeleton.dfy")), StandardCharsets.UTF_8);
-		PrintWriter writer = new PrintWriter(filename, "UTF-8");
-		
-		template = template.replace("<harness-args>", harnessArgs);
-		template = template.replace("<init-vars>", initVars);
-		template = template.replace("<verif-code>", verifCode);
-		template = template.replace("<inv-pc-args>", invPcArgs);
-		template = template.replace("<loop-inv>", loopInv);
-		template = template.replace("<post-cond>", postCond);
-		template = template.replace("<mapper-args-decl>", mapperArgsDecl);
-		template = template.replace("<mapper-args-call>", mapperArgsCall);
-		template = template.replace("<loop-counter-range-domap>", preCondDomap);
-		template = template.replace("<loop-counter-range-map>", preCondMap);
-		template = template.replace("<domap-emits>", domapEmits);
-		template = template.replace("<domap-emit-type>", domapEmitType);
-		template = template.replace("<mapper-args-call-inductive>", mapperArgsCallInd);
-		template = template.replace("<doreduce-key-type>", doreduceKeyType);
-		template = template.replace("<output-type>", casper.Util.getDafnyType(outputType.replace("["+Configuration.arraySizeBound+"]","")));
-		template = template.replace("<reduce-init-value>", reduceInitValue);
-		template = template.replace("<reduce-exp>",reduceExp);
-		template = template.replace("<reduce-exp-lemma>",reduceExpLemma);
-		template = template.replace("<invariant>",invariant + " && " + loopCond);
-		template = template.replace("<wpc>",wpc);
-		template = template.replace("<mapper-args-call-inductive-2>", mapperArgsCallInd2);
-		template = template.replace("<emit-lemmas>", emitLemmas);
-		template = template.replace("<terminate-condition>", tCond);
-		template = template.replace("<main-requires>", mainReqStmts);
-		template = template.replace("<inv-requires>", mainReqStmts);
-		template = template.replace("<pcond-requires>", mainReqStmts);
-		template = template.replace("<lemma-requires>", mainReqStmts);
-		template = template.replace("<reducer-args-decl>", reducerArgsDecl);
-		template = template.replace("<reducer-args-call>", reducerArgsCall);
-		
-		writer.print(template);
-		writer.close();
-		
-		/****** Run dafny ******/
-		Runtime rt = Runtime.getRuntime();
-		Process pr = rt.exec("dafny "+ filename);
-
-		writer = new PrintWriter("output/outputTempDafny.txt", "UTF-8");
-		
-		BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-			 
-        String line=null;
-        while((line=input.readLine()) != null) {
-        	writer.print(line+"\n");
-        }
-
-        int exitVal = pr.waitFor();
-        if(exitVal == 0)
-        	System.err.println("Summary successfully verified");
-        else
-        	System.err.println("Verifier exited with error code "+exitVal);
-        
-		writer.close();
-		
-		// If summary successfully verifies, save relevant info
-		ext.mapEmits = mapEmits;
 		ext.mapKeyType = mapKeyType;
-		ext.reduceExp = reduceValue;
+		
+		return emits;
 	}
 
 	@Override

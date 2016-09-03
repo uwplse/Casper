@@ -171,7 +171,7 @@ public class GenerateSparkCode extends NodeVisitor{
 
 	private String generateMapEmits(MyWhileExt ext) {
 		String emits = "";
-		for(GenerateScaffold.KvPair kvp : ext.mapEmits){
+		for(GenerateScaffold.KvPair kvp : ext.mapEmits.get("noCondition")){
 			// Fix function calls
 			for(SketchCall call : ext.methodOperators){
 				Pattern r = Pattern.compile("^("+call.name+")\\((..*)\\)$");

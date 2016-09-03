@@ -250,7 +250,7 @@ public class CasperScheduler extends JL7Scheduler {
      */
     public Goal ScaffoldGenerated (Job job)
     {
-		Goal g = internGoal(new VisitorGoal(job, new GenerateScaffold()));
+		Goal g = internGoal(new VisitorGoal(job, new GenerateScaffold(extInfo.nodeFactory())));
 		
     	try {
 			g.addPrerequisiteGoal(VerificationCodeGenerated(job), this);

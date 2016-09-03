@@ -21,6 +21,7 @@ import java.util.Set;
 import casper.JavaLibModel.SketchCall;
 import casper.types.CustomASTNode;
 import casper.visit.GenerateScaffold;
+import casper.visit.GenerateScaffold.KvPair;
 import casper.visit.GenerateScaffold.SketchVariable;
 import polyglot.ast.FieldDecl;
 import polyglot.ast.Node;
@@ -111,12 +112,12 @@ public class MyWhileExt extends MyStmtExt {
 	public Set<SketchCall> methodOperators = new HashSet<SketchCall>();
 	
 	// Map Emits
-	public List<GenerateScaffold.KvPair> mapEmits = null;
+	public Map<String,List<KvPair>> mapEmits = null;
 	
 	// Reduce Expression
 	public String reduceExp = null;
 
-	public String mapKeyType;
+	public String mapKeyType = "";
 	
 	public Map<String,Boolean> generateCode = new HashMap<String,Boolean>();
 

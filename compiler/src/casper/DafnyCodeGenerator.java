@@ -50,6 +50,9 @@ public class DafnyCodeGenerator {
 				args += ", " + var.name + "0: " + casper.Util.getDafnyType(var.type);
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			args += ", " + "casperConst" + i + ": int";
+		}
 		
 		return args;
 	}
@@ -106,11 +109,14 @@ public class DafnyCodeGenerator {
 				code += ", " + var.name + ": " + casper.Util.getDafnyType(var.type);
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			code += ", " + "casperConst" + i + ": int";
+		}
 		
 		return code;
 	}
 
-	public static String generateLoopInv(MyWhileExt ext, String outputType, Set<SketchVariable> sketchOutputVars, List<SketchVariable> sketchLoopCounters, Set<SketchVariable> sketchInputVars, String reduceValue) {
+	public static String generateLoopInv(MyWhileExt ext, String outputType, Set<SketchVariable> sketchOutputVars, List<SketchVariable> sketchLoopCounters, Set<SketchVariable> sketchInputVars, String mergeOp, String reduceValue) {
 		String code = "";
 		
 		code += "0 <= " + sketchLoopCounters.get(0).name + " <= |" + ext.inputDataCollections.get(0).name + "| &&\n\t";
@@ -121,13 +127,23 @@ public class DafnyCodeGenerator {
 				args += ","+var.name;
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			args += "," + "casperConst" + i;
+		}
 		
 		if(casper.Util.getTypeClass(outputType) == casper.Util.PRIMITIVE){
 			int index = 0;
 			for(SketchVariable var : sketchOutputVars){
 				if(var.type.equals(outputType)){
-					String operator = casper.Util.getOperatorFromExp(reduceValue);
-					code += "(" + var.name + " == (doreduce(mapper("+args+"),"+index+"<reducer-args-call>) " + operator + " " + var.name + "0)) &&\n\t";
+					if(reduceValue.contains("val1") && reduceValue.contains("val2")){
+						code += "(" + var.name + " == (doreduce(mapper("+args+"),"+index+"<reducer-args-call>) " + mergeOp + " " + var.name + "0)) &&\n\t";
+					}
+					else{
+						code += "("
+								+ "(contains(mapper("+args+"),"+index+") && (" + var.name + " == (doreduce(mapper("+args+"),"+index+"<reducer-args-call>) " + mergeOp + " " + var.name + "0))) || "
+								+ "((!contains(mapper("+args+"),"+index+")) && (" + var.name + " == " + var.name + "0))"
+							  + ") &&\n\t";
+					}
 					index++;
 				}
 			}
@@ -136,8 +152,7 @@ public class DafnyCodeGenerator {
 			int index = 0;
 			for(SketchVariable var : sketchOutputVars){
 				if(var.type.equals(outputType)){
-					String operator = casper.Util.getOperatorFromExp(reduceValue);
-					code += "(forall k :: 0 <= k < |" + var.name  + "| ==> " + var.name + "[k] == doreduce(mapper("+args+"),("+index+",k)<reducer-args-call>) " + operator + " " + var.name + "0[k]) &&\n\t";
+					code += "(forall k :: 0 <= k < |" + var.name  + "| ==> " + var.name + "[k] == doreduce(mapper("+args+"),("+index+",k)<reducer-args-call>) " + mergeOp + " " + var.name + "0[k]) &&\n\t";
 					index++;
 				}
 			}
@@ -148,7 +163,7 @@ public class DafnyCodeGenerator {
 		return code;
 	}
 	
-	public static String generatePostCond(MyWhileExt ext, String outputType, Set<SketchVariable> sketchOutputVars, List<SketchVariable> sketchLoopCounters, Set<SketchVariable> sketchInputVars, String reduceValue) {
+	public static String generatePostCond(MyWhileExt ext, String outputType, Set<SketchVariable> sketchOutputVars, List<SketchVariable> sketchLoopCounters, Set<SketchVariable> sketchInputVars, String mergeOp, String reduceValue) {
 		String code = "";
 		
 		code += sketchLoopCounters.get(0).name+" == |" + ext.inputDataCollections.get(0).name + "| &&\n\t";
@@ -159,13 +174,23 @@ public class DafnyCodeGenerator {
 				args += ","+var.name;
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			args += "," + "casperConst" + i;
+		}
 		
 		if(casper.Util.getTypeClass(outputType) == casper.Util.PRIMITIVE){
 			int index = 0;
 			for(SketchVariable var : sketchOutputVars){
 				if(var.type.equals(outputType)){
-					String operator = casper.Util.getOperatorFromExp(reduceValue);
-					code += "(" + var.name + " == (doreduce(mapper("+args+"),"+index+"<reducer-args-call>) " + operator + " " + var.name + "0)) &&\n\t";
+					if(reduceValue.contains("val1") && reduceValue.contains("val2")){
+						code += "(" + var.name + " == (doreduce(mapper("+args+"),"+index+"<reducer-args-call>) " + mergeOp + " " + var.name + "0)) &&\n\t";
+					}
+					else{
+						code += "("
+								+ "(contains(mapper("+args+"),"+index+") && (" + var.name + " == (doreduce(mapper("+args+"),"+index+"<reducer-args-call>) " + mergeOp + " " + var.name + "0))) || "
+								+ "((!contains(mapper("+args+"),"+index+")) && (" + var.name + " == " + var.name + "0))"
+							  + ") &&\n\t";
+					}
 					index++;
 				}
 			}
@@ -179,7 +204,7 @@ public class DafnyCodeGenerator {
 					index++;
 				}
 			}
-		} 
+		}
 		
 		code = code.substring(0,code.length()-5);
 		
@@ -201,6 +226,9 @@ public class DafnyCodeGenerator {
 				args += ", " + var.name + ": " + casper.Util.getDafnyType(var.type);
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			args += ", " + "casperConst" + i + ": int";
+		}
 		
 		return args;
 	}
@@ -218,6 +246,9 @@ public class DafnyCodeGenerator {
 			if(!sketchOutputVars.contains(var) && !sketchLoopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
 				args += ", " + var.name;
 			}
+		}
+		for(int i=0; i<ext.constCount; i++){
+			args += ", " + "casperConst" + i;
 		}
 		
 		return args;
@@ -238,6 +269,9 @@ public class DafnyCodeGenerator {
 				args += ", " + var.name;
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			args += ", " + "casperConst" + i;
+		}
 		
 		return args;
 	}
@@ -257,6 +291,9 @@ public class DafnyCodeGenerator {
 				args += ", " + var.name;
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			args += ", " + "casperConst" + i;
+		}
 		
 		return args;
 	}
@@ -269,15 +306,53 @@ public class DafnyCodeGenerator {
 		return "requires 0 <= " + sketchLoopCounters.get(0).name + " <= |" + ext.inputDataCollections.get(0).name + "|";
 	}
 
-	public static String generateMapEmits(MyWhileExt ext, List<GenerateScaffold.KvPair> mapEmits) {
-		String code = "[";
-		for(GenerateScaffold.KvPair kvp : mapEmits){
-			if(kvp.key2 == "")
-				code += "("+kvp.key+","+kvp.value+"),";
-			else
-				code += "(("+kvp.key+","+kvp.key2+"),"+kvp.value+"),";
+	public static String generateMapEmits(Map<String, List<KvPair>> mapEmits, String mapperArgsCall) {
+		String code = "";
+		int index = 0;
+		for(String cond : mapEmits.keySet()){
+			for(KvPair kvp : mapEmits.get(cond)){
+				code += "emit" + index + "(" + mapperArgsCall + ") + ";
+				index++;
+			}
 		}
-		return code.substring(0,code.length()-1) + "]";
+		code = code.substring(0,code.length()-3);
+		return code;
+	}
+	
+	public static String generateEmitFuncs(Map<String, List<KvPair>> mapEmits) {
+		String code = "";
+		int index = 0;
+		for(String cond : mapEmits.keySet()){
+			for(KvPair kvp : mapEmits.get(cond)){
+				String emit = "[";
+				if(kvp.key2 == "")
+					emit += "("+kvp.key+","+kvp.value+"),";
+				else
+					emit += "(("+kvp.key+","+kvp.key2+"),"+kvp.value+"),";
+				emit = emit.substring(0,emit.length()-1) + "]";
+				
+				if(cond.equals("noCondition")){
+					code += "function emit" + index + "(<mapper-args-decl>) : <domap-emit-type>\n\t" + 
+							"<loop-counter-range-domap>\n\t" +
+							"ensures emit"+index+"(<mapper-args-call>) == "+emit+"\n" +
+						"{\n\t" +
+						  emit + "\n" +
+						"}\n\n";
+				}
+				else{
+					code += "function emit" + index + "(<mapper-args-decl>) : <domap-emit-type>\n\t" + 
+							"<loop-counter-range-domap>\n\t" +
+							"ensures ("+cond+") ==> (emit"+index+"(<mapper-args-call>) == "+emit+")\n" +
+						"{\n\t" +
+						  "if "+cond+" then" + emit + "\n" +
+						  "else []\n" +
+						"}\n\n";
+				}
+				index++;
+			}
+		}
+		
+		return code;
 	}
 
 	public static String generateReduceExp(String reduceValue, String reduceInitValue) { 
@@ -286,17 +361,16 @@ public class DafnyCodeGenerator {
 		return foldexp;
 	}
 
-	public static String generateEmitLemmas(String type, List<GenerateScaffold.KvPair> mapEmits, String mapperArgsCall, String mapperArgsCallInd2, String reduceValue) {
+	public static String generateEmitLemmas(String type, Map<String, List<KvPair>> mapEmits, String mapperArgsCall, String mapperArgsCallInd2, String reduceValue) {
 		String code = "";
 
 		if(type.contains("["+Configuration.arraySizeBound+"]")){
-			for(GenerateScaffold.KvPair kvp : mapEmits){
+			for(GenerateScaffold.KvPair kvp : mapEmits.get("noCondition")){
 				if(kvp.key2 == ""){
 					code += "assert doreduce(domap("+mapperArgsCall+"),"+kvp.key+"<reducer-args-call>) == ("+kvp.value+");\n\t";
 					code += "Lemma2(domap("+mapperArgsCall+"),mapper("+mapperArgsCall+"),"+kvp.key+"<reducer-args-call>);\n\t";
 				}
 				else{
-					code += "assert doreduce(domap("+mapperArgsCall+"),("+kvp.key+","+kvp.key2+")<reducer-args-call>) == ("+kvp.value+");\n\t";
 					code += "assert doreduce(domap("+mapperArgsCall+"),("+kvp.key+","+kvp.key2+")<reducer-args-call>) == ("+kvp.value+");\n\t";
 				}
 				
@@ -305,7 +379,7 @@ public class DafnyCodeGenerator {
 			}
 		}
 		else{
-			for(GenerateScaffold.KvPair kvp : mapEmits){
+			for(GenerateScaffold.KvPair kvp : mapEmits.get("noCondition")){
 				String exp = reduceValue;
 				exp = exp.replace("val2", "doreduce(domap("+mapperArgsCall+"),"+kvp.key+"<reducer-args-call>)");
 				exp = exp.replace("val1", "doreduce(mapper("+mapperArgsCall+"),"+kvp.key+"<reducer-args-call>)");
@@ -398,9 +472,9 @@ public class DafnyCodeGenerator {
 		return code;
 	}
 
-	public static String generateDomapEmitType(String mapKeyType, String outputType, List<KvPair> mapEmits) {
+	public static String generateDomapEmitType(String mapKeyType, String outputType) {
 		String code = "";
-		
+
 		// Convert mapKeyType to dafny types
 		String dafnyMapKeyType = "";
 		
@@ -416,7 +490,7 @@ public class DafnyCodeGenerator {
 		return code;
 	}
 
-	public static String generateDoreduceKeyType(String mapKeyType, List<KvPair> mapEmits) {
+	public static String generateDoreduceKeyType(String mapKeyType) {
 		String code = "";
 		//if(mapEmits.get(0).key2 == "")
 			code += mapKeyType.replace("string", "int");
@@ -435,6 +509,9 @@ public class DafnyCodeGenerator {
 				code += v.name + ",";
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			code += "casperConst" + i + ",";
+		}
 		code = code.substring(0,code.length()-1) + ")";
 		
 		return code;
@@ -449,6 +526,9 @@ public class DafnyCodeGenerator {
 			if(!sketchOutputVars.contains(v) && !sketchLoopCounters.contains(v) && !ext.inputDataCollections.contains(v)){
 				invariant += v.name + ",";
 			}
+		}
+		for(int i=0; i<ext.constCount; i++){
+			invariant += "casperConst" + i + ",";
 		}
 		invariant = invariant.substring(0,invariant.length()-1) + ")";
 		
@@ -465,6 +545,9 @@ public class DafnyCodeGenerator {
 				wpc += v.name + ",";
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			wpc += "casperConst" + i + ",";
+		}
 		wpc = wpc.substring(0,wpc.length()-1) + ")";
 		
 		return wpc;
@@ -480,15 +563,33 @@ public class DafnyCodeGenerator {
 				pcond += v.name + ",";
 			}
 		}
+		for(int i=0; i<ext.constCount; i++){
+			pcond += "casperConst" + i + ",";
+		}
 		pcond = pcond.substring(0,pcond.length()-1) + ")";
 		
 		return pcond;
 	}
 
-	public static String generateReduceExpLemma(String reduceValue) {
-		String foldexp = reduceValue.replace("val1", "doreduce(a, key<reducer-args-call>)");
-		foldexp = foldexp.replaceAll("val2", "doreduce(b, key<reducer-args-call>)");
-		return "("+foldexp+")";
+	public static String generateReduceLemma(String reduceValue, String reduceInitValue) {
+		if(reduceValue.contains("val1") && reduceValue.contains("val2")){
+			String foldexp = reduceValue.replace("val1", "doreduce(a, key<reducer-args-call>)");
+			foldexp = foldexp.replaceAll("val2", "doreduce(b, key<reducer-args-call>)");
+			
+			String lemma = "lemma Lemma2 (a: <domap-emit-type>, b: <domap-emit-type>, key: <doreduce-key-type><reducer-args-decl>)\n\t" +
+							  "ensures doreduce(a+b, key<reducer-args-call>) == ("+foldexp+")\n" +
+							"{\n\t" +
+							    "if a != []\n\t" +
+							    "{\n\t\t" +
+							    	"Lemma2(a[1..], b, key<reducer-args-call>);\n\t\t" +
+							    	"assert a + b == [a[0]] + (a[1..] + b);\n\t" +
+								"}\n" +
+							"}";
+			return lemma;	
+		}
+		else{
+			return "";
+		}
 	}
 
 	public static String generatedReducerArgsDecl(MyWhileExt ext, List<SketchVariable> sketchLoopCounters, Set<SketchVariable> sketchInputVars, Set<SketchVariable> sketchOutputVars) {
@@ -512,4 +613,5 @@ public class DafnyCodeGenerator {
 		}
 		return args;
 	}
+
 }

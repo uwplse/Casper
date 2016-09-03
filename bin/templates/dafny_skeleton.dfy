@@ -5,6 +5,7 @@ function str_equal(val1: int, val2: int) : bool
 }
 
 /***************************** DO MAP ***************************************/
+<emit-funcs>
 function domap (<mapper-args-decl>) : <domap-emit-type>
   <loop-counter-range-domap>
   ensures domap(<mapper-args-call>) == <domap-emits>
@@ -36,15 +37,17 @@ function doreduce(input: <domap-emit-type>, key: <doreduce-key-type><reducer-arg
 
 /******************************* HARNESS ************************************/  
 
-lemma Lemma2 (a: <domap-emit-type>, b: <domap-emit-type>, key: <doreduce-key-type><reducer-args-decl>)
-  ensures doreduce(a+b, key<reducer-args-call>) == (<reduce-exp-lemma>)
+function contains(input: <domap-emit-type>, key: <doreduce-key-type>) : bool
+  ensures (input == []) ==> (contains(input, key) == false)
+  ensures (|input| > 0 && input[0].0 == key) ==> (contains(input, key) == true)
+  ensures (|input| > 0 && input[0].0 != key) ==> (contains(input, key) == contains(input[1..], key))
 {
-  if a != []
-  {
-    Lemma2(a[1..], b, key<reducer-args-call>);
-    assert a + b == [a[0]] + (a[1..] + b);
-  }
+  if input == [] then false
+  else if input[0].0 == key then true
+  else contains(input[1..], key)
 }
+
+<reduce-exp-lemma>
 
 lemma Lemma (<inv-pc-args>)
   <lemma-requires>

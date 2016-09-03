@@ -1248,37 +1248,39 @@ public class SketchCodeGenerator {
 				terminalOpts += " | true | false";
 				break;
 		}*/
-		for(SketchVariable var : sketchInputVars){
-			if(sketchOutputVars.contains(var))
-				continue;
-			
-			if(var.type.equals(type)){
-				terminalOpts += " | " + var.name;
-			}
-			else if(var.type.equals(type+"["+Configuration.arraySizeBound+"]")){
-				if(!ext.inputDataCollections.contains(var)){
-					for(SketchVariable lc : sketchLoopCounters){
-						terminalOpts += " | " + var.name + "["+lc.name+"]";
+		if(!outputType.equals("bit")){
+			for(SketchVariable var : sketchInputVars){
+				if(sketchOutputVars.contains(var))
+					continue;
+				
+				if(var.type.equals(type)){
+					terminalOpts += " | " + var.name;
+				}
+				else if(var.type.equals(type+"["+Configuration.arraySizeBound+"]")){
+					if(!ext.inputDataCollections.contains(var)){
+						for(SketchVariable lc : sketchLoopCounters){
+							terminalOpts += " | " + var.name + "["+lc.name+"]";
+						}
+					}
+				}
+				else{
+					for(String globalVar : ext.globalDataTypes){
+						// If it is one of the global data types
+						if(globalVar.equals(var.type)){
+							// Add an option for each field that matches type
+		        			for(FieldDecl field : ext.globalDataTypesFields.get(globalVar)){
+		        				if(field.type().toString().equals(type)){
+		        					terminalOpts += " | " + var.name + "." + field.id().toString();
+		        				}
+		        			}
+		        		}
 					}
 				}
 			}
-			else{
-				for(String globalVar : ext.globalDataTypes){
-					// If it is one of the global data types
-					if(globalVar.equals(var.type)){
-						// Add an option for each field that matches type
-	        			for(FieldDecl field : ext.globalDataTypesFields.get(globalVar)){
-	        				if(field.type().toString().equals(type)){
-	        					terminalOpts += " | " + var.name + "." + field.id().toString();
-	        				}
-	        			}
-	        		}
+			for(int i=0; i<ext.constCount; i++){
+				if(casper.Util.compatibleTypes(type,"int") == 1){
+					terminalOpts += " | casperConst" + i;
 				}
-			}
-		}
-		for(int i=0; i<ext.constCount; i++){
-			if(casper.Util.compatibleTypes(type,"int") == 1){
-				terminalOpts += " | casperConst" + i;
 			}
 		}
 		
@@ -1300,7 +1302,10 @@ public class SketchCodeGenerator {
 			id++;
 		}
 		if(!opts.equals("")) opts = opts.substring(0, opts.length()-3);
-		else opts = "";
+		
+		if(outputType.equals("bit")){
+			opts = "true | false | " + opts;
+		}
 		
 		// Generator code		
 		generator += "generator "+type+" "+type+"ReduceGenerator("+type+" val1, "+type+" val2){\n\t" + terminals + expressions + "return {| " + opts + " |};\n}";
