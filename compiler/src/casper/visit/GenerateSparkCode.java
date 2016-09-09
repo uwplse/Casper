@@ -79,6 +79,10 @@ public class GenerateSparkCode extends NodeVisitor{
 						template = template.replace("<input-name>", inputDataName+"_"+lcName);
 						template = template.replace(inputDataName+"["+lcName+"]", inputDataName+"_"+lcName);
 						
+						for(String constVar : ext.constMapping.keySet()){
+							template = template.replace(ext.constMapping.get(constVar), constVar);
+						}
+						
 						for(Variable inVar : ext.inputVars){
 							if(!ext.outputVars.contains(inVar) && inVar.category != Variable.ARRAY_ACCESS)
 								template = template.replaceAll("\\b"+inVar.varName+"\\b",inVar.varName+"_final");
@@ -171,40 +175,50 @@ public class GenerateSparkCode extends NodeVisitor{
 
 	private String generateMapEmits(MyWhileExt ext) {
 		String emits = "";
-		for(GenerateScaffold.KvPair kvp : ext.mapEmits.get("noCondition")){
-			// Fix function calls
-			for(SketchCall call : ext.methodOperators){
-				Pattern r = Pattern.compile("^("+call.name+")\\((..*)\\)$");
-				Matcher m;
-				
-				m = r.matcher(kvp.key);
-				if(m.find()){
-					System.err.println("key:" + m);
+		for(String cond : ext.mapEmits.keySet()){
+			for(GenerateScaffold.KvPair kvp : ext.mapEmits.get(cond)){
+				// Fix function calls
+				for(SketchCall call : ext.methodOperators){
+					Pattern r = Pattern.compile("^("+call.name+")\\((..*)\\)$");
+					Matcher m;
+					
+					m = r.matcher(kvp.key);
+					if(m.find()){
+					}
+					
+					m = r.matcher(kvp.key2);
+					if(m.find()){
+					}
+					
+					m = r.matcher(kvp.value);
+					if(m.find()){
+						if(call.target.equals("first-arg")){
+							String target = m.group(2).substring(0, m.group(2).indexOf(","));
+							String args = m.group(2).substring(m.group(2).indexOf(",")+1, m.group(2).length());
+							kvp.value = kvp.value.replace(m.group(0), target+"."+call.nameOrig+"("+args+")");
+						}
+						else{
+							String args = m.group(2);
+							kvp.value = kvp.value.replace(m.group(0), call.nameOrig+"("+args+")");
+						}
+					}
 				}
-				
-				m = r.matcher(kvp.key2);
-				if(m.find()){
-					System.err.println("key2:" + m);
-				}
-				
-				m = r.matcher(kvp.value);
-				if(m.find()){
-					if(call.target.equals("first-arg")){
-						String target = m.group(2).substring(0, m.group(2).indexOf(","));
-						String args = m.group(2).substring(m.group(2).indexOf(",")+1, m.group(2).length());
-						kvp.value = kvp.value.replace(m.group(0), target+"."+call.nameOrig+"("+args+")");
+				if(kvp.key2 == ""){
+					if(cond.equals("noCondition")){
+						emits += "emits.add(new Tuple2("+kvp.key+","+kvp.value+"));\n";
 					}
 					else{
-						String args = m.group(2);
-						kvp.value = kvp.value.replace(m.group(0), call.nameOrig+"("+args+")");
+						emits += "if("+cond+") emits.add(new Tuple2("+kvp.key+","+kvp.value+"));\n";
 					}
 				}
-			}
-			if(kvp.key2 == ""){
-				emits += "emits.add(new Tuple2("+kvp.key+","+kvp.value+"));\n";
-			}
-			else{
-				emits += "emits.add(new Tuple2(new Tuple2("+kvp.key+","+kvp.key2+"), "+kvp.value+"));\n";
+				else{
+					if(cond.equals("noCondition")){
+						emits += "emits.add(new Tuple2(new Tuple2("+kvp.key+","+kvp.key2+"), "+kvp.value+"));\n";
+					}
+					else{
+						emits += "if("+cond+") emits.add(new Tuple2(new Tuple2("+kvp.key+","+kvp.key2+"), "+kvp.value+"));\n";
+					}
+				}
 			}
 		}
 		return emits;
