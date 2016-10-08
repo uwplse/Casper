@@ -6,7 +6,8 @@ The most recent release version for Casper is v0.0.1.
 
 To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read our 
 [paper](http://homes.cs.washington.edu/~maazsaf/synt16.pdf) or 
-[email us](https://mailman.cs.washington.edu/mailman/listinfo/casper-users)!
+[email us](https://mailman.cs.washington.edu/mailman/listinfo/casper-users), and if you like
+our tool, please star our repo!
 
 Casper has been implemented as an extension of 
 [Polyglot 2.6.1](https://www.cs.cornell.edu/projects/polyglot/).
