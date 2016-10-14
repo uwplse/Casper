@@ -11,6 +11,7 @@ package casper;
 import java.util.ArrayList;
 import java.util.List;
 
+import casper.extension.MyWhileExt;
 import casper.types.ArrayAccessNode;
 import casper.types.ArrayUpdateNode;
 import casper.types.CallNode;
@@ -18,6 +19,7 @@ import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
 import polyglot.ast.Call;
 import polyglot.ast.Expr;
+import polyglot.ast.Lit;
 import polyglot.ast.Local;
 import polyglot.ast.Node;
 
@@ -25,173 +27,7 @@ public class JavaLibModel {
 	
 	private static boolean debug = false;
 	
-	// A class used to encapsulate a function call in Sketch.
-	// SketchCall objects are used to generate sketch code.
-	public static class SketchCall{
-		public String nameOrig;
-		public String target;
-		public String name;
-		public String returnType;
-		public List<String> args = new ArrayList<String>();
-		public String toString(){ return "["+returnType+", "+name+", "+args+"]"; }
-		public boolean equals(Object o){ return name.equals(((SketchCall)o).name) && returnType.equals(((SketchCall)o).returnType) && args.equals(((SketchCall)o).args); }
-		public int hashCode(){ return 0; }
-		public String resolve(String exp, List<String> argsR) {
-			if(argsR.indexOf(exp) >= args.size()){
-				return name+"("+casper.Util.join(argsR.subList(0, argsR.size()-1),",")+")";
-			}
-			return exp;
-		}
-	}
-	
-	// Extract all loop counters from the function call
-	public static Node extractLoopCounters(Call exp) {
-		// Get the container class
-		String targetType = exp.target().type().toString();
-		
-		// Is the container class a generic?
-		int end = targetType.indexOf('<');
-		if(end != -1)
-			// It is, drop the generic part
-			targetType = targetType.substring(0, end);
-		
-		switch(targetType){
-			case "java.util.List":
-				switch(exp.id().toString()){
-					case "get":
-						return exp.arguments().get(0);
-					default:
-						return null;
-				}
-			default:
-				return null;
-		}
-	}
-	
-	// Extract all expressions being read by this function call
-	static public List<Node> extractReads(Call exp){
-		// Get the container class
-		String targetType = exp.target().type().toString();
-		
-		// Is the container class a generic?
-		int end = targetType.indexOf('<');
-		if(end != -1)
-			// It is, drop the generic part
-			targetType = targetType.substring(0, end);
-		
-		List<Node> reads = new ArrayList<Node>();
-		
-		switch(targetType){
-			case "java.lang.String":
-				switch(exp.id().toString()){
-					case "equals":
-						reads.addAll(exp.arguments());
-						reads.add(exp.target());
-						break;
-					case "split":
-						reads.add(exp.target());
-						break;
-					default:
-						break;
-				}
-				break;
-			case "java.util.List":
-				switch(exp.id().toString()){
-					case "size":
-						reads.add(exp.target());
-						break;
-					case "get":
-						reads.add(exp.target());
-						for(Expr arg : exp.arguments())
-							if(arg instanceof Local)
-								reads.add(arg);
-						break;
-					case "add":
-						reads.addAll(exp.arguments());
-						break;
-					case "set":
-						reads.addAll(exp.arguments());
-						break;
-					default:
-						break;
-				}
-				break;
-			case "java.util.Map":
-				switch(exp.id().toString()){
-					case "get":
-						reads.add(exp.target());
-						reads.addAll(exp.arguments());
-						break;
-					case "put":
-						reads.addAll(exp.arguments());
-						break;
-					default:
-						break;
-				}
-				break;
-			default:
-				break;
-		}
-		
-		return reads;
-	}
-	
-	// Extract all expressions being modified by this function call
-	static public List<Node> extractWrites(Call exp){
-		String targetType = exp.target().type().toString();
-		int end = targetType.indexOf('<');
-		if(end != -1)
-			targetType = targetType.substring(0, end);
-		
-		List<Node> writes = new ArrayList<Node>();
-		
-		switch(targetType){
-			case "java.lang.String":
-				switch(exp.id().toString()){
-					case "equals":
-						break;
-					case "split":
-						break;
-					default:
-						break;
-				}
-				break;
-			case "java.util.List":
-				switch(exp.id().toString()){
-					case "size":
-						break;
-					case "add":
-						writes.add(exp.target());
-						break;
-					case "get":
-						break;
-					case "set":
-						writes.add(exp.target());
-						break;
-					default:
-						break;
-				}
-				break;
-			case "java.util.Map":
-				switch(exp.id().toString()){
-					case "get":
-						break;
-					case "put":
-						writes.add(exp.target());
-						break;
-					default:
-						break;
-				}
-				break;
-			default:
-				break;
-		}
-		
-		return writes;
-	}
-	
-	// This method is used to judge whether we
-	// 'handle' a certain method or not
+	// Determines if the provided library method is supported
 	static public boolean recognizes(Call exp){
 		String targetType = exp.target().type().toString();
 		int end = targetType.indexOf('<');
@@ -237,6 +73,200 @@ public class JavaLibModel {
 					System.err.println("Unsupported library funcntion: "+ exp);
 				}
 				return false;
+		}
+	}
+	
+	// Extract all loop counters from the function call
+	public static Node extractLoopCounters(Call exp) {
+		// Get the container class
+		String targetType = exp.target().type().toString();
+		
+		// Is the container class a generic?
+		int end = targetType.indexOf('<');
+		if(end != -1)
+			// It is, drop the generic part
+			targetType = targetType.substring(0, end);
+		
+		switch(targetType){
+			case "java.util.List":
+				switch(exp.id().toString()){
+					case "get":
+						return exp.arguments().get(0);
+					default:
+						return null;
+				}
+			default:
+				return null;
+		}
+	}
+	
+	// Extract all expressions being read from function call
+	static public List<Node> extractReads(Call exp, MyWhileExt ext){
+		// Get the container class
+		String targetType = exp.target().type().toString();
+		
+		// Is the container class a generic?
+		int end = targetType.indexOf('<');
+		if(end != -1)
+			// It is, drop the generic part
+			targetType = targetType.substring(0, end);
+		
+		List<Node> reads = new ArrayList<Node>();
+		
+		switch(targetType){
+			case "java.lang.String":
+				switch(exp.id().toString()){
+					case "equals":
+						reads.add(exp.target());
+						reads.addAll(exp.arguments());
+						break;
+					default:
+						break;
+				}
+				break;
+			case "java.lang.Math":
+				switch(exp.id().toString()){
+					case "pow":
+						reads.addAll(exp.arguments());
+						break;
+					case "sqrt":
+						reads.addAll(exp.arguments());
+						break;
+					default:
+						break;
+				}
+			case "java.util.List":
+				switch(exp.id().toString()){
+					case "size":
+						ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.CONST_ARRAY_ACCESS);
+						break;
+					case "get":
+						for(Expr arg : exp.arguments()){
+							if(arg instanceof Local){
+								reads.add(arg);
+								ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.ARRAY_ACCESS);
+							}
+							else if(arg instanceof Lit){
+								ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.CONST_ARRAY_ACCESS);
+							}
+						}
+						break;
+					case "add":
+						reads.addAll(exp.arguments());
+						break;
+					case "set":
+						reads.addAll(exp.arguments());
+						break;
+					default:
+						break;
+				}
+				break;
+			case "java.util.Map":
+				switch(exp.id().toString()){
+					case "get":
+						reads.add(exp.target());
+						reads.addAll(exp.arguments());
+						break;
+					case "put":
+						reads.addAll(exp.arguments());
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
+		}
+		
+		return reads;
+	}
+	
+	// Extract all expressions being modified by this function call
+	static public List<Node> extractWrites(Call exp, MyWhileExt ext){
+		String targetType = exp.target().type().toString();
+		int end = targetType.indexOf('<');
+		if(end != -1)
+			targetType = targetType.substring(0, end);
+		
+		List<Node> writes = new ArrayList<Node>();
+		
+		switch(targetType){
+			case "java.lang.String":
+				switch(exp.id().toString()){
+					case "equals":
+						break;
+					default:
+						break;
+				}
+				break;
+			case "java.lang.Math":
+				switch(exp.id().toString()){
+					case "pow":
+					case "sqrt":
+						break;
+					default:
+						break;
+				}
+			case "java.util.Map":
+				switch(exp.id().toString()){
+					case "get":
+						break;
+					case "put":
+						if(exp.arguments().get(0) instanceof Local){
+							writes.add(exp.target());
+						}
+						else if(exp.arguments().get(0) instanceof Lit){
+							ext.saveOutputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.CONST_ARRAY_ACCESS);
+						}
+						break;
+					default:
+						break;
+				}
+				break;
+			case "java.util.List":
+				switch(exp.id().toString()){
+					case "size":
+						break;
+					case "add":
+						writes.add(exp.target());
+						break;
+					case "get":
+						break;
+					case "set":
+						if(exp.arguments().get(0) instanceof Local){
+							writes.add(exp.target());
+						}
+						else if(exp.arguments().get(0) instanceof Lit){
+							ext.saveOutputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.CONST_ARRAY_ACCESS);
+						}
+						break;
+					default:
+						break;
+				}
+				break;
+			default:
+				break;
+		}
+		
+		return writes;
+	}
+	
+	// A class used to encapsulate a function call in Sketch.
+	// SketchCall objects are used to generate sketch code.
+	public static class SketchCall{
+		public String nameOrig;
+		public String target;
+		public String name;
+		public String returnType;
+		public List<String> args = new ArrayList<String>();
+		public String toString(){ return "["+returnType+", "+name+", "+args+"]"; }
+		public boolean equals(Object o){ return name.equals(((SketchCall)o).name) && returnType.equals(((SketchCall)o).returnType) && args.equals(((SketchCall)o).args); }
+		public int hashCode(){ return 0; }
+		public String resolve(String exp, List<String> argsR) {
+			if(argsR.indexOf(exp) >= args.size()){
+				return name+"("+casper.Util.join(argsR.subList(0, argsR.size()-1),",")+")";
+			}
+			return exp;
 		}
 	}
 	

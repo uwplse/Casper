@@ -1,5 +1,5 @@
 /* 
-The payment for your money transfer has been received and is available for pickup. * This class implements a single compiler pass. The pass is executed 
+ * This class implements a single compiler pass. The pass is executed 
  * after the promising loop fragments have been marked. The goal for
  * this compiler pass is to extract the set of input variables for
  * all of the marked code fragments.
@@ -27,6 +27,7 @@ import polyglot.ast.Cast;
 import polyglot.ast.Expr;
 import polyglot.ast.Field;
 import polyglot.ast.If;
+import polyglot.ast.Lit;
 import polyglot.ast.Local;
 import polyglot.ast.LocalDecl;
 import polyglot.ast.Node;
@@ -44,6 +45,7 @@ public class ExtractInputVariables extends NodeVisitor {
 	boolean ignore;
 	ArrayList<MyWhileExt> extensions;
    
+	@SuppressWarnings("deprecation")
 	public ExtractInputVariables(){
 		this.debug = false;
 		this.extensions = new ArrayList<MyWhileExt>();
@@ -93,21 +95,19 @@ public class ExtractInputVariables extends NodeVisitor {
 				ext.saveExpression(exp.toString(), exp.type().toString());
 		}
 		else if(exp instanceof Call){
-			// If expression is a function call
+			// If expression is a user defined function call
+			// TODO
 			
-			// We currently assume that the source code is inlined and therefore any function call is an external library
-			// call. We pass the expression to our JavaLibModel - a class that recognizes typical Java library calls.s
-			List<Node> reads = JavaLibModel.extractReads((Call)exp);
-			if(debug){
-				System.err.println(exp + " ::: " + reads);
-			}
-			for(Node node : reads){
-				if(node instanceof Receiver){
-					for(MyWhileExt ext : extensions)
+			// Else if the expression is a library function call
+			for(MyWhileExt ext : extensions){
+				List<Node> reads = JavaLibModel.extractReads((Call)exp,ext);
+				for(Node node : reads){
+					if(node instanceof Receiver){
 						ext.saveInputVariable(node.toString(),((Receiver)node).type().toString(),MyWhileExt.Variable.FIELD_ACCESS);
-				}
-				else if(node instanceof Expr){
-					extractReadsFromExpr((Expr)node);
+					}
+					else if(node instanceof Expr){
+						extractReadsFromExpr((Expr)node);
+					}
 				}
 			}
 		}
@@ -130,7 +130,7 @@ public class ExtractInputVariables extends NodeVisitor {
 					// Save the index (unless it is a constant)
 					ext.saveInputVariable(index.toString(), index.type().toString(),MyWhileExt.Variable.VAR);
 				}
-				else if(index instanceof Literal){
+				else if(index instanceof Lit){
 					// Save the array
 					ext.saveInputVariable(((ArrayAccess)exp).array().toString(), ((ArrayAccess)exp).array().type().toString(),MyWhileExt.Variable.CONST_ARRAY_ACCESS);
 				}
@@ -139,6 +139,9 @@ public class ExtractInputVariables extends NodeVisitor {
 		else if(exp instanceof Cast){
 			// If expression is being casted
 			extractReadsFromExpr(((Cast) exp).expr());
+		}
+		else if(exp instanceof Lit){
+			// Ignore
 		}
 		else{
 			if(debug){
@@ -198,18 +201,19 @@ public class ExtractInputVariables extends NodeVisitor {
 				ext.saveLocalVariable(((LocalDecl) n).id().toString(), ((LocalDecl) n).type().toString());
 		}
 		else if(n instanceof Call){
-			// If expression is a function call
+			// If expression is a user defined function call
+			// TODO
 			
-			// We currently assume that the source code is inlined and therefore any function call is an external library
-			// call. We pass the expression to our JavaLibModel - a class that recognizes typical Java library calls.
-			List<Node> reads = JavaLibModel.extractReads((Call)n);
-			for(Node node : reads){
-				if(node instanceof Receiver){
-					for(MyWhileExt ext : extensions)
-						ext.saveInputVariable(node.toString(),((Receiver)node).type().toString(),MyWhileExt.Variable.VAR);
-				}
-				else if(node instanceof Expr){
-					extractReadsFromExpr((Expr)node);
+			// Else if the expression is a library function call
+			for(MyWhileExt ext : extensions){
+				List<Node> reads = JavaLibModel.extractReads((Call)n,ext);
+				for(Node node : reads){
+					if(node instanceof Receiver){
+						ext.saveInputVariable(node.toString(),((Receiver)node).type().toString(),MyWhileExt.Variable.FIELD_ACCESS);
+					}
+					else if(node instanceof Expr){
+						extractReadsFromExpr((Expr)node);
+					}
 				}
 			}
 		}

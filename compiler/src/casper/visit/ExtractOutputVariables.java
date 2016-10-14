@@ -65,8 +65,12 @@ public class ExtractOutputVariables extends NodeVisitor  {
 							Stmt alt = ((If) stmt).alternative(); 
 							
 							// And consequent or alternative contains a break
-							if(casper.Util.containsBreak(cons) || casper.Util.containsBreak(alt)){
-								MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(stmt);
+							if(casper.Util.containsBreak(cons)){
+								MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(((If) stmt).alternative());
+								stmtext.process = true;
+							}
+							else if(casper.Util.containsBreak(alt)){
+								MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(((If) stmt).consequent());
 								stmtext.process = true;
 							}
 						}
@@ -89,7 +93,7 @@ public class ExtractOutputVariables extends NodeVisitor  {
 				}
 			}
 		}
-		else if(n instanceof If || n instanceof Block){
+		else if(n instanceof Block){
 			// If statement
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
 			if(stmtext.process)
@@ -129,14 +133,13 @@ public class ExtractOutputVariables extends NodeVisitor  {
 		}
 		else if(n instanceof Call){
 			// Function call
-			List<Node> writes = JavaLibModel.extractWrites((Call) n);
-			for(Node node : writes){
-				if(node instanceof Receiver){
-					for(MyWhileExt ext : extensions)
+			for(MyWhileExt ext : extensions){
+				List<Node> writes = JavaLibModel.extractWrites((Call)n,ext);
+				for(Node node : writes){
+					if(node instanceof Receiver){
 						ext.saveOutputVariable(node.toString(),((Receiver)node).type().toString(),MyWhileExt.Variable.FIELD_ACCESS);
-				}
-				else if(node instanceof Local){
-					for(MyWhileExt ext : this.extensions){
+					}
+					else if(node instanceof Local){
 						ext.saveOutputVariable(ext.toString(),node.toString(),((Local) node).type().toString(),MyWhileExt.Variable.VAR);
 					}
 				}
@@ -160,10 +163,12 @@ public class ExtractOutputVariables extends NodeVisitor  {
 				this.extensions.remove(((MyWhileExt)JavaExt.ext(n)));
 			}
 		}
-		else if(n instanceof If){
+		else if(n instanceof Block){
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
-			if(stmtext.process)
+			if(stmtext.process){
 				this.ignore = true;
+				stmtext.process = false;
+			}
 		}
        
 		return n;

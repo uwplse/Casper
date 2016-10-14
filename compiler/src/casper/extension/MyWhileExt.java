@@ -17,10 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import casper.JavaLibModel.SketchCall;
 import casper.types.CustomASTNode;
-import casper.visit.GenerateScaffold;
 import casper.visit.GenerateScaffold.KvPair;
 import casper.visit.GenerateScaffold.SketchVariable;
 import polyglot.ast.FieldDecl;
@@ -31,6 +29,14 @@ public class MyWhileExt extends MyStmtExt {
 	
 	// Used to mark promising loops that we will attempt to serialize
 	public boolean interesting = false;
+	
+	// Save the parent node of this loop for analysis
+	public Node parent = null;
+	
+    // All variables that are used as indexes when accessing large
+	// data structures like arrays and collections. Must change with
+	// loop iterations.
+    public List<Variable> loopCounters = new ArrayList<Variable>();
 	
 	// Input variables are variables that were declared outside of the
 	// loop body, but were read within the loop. They are thus inputs
@@ -58,9 +64,6 @@ public class MyWhileExt extends MyStmtExt {
     // to how the variables are used within the loop.
     // Note: Not used anywhere currently
     public Set<Expression> expUsed = new HashSet<Expression>();
-    
-    // All variables that are used to count loop iterations.
-    public List<Variable> loopCounters = new ArrayList<Variable>();
     
     // Increment expressions for loop counters
     public List<CustomASTNode> incrementExps = new ArrayList<CustomASTNode>();
@@ -93,9 +96,6 @@ public class MyWhileExt extends MyStmtExt {
 	
 	// The loop invariant (expressed using function loopInvariant(..)
 	public Map<String,CustomASTNode> invariants = new HashMap<String,CustomASTNode>();
-
-	// Save the parent node of this loop for analysis
-	public Node parent = null;
 
 	// Save the initial values of input / output variables
 	public Map<String, CustomASTNode> initVals = new HashMap<String,CustomASTNode>();
@@ -363,7 +363,23 @@ public class MyWhileExt extends MyStmtExt {
     	}
     }
     
-    // Save an input variable which is a field of a class.
+    // Save an loop counter variable.
+    public void saveLoopCounterVariable(String varName, String varType, int category){
+    	if(category == MyWhileExt.Variable.VAR){
+    		Variable var = new Variable(varName,varType,"",category);
+        	loopCounters.add(var);
+    	}
+    	else if(category == MyWhileExt.Variable.FIELD_ACCESS){
+    		Variable var = new Variable(varName,varType,"",category);
+    		loopCounters.add(var);
+    	}
+    	else if(category == MyWhileExt.Variable.ARRAY_ACCESS){
+    		Variable var = new Variable(varName,varType,"",category);
+    		loopCounters.add(var);
+    	}
+    }
+    
+    // Save an input variable
     public void saveInputVariable(String varName, String varType, String containerType, int category){
     	Variable var = new Variable(varName,varType, containerType,category);
     	
@@ -383,14 +399,27 @@ public class MyWhileExt extends MyStmtExt {
     		}
     	}
     	else if(category == MyWhileExt.Variable.ARRAY_ACCESS){
-    		if(!localVars.contains(var))
+    		if(!localVars.contains(var)){
         		inputVars.add(var);
+    		}
+    		else{
+    			for(Variable v : localVars){
+    				if(v.varName.equals(var.varName)){
+    					v.category = category;
+    				}
+    			}
+    		}
     	}
     }
     
     // Save an input variable.
     public void saveInputVariable(String varName, String varType, int category){
     	saveInputVariable(varName,varType,"",category);
+    }
+    
+    // Save an expression.
+    public void saveExpression(String exp, String expType){
+    	expUsed.add(new Expression(exp,expType));
     }
     
     // Add pending input variables
@@ -417,6 +446,11 @@ public class MyWhileExt extends MyStmtExt {
     			inputVars.add(var);
     		}
     	}
+    }
+    
+    // Save a local variable.
+    public void saveLocalVariable(String varName, String varType){
+    	localVars.add(new Variable(varName,varType,"",MyWhileExt.Variable.VAR));
     }
     
     // Save an output variable which is a field of a class.
@@ -452,32 +486,6 @@ public class MyWhileExt extends MyStmtExt {
     // Save an output variable.
     public void saveOutputVariable(String varName, String varType, int category){
     	saveOutputVariable(varName,varType,"",category);
-    }
-    
-    // Save an output variable.
-    public void saveLoopCounterVariable(String varName, String varType, int category){
-    	if(category == MyWhileExt.Variable.VAR){
-    		Variable var = new Variable(varName,varType,"",category);
-        	loopCounters.add(var);
-    	}
-    	else if(category == MyWhileExt.Variable.FIELD_ACCESS){
-    		Variable var = new Variable(varName,varType,"",category);
-    		loopCounters.add(var);
-    	}
-    	else if(category == MyWhileExt.Variable.ARRAY_ACCESS){
-    		Variable var = new Variable(varName,varType,"",category);
-    		loopCounters.add(var);
-    	}
-    }
-    
-    // Save an expression.
-    public void saveExpression(String exp, String expType){
-    	expUsed.add(new Expression(exp,expType));
-    }
-    
-    // Save a local variable.
-    public void saveLocalVariable(String varName, String varType){
-    	localVars.add(new Variable(varName,varType,"",MyWhileExt.Variable.VAR));
     }
     
     // Alias analysis
