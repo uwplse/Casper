@@ -27,7 +27,6 @@ import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
 import polyglot.ast.ArrayAccess;
-import polyglot.ast.ArrayAccessAssign;
 import polyglot.ast.Assign;
 import polyglot.ast.Block;
 import polyglot.ast.Call;
@@ -49,6 +48,7 @@ public class GenerateVerification extends NodeVisitor {
 	Map<String,String> constMapping;
 	int constID;
 	
+	@SuppressWarnings("deprecation")
 	public GenerateVerification (NodeFactory nf) {
 		this.debug = false;
 		this.nf = nf;

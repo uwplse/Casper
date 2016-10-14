@@ -1,0 +1,3 @@
+Inbits=2,
+ArraySizeBound=4,
+RecursionDepth=2

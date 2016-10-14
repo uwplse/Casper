@@ -17,7 +17,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
 import polyglot.ast.ClassDecl;
@@ -34,6 +33,7 @@ public class ExtractUserDefinedDataTypes extends NodeVisitor {
 	Stack<String> classes;
 	Map<String,Set<FieldDecl>> fields;
    
+	@SuppressWarnings("deprecation")
 	public ExtractUserDefinedDataTypes(){
 		this.debug = false;
 		this.dataTypes = new ArrayList<String>();

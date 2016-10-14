@@ -16,9 +16,11 @@
 
 package casper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import casper.visit.ExtractInputVariables;
 import casper.visit.ExtractLoopCounters;
 import casper.visit.ExtractLoopTerminateConditions;
@@ -29,6 +31,7 @@ import casper.visit.GenerateScaffold;
 import casper.visit.GenerateSparkCode;
 import casper.visit.GenerateVerification;
 import casper.visit.SelectLoopsForTranslation;
+import casper.visit.UpdateConfigurations;
 import polyglot.ast.NodeFactory;
 import polyglot.ext.jl7.JL7Scheduler;
 import polyglot.frontend.CyclicDependencyException;
@@ -48,16 +51,17 @@ public class CasperScheduler extends JL7Scheduler {
         super(extInfo);
     }
 	
-	/*
-	 * Built-in class. Converts all loops to standard while format.
-	 * https://www.cs.cornell.edu/Projects/polyglot/api2/polyglot/visit/LoopNormalizer.html
-	 */
-	public Goal LoopsNormalized(final Job job){
-    	TypeSystem ts = extInfo.typeSystem();
-    	NodeFactory nf = extInfo.nodeFactory();
-    	Goal g = internGoal(new VisitorGoal(job, new LoopNormalizer(job,ts,nf)));
-            	
-    	try {
+	// Read user configurations from file
+	public Goal ConfigurationUpdated(Job job){
+		Goal g = null;
+		try {
+			g = internGoal(new VisitorGoal(job, new UpdateConfigurations()));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
+		try {
     		g.addPrerequisiteGoal(TypeChecked(job),this);
     		g.addPrerequisiteGoal(ConstantsChecked(job),this);
     		g.addPrerequisiteGoal(ReachabilityChecked(job),this);
@@ -74,7 +78,26 @@ public class CasperScheduler extends JL7Scheduler {
     	}
         catch (CyclicDependencyException e) { 
         	throw new InternalCompilerError(e); 
+    	}        
+
+        return internGoal(g);
+	}
+	
+	/*
+	 * Built-in class. Converts all loops to standard while format.
+	 * https://www.cs.cornell.edu/Projects/polyglot/api2/polyglot/visit/LoopNormalizer.html
+	 */
+	public Goal LoopsNormalized(Job job){
+    	TypeSystem ts = extInfo.typeSystem();
+    	NodeFactory nf = extInfo.nodeFactory();
+    	Goal g = internGoal(new VisitorGoal(job, new LoopNormalizer(job,ts,nf)));
+            	
+    	try {
+        	g.addPrerequisiteGoal(ConfigurationUpdated(job), this);
     	}
+        catch (CyclicDependencyException e) { 
+        	throw new InternalCompilerError(e); 
+    	} 
     	
         return g;
     }
@@ -83,7 +106,7 @@ public class CasperScheduler extends JL7Scheduler {
 	 * Built-in class. Converts all expressions to a set few standard formats.
 	 * https://www.cs.cornell.edu/Projects/polyglot/api2/polyglot/visit/ExpressionFlattener.html
 	 */
-	public Goal ExpressionsFlattened(final Job job){
+	public Goal ExpressionsFlattened(Job job){
     	TypeSystem ts = extInfo.typeSystem();
     	NodeFactory nf = extInfo.nodeFactory();
     	Goal g = internGoal(new VisitorGoal(job, new ExpressionFlattener(job,ts,nf)));
@@ -279,7 +302,7 @@ public class CasperScheduler extends JL7Scheduler {
 			{
 				List<Goal> l = new ArrayList<Goal>();
 				l.addAll(super.prerequisiteGoals(scheduler));
-				l.add(UserDefinedDataTypesExtracted(job));
+				l.add(VerificationCodeGenerated(job));
 				return l;
 			}
 		});

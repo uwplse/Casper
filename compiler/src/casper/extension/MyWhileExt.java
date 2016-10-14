@@ -65,7 +65,33 @@ public class MyWhileExt extends MyStmtExt {
     // Note: Not used anywhere currently
     public Set<Expression> expUsed = new HashSet<Expression>();
     
-    // Increment expressions for loop counters
+    // Operators found in the loop body
+ 	public Set<String> binaryOperators = new HashSet<String>();
+ 	public Set<String> unaryOperators = new HashSet<String>();
+ 	public Set<SketchCall> methodOperators = new HashSet<SketchCall>();
+    
+ 	// Does the loop terminate when the initCond is true or does it terminate
+    // when it is false. If condInv is true, it means the loop terminates when
+    // the condition is false.
+    public boolean condInv = false;
+    
+    // The condition that causes the loop to terminate
+    public CustomASTNode terminationCondition;
+ 	
+ 	// User defined data types that may or may not appear in the loop
+   	public ArrayList<String> globalDataTypes;
+
+   	// Use to save the fields of the user defined data types
+	public Map<String, Set<FieldDecl>> globalDataTypesFields;
+ 	
+    
+	
+	
+	
+	
+	
+	
+	// Increment expressions for loop counters
     public List<CustomASTNode> incrementExps = new ArrayList<CustomASTNode>();
     
     // We perform an alias analysis. If two variables are aliases, then
@@ -73,21 +99,8 @@ public class MyWhileExt extends MyStmtExt {
     // need to be able to capture this effect.
     // Note: Not used anywhere currently
     public Map<Variable, Set<Variable>> aliases = new HashMap<Variable, Set<Variable>>();
-    
-    // Does the loop terminate when the initCond is true or does it terminate
-    // when it is false. If condInv is true, it means the loop terminates when
-    // the condition is false.
-    public boolean condInv = false;
-    
-    // The condition that causes the loop to terminate
-    public CustomASTNode terminationCondition;
    	
-   	// User defined data types that may or may not appear in the loop
-   	public ArrayList<String> globalDataTypes;
-
-   	// Use to save the fields of the user defined data types
-	public Map<String, Set<FieldDecl>> globalDataTypesFields;
-	
+   	
 	// The ordering of post condition args
 	public Map<String,List<String>> postConditionArgsOrder = new HashMap<String,List<String>>();
 	
@@ -103,13 +116,6 @@ public class MyWhileExt extends MyStmtExt {
 	// Input data collections
 	public boolean hasInputData = false;
 	public List<SketchVariable> inputDataCollections = new ArrayList<SketchVariable>();
-
-	// Operators found in the loop body
-	public Set<String> binaryOperators = new HashSet<String>();
-	public Set<String> unaryOperators = new HashSet<String>();
-
-	// Library functions found in the loop body
-	public Set<SketchCall> methodOperators = new HashSet<SketchCall>();
 	
 	// Map Emits
 	public Map<String,List<KvPair>> mapEmits = null;

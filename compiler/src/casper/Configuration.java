@@ -7,10 +7,9 @@
 package casper;
 
 public class Configuration {
-	static final public int inbits = 2;
-	static final public int arraySizeBound = 4;
-	static final public int mapEmitCountBound = 5;
-	static final public int recursionDepth = 3;
-	static public boolean useConditionals = false;
+	static public int inbits = 0;
+	static public int arraySizeBound = 0;
+	static public int recursionDepth = 0;
 	public static int emitCount = 0;
+	static public boolean useConditionals = false;
 }
