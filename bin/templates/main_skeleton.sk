@@ -46,6 +46,8 @@ bit loopInvariant(<loop-inv-args-decl>){
 
 <generate-int-map>
 
+<generate-bit-vec-map>
+
 <generate-string-map>
 
 <generate-bit-map>

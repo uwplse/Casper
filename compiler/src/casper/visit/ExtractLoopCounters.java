@@ -7,24 +7,21 @@ import casper.JavaLibModel;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
+import casper.extension.MyWhileExt.Variable;
 import polyglot.ast.ArrayAccess;
 import polyglot.ast.Assign;
-import polyglot.ast.Binary;
 import polyglot.ast.Block;
 import polyglot.ast.Call;
-import polyglot.ast.Cast;
 import polyglot.ast.Expr;
 import polyglot.ast.Field;
 import polyglot.ast.If;
 import polyglot.ast.Local;
-import polyglot.ast.LocalDecl;
 import polyglot.ast.Node;
 import polyglot.ast.Receiver;
-import polyglot.ast.Return;
 import polyglot.ast.Stmt;
-import polyglot.ast.Switch;
-import polyglot.ast.Unary;
 import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
+import polyglot.lex.Literal;
 import polyglot.visit.NodeVisitor;
 
 public class ExtractLoopCounters extends NodeVisitor {
@@ -33,7 +30,7 @@ public class ExtractLoopCounters extends NodeVisitor {
 	ArrayList<MyWhileExt> extensions;
    
 	public ExtractLoopCounters(){
-		this.debug = false;
+		this.debug = true;
 		this.ignore = true;
 		this.extensions = new ArrayList<MyWhileExt>();
 	}
@@ -56,18 +53,24 @@ public class ExtractLoopCounters extends NodeVisitor {
 							Stmt cons = ((If) stmt).consequent();
 							Stmt alt = ((If) stmt).alternative(); 
 							
-							// And consequent or alternative does not contain a break
-							if(!casper.Util.containsBreak(cons) && !casper.Util.containsBreak(alt)){
-								MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(stmt);
+							// And consequent or alternative contains a break
+							if(casper.Util.containsBreak(cons)){
+								MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(((If) stmt).alternative());
 								stmtext.isIncrementBlock = true;
-								break;
+							}
+							else if(casper.Util.containsBreak(alt)){
+								MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(((If) stmt).consequent());
+								stmtext.isIncrementBlock = true;
 							}
 						}
 					}
 				}
 			}
 		}
-		else if(n instanceof If){
+		else if(n instanceof ExtendedFor){
+			((MyWhileExt)JavaExt.ext(n)).saveLoopCounterVariable("i", "int", Variable.VAR);
+		}
+		else if(n instanceof Block){
 			// If statement
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
 			if(stmtext.isIncrementBlock){
@@ -78,41 +81,24 @@ public class ExtractLoopCounters extends NodeVisitor {
 		// If we are not extracting, then do nothing
 		if(this.extensions.size() == 0 || this.ignore) return this;
 		
-		if(n instanceof Assign){
-			// Assignment statement
-			Expr left = ((Assign) n).left();
-			
-			if(left instanceof ArrayAccess){
-				for(MyWhileExt ext : this.extensions){
-					// Save the array
-					ext.saveLoopCounterVariable(((ArrayAccess)left).array().toString(), ((ArrayAccess)left).array().type().toString(),MyWhileExt.Variable.ARRAY_ACCESS);
-				}
-			}
-			else if(left instanceof Field){
-				for(MyWhileExt ext : this.extensions){
-					// Save the variable
-					ext.saveLoopCounterVariable(left.toString(), left.type().toString(), MyWhileExt.Variable.FIELD_ACCESS);
-				}
-			}
-			else{
-				for(MyWhileExt ext : this.extensions){
-					// Save the variable
-					ext.saveLoopCounterVariable(left.toString(), left.type().toString(),MyWhileExt.Variable.VAR);
-				}
+		
+		if(n instanceof ArrayAccess){
+			Expr index = ((ArrayAccess) n).index();
+			for(MyWhileExt ext : this.extensions){
+				ext.saveLoopCounterVariable(index.toString(), index.type().toString(), Variable.VAR);
 			}
 		}
 		else if(n instanceof Call){
 			// Function call
-			List<Node> writes = JavaLibModel.extractWrites((Call) n);
-			for(Node node : writes){
-				if(node instanceof Receiver){
-					for(MyWhileExt ext : extensions)
-						ext.saveLoopCounterVariable(node.toString(),((Receiver)node).type().toString(),MyWhileExt.Variable.VAR);
+			Node lc = JavaLibModel.extractLoopCounters((Call) n);
+			if(lc instanceof Literal){
+				for(MyWhileExt ext : this.extensions){
+					ext.saveLoopCounterVariable(lc.toString(),lc.toString(),MyWhileExt.Variable.VAR);
 				}
-				else if(node instanceof Local){
-					for(MyWhileExt ext : this.extensions){
-						ext.saveLoopCounterVariable(ext.toString(),node.toString(),MyWhileExt.Variable.VAR);
-					}
+			}
+			else if(lc instanceof Local){
+				for(MyWhileExt ext : this.extensions){
+					ext.saveLoopCounterVariable(lc.toString(),lc.toString(),MyWhileExt.Variable.VAR);
 				}
 			}
 		}
@@ -133,10 +119,12 @@ public class ExtractLoopCounters extends NodeVisitor {
 				this.extensions.remove(((MyWhileExt)JavaExt.ext(n)));
 			}
 		}
-		else if(n instanceof If){
+		else if(n instanceof Block){
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
-			if(stmtext.isIncrementBlock)
+			if(stmtext.isIncrementBlock){
 				this.ignore = true;
+				stmtext.isIncrementBlock = false;
+			}
 		}
        
 		return n;

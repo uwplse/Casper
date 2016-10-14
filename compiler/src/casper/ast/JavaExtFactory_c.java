@@ -26,6 +26,11 @@ public final class JavaExtFactory_c extends JavaAbstractExtFactory_c {
     }
     
     @Override
+    protected Ext extExtendedForImpl(){
+		return new MyWhileExt();
+    }
+    
+    @Override
     protected Ext extStmtImpl(){
 		return new MyStmtExt();
     }

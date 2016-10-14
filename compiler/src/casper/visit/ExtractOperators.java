@@ -8,11 +8,13 @@ import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import polyglot.ast.Binary;
+import polyglot.ast.Block;
 import polyglot.ast.Call;
 import polyglot.ast.If;
 import polyglot.ast.Node;
 import polyglot.ast.Unary;
 import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
 import polyglot.visit.NodeVisitor;
 
 public class ExtractOperators  extends NodeVisitor {
@@ -28,14 +30,14 @@ public class ExtractOperators  extends NodeVisitor {
    	
 	public NodeVisitor enter(Node parent, Node n){
 		// If the node is a loop
-		if(n instanceof While){
+		if(n instanceof While || n instanceof ExtendedFor){
 			// If the loop was marked as interesting
 			if(((MyWhileExt)JavaExt.ext(n)).interesting){
 				// begin extraction
 				this.extensions.add((MyWhileExt)JavaExt.ext(n));
 			}
 		}
-		else if(n instanceof If){
+		else if(n instanceof If || n instanceof Block){
 			// If statement
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
 			if(stmtext.process)
@@ -74,7 +76,7 @@ public class ExtractOperators  extends NodeVisitor {
 	@Override
 	public Node leave(Node old, Node n, NodeVisitor v){
 		// If the node is a loop
-		if(n instanceof While){
+		if(n instanceof While || n instanceof ExtendedFor){
 			// If the loop was marked as interesting
 			if(((MyWhileExt)JavaExt.ext(n)).interesting){
 				
@@ -86,11 +88,11 @@ public class ExtractOperators  extends NodeVisitor {
 				
 				this.extensions.remove(((MyWhileExt)JavaExt.ext(n)));
 			}
-			else if(n instanceof If){
-				MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
-				if(stmtext.process)
-					this.ignore = true;
-			}
+		}
+		else if(n instanceof If || n instanceof Block){
+			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
+			if(stmtext.process)
+				this.ignore = true;
 		}
        
 		return n;

@@ -32,6 +32,7 @@ import polyglot.ast.Node;
 import polyglot.ast.Receiver;
 import polyglot.ast.Stmt;
 import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
 import polyglot.visit.NodeVisitor;
 
 public class ExtractOutputVariables extends NodeVisitor  {
@@ -74,7 +75,21 @@ public class ExtractOutputVariables extends NodeVisitor  {
 				}
 			}
 		}
-		else if(n instanceof If){
+		else if(n instanceof ExtendedFor){
+			// If the loop was marked as interesting
+			if(((MyWhileExt)JavaExt.ext(n)).interesting){
+				// begin extraction
+				this.extensions.add((MyWhileExt)JavaExt.ext(n));
+				
+				// Mark the first if condition to be ignored. It contains the loop increment
+				Stmt loopBody = ((ExtendedFor) n).body();
+				if(loopBody instanceof Block){
+					MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(loopBody);
+					stmtext.process = true;
+				}
+			}
+		}
+		else if(n instanceof If || n instanceof Block){
 			// If statement
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
 			if(stmtext.process)
@@ -134,7 +149,7 @@ public class ExtractOutputVariables extends NodeVisitor  {
 	@Override
 	public Node leave(Node old, Node n, NodeVisitor v){
 		// If the node is a loop
-		if(n instanceof While){
+		if(n instanceof While || n instanceof ExtendedFor){
 			// If the loop was marked as interesting
 			if(((MyWhileExt)JavaExt.ext(n)).interesting){
 				if(debug){

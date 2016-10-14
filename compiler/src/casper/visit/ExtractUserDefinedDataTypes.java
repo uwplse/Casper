@@ -24,6 +24,7 @@ import polyglot.ast.ClassDecl;
 import polyglot.ast.FieldDecl;
 import polyglot.ast.Node;
 import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
 import polyglot.visit.NodeVisitor;
 
 public class ExtractUserDefinedDataTypes extends NodeVisitor {
@@ -44,7 +45,7 @@ public class ExtractUserDefinedDataTypes extends NodeVisitor {
 	@Override
 	public NodeVisitor enter(Node parent, Node n){
 		// If the node is a loop
-		if(n instanceof While){
+		if(n instanceof While || n instanceof ExtendedFor){
 			// Get extension of loop node
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			

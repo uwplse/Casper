@@ -11,9 +11,12 @@ import polyglot.ast.Call;
 import polyglot.ast.Cast;
 import polyglot.ast.Expr;
 import polyglot.ast.Field;
+import polyglot.ast.FloatLit;
 import polyglot.ast.IntLit;
 import polyglot.ast.Lit;
 import polyglot.ast.Local;
+import polyglot.ast.New;
+import polyglot.ast.NewArray;
 import polyglot.ast.StringLit;
 import polyglot.ast.Unary;
 
@@ -57,7 +60,17 @@ abstract public class CustomASTNode {
 	public static CustomASTNode convertToAST(Expr exp){
 		CustomASTNode node = null;
 		
-		if(exp instanceof Cast){
+		if(exp instanceof New){
+			String objType = ((New) exp).objectType().toString();
+			if(objType.startsWith("java.util.ArrayList<")){
+				String subType = objType.substring("java.util.ArrayList<".length(), objType.length()-1);
+				node = new ConstantNode(casper.Util.getInitVal(subType),ConstantNode.INTLIT);
+			}
+		}
+		else  if(exp instanceof NewArray){
+			node = new ConstantNode(casper.Util.getInitVal(((NewArray) exp).baseType().toString()),ConstantNode.INTLIT);
+		}
+		else if(exp instanceof Cast){
 			node = convertToAST(((Cast) exp).expr());
 		}
 		else if(exp instanceof Local){
@@ -72,6 +85,10 @@ abstract public class CustomASTNode {
 			}
 			else if(exp instanceof BooleanLit){
 				node = new ConstantNode(exp.toString(),ConstantNode.BOOLEANLIT);
+			}
+			else if(exp instanceof FloatLit){
+				String exp_p = Integer.toString((int)Math.ceil(Double.parseDouble(exp.toString()))); 
+				node = new ConstantNode(exp_p,ConstantNode.INTLIT);
 			}
 			else{
 				node = new ConstantNode(exp.toString(),ConstantNode.UNKNOWNLIT);

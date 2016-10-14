@@ -35,6 +35,7 @@ import polyglot.ast.Return;
 import polyglot.ast.Switch;
 import polyglot.ast.Unary;
 import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
 import polyglot.lex.Literal;
 import polyglot.visit.NodeVisitor;
 
@@ -159,6 +160,15 @@ public class ExtractInputVariables extends NodeVisitor {
 				this.extensions.add((MyWhileExt)JavaExt.ext(n));
 			}
 		}
+		if(n instanceof ExtendedFor){
+			// If the loop was marked as interesting
+			if(((MyWhileExt)JavaExt.ext(n)).interesting){
+				// begin extraction
+				MyWhileExt ext = (MyWhileExt)JavaExt.ext(n);
+				this.extensions.add(ext);
+				ext.saveInputVariable(((ExtendedFor) n).expr().toString(), ((ExtendedFor) n).expr().type().toString(), MyWhileExt.Variable.ARRAY_ACCESS);
+			}
+		}
 		
 		// If we are not extracting, then do nothing
 		if(this.extensions.size() == 0) return this;
@@ -215,7 +225,7 @@ public class ExtractInputVariables extends NodeVisitor {
 	@Override
 	public Node leave(Node old, Node n, NodeVisitor v){
 		// If the node is a loop
-		if(n instanceof While){
+		if(n instanceof While || n instanceof ExtendedFor){
 			// If the loop was marked as interesting
 			if(((MyWhileExt)JavaExt.ext(n)).interesting){
 				((MyWhileExt)JavaExt.ext(n)).savePendingInputVariables();

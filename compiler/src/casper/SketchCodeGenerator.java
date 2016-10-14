@@ -1,6 +1,7 @@
 package casper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,7 +39,6 @@ public class SketchCodeGenerator {
 				else
 					increment = Configuration.arraySizeBound * increment;
 			}
-				
 			
 			if(argsList.containsKey(vartype)){
 				argsList.put(vartype, argsList.get(vartype) + increment);
@@ -50,7 +50,7 @@ public class SketchCodeGenerator {
 		// Look at the member field datatypes
 		else if(casper.Util.getTypeClass(vartypeOrig) == casper.Util.OBJECT){
 			String vartype = vartypeOrig;
-			
+
 			for(FieldDecl fdecl : ext.globalDataTypesFields.get(vartype)){
 				String fieldType = fdecl.type().toString();
 				handleVarArgs(fieldType, category, ext, argsList, increment, isInputVar);
@@ -115,6 +115,11 @@ public class SketchCodeGenerator {
 			if(ext.initVals.containsKey(var.name) && ext.initVals.get(var.name) instanceof ConstantNode){
 				if(casper.Util.getTypeClass(var.type) == casper.Util.PRIMITIVE){
 					ret += var.type + " "+ var.name + "0 = " + ext.initVals.get(var.name) + ";\n\t";
+				}
+				else if(casper.Util.getTypeClass(var.type) == casper.Util.ARRAY){
+					ret += var.type + " "+ var.name + "0;\n\t";
+					for(int i=0; i<Configuration.arraySizeBound; i++)
+						ret += var.name + "0["+i+"] = " + ext.initVals.get(var.name) + ";\n\t";
 				}
 			}
 			else{
@@ -304,6 +309,7 @@ public class SketchCodeGenerator {
 
 	public static String initLoopCounters(MyWhileExt ext, Map<String, Integer> argsList, List<SketchVariable> sketchLoopCounters) {
 		String ret = "";
+
 		for(SketchVariable var : sketchLoopCounters){
 			if(ext.initVals.containsKey(var.name)){
 				ret += var.type + " "+ var.name + "0 = " + ext.initVals.get(var.name) + ";\n\t";
@@ -315,6 +321,10 @@ public class SketchCodeGenerator {
 			ret += var.type + " "+ var.name + " = " + var.type + "Set[" + (argsList.get(var.type)-1) + "];\n\t";
 			argsList.put(var.type, argsList.get(var.type) - 1 );
 		}
+		
+		if(ret == "")
+			return ret;
+		
 		return ret.substring(0, ret.length()-2);
 	}
 	
@@ -373,7 +383,7 @@ public class SketchCodeGenerator {
 	public static String generateMapLoopInit(List<SketchVariable> sketchLoopCounters, CustomASTNode tCond) {
 		String init = "";
 		for(SketchVariable var : sketchLoopCounters){
-			if(tCond.contains(var.name)){
+			if(true || tCond.contains(var.name)){
 				init += var.type + " _" + var.name + " = " + var.name + "0;\n\t";
 			}
 		}
@@ -669,84 +679,16 @@ public class SketchCodeGenerator {
 	}
 
 	// Generate do map grammars
-	public static String generateIntGrammar(List<SketchVariable> sketchLoopCounters, MyWhileExt ext) {
-		String intGenerator = "";
-		
-		// Generate args decl
-		String argsDecl = ext.inputDataCollections.get(0).type.replace(""+Configuration.arraySizeBound, ""+(Configuration.arraySizeBound-1)) + " " + ext.inputDataCollections.get(0).name;
-		for(SketchVariable var : sketchLoopCounters){
-			argsDecl += ", " + var.type + " " + var.name;
-		}
-		
-		// Generate args call
-		String argscall = ext.inputDataCollections.get(0).name;
-		for(SketchVariable var : sketchLoopCounters){
-			argscall += ", " + var.name;
-		}
-		
-		// Generate int map terminal args
-		String mapIntTermArgs = "";
-		for(SketchVariable var : sketchLoopCounters){
-			mapIntTermArgs += var.name + ", ";
-		}
-		mapIntTermArgs = mapIntTermArgs.substring(0, mapIntTermArgs.length()-2);
-		
-		// Generate grammar options
-		String opts = "";
-		if(ext.inputDataCollections.get(0).type.equals("int["+Configuration.arraySizeBound+"]")){
-			opts = " | " + ext.inputDataCollections.get(0).name+"[terminal2]"; 
-		}
-		else if(casper.Util.getTypeClass(ext.inputDataCollections.get(0).type) == casper.Util.OBJECT_ARRAY){
-			String objectType = ext.inputDataCollections.get(0).type.replace("["+Configuration.arraySizeBound+"]", "");
-			for(FieldDecl field : ext.globalDataTypesFields.get(objectType)){
-				if(field.type().toString().equals("int")){
-					opts += " | " + ext.inputDataCollections.get(0).name+"[terminal2]."+field.name();
-				}
-			}
-		}
-		
-		for(String op : ext.binaryOperators){
-			if(casper.Util.operatorType(op) == casper.Util.ARITHMETIC_OP){
-				opts += " | terminal2 " + op + " terminal3";
-			}
-		}
-		for(String op : ext.unaryOperators){
-			if(casper.Util.operatorType(op) == casper.Util.ARITHMETIC_OP){
-				opts += " | " + op + "terminal3";
-			}
-		}
-		
-		intGenerator +=	"generator int intMapGenerator("+argsDecl+", int depth){\n\t" +
-							"if(depth == 1){\n\t\t" +
-								"return intMapTerminals("+mapIntTermArgs+");\n\t" +
-							"}\n\t" +
-							"else{\n\t\t" +
-								"int terminal1 = intMapTerminals("+mapIntTermArgs+");\n\t\t" +
-								"int terminal2 = intMapGenerator("+argscall+", depth-1);\n\t\t" +
-								"int terminal3 = intMapGenerator("+argscall+", depth-1);\n\t\t" +
-								"return {| terminal1" + opts + " |};\n\t" +
-							"}\n" +
-						"}";
-		
-		return intGenerator;
-	}
-
-	// Generate do map grammars
 	public static String generateMapGrammarInlined(String type, Set<SketchVariable> sketchInputVars, Set<SketchVariable> sketchOutputVars, List<SketchVariable> sketchLoopCounters, MyWhileExt ext) {
 		String generator = "";
 		
-		// Generate args decl
-		String argsDecl = ext.inputDataCollections.get(0).type.replace(""+Configuration.arraySizeBound, ""+(Configuration.arraySizeBound-1)) + " " + ext.inputDataCollections.get(0).name;
-		for(SketchVariable var : sketchLoopCounters){
-			argsDecl += ", " + var.type + " " + var.name;
-		}
-		
-		// Terminal options
-		String terminalOpts = "";
+		/******** Generate terminal options *******/
+		Map<String,List<String>> terminals = new HashMap<String,List<String>>();
+		terminals.put(type, new ArrayList());
 		
 		for(Variable var : ext.loopCounters){
 			if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 1){
-				terminalOpts += " | " + var.varName;
+				terminals.get(type).add(var.varName);
 			}
 		}
 		for(Variable var : ext.inputVars){
@@ -754,12 +696,12 @@ public class SketchCodeGenerator {
 				continue;
 			
 			if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 1){
-				terminalOpts += " | " + var.varName;
+				terminals.get(type).add(var.varName);
 			}
 			else if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 2){
 				if(!ext.inputDataCollections.contains(var) || true){
 					for(SketchVariable lc : sketchLoopCounters){
-						terminalOpts += " | " + var.varName + "["+lc.name+"]";
+						terminals.get(type).add(var.varName + "["+lc.name+"]");
 					}
 				}
 			}
@@ -770,7 +712,7 @@ public class SketchCodeGenerator {
 						// Add an option for each field that matches type
 	        			for(FieldDecl field : ext.globalDataTypesFields.get(globalVar)){
 	        				if(casper.Util.compatibleTypes(type,field.type().toString()) == 1){
-	        					terminalOpts += " | " + var.varName + "." + field.id().toString();
+	        					terminals.get(type).add(var.varName + "." + field.id().toString());
 	        				}
 	        			}
 	        		}
@@ -781,7 +723,7 @@ public class SketchCodeGenerator {
 		        				// Add an option for each field (of an arbitrary array index) that matches type
 		        				if(casper.Util.compatibleTypes(type,field.type().toString()) == 1){
 		        					for(SketchVariable lc : sketchLoopCounters){
-		        						terminalOpts += " | " + var.varName + "["+lc.name+"]." + field.id().toString();
+		        						terminals.get(type).add(var.varName + "["+lc.name+"]." + field.id().toString());
 		        					}
 		        				}
 		        			}
@@ -792,161 +734,442 @@ public class SketchCodeGenerator {
 		}
 		for(int i=0; i<ext.constCount; i++){
 			if(casper.Util.compatibleTypes(type,"int") == 1){
-				terminalOpts += " | casperConst" + i;
+				terminals.get(type).add("casperConst" + i);
 			}
 		}
 		
-		switch(type){
-			case "int":
-				terminalOpts = "??" + terminalOpts;
-				break;
-			case "bit":
-				terminalOpts = "true | false" + terminalOpts;
-				break;
-			case "String":
-				if(terminalOpts == "")
-					terminalOpts = "-1";
-				else
-					terminalOpts = terminalOpts.substring(3,terminalOpts.length());
-				break;
-		}
-		
+		/********** Generate type expressions ********/
 		String sketchType = type;
 		if(type == "String")
 			sketchType = "int";
 		
-		// Terminals
-		String terminals = "";
-		for(int i=0; i<Configuration.recursionDepth; i++){
-			terminals += sketchType+" _terminal"+(i+1)+" = {| " + terminalOpts + " |};\n\t";
+		String typeName = type.toLowerCase();
+		if(sketchType == "bit[32]")
+			typeName = "bitInt";
+		
+		// Terminal names
+		Map<String,List<String>> terminalNames = new HashMap<String,List<String>>();
+		for(String ttype : terminals.keySet()){
+			terminalNames.put(ttype, new ArrayList<String>());
+			for(int i=0; i<terminals.get(ttype).size(); i++){
+					terminalNames.get(ttype).add("_"+typeName+"_terminal"+i);
+			}
 		}
 		
 		// Grammar options
 		List<String> exprs = new ArrayList<String>();
-		getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,"<-expr->",Configuration.recursionDepth,1);
-		String expressions = "";
-		String opts = "";
-		int id = 0;
-		for(String expr : exprs){
-			expressions += sketchType+" _option"+id+" = " + expr + ";\n\t";
-			opts += "_option"+id+ " | ";
-			id++;
-		}
-		opts = opts.substring(0, opts.length()-3);
+		Map<String,Integer> constants = new HashMap<String,Integer>();
+		getConstantsRequired(	type,
+								ext.binaryOperators,
+								ext.unaryOperators,
+								ext.methodOperators,
+								constants,
+								Configuration.recursionDepth
+							);
+		getMapExpressions(	type,
+							ext.binaryOperators,
+							ext.unaryOperators,
+							ext.methodOperators,
+							terminalNames,
+							exprs,
+							constants,
+							Configuration.recursionDepth
+						);
 		
-		// Generator code		
-		generator +=	"generator "+sketchType+" "+type.toLowerCase()+"MapGenerator("+argsDecl+"){\n\t" + terminals + expressions + "return {| " + opts + " |};\n}";
+		/******** Generate args decl code *******/
+		
+		String argsDecl = ext.inputDataCollections.get(0).type.replace(""+Configuration.arraySizeBound, ""+(Configuration.arraySizeBound-1)) + " " + ext.inputDataCollections.get(0).name;
+		for(SketchVariable var : sketchLoopCounters){
+			argsDecl += ", " + var.type + " " + var.name;
+		}
+		
+		/******** Generate terminals code *******/
+		String terminalsCode = "";
+		int termIndex = 0;
+		for(termIndex=0; termIndex<terminals.get(type).size(); termIndex++){
+			terminalsCode += sketchType+" _"+typeName+"_terminal"+(termIndex)+" = "+terminals.get(type).get(termIndex)+";\n\t";
+		}
+		for(String cType : constants.keySet()){
+			for(int i=termIndex; i<termIndex+constants.get(cType); i++){
+				String ctypeName = cType.toLowerCase();
+				if(cType == "bit[32]")
+					ctypeName = "bitInt";
+				
+				if(cType.equals(type)){
+					switch(cType){
+						case "int":
+							terminalsCode += cType+" _"+ctypeName+"_terminal"+(i)+" = ??;\n\t";
+							break;
+						case "bit":
+							terminalsCode += cType+" _"+ctypeName+"_terminal"+(i)+" = {| true | false |};\n\t";
+							break;
+						case "bit[32]":
+							terminalsCode += cType+" _"+ctypeName+"_terminal"+(i)+" = genRandBitVec();\n\t";
+							break;
+						case "String":
+							terminalsCode += cType+" _"+ctypeName+"_terminal"+(i)+" = ??;\n\t";
+							break;
+					}
+				}
+				else{
+					String args = ext.inputDataCollections.get(0).name;
+					for(SketchVariable var : sketchLoopCounters){
+						argsDecl += ", " + var.name;
+					}
+					switch(cType){
+						case "int":
+							terminalsCode += cType+" _"+ctypeName+"_terminal"+(i)+" = intMapGenerator("+args+");\n\t";
+							break;
+						case "bit":
+							terminalsCode += cType+" _"+ctypeName+"_terminal"+(i)+" = bitMapGenerator("+args+");\n\t";
+							break;
+						case "bit[32]":
+							terminalsCode += cType+" _"+ctypeName+"_terminal"+(i)+" = bitIntMapGenerator("+args+")\n\t";
+							break;
+						case "String":
+							terminalsCode += "int _"+ctypeName+"_terminal"+(i)+" = stringMapGenerator("+args+");\n\t";
+							break;
+					}
+				}
+			}
+		}
+		
+		/******** Generate expressions code *******/
+		String expressions = "int c = ??("+(int)Math.ceil(Math.log(exprs.size())/Math.log(2))+");\n\t";
+		int c = 0;
+		for(String expr : exprs){
+			for(String ttype : constants.keySet()){
+				String ttypeName = ttype.toLowerCase();
+				if(ttypeName == "bit[32]")
+					ttypeName = "bitInt";			
+					
+				int i=terminals.get(ttype).size();
+				while(expr.contains("<"+ttype+"-term>")){
+					int st_ind = expr.indexOf("<"+ttype+"-term>");
+					expr = expr.substring(0,st_ind) + "_"+ttypeName+"_terminal"+(i++) + expr.substring(st_ind+("<"+ttype+"-term>").length(),expr.length());
+				}
+			}
+			
+			
+			expressions += "if(c=="+c+++"){ return " + expr + "; }\n\t";
+		}
+		
+		/****** Generate final output code ******/
+		generator += "generator "+sketchType+" "+typeName+"MapGenerator("+argsDecl+"){\n\t" + terminalsCode + expressions + "\n}";
 		
 		return generator;
 	}
 	
-	private static void getMapExpressions(String type, MyWhileExt ext, Set<SketchVariable> sketchInputVars, Set<SketchVariable> sketchOutputVars, List<SketchVariable> sketchLoopCounters, List<String> exprs, String exprString, int depth, int terminalid) {
+	private static void getConstantsRequired(String type, Set<String> binaryOps, Set<String> unaryOps, Set<SketchCall> methodOps, Map<String, Integer> constants, int depth) {
 		if(depth == 0){
 			return;
 		}
 		if(depth == 1){
-			exprs.add(exprString.replace("<-expr->","_terminal"+terminalid));
+			constants.put(type, 1);
 			return;
 		}
 		else{
-			exprs.add(exprString.replace("<-expr->","_terminal"+terminalid));
-			
-			/*if(ext.inputDataCollections.get(0).type.equals(type+"["+Configuration.arraySizeBound+"]")){
-				String newExprString = exprString.replace("<-expr->", ext.inputDataCollections.get(0).name+"[<-expr->]");
-				getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid);
-				
-				for(String op : ext.binaryOperators){
-					if(javatosketch.Util.operatorType(op) == javatosketch.Util.getOpClassForType(type)){
-						List<String> subexprs = new ArrayList<String>();
-						getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,subexprs,"<-expr->",depth/2,terminalid);
-						List<String> handled = new ArrayList<String>();
-						for(String expr1 : subexprs){
-							if(!handled.contains(expr1)){
-								handled.add(expr1);
-								newExprString = exprString.replace("<-expr->", ext.inputDataCollections.get(0).name+"["+expr1+"]" + " " + op + " <-expr->");
-								getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid+(depth/2));
+			for(String op : binaryOps){
+				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
+					if(type.equals("bit")){
+						if(casper.Util.operandTypes(op) == casper.Util.BIT_ONLY){
+							Map<String,Integer> subConstants = new HashMap<String,Integer>();
+							getConstantsRequired(type,binaryOps,unaryOps,methodOps,subConstants,depth-1);
+							for(String ctype : subConstants.keySet()){
+								if(!constants.containsKey(ctype)) constants.put(ctype, 0);
+								if(depth == 2)
+									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
+								else
+									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
+							}
+						}
+						
+					}
+					else if(type.equals("bit[32]")){
+						if(casper.Util.operandTypes(op) == casper.Util.VEC_ONLY){
+							Map<String,Integer> subConstants = new HashMap<String,Integer>();
+							getConstantsRequired(type,binaryOps,unaryOps,methodOps,subConstants,depth-1);
+							for(String ctype : subConstants.keySet()){
+								if(!constants.containsKey(ctype)) constants.put(ctype, 0);
+								if(depth == 2)
+									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
+								else
+									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
+							}
+						}
+						else if(casper.Util.operandTypes(op) == casper.Util.VEC_INT){
+							Map<String,Integer> subConstants = new HashMap<String,Integer>();
+							getConstantsRequired(type,binaryOps,unaryOps,methodOps,subConstants,depth-1);
+							getConstantsRequired("int",binaryOps,unaryOps,methodOps,subConstants,depth-1);
+							for(String ctype : subConstants.keySet()){
+								if(!constants.containsKey(ctype)) constants.put(ctype, 0);
+								if(depth == 2)
+									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
+								else
+									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
 							}
 						}
 					}
-				}
-				for(String op : ext.unaryOperators){
-					if(javatosketch.Util.operatorType(op) == javatosketch.Util.getOpClassForType(type)){
-						newExprString = exprString.replace("<-expr->", op + "("+ext.inputDataCollections.get(0).name+"[<-expr->])");
-						getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid);
+					else{
+						Map<String,Integer> subConstants = new HashMap<String,Integer>();
+						getConstantsRequired(type,binaryOps,unaryOps,methodOps,subConstants,depth-1);
+						for(String ctype : subConstants.keySet()){
+							if(!constants.containsKey(ctype)) constants.put(ctype, 0);
+							if(depth == 2)
+								constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
+							else
+								constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
+						}
 					}
 				}
 			}
-			else if(javatosketch.Util.getTypeClass(ext.inputDataCollections.get(0).type) == javatosketch.Util.OBJECT_ARRAY){
-				String objectType = ext.inputDataCollections.get(0).type.replace("["+Configuration.arraySizeBound+"]", "");
-				for(FieldDecl field : ext.globalDataTypesFields.get(objectType)){
-					if(field.type().toString().equals(type)){
-						String newExprString = exprString.replace("<-expr->", ext.inputDataCollections.get(0).name+"[<-expr->]."+field.name());
-						getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid);
-						
-						for(String op : ext.binaryOperators){
-							if(javatosketch.Util.operatorType(op) == javatosketch.Util.getOpClassForType(type)){
-								List<String> subexprs = new ArrayList<String>();
-								getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,subexprs,"<-expr->",depth/2,terminalid);
-								List<String> handled = new ArrayList<String>();
-								for(String expr1 : subexprs){
-									if(!handled.contains(expr1)){
-										handled.add(expr1);
-										newExprString = exprString.replace("<-expr->", ext.inputDataCollections.get(0).name+"["+expr1+"]."+field.name() + " " + op + " <-expr->");
-										getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid+(depth/2));
+			for(String op : unaryOps){
+				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
+					Map<String,Integer> subConstants = new HashMap<String,Integer>();
+					getConstantsRequired(type,binaryOps,unaryOps,methodOps,subConstants,depth-1);
+					for(String ctype : subConstants.keySet()){
+						if(!constants.containsKey(ctype)) constants.put(ctype, 0);
+						if(depth == 2)
+							constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
+						else
+							constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
+					}
+				}
+			}
+			for(SketchCall op : methodOps){
+				// TODO
+			}
+			
+			return;
+		}
+	}
+
+	private static void getMapExpressions(String type, Set<String> binaryOps, Set<String> unaryOps, Set<SketchCall> methodOps, Map<String,List<String>> terminals, List<String> exprs, Map<String, Integer> constants, int depth) {
+		if(depth == 0){
+			return;
+		}
+		if(depth == 1){
+			if(terminals.containsKey(type)){
+				for(String terminal : terminals.get(type))
+					exprs.add(terminal);
+			}
+			
+			/*if(constants.containsKey(type)){
+				String typeName = type.toLowerCase();
+				if(typeName == "bit[32]")
+					typeName = "bitInt";
+				
+				
+				for(int i=terminals.size(); i<terminals.size()+constants.get(type); i++){
+					exprs.add("_"+typeName+"_terminal"+i);
+				}
+			}*/
+			exprs.add("<"+type+"-term>");
+			return;
+		}
+		else{
+			/*if(terminals.containsKey(type)){
+				for(String terminal : terminals.get(type))
+					exprs.add(terminal);
+			}
+			
+			if(constants.containsKey(type)){
+				String typeName = type.toLowerCase();
+				if(typeName == "bit[32]")
+					typeName = "bitInt";
+				
+				for(int i=terminals.size(); i<terminals.size()+constants.get(type); i++){
+					exprs.add("_"+typeName+"_terminal"+i);
+				}
+			}*/
+			if(terminals.containsKey(type)){
+				for(String terminal : terminals.get(type))
+					exprs.add(terminal);
+			}
+			
+			exprs.add("<"+type+"-term>");
+			
+			for(String op : binaryOps){
+				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
+					if(type.equals("bit")){
+						if(casper.Util.operandTypes(op) == casper.Util.BIT_ONLY){
+							if(casper.Util.isAssociative(op)){
+								List<String> subExprs = new ArrayList<String>();
+								getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,constants,depth-1);
+								for(String exprLeft : subExprs){
+									for(String exprRight : subExprs){
+										if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+											continue;
+										if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
+											continue;
+										exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
+									}
+								}
+							}
+							else {
+								List<String> subExprs = new ArrayList<String>();
+								getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,constants,depth-1);
+								for(String exprLeft : subExprs){
+									for(String exprRight : subExprs){
+										exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 									}
 								}
 							}
 						}
-						for(String op : ext.unaryOperators){
-							if(javatosketch.Util.operatorType(op) == javatosketch.Util.getOpClassForType(type)){
-								newExprString = exprString.replace("<-expr->", op + "("+ext.inputDataCollections.get(0).name+"[<-expr->]."+field.name()+")");
-								getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid);
-							}
-						}
+						
 					}
-				}
-			}*/
-			
-			for(String op : ext.binaryOperators){
-				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
-					if(type.equals("bit")){
-						if(casper.Util.operandType(op) == casper.Util.BIT_ONLY){
-							String newExprString = exprString.replace("<-expr->", "_terminal" + terminalid + " " + op + " <-expr->");
-							getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid+1);
-						}
-						else if(casper.Util.operandType(op) == casper.Util.INT_ONLY){
-							String args = ext.inputDataCollections.get(0).name;
-							for(SketchVariable var : sketchLoopCounters){
-								args += ", " + var.name + ", ";
+					else if(type.equals("bit[32]")){
+						if(casper.Util.operandTypes(op) == casper.Util.VEC_ONLY){
+							if(casper.Util.isAssociative(op)){
+								List<String> subExprs = new ArrayList<String>();
+								getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,constants,depth-1);
+								for(String exprLeft : subExprs){
+									for(String exprRight : subExprs){
+										if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+											continue;
+										if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
+											continue;
+										boolean rhsIsTerminal = true;
+										boolean lhsIsTerminal = true;
+										for(String ttype : terminals.keySet()){
+											if(terminals.get(ttype).contains(exprRight)){
+												rhsIsTerminal = false;
+												break;
+											}
+										}
+										for(String ttype : terminals.keySet()){
+											if(terminals.get(ttype).contains(exprLeft)){
+												lhsIsTerminal = false;
+												break;
+											}
+										}
+										if(depth == 2 && lhsIsTerminal && rhsIsTerminal)
+											continue;
+										exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
+									}
+								}
 							}
-							args = args.substring(0, args.length()-2);
-							exprs.add(exprString.replace("<-expr->", "intMapGenerator("+args+") " + op + " intMapGenerator("+args+")"));
-						}
-						else if(casper.Util.operandType(op) == casper.Util.ALL_TYPES){
-							String args = ext.inputDataCollections.get(0).name;
-							for(SketchVariable var : sketchLoopCounters){
-								args += ", " + var.name + ", ";
+							else {
+								List<String> subExprs = new ArrayList<String>();
+								getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,constants,depth-1);
+								for(String exprLeft : subExprs){
+									for(String exprRight : subExprs){
+										boolean rhsIsTerminal = true;
+										boolean lhsIsTerminal = true;
+										for(String ttype : terminals.keySet()){
+											if(terminals.get(ttype).contains(exprRight)){
+												rhsIsTerminal = false;
+												break;
+											}
+										}
+										for(String ttype : terminals.keySet()){
+											if(terminals.get(ttype).contains(exprLeft)){
+												lhsIsTerminal = false;
+												break;
+											}
+										}
+										if(lhsIsTerminal && rhsIsTerminal)
+											continue;
+										exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
+									}
+								}
 							}
-							args = args.substring(0, args.length()-2);
-							exprs.add(exprString.replace("<-expr->", "intMapGenerator("+args+")" + op + " intMapGenerator("+args+")"));
-							exprs.add(exprString.replace("<-expr->", "stringMapGenerator("+args+")" + op + " stringMapGenerator("+args+")"));
-							String newExprString = exprString.replace("<-expr->", "_terminal" + terminalid + " " + op + " <-expr->");
-							getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid+1);
+						}
+						else if(casper.Util.operandTypes(op) == casper.Util.VEC_INT){
+							List<String> lhsSubExprs = new ArrayList<String>();
+							List<String> rhsSubExprs = new ArrayList<String>();
+							getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,lhsSubExprs,constants,depth-1);
+							getMapExpressions("int",binaryOps,unaryOps,methodOps,terminals,rhsSubExprs,constants,depth-1);
+							for(String exprLeft : lhsSubExprs){
+								for(String exprRight : rhsSubExprs){
+									exprRight = exprRight.replace("<-expr->", "intTerminals()");
+									if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+										continue;
+									boolean rhsIsConstant = true;
+									boolean lhsIsConstant = true;
+									for(String ttype : terminals.keySet()){
+										if(terminals.get(ttype).contains(exprRight)){
+											rhsIsConstant = false;
+											break;
+										}
+									}
+									for(String ttype : terminals.keySet()){
+										if(terminals.get(ttype).contains(exprLeft)){
+											lhsIsConstant = false;
+											break;
+										}
+									}
+									if(lhsIsConstant && rhsIsConstant)
+										continue;
+									exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
+								}
+							}
 						}
 					}
 					else{
-						String newExprString = exprString.replace("<-expr->", "_terminal" + terminalid + " " + op + " <-expr->");
-						getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid+1);
+						if(casper.Util.isAssociative(op)){
+							List<String> subExprs = new ArrayList<String>();
+							getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,constants,depth-1);
+							for(String exprLeft : subExprs){
+								for(String exprRight : subExprs){
+									if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+										continue;
+									if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
+										continue;
+									boolean rhsIsNotTerminal = true;
+									boolean lhsIsNotTerminal = true;
+									for(String ttype : terminals.keySet()){
+										if(terminals.get(ttype).contains(exprRight)){
+											rhsIsNotTerminal = false;
+											break;
+										}
+									}
+									for(String ttype : terminals.keySet()){
+										if(terminals.get(ttype).contains(exprLeft)){
+											lhsIsNotTerminal = false;
+											break;
+										}
+									}
+									if(lhsIsNotTerminal && rhsIsNotTerminal && depth == 2)
+										continue;
+									exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
+								}
+							}
+						}
+						else{
+							List<String> subExprs = new ArrayList<String>();
+							getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,constants,depth-1);
+							for(String exprLeft : subExprs){
+								for(String exprRight : subExprs){
+									boolean rhsIsTerminal = true;
+									boolean lhsIsTerminal = true;
+									for(String ttype : terminals.keySet()){
+										if(terminals.get(ttype).contains(exprRight)){
+											rhsIsTerminal = false;
+											break;
+										}
+									}
+									for(String ttype : terminals.keySet()){
+										if(terminals.get(ttype).contains(exprLeft)){
+											lhsIsTerminal = false;
+											break;
+										}
+									}
+									if(lhsIsTerminal && rhsIsTerminal)
+										continue;
+									exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
+								}
+							}
+						}
 					}
 				}
 			}
-			for(String op : ext.unaryOperators){
+			for(String op : unaryOps){
 				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
-					String newExprString = exprString.replace("<-expr->", op + "(<-expr->)");
-					getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid);
+					//getMapExpressions(type,binaryOps,unaryOps,methodOps,inputDataCollection,sketchInputVars,sketchOutputVars,sketchLoopCounters,terminals,exprs,constants,depth-1);
 				}
 			}
-			for(SketchCall op : ext.methodOperators){
+			for(SketchCall op : methodOps){
 				if(casper.Util.getOpClassForType(casper.Util.getSketchTypeFromRaw(op.returnType)) == casper.Util.getOpClassForType(type)){
 					String call = op.name+"(";
 					for(String argType : op.args){
@@ -955,10 +1178,10 @@ public class SketchCodeGenerator {
 						}
 						else{
 							// Generate args for generator functions
-							String args = ext.inputDataCollections.get(0).name;
-							for(SketchVariable var : sketchLoopCounters){
-								args += ", " + var.name + ", ";
-							}
+							String args = "";//inputDataCollection.name;
+							//for(SketchVariable var : sketchLoopCounters){
+							//	args += ", " + var.name + ", ";
+							//}
 							args = args.substring(0, args.length()-2);
 							if(argType.equals("java.lang.String"))
 								call += "stringMapGenerator("+args+"),";
@@ -968,8 +1191,12 @@ public class SketchCodeGenerator {
 						 
 					}
 					call = call.substring(0,call.length()-1) + ")";
-					String newExprString = exprString.replace("<-expr->", call);
-					getMapExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1,terminalid);
+					List<String> subExprs = new ArrayList<String>();
+					getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,constants,depth-1);
+					List<String> newExprs = new ArrayList<String>();
+					String newExprString = call;	
+					fillExpressions(exprs,subExprs,newExprs,newExprString,0);
+					exprs.addAll(newExprs);
 				}
 			}
 			
@@ -977,202 +1204,18 @@ public class SketchCodeGenerator {
 		}
 	}
 
-	public static String generateIntTerminals(Set<SketchVariable> sketchInputVars, Set<SketchVariable> sketchOutputVars, List<SketchVariable> sketchLoopCounters, MyWhileExt ext){
-		String intTerms = "";
+	private static void fillExpressions(List<String> exprs, List<String> subExprs, List<String> newExprs, String newExprString, int st_index) {
+		int index = newExprString.indexOf("<-expr->",st_index);
 		
-		// Generate args decl
-		String argsDecl = "";
-		for(SketchVariable var : sketchLoopCounters){
-			argsDecl += var.type + " " + var.name + ", ";
-		}
-		argsDecl = argsDecl.substring(0, argsDecl.length()-2);
-		
-		intTerms +=	"generator int intMapTerminals("+argsDecl+"){\n\t";
-		intTerms += "int option0 = ??;\n\t"; 
-		
-		int varid = 1;
-		for(SketchVariable var : sketchInputVars){
-			if(sketchOutputVars.contains(var))
-				continue;
-			
-			if(var.type.equals("int")){
-				intTerms += "int option" + varid++ + " = " + var.name + ";\n\t";
-			}
-			else if(var.type.equals("int["+Configuration.arraySizeBound+"]")){
-				if(!ext.inputDataCollections.contains(var)){
-					for(SketchVariable lc : sketchLoopCounters){
-						intTerms += "int option" + varid++ + " = " + var.name + "["+lc.name+"]" + ";\n\t";
-					}
-				}
-			}
-			else{
-				for(String globalVar : ext.globalDataTypes){
-					// If it is one of the global data types
-					if(globalVar.equals(var.type)){
-						// Add an option for each field that matches type
-	        			for(FieldDecl field : ext.globalDataTypesFields.get(globalVar)){
-	        				if(field.type().toString().equals("int")){
-	        					intTerms += "int option" + varid++ + " = " + var.name + "." + field.id().toString() + ";\n\t";
-	        				}
-	        			}
-	        		}
-					// If it is an array of one of the global data types
-	        		else if(globalVar.equals(var.type.replace("["+Configuration.arraySizeBound+"]", ""))){
-	        			if(!ext.inputDataCollections.contains(var)){
-		        			for(FieldDecl field : ext.globalDataTypesFields.get(globalVar)){
-		        				// Add an option for each field (of an arbitrary array index) that matches type
-		        				if(field.type().toString().equals("int")){
-		        					for(SketchVariable lc : sketchLoopCounters){
-		        						intTerms += "int option" + varid++ + " = " + var.name + "["+lc.name+"]." + field.id().toString() + ";\n\t";
-		        					}
-		        				}
-		        			}
-	        			}
-	        		}
-				}
-			}
-		}
-		for(SketchVariable var : sketchLoopCounters){
-			if(var.type.equals("int")){
-				intTerms += "int option" + varid++ + " = " + var.name + ";\n\t";
-			}
+		if(index == -1){
+			newExprs.add(newExprString);
+			return;
 		}
 		
-		String opts = "";
-		for(int i=0; i<varid; i++){
-			opts += "option" + i + " | ";
+		for(String expr : subExprs){
+			String newExprStringUpdated = newExprString.substring(0,index) + expr + newExprString.substring(index+8,newExprString.length());
+			fillExpressions(exprs,subExprs,newExprs,newExprStringUpdated,index-8+expr.length()+1);
 		}
-		opts = opts.substring(0,opts.length()-3);
-		
-		intTerms += "return {| "+opts+" |};\n}\n";
-		
-		return intTerms;
-	}
-
-	public static String generateBitGrammar(List<SketchVariable> sketchLoopCounters, MyWhileExt ext) {
-		String bitGenerator = "";
-		
-		// Generate args decl
-		String argsDecl = ext.inputDataCollections.get(0).type.replace(""+Configuration.arraySizeBound, ""+(Configuration.arraySizeBound-1)) + " " + ext.inputDataCollections.get(0).name;
-		for(SketchVariable var : sketchLoopCounters){
-			argsDecl += ", " + var.type + " " + var.name;
-		}
-		
-		// Generate args call
-		String argscall = ext.inputDataCollections.get(0).name;
-		for(SketchVariable var : sketchLoopCounters){
-			argscall += ", " + var.name;
-		}
-		
-		// Generate bit map terminal args
-		String mapBitTermArgs = "";
-		for(SketchVariable var : sketchLoopCounters){
-			mapBitTermArgs += var.name + ", ";
-		}
-		mapBitTermArgs = mapBitTermArgs.substring(0, mapBitTermArgs.length()-2);
-		
-		// Generate grammar options
-		String opts = "";
-		if(ext.inputDataCollections.get(0).type.equals("bit["+Configuration.arraySizeBound+"]")){
-			opts = " | " + ext.inputDataCollections.get(0).name+"[terminal2]"; 
-		}
-		for(String op : ext.binaryOperators){
-			if(casper.Util.operatorType(op) == casper.Util.RELATIONAL_OP){
-				opts += " | terminal2 " + op + " terminal3";
-			}
-		}
-		for(String op : ext.unaryOperators){
-			if(casper.Util.operatorType(op) == casper.Util.RELATIONAL_OP){
-				opts += " | " + op + "terminal3";
-			}
-		}
-		
-		bitGenerator +=	"generator bit bitMapGenerator("+argsDecl+", int depth){\n\t" +
-							"if(depth == 1){\n\t\t" +
-								"return bitMapTerminals("+mapBitTermArgs+");\n\t" +
-							"}\n\t" +
-							"else{\n\t\t" +
-								"bit terminal1 = bitMapTerminals("+mapBitTermArgs+");\n\t\t" +
-								"bit terminal2 = bitMapGenerator("+argscall+", depth-1);\n\t\t" +
-								"bit terminal3 = bitMapGenerator("+argscall+", depth-1);\n\t\t" +
-								"return {| terminal1" + opts + " |};\n\t" +
-							"}\n" +
-						"}";
-		
-		return bitGenerator;
-	}
-	
-	public static String generateBitTerminals(Set<SketchVariable> sketchInputVars, Set<SketchVariable> sketchOutputVars, List<SketchVariable> sketchLoopCounters, MyWhileExt ext){
-		String bitTerms = "";
-		
-		// Generate args decl
-		String argsDecl = "";
-		for(SketchVariable var : sketchLoopCounters){
-			argsDecl += var.type + " " + var.name + ", ";
-		}
-		argsDecl = argsDecl.substring(0, argsDecl.length()-2);
-		
-		bitTerms +=	"generator bit bitMapTerminals("+argsDecl+"){\n\t";
-		bitTerms += "bit option0 = true;\n\t";
-		bitTerms += "bit option1 = false;\n\t";
-		
-		int varid = 2;
-		for(SketchVariable var : sketchInputVars){
-			if(sketchOutputVars.contains(var))
-				continue;
-			
-			if(var.type.equals("bit")){
-				bitTerms += "bit option" + varid++ + " = " + var.name + ";\n\t";
-			}
-			else if(var.type.equals("bit["+Configuration.arraySizeBound+"]")){
-				if(!ext.inputDataCollections.contains(var)){
-					for(SketchVariable lc : sketchLoopCounters){
-						bitTerms += "bit option" + varid++ + " = " + var.name + "["+lc.name+"]" + ";\n\t";
-					}
-				}
-			}
-			else{
-				for(String globalVar : ext.globalDataTypes){
-					// If it is one of the global data types
-					if(globalVar.equals(var.type)){
-						// Add an option for each field that matches type
-	        			for(FieldDecl field : ext.globalDataTypesFields.get(globalVar)){
-	        				if(field.type().toString().equals("bit")){
-	        					bitTerms += "bit option" + varid++ + " = " + var.name + "." + field.id().toString() + ";\n\t";
-	        				}
-	        			}
-	        		}
-					// If it is an array of one of the global data types
-	        		else if(globalVar.equals(var.type.replace("["+Configuration.arraySizeBound+"]", ""))){
-	        			if(!ext.inputDataCollections.contains(var)){
-		        			for(FieldDecl field : ext.globalDataTypesFields.get(globalVar)){
-		        				// Add an option for each field (of an arbitrary array index) that matches type
-		        				if(field.type().toString().equals("bit")){
-		        					for(SketchVariable lc : sketchLoopCounters){
-		        						bitTerms += "bit option" + varid++ + " = " + var.name + "["+lc.name+"]." + field.id().toString() + ";\n\t";
-		        					}
-		        				}
-		        			}
-	        			}
-	        		}
-				}
-			}
-		}
-		for(SketchVariable var : sketchLoopCounters){
-			if(var.type.equals("bit")){
-				bitTerms += "bit option" + varid++ + " = " + var.name + ";\n\t";
-			}
-		}
-		
-		String opts = "";
-		for(int i=0; i<varid; i++){
-			opts += "option" + i + " | ";
-		}
-		opts = opts.substring(0,opts.length()-3);
-		
-		bitTerms += "return {| "+opts+" |};\n}\n";
-		
-		return bitTerms;
 	}
 	
 	// Generate do reduce emits
@@ -1198,38 +1241,6 @@ public class SketchCodeGenerator {
 						"}";
 				
 		return emits;
-	}
-
-	// Generate do reduce grammars
-	public static String generateReduceGrammar(MyWhileExt ext, Set<SketchVariable> sketchInputVars, String outputType) {
-		String reduceExpGen = "";
-		
-		// Generate grammar options
-		String opts = "";
-		for(String op : ext.binaryOperators){
-			if(casper.Util.operatorType(op) == casper.Util.ARITHMETIC_OP){
-				opts += " | terminal2 " + op + " terminal3";
-			}
-		}
-		for(String op : ext.unaryOperators){
-			if(casper.Util.operatorType(op) == casper.Util.ARITHMETIC_OP){
-				opts += " | " + op + "terminal3";
-			}
-		}
-		
-		reduceExpGen +=	"generator "+outputType+" "+outputType+"ReduceGenerator("+outputType + " val1, " + outputType + " val2, int depth){\n\t" +
-							"if(depth == 1){\n\t\t" +
-								"return "+outputType+"ReduceTerminals(val1, val2);\n\t" +
-							"}\n\t" +
-							"else{\n\t\t" +
-								"int terminal1 = "+outputType+"ReduceTerminals(val1, val2);\n\t\t" +
-								"int terminal2 = "+outputType+"ReduceGenerator(val1, val2, depth-1);\n\t\t" +
-								"int terminal3 = "+outputType+"ReduceGenerator(val1, val2, depth-1);\n\t\t" +
-								"return {| terminal1" + opts + " |};\n\t" +
-							"}\n" +
-						"}";
-		
-		return reduceExpGen;
 	}
 	
 	// Generate do reduce grammars
@@ -1286,8 +1297,10 @@ public class SketchCodeGenerator {
 		
 		// Terminals
 		String terminals = "";
-		for(int i=0; i<Configuration.recursionDepth; i++){
-			terminals += type+" terminal"+(i+1)+" = {| " + terminalOpts + " |};\n\t";
+		int termC = Configuration.recursionDepth;
+		if(termC > 2) Math.pow(termC-1,2);
+		for(int i=0; i<termC; i++){
+			terminals += type+" _terminal"+(i)+" = {| " + terminalOpts + " |};\n\t";
 		}
 		
 		// Grammar options
@@ -1297,6 +1310,13 @@ public class SketchCodeGenerator {
 		String opts = "";
 		int id = 0;
 		for(String expr : exprs){
+			int index = 0;
+			while(expr.contains("<-expr->")){
+				int st_index = expr.indexOf("<-expr->");
+				int end_index = st_index + 8;
+				expr = expr.substring(0, st_index) + "_terminal"+ index++ + expr.substring(end_index, expr.length());
+			}
+			
 			expressions += type+" _option"+id+" = " + expr + ";\n\t";
 			opts += "_option"+id+ " | ";
 			id++;
@@ -1318,91 +1338,146 @@ public class SketchCodeGenerator {
 			return;
 		}
 		if(depth == 1){
-			exprs.add(exprString.replace("<-expr->","terminal"+depth));
+			exprs.add(exprString);
 			return;
 		}
 		else{
-			//exprs.add(exprString.replace("<-expr->","terminal"+depth));
+			exprs.add(exprString);
 			
 			for(String op : ext.binaryOperators){
-				if(casper.Util.isAggOperator(op) && (casper.Util.operatorType(op) == casper.Util.getOpClassForType(type))){
-					String newExprString = exprString.replace("<-expr->", "terminal" + depth + " " + op + " <-expr->");
-					getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
+				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
+					if(type.equals("bit")){
+						if(casper.Util.operandTypes(op) == casper.Util.BIT_ONLY){
+							if(casper.Util.isAssociative(op)){
+								List<String> subExprs = new ArrayList<String>();
+								getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,subExprs,"<-expr->",depth-1);
+								for(String exprLeft : subExprs){
+									for(String exprRight : subExprs){
+										if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+											continue;
+										if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
+											continue;
+										exprs.add(exprString.replace("<-expr->", "("+exprLeft + " " + op + " " + exprRight + ")"));
+									}
+								}
+							}
+							else {
+								List<String> subExprs = new ArrayList<String>();
+								getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,subExprs,"<-expr->",depth-1);
+								for(String exprLeft : subExprs){
+									for(String exprRight : subExprs){
+										exprs.add(exprString.replace("<-expr->", "("+exprLeft + " " + op + " " + exprRight + ")"));
+									}
+								}
+							}
+						}
+						
+					}
+					else if(type.equals("bit[32]")){
+						if(casper.Util.operandTypes(op) == casper.Util.VEC_ONLY){
+							if(casper.Util.isAssociative(op)){
+								List<String> subExprs = new ArrayList<String>();
+								getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,subExprs,"<-expr->",depth-1);
+								for(String exprLeft : subExprs){
+									for(String exprRight : subExprs){
+										if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+											continue;
+										if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
+											continue;
+										exprs.add(exprString.replace("<-expr->", "("+exprLeft + " " + op + " " + exprRight + ")"));
+									}
+								}
+							}
+							else {
+								List<String> subExprs = new ArrayList<String>();
+								getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,subExprs,"<-expr->",depth-1);
+								for(String exprLeft : subExprs){
+									for(String exprRight : subExprs){
+										exprs.add(exprString.replace("<-expr->", "("+exprLeft + " " + op + " " + exprRight + ")"));
+									}
+								}
+							}
+						}
+						else if(casper.Util.operandTypes(op) == casper.Util.VEC_INT){
+							List<String> lhsSubExprs = new ArrayList<String>();
+							List<String> rhsSubExprs = new ArrayList<String>();
+							getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,lhsSubExprs,"<-expr->",depth-1);
+							getReduceExpressions("int",ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,rhsSubExprs,"<-expr->",depth-1);
+							for(String exprLeft : lhsSubExprs){
+								for(String exprRight : rhsSubExprs){
+									exprRight = exprRight.replace("<-expr->", "intTerminals()");
+									if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+										continue;
+									exprs.add(exprString.replace("<-expr->", "("+exprLeft + " " + op + " " + exprRight + ")"));
+								}
+							}
+						}
+					}
+					else{
+						if(casper.Util.isAssociative(op)){
+							List<String> subExprs = new ArrayList<String>();
+							getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,subExprs,"<-expr->",depth-1);
+							for(String exprLeft : subExprs){
+								for(String exprRight : subExprs){
+									if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+										continue;
+									if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
+										continue;
+									exprs.add(exprString.replace("<-expr->", "("+exprLeft + " " + op + " " + exprRight + ")"));
+								}
+							}
+						}
+						else{
+							List<String> subExprs = new ArrayList<String>();
+							getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,subExprs,"<-expr->",depth-1);
+							for(String exprLeft : subExprs){
+								for(String exprRight : subExprs){
+									exprs.add(exprString.replace("<-expr->", "("+exprLeft + " " + op + " " + exprRight + ")"));
+								}
+							}
+						}
+					}
 				}
 			}
-			if(depth != 2){
-				for(String op : ext.unaryOperators){
-					if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
-						String newExprString = exprString.replace("<-expr->", op + "(<-expr->)");
-						getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
-					}
+			for(String op : ext.unaryOperators){
+				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
+					String newExprString = exprString.replace("<-expr->", op + "(<-expr->)");
+					getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
 				}
 			}
 			for(SketchCall op : ext.methodOperators){
 				if(casper.Util.getOpClassForType(casper.Util.getSketchTypeFromRaw(op.returnType)) == casper.Util.getOpClassForType(type)){
 					String call = op.name+"(";
-					boolean ignore = false;
 					for(String argType : op.args){
 						if(casper.Util.getSketchTypeFromRaw(argType).equals(type)){
 							call += "<-expr->,";
 						}
 						else{
-							ignore = true;
-							break;
+							// Generate args for generator functions
+							String args = ext.inputDataCollections.get(0).name;
+							for(SketchVariable var : sketchLoopCounters){
+								args += ", " + var.name + ", ";
+							}
+							args = args.substring(0, args.length()-2);
+							if(argType.equals("java.lang.String"))
+								call += "stringMapGenerator("+args+"),";
+							else
+								call += casper.Util.getSketchTypeFromRaw(argType).toLowerCase()+"MapGenerator("+args+"),";
 						}
 						 
 					}
-					if(!ignore){
-						call = call.substring(0,call.length()-1) + ")";
-						String newExprString = exprString.replace("<-expr->", call);
-						getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,exprs,newExprString,depth-1);
-					}
+					call = call.substring(0,call.length()-1) + ")";
+					String newExprString = exprString.replace("<-expr->", call);	
+					List<String> subExprs = new ArrayList<String>();
+					getReduceExpressions(type,ext,sketchInputVars,sketchOutputVars,sketchLoopCounters,subExprs,"<-expr->",depth-1);
+					List<String> newExprs = new ArrayList<String>();
+					fillExpressions(exprs,subExprs,newExprs,newExprString,0);
+					exprs.addAll(newExprs);
 				}
 			}
 			
 			return;
 		}
-	}
-
-	public static String generateReduceTerminals(MyWhileExt ext, Set<SketchVariable> sketchInputVars, Set<SketchVariable> sketchOutputVars, String outputType){
-		String reduceTerms = "";
-		
-		reduceTerms +=	"generator " + outputType + " " + outputType + "ReduceTerminals("+outputType + " val1, " + outputType + " val2){\n\t";
-		reduceTerms += outputType + " option0 = val1;\n\t";
-		reduceTerms += outputType + " option1 = val2;\n\t";
-		
-		int varid = 2;
-		for(SketchVariable var : sketchInputVars){
-			if(sketchOutputVars.contains(var))
-				continue;
-			
-			if(var.type.equals(outputType)){
-				reduceTerms += outputType + " option" + varid++ + " = " + var.name + ";\n\t";
-			}
-			else{
-				for(String globalVar : ext.globalDataTypes){
-					// If it is one of the global data types
-					if(globalVar.equals(var.type)){
-						// Add an option for each field that matches type
-	        			for(FieldDecl field : ext.globalDataTypesFields.get(globalVar)){
-	        				if(field.type().toString().equals(outputType)){
-	        					reduceTerms += outputType + " option" + varid++ + " = " + var.name + "." + field.id().toString() + ";\n\t";
-	        				}
-	        			}
-	        		}
-				}
-			}
-		}
-		
-		String opts = "";
-		for(int i=0; i<varid; i++){
-			opts += "option" + i + " | ";
-		}
-		opts = opts.substring(0,opts.length()-3);
-		
-		reduceTerms += "return {| "+opts+" |};\n}\n";
-		
-		return reduceTerms;
 	}
 	
 	// Generate code that includes all necessary files

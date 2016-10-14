@@ -168,6 +168,7 @@ public class MyWhileExt extends MyStmtExt {
     	public String varType;
     	public String containerType;
     	public int category;
+    	public boolean bitVec = false;
     	
     	public static final int VAR = 0;
     	public static final int FIELD_ACCESS = 1;
@@ -232,9 +233,9 @@ public class MyWhileExt extends MyStmtExt {
     		return sketchType;
     	}
     	
-    	public String getType(){		
-    		String targetType = varType;
-    		String templateType = varType;
+    	private String getType(String vtype){
+    		String targetType = vtype;
+    		String templateType = vtype;
     		int end = targetType.indexOf('<');
     		if(end != -1){
     			targetType = targetType.substring(0, end);
@@ -244,7 +245,7 @@ public class MyWhileExt extends MyStmtExt {
     				case "java.util.ArrayList":
     					templateType = templateType.substring(end+1,templateType.length()-1);
     					this.category = Variable.ARRAY_ACCESS;
-    					return casper.Util.getSketchTypeFromRaw(templateType)+"[]";
+    					return casper.Util.getSketchTypeFromRaw(this.getType(templateType))+"[]";
     				case "java.util.Map":
     					templateType = templateType.substring(end+1,templateType.length()-1);
         				String[] subTypes = templateType.split(",");
@@ -258,19 +259,23 @@ public class MyWhileExt extends MyStmtExt {
 	        				case "java.lang.Byte":
 	        				case "java.lang.BigInteger":
 	        					this.category = Variable.ARRAY_ACCESS;
-	        					return casper.Util.getSketchTypeFromRaw(subTypes[1])+"[]";
+	        					return casper.Util.getSketchTypeFromRaw(this.getType(subTypes[1]))+"[]";
 	        				default:
 	        					templateType = translateToSketchType(templateType);
 	        					return templateType + "Map";
         				}
     				default:
-    					String[] components = varType.split("\\.");
-    	        		return components[components.length-1];
+    					String[] components = vtype.split("\\.");
+    	        		return casper.Util.getSketchTypeFromRaw(components[components.length-1]);
     			}
     		}
     		
-    		String[] components = varType.split("\\.");
-    		return components[components.length-1];
+    		String[] components = vtype.split("\\.");
+    		return casper.Util.getSketchTypeFromRaw(components[components.length-1]);
+    	}
+    	
+    	public String getType(){		
+    		return this.getType(varType);
     	}
     	
     	public String getOriginalType(){		

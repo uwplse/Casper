@@ -27,6 +27,7 @@ import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
 import polyglot.ast.ArrayAccess;
+import polyglot.ast.ArrayAccessAssign;
 import polyglot.ast.Assign;
 import polyglot.ast.Block;
 import polyglot.ast.Call;
@@ -38,6 +39,7 @@ import polyglot.ast.Node;
 import polyglot.ast.NodeFactory;
 import polyglot.ast.Stmt;
 import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
 import polyglot.visit.NodeVisitor;
 
 public class GenerateVerification extends NodeVisitor {
@@ -56,7 +58,7 @@ public class GenerateVerification extends NodeVisitor {
 	
 	public NodeVisitor enter(Node parent, Node n){
 		// If the node is a loop
-		if(n instanceof While){
+		if(n instanceof While || n instanceof ExtendedFor){
 			// Get extension of loop node
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			
@@ -64,7 +66,8 @@ public class GenerateVerification extends NodeVisitor {
 			extractInitialValues(n, ext);
 			
 			// Extract Loop Increment
-			extractLoopIncrement((While)n, ext);
+			if(n instanceof While)
+				extractLoopIncrement((While)n, ext);
 			
 			// Reset constant mappings
 			this.constMapping.clear();
@@ -106,7 +109,11 @@ public class GenerateVerification extends NodeVisitor {
 					
 					// Construct pre condition statement of I for loop Body
 					Map<String,CustomASTNode> wpcValues = new HashMap<String,CustomASTNode>();
-					Stmt loopBody = ((While) n).body();
+					Stmt loopBody = null;
+					if(n instanceof While)
+						loopBody = ((While) n).body();
+					else
+						loopBody = ((ExtendedFor)n).body();
 					CustomASTNode preCondBlock = generateWPC(sketchType,ext.parent,ext.loopInvariantArgsOrder,ext.terminationCondition,ext.initVals,wpcValues);
 					MyStmtExt blockExt = (MyStmtExt) JavaExt.ext(loopBody);
 					blockExt.preConditions.put(sketchType, preCondBlock);

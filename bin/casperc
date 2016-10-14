@@ -27,7 +27,7 @@ fixclasspath() {
   fi
 }
 
-extra_cp=
+extra_cp=/home/Maaz/Desktop/Work/Alvin/Releases/Casper/lib/imagej-1.46.jar
 args=
 vmargs=-ea
 classpath=

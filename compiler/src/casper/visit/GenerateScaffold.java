@@ -34,10 +34,12 @@ import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import casper.extension.MyWhileExt.Variable;
 import casper.types.IdentifierNode;
-import polyglot.ast.Expr;
+import polyglot.ast.Block;
 import polyglot.ast.Node;
 import polyglot.ast.NodeFactory;
+import polyglot.ast.Stmt;
 import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
 import polyglot.visit.NodeVisitor;
 
 public class GenerateScaffold extends NodeVisitor{
@@ -117,12 +119,22 @@ public class GenerateScaffold extends NodeVisitor{
 		String loopCountersInit = SketchCodeGenerator.initLoopCounters(ext, argsList, sketchLoopCounters);
 		
 		// Generate verification code
-		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(((While)n).body()));
+		Stmt loopBody;
+		if(n instanceof While)
+			loopBody = ((While)n).body();
+		else
+			loopBody = ((ExtendedFor)n).body();
+		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(loopBody));
+		
 		String invariant = ext.invariants.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
-		String loopCond = ext.terminationCondition.toString(); if(!ext.condInv) loopCond = "!" + loopCond; loopCond = "("+sketchLoopCounters.get(0).name+"<"+(Configuration.arraySizeBound-1)+")";
+		String loopCond = "("+sketchLoopCounters.get(0).name+"<"+(Configuration.arraySizeBound-1)+")";
+		
 		String loopCondFalse = loopCond; if(ext.condInv) loopCondFalse = "!" + loopCondFalse;
+		
 		String wpc = bodyExt.preConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
+		
 		String postC = ext.postConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
+		
 		String preC = ext.preConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
 		
 		// Generate weakest pre condition values initialization
@@ -169,7 +181,7 @@ public class GenerateScaffold extends NodeVisitor{
 		String domapFuncArgsCall = SketchCodeGenerator.generateDomapFuncArgsCall(ext,sketchLoopCounters);
 		
 		// Generate map function loop increment
-		String mapLoopIncr = SketchCodeGenerator.generateMapLoopIncr(sketchLoopCounters,ext.incrementExps);
+		String mapLoopIncr = "";//SketchCodeGenerator.generateMapLoopIncr(sketchLoopCounters,ext.incrementExps);
 		
 		// Output reconstruction
 		String outputRecon = SketchCodeGenerator.reconstructOutput(outputType,sketchOutputVars);
@@ -182,6 +194,9 @@ public class GenerateScaffold extends NodeVisitor{
 		
 		// Generate int expression generator for map
 		String intMapGen = SketchCodeGenerator.generateMapGrammarInlined("int",sketchInputVars,sketchOutputVars,sketchLoopCounters,ext);
+		
+		// Generate bit-vector expression generator for map
+		String bitVecMapGen = SketchCodeGenerator.generateMapGrammarInlined("bit[32]",sketchInputVars,sketchOutputVars,sketchLoopCounters,ext);
 		
 		// Generate bit expression generator for map
 		String bitMapGen = SketchCodeGenerator.generateMapGrammarInlined("bit",sketchInputVars,sketchOutputVars,sketchLoopCounters,ext);
@@ -211,6 +226,7 @@ public class GenerateScaffold extends NodeVisitor{
 		text = text.replace("<loop-inv-args-decl>",loopInvariantArgsDecl);
 		text = text.replace("<loop-inv-body>",loopInvariant);
 		text = text.replace("<generate-int-map>",intMapGen);
+		text = text.replace("<generate-bit-vec-map>",bitVecMapGen);
 		text = text.replace("<generate-bit-map>",bitMapGen);
 		text = text.replace("<generate-string-map>",stringMapGen);
 		text = text.replace("<domap-func-args-decl>",domapFuncArgsDecl);
@@ -230,66 +246,6 @@ public class GenerateScaffold extends NodeVisitor{
 		writer.close();
 	}
 	
-	/*
-	// Generate custom array of given typeName
-	public void generateArray(String typeName) throws Exception{
-		// Create array class file
-		PrintWriter writer = new PrintWriter("output/"+typeName+"Array.sk", "UTF-8");
-		
-		// Read template
-		String text = new String(Files.readAllBytes(Paths.get("templates/array_skeleton.sk")), StandardCharsets.UTF_8);
-		
-		// Modify template
-		text = text.replace("<var-name>", typeName);
-		text = text.replace("<var-name-sc>", typeName.toLowerCase());
-		text = text.replace("<include-libs>","include \"" + typeName + ".sk\";");
-		
-		// Save
-		writer.print(text);
-		writer.close();
-	}
-	*/
-	
-	/*
-	// Generate code that defines the required map class
-	private void generateMap(String type) throws IOException {
-		String patternString = "(Str|Int){1}List|(Str|Int){2}Map";
-		Pattern pattern = Pattern.compile(patternString);
-		Matcher matcher = pattern.matcher(type);
-		if(matcher.matches()){
-			String mapType = type.substring(0,6);
-			String mapTypeFunc = mapType.toLowerCase();
-			String keyType = javatosketch.Util.convertAbbrToType(mapTypeFunc.substring(0,3));
-			String valType = javatosketch.Util.convertAbbrToType(mapTypeFunc.substring(3,6));
-			
-			// Create array class file
-			PrintWriter writer = new PrintWriter("output/"+type+".sk", "UTF-8");
-			
-			// Read template
-			String text = new String(Files.readAllBytes(Paths.get("templates/map_skeleton.sk")), StandardCharsets.UTF_8);
-			
-			String verifCode = "";
-			if(javatosketch.Util.isBasicType(valType) == 1 || javatosketch.Util.isBasicType(valType) == 2){
-				verifCode += "assert ptr1.value == ptr2.value;";
-			}
-			else if(javatosketch.Util.isBasicType(valType) == 3){
-				verifCode += "assert "+valType.substring(0,6).toLowerCase()+"_map_equal(ptr1.value, ptr2.value);";
-			}	
-			
-			// Modify template
-			text = text.replace("<map-type>", mapType);
-			text = text.replace("<map-type-func>",mapTypeFunc);
-			text = text.replace("<key-type>", keyType);
-			text = text.replace("<value-type>",valType);
-			text = text.replace("<value-compare-assert>",verifCode);
-			
-			// Save
-			writer.print(text);
-			writer.close();
-		}
-	}
-	*/
-
 	// Translate input variables to sketch types
 	public void generateSketchInputVars(Node n, Set<SketchVariable> sketchInputVars) throws Exception{
 		MyWhileExt ext = (MyWhileExt)JavaExt.ext(n);
@@ -509,9 +465,12 @@ public class GenerateScaffold extends NodeVisitor{
 
 	public NodeVisitor enter(Node parent, Node n){
 		// If the node is a loop
-		if(n instanceof While){
+		if(n instanceof While || n instanceof ExtendedFor){
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			if(ext.interesting){
+				
+				System.err.println(ext.inputVars);
+				
 				if(debug){
 					System.err.println("Attempting to translate code fragment:-");
 					n.prettyPrint(System.err);
@@ -654,7 +613,8 @@ public class GenerateScaffold extends NodeVisitor{
 		errstream.start();
 
         int exitVal = pr.waitFor();
-        
+		
+		
         if(exitVal == 0){
         	System.err.println("Summary successfully synthesized");
         	writer.close();
@@ -665,7 +625,6 @@ public class GenerateScaffold extends NodeVisitor{
         	writer.close();
         	
         	// TODO: Add machinery for incrementally adding options (something more sophisticated / less ad hoc)
-        	
         	if(ext.useConditionals && !Configuration.useConditionals){
         		System.err.println("Incrementing grammar...");
         		Configuration.useConditionals = true;

@@ -36,7 +36,7 @@ public class GenerateSparkCode extends NodeVisitor{
 	@Override
 	public Node leave(Node old, Node n, NodeVisitor v){
 		// If the node is a loop
-		if(n instanceof While){
+		/*if(n instanceof While){
 			// If the loop was marked as interesting
 			if(((MyWhileExt)JavaExt.ext(n)).interesting){
 				MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
@@ -115,7 +115,7 @@ public class GenerateSparkCode extends NodeVisitor{
 				first = !first;
 			}
 		}
-       
+       */
 		return n;
 	}
    

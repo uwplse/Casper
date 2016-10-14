@@ -8,6 +8,7 @@ import casper.visit.GenerateScaffold.SketchVariable;
 import polyglot.ast.Block;
 import polyglot.ast.Branch;
 import polyglot.ast.Stmt;
+import polyglot.ast.TypeNode;
 
 public class Util {
 	public static String getSketchTypeFromRaw(String original){
@@ -20,33 +21,28 @@ public class Util {
 			case "byte":
 			case "int":
 			case "long":
-			case "java.lang.String":
-			case "java.lang.Integer":
-				return "int";
 			case "float":
-				return "float";
 			case "double":
-				return "double";
+			case "String":
+			case "Integer":
+			case "Double":
+			case "Float":
+				return "int";
 			case "boolean[]":
 				return "bit[" + Configuration.arraySizeBound + "]";
-				// return "BitArray";
 			case "char[]":
 				return "char[" + Configuration.arraySizeBound + "]";
-				// return "CharArray";
 			case "short[]":
 			case "byte[]":
 			case "int[]":
 			case "long[]":
-			case "java.lang.String[]":
-			case "java.lang.Integer[]":
-				return "int[" + Configuration.arraySizeBound + "]";
-				// return "IntArray";
-			case "float[]":
-				return "float[" + Configuration.arraySizeBound + "]";
-				// return "FloatArray";
 			case "double[]":
-				return "double[" + Configuration.arraySizeBound + "]";
-				// return "DoubleArray";	
+			case "float[]":
+			case "String[]":
+			case "Integer[]":
+			case "Double[]":
+			case "Float[]":
+				return "int[" + Configuration.arraySizeBound + "]";
 			default:
 				String[] components = original.split("\\.");
 				String dataType = components[components.length-1];
@@ -97,33 +93,28 @@ public class Util {
 			case "byte":
 			case "int":
 			case "long":
-			case "String":
-			case "Integer":
-				return "int";
-			case "float":
-				return "float";
 			case "double":
-				return "double";
+			case "float":
+			case "Integer":
+			case "Double":
+			case "Float":
+			case "String":				
+				return "int";
 			case "boolean[]":
-				// return "BitArray";
 				return "bit["+Configuration.arraySizeBound+"]";
 			case "char[]":
-				// return "CharArray";
 				return "char["+Configuration.arraySizeBound+"]";
 			case "short[]":
 			case "byte[]":
 			case "int[]":
 			case "long[]":
-			case "String[]":
-			case "Integer[]":
-				// return "IntArray";
-				return "int["+Configuration.arraySizeBound+"]";
 			case "float[]":
-				// return "FloatArray";
-				return "float["+Configuration.arraySizeBound+"]";
 			case "double[]":
-				// return "DoubleArray";
-				return "double["+Configuration.arraySizeBound+"]";	
+			case "Integer[]":
+			case "Float[]":
+			case "String[]":
+			case "Double[]":	
+				return "int["+Configuration.arraySizeBound+"]";	
 			default:
 				return original;
 		}
@@ -143,18 +134,17 @@ public class Util {
 		case "double":
 		case "String":
 		case "Integer":
+		case "Double":
 			return PRIMITIVE;
-		case "bit["+Configuration.arraySizeBound+"]":
-		case "char["+Configuration.arraySizeBound+"]":
-		case "int["+Configuration.arraySizeBound+"]":
-		case "float["+Configuration.arraySizeBound+"]":
-		case "double["+Configuration.arraySizeBound+"]":
-		case "String["+Configuration.arraySizeBound+"]":
-		case "Integer["+Configuration.arraySizeBound+"]":
-			return ARRAY;
 		default:
 			if(type.endsWith("["+Configuration.arraySizeBound+"]")){
-				return OBJECT_ARRAY;
+				if(getTypeClass(type.substring(0, type.lastIndexOf("["+Configuration.arraySizeBound+"]"))) == PRIMITIVE ||
+				   getTypeClass(type.substring(0, type.lastIndexOf("["+Configuration.arraySizeBound+"]"))) == ARRAY	){
+					return ARRAY;
+				}
+				else {
+					return OBJECT_ARRAY;
+				}
 			}
 			else{
 				return OBJECT;
@@ -194,7 +184,8 @@ public class Util {
 
    	public static final int ARITHMETIC_OP = 1;
    	public static final int RELATIONAL_OP = 2;
-   	public static final int UNKNOWN_OP = 3;
+   	public static final int BITVECTOR_OP = 3;
+   	public static final int UNKNOWN_OP = 4;
    	
 	public static int operatorType(String op) {
 		switch(op){
@@ -203,10 +194,14 @@ public class Util {
 		case "*":
 		case "/":
 		case "%":
+			return ARITHMETIC_OP;
 		case ">>":
 		case "<<":
 		case ">>>":
-			return ARITHMETIC_OP;
+		case "&":
+		case "^":
+		case "|":
+			return BITVECTOR_OP;
 		case "<":
 		case ">":
 		case "<=":
@@ -214,9 +209,6 @@ public class Util {
 		case "instanceof":
 		case "==":
 		case "!=":
-		case "&":
-		case "^":
-		case "|":
 		case "&&":
 		case "||":
 		case "!":
@@ -253,9 +245,11 @@ public class Util {
 	
 	public static final int INT_ONLY = 1;
 	public static final int BIT_ONLY = 2;
-	public static final int ALL_TYPES = 3;
+	public static final int VEC_INT = 3;
+	public static final int VEC_ONLY = 4;
+	public static final int ALL_TYPES = 5;
 	
-	public static int operandType(String op) {
+	public static int operandTypes(String op) {
 		switch(op){
 		case "&&":
 		case "||":
@@ -265,12 +259,17 @@ public class Util {
 		case ">":
 		case "<=":
 		case ">=":
-		case "&":
-		case "^":
-		case "|":
 		case "==":
 		case "!=":
 			return INT_ONLY;
+		case ">>":
+		case ">>>":
+		case "<<":
+			return VEC_INT;
+		case "&":
+		case "^":
+		case "|":
+			return VEC_ONLY;
 		default:
 			return ALL_TYPES;
 		}
@@ -308,6 +307,8 @@ public class Util {
 			return ARITHMETIC_OP;
 		case "bit":
 			return RELATIONAL_OP;
+		case "bit[32]":
+			return BITVECTOR_OP;
 		default:
 			return UNKNOWN_OP;
 		}
@@ -324,6 +325,8 @@ public class Util {
 					case "float":
 					case "double":
 					case "Integer":
+					case "Double":
+					case "Float":
 						return 1;
 					case "short[]":
 					case "byte[]":
@@ -332,6 +335,8 @@ public class Util {
 					case "float[]":
 					case "double[]":
 					case "Integer[]":
+					case "Double[]":
+					case "Float[]":
 						return 2;
 					default:
 						return 0;
@@ -433,6 +438,33 @@ public class Util {
 		}
 		else{
 			return "unknownOP";
+		}
+	}
+
+	public static boolean isAssociative(String op) {
+		switch(op){
+		case "+":
+		case "*":
+		case "&&":
+		case "||":
+		case "&":
+		case "|":
+		case "==":
+		case "^":
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public static String getInitVal(String type) {
+		switch(type){
+			case "double":
+				return "0";
+			case "java.lang.Integer":
+				
+			default:
+				return "0";
 		}
 	}
 	

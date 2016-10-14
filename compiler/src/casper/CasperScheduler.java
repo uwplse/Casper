@@ -2,21 +2,11 @@
  * The scheduler class is used to add custom passes in the compilation
  * process. Furthermore, the exact order in which the passes must execute
  * is defined. Our additional passes execute just before the code generation
- * proocess and after the  code has been validated to confirm it is legal
+ * process and after the  code has been validated to confirm it is legal
  * Java 7.
  * 
  * List of custom passes in proper order:
- *    1) Normalize loops
- *    2) Flatten expressions 
- *    3) Extract loop bodies
- *    4) Input variables extracted
- *    5) Output variables extracted
- *    6) Initial loop conditions extracted
- *    7) Loop conditions tainted
- *    8) Loop conditions formulated
- *    9) Loop increments calculated
- *    10) Aliases identified
- *    11) Scaffold generated
+ *    1) TODO: Finish this
  * 
  * Details for each compiler pass can be found in the respective visitor
  * class.
@@ -29,7 +19,6 @@ package casper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import casper.visit.ExtractInputVariables;
 import casper.visit.ExtractLoopCounters;
 import casper.visit.ExtractLoopTerminateConditions;

@@ -18,6 +18,7 @@ import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
 import polyglot.ast.Call;
 import polyglot.ast.Expr;
+import polyglot.ast.Local;
 import polyglot.ast.Node;
 
 public class JavaLibModel {
@@ -40,6 +41,30 @@ public class JavaLibModel {
 				return name+"("+casper.Util.join(argsR.subList(0, argsR.size()-1),",")+")";
 			}
 			return exp;
+		}
+	}
+	
+	// Extract all loop counters from the function call
+	public static Node extractLoopCounters(Call exp) {
+		// Get the container class
+		String targetType = exp.target().type().toString();
+		
+		// Is the container class a generic?
+		int end = targetType.indexOf('<');
+		if(end != -1)
+			// It is, drop the generic part
+			targetType = targetType.substring(0, end);
+		
+		switch(targetType){
+			case "java.util.List":
+				switch(exp.id().toString()){
+					case "get":
+						return exp.arguments().get(0);
+					default:
+						return null;
+				}
+			default:
+				return null;
 		}
 	}
 	
@@ -77,9 +102,14 @@ public class JavaLibModel {
 						break;
 					case "get":
 						reads.add(exp.target());
-						reads.addAll(exp.arguments());
+						for(Expr arg : exp.arguments())
+							if(arg instanceof Local)
+								reads.add(arg);
 						break;
 					case "add":
+						reads.addAll(exp.arguments());
+						break;
+					case "set":
 						reads.addAll(exp.arguments());
 						break;
 					default:
@@ -135,6 +165,9 @@ public class JavaLibModel {
 						break;
 					case "get":
 						break;
+					case "set":
+						writes.add(exp.target());
+						break;
 					default:
 						break;
 				}
@@ -170,8 +203,6 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "equals":
 						return true;
-					case "split":
-						return false;
 					default:
 						return false;
 				}
@@ -180,6 +211,7 @@ public class JavaLibModel {
 					case "size":
 					case "get":
 					case "add":
+					case "set":
 						return true;
 					default:
 						return false;
@@ -192,7 +224,18 @@ public class JavaLibModel {
 					default:
 						return false;
 				}
+			case "java.lang.Math":
+				switch(exp.id().toString()){
+					case "pow":
+					case "sqrt":
+						return true;
+					default:
+						return false;
+				}
 			default:
+				if(debug){
+					System.err.println("Unsupported library funcntion: "+ exp);
+				}
 				return false;
 		}
 	}
@@ -244,6 +287,29 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "get":
 					case "put":
+					default:
+						return res;
+				}
+			case "java.lang.Math":
+				switch(exp.id().toString()){
+					case "pow":
+						res.target = "Math";
+						res.name = "math_pow";
+						res.nameOrig = "pow";
+						for(Expr arg : exp.arguments()){
+							res.args.add(arg.type().toString());
+						}
+						res.returnType = exp.type().toString();
+						return res;
+					case "sqrt":
+						res.target = "Math";
+						res.name = "math_sqrt";
+						res.nameOrig = "sqrt";
+						for(Expr arg : exp.arguments()){
+							res.args.add(arg.type().toString());
+						}
+						res.returnType = exp.type().toString();
+						return res;
 					default:
 						return res;
 				}
@@ -342,17 +408,17 @@ public class JavaLibModel {
 	    				}
 						break;
 					default:
-						if(debug){
+						if(debug || true){
 							System.err.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
 				break;
-			/*case "java.util.List":
+			case "java.util.List":
 				switch(id){
-					case "get":
+					case "set":
 						List<Expr> args = c.arguments();
-						CustomASTNode acc = new ArrayAccessNode(target+"["+args.get(0)+"]",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
+						CustomASTNode acc = new ArrayUpdateNode(new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)),CustomASTNode.convertToAST(args.get(1)));
 						return currVerifCondition.replaceAll(target,acc);
 					default:
 						if(debug){
@@ -360,10 +426,11 @@ public class JavaLibModel {
 						}
 						break;
 				}
-				break;*/
+				break;
 			default:
-				if(debug){
+				if(debug || true){
 					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
+					System.exit(1);
 				}
 		}
 		
@@ -434,8 +501,20 @@ public class JavaLibModel {
 						}
 						break;
 				}
+			case "java.lang.Math":
+				switch(id){
+				case "sqrt":
+					ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
+					args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+					return new CallNode("math_sqrt",args);
+				default:
+					if(debug){
+						System.err.println("Method " + id + " of java.lang.Math not currently supported. Please extend the JavaLibModel.");
+					}
+					break;	
+				}
 			default:
-				if(debug){
+				if(debug || true){
 					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
 				}
 		}
