@@ -143,16 +143,6 @@ abstract public class CustomASTNode {
 		}
 		else if(exp instanceof Call){
 			node = JavaLibModel.convertToAST((Call)exp);
-			/*
-			// If not a library call
-			String fname = ((Call) exp).name();
-			List<Expr> argsExpr = ((Call) exp).arguments();
-			ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
-			for(Expr argExpr : argsExpr){
-				CustomASTNode arg = convertToAST(argExpr);
-				args.add(arg);
-			}
-			node = new CallNode(fname,args);*/
 		}
 		else {
 			System.out.println("Unrecognized AST Node: " + exp.toString());

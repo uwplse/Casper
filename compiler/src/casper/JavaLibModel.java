@@ -347,6 +347,93 @@ public class JavaLibModel {
 				return res;
 		}
 	}
+	
+	public static CustomASTNode convertToAST(Call c) {
+		String target = c.target().toString();
+		String targetType = c.target().type().toString();
+		String targetTypeMain = targetType;
+		if(targetType.contains("<"))
+			targetTypeMain = targetType.substring(0,targetType.indexOf("<"));
+		
+		String id = c.id().toString();
+		
+		switch(targetTypeMain){
+			case "java.util.Map":
+				String[] targetSubTypes = targetType.substring(targetType.indexOf("<")+1,targetType.lastIndexOf(">")).split(",");
+				switch(id){
+					case "get":
+						List<Expr> args = c.arguments();
+						switch(targetSubTypes[0]){
+		    				case "java.lang.Integer":
+		    				case "java.lang.String":
+		    				case "java.lang.Double":
+		    				case "java.lang.Float":
+		    				case "java.lang.Long":
+		    				case "java.lang.Short":
+		    				case "java.lang.Byte":
+		    				case "java.lang.BigInteger":
+		    					return new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
+		    				default:
+		    					if(debug){
+		    						System.err.println("Currently not handling Map of type: " + targetSubTypes[0]);
+		    					}
+		    					break;
+	    				}
+						break;
+					default:
+						if(debug){
+							System.err.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
+						}
+						break;
+				}
+				break;
+			case "java.util.List":
+				switch(id){
+					case "get":
+						List<Expr> args = c.arguments();
+						return new ArrayAccessNode(target+"["+args.get(0)+"]",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
+					case "size":
+						return new CallNode(target+".size",new ArrayList<CustomASTNode>());
+					default:
+						if(debug){
+							System.err.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
+						}
+						break;
+				}
+				break;
+			case "java.lang.String":
+				switch(id){
+					case "equals":
+						ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
+						args.add(new IdentifierNode(target));
+						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+						return new CallNode("str_equal",args);
+					default:
+						if(debug){
+							System.err.println("Method " + id + " of java.lang.String not currently supported. Please extend the JavaLibModel.");
+						}
+						break;
+				}
+			case "java.lang.Math":
+				switch(id){
+				case "sqrt":
+					ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
+					args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+					return new CallNode("math_sqrt",args);
+				default:
+					if(debug){
+						System.err.println("Method " + id + " of java.lang.Math not currently supported. Please extend the JavaLibModel.");
+					}
+					break;	
+				}
+			default:
+				if(debug || true){
+					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
+				}
+		}
+		
+		return new IdentifierNode("");
+	}
 
 	// Currently cannot handle data structures containing non primitive types
 	public static String translateToSketchType(String templateType) {
@@ -465,90 +552,5 @@ public class JavaLibModel {
 		}
 		
 		return null;
-	}
-
-	public static CustomASTNode convertToAST(Call c) {
-		String target = c.target().toString();
-		String targetType = c.target().type().toString();
-		String targetTypeMain = targetType;
-		if(targetType.contains("<"))
-			targetTypeMain = targetType.substring(0,targetType.indexOf("<"));
-		
-		String id = c.id().toString();
-		
-		switch(targetTypeMain){
-			case "java.util.Map":
-				String[] targetSubTypes = targetType.substring(targetType.indexOf("<")+1,targetType.lastIndexOf(">")).split(",");
-				switch(id){
-					case "get":
-						List<Expr> args = c.arguments();
-						switch(targetSubTypes[0]){
-		    				case "java.lang.Integer":
-		    				case "java.lang.String":
-		    				case "java.lang.Double":
-		    				case "java.lang.Float":
-		    				case "java.lang.Long":
-		    				case "java.lang.Short":
-		    				case "java.lang.Byte":
-		    				case "java.lang.BigInteger":
-		    					return new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
-		    				default:
-		    					if(debug){
-		    						System.err.println("Currently not handling Map of type: " + targetSubTypes[0]);
-		    					}
-		    					break;
-	    				}
-						break;
-					default:
-						if(debug){
-							System.err.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
-						}
-						break;
-				}
-				break;
-			case "java.util.List":
-				switch(id){
-					case "get":
-						List<Expr> args = c.arguments();
-						return new ArrayAccessNode(target+"["+args.get(0)+"]",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
-					default:
-						if(debug){
-							System.err.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
-						}
-						break;
-				}
-				break;
-			case "java.lang.String":
-				switch(id){
-					case "equals":
-						ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
-						args.add(new IdentifierNode(target));
-						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
-						return new CallNode("str_equal",args);
-					default:
-						if(debug){
-							System.err.println("Method " + id + " of java.lang.String not currently supported. Please extend the JavaLibModel.");
-						}
-						break;
-				}
-			case "java.lang.Math":
-				switch(id){
-				case "sqrt":
-					ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
-					args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
-					return new CallNode("math_sqrt",args);
-				default:
-					if(debug){
-						System.err.println("Method " + id + " of java.lang.Math not currently supported. Please extend the JavaLibModel.");
-					}
-					break;	
-				}
-			default:
-				if(debug || true){
-					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
-				}
-		}
-		
-		return new IdentifierNode("");
 	}
 }

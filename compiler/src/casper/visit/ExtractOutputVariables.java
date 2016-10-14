@@ -40,6 +40,7 @@ public class ExtractOutputVariables extends NodeVisitor  {
 	boolean ignore;
 	ArrayList<MyWhileExt> extensions;
 	
+	@SuppressWarnings("deprecation")
 	public ExtractOutputVariables(){
 		this.debug = false;
 		this.ignore = true;
@@ -167,7 +168,6 @@ public class ExtractOutputVariables extends NodeVisitor  {
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
 			if(stmtext.process){
 				this.ignore = true;
-				stmtext.process = false;
 			}
 		}
        

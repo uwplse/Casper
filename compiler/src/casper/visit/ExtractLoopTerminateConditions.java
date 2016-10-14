@@ -50,6 +50,7 @@ public class ExtractLoopTerminateConditions extends NodeVisitor {
 	boolean debug;
 	CustomASTNode terminationCondition;
 	
+	@SuppressWarnings("deprecation")
 	public ExtractLoopTerminateConditions ()
 	{
 		this.debug = false;

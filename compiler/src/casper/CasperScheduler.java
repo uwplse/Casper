@@ -279,7 +279,7 @@ public class CasperScheduler extends JL7Scheduler {
 			{
 				List<Goal> l = new ArrayList<Goal>();
 				l.addAll(super.prerequisiteGoals(scheduler));
-				l.add(SparkCodeGenerated(job));
+				l.add(UserDefinedDataTypesExtracted(job));
 				return l;
 			}
 		});

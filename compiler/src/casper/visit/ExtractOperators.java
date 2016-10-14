@@ -37,7 +37,7 @@ public class ExtractOperators  extends NodeVisitor {
 				this.extensions.add((MyWhileExt)JavaExt.ext(n));
 			}
 		}
-		else if(n instanceof If || n instanceof Block){
+		else if(n instanceof Block){
 			// If statement
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
 			if(stmtext.process)
@@ -89,7 +89,7 @@ public class ExtractOperators  extends NodeVisitor {
 				this.extensions.remove(((MyWhileExt)JavaExt.ext(n)));
 			}
 		}
-		else if(n instanceof If || n instanceof Block){
+		else if(n instanceof Block){
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
 			if(stmtext.process)
 				this.ignore = true;
