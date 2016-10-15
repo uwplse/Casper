@@ -6,11 +6,14 @@ package casper.visit;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import casper.JavaLibModel;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import casper.extension.MyWhileExt.Variable;
+import casper.types.CustomASTNode;
+import casper.types.IdentifierNode;
 import polyglot.ast.ArrayAccess;
 import polyglot.ast.Block;
 import polyglot.ast.Call;
@@ -68,7 +71,7 @@ public class ExtractLoopCounters extends NodeVisitor {
 			}
 		}
 		else if(n instanceof ExtendedFor){
-			((MyWhileExt)JavaExt.ext(n)).saveLoopCounterVariable("i", "int", Variable.VAR);
+			((MyWhileExt)JavaExt.ext(n)).saveLoopCounterVariable("casper_i", "int", Variable.VAR);
 		}
 		else if(n instanceof Block){
 			// If statement
@@ -107,8 +110,64 @@ public class ExtractLoopCounters extends NodeVisitor {
 	public Node leave(Node old, Node n, NodeVisitor v){
 		// If the node is a loop
 		if(n instanceof While){
+			MyWhileExt ext = (MyWhileExt)JavaExt.ext(n);
+			
 			// If the loop was marked as interesting
-			if(((MyWhileExt)JavaExt.ext(n)).interesting){
+			if(ext.interesting){
+				Stmt body = ((While) n).body();
+				
+				// Filter out loop counters
+				for(Variable var : ext.loopCounters){
+					CustomASTNode lcExp = new IdentifierNode(var.varName);
+					
+					if(body instanceof Block){
+						List<Stmt> statements = ((Block) body).statements();
+						
+						// Extract initial condition
+						for(int i=0; i<statements.size(); i++){
+							Stmt currStatement = statements.get(i);
+							
+							// Satement is a conditional
+							if(currStatement instanceof If){
+								Stmt cons = ((If) currStatement).consequent();
+								Stmt alt = ((If) currStatement).alternative(); 
+								
+								// And consequent or alternative does not contain a break
+								if(!casper.Util.containsBreak(cons) && !casper.Util.containsBreak(alt)){
+									// Must be the increment if, process it first
+									lcExp = casper.Util.generatePreCondition(var.getSketchType(), cons, lcExp, ext, debug);
+									break;
+								}
+							}
+						}
+						
+						for(int i=0; i<statements.size(); i++){
+							Stmt currStatement = statements.get(i);
+							
+							// Satement is a conditional
+							if(currStatement instanceof If){
+								Stmt cons = ((If) currStatement).consequent();
+								Stmt alt = ((If) currStatement).alternative(); 
+								
+								// And consequent contains a break
+								if(casper.Util.containsBreak(cons)){
+									lcExp = casper.Util.generatePreCondition(var.getSketchType(), alt, lcExp, ext, debug);
+									break;
+								}
+								// And alternative contains a break
+								else if(casper.Util.containsBreak(alt)){
+									lcExp = casper.Util.generatePreCondition(var.getSketchType(), cons, lcExp, ext, debug);
+									break;
+								}
+							}
+						}
+					}
+					
+					if(lcExp.toString().equals(var.varName)){
+						ext.loopCounters.remove(var);
+					}
+				}
+			
 				if(debug){
 					System.err.println("Loop Counters:\n"+((MyWhileExt)JavaExt.ext(n)).loopCounters.toString());
 				}

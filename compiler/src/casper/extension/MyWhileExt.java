@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import casper.JavaLibModel.SketchCall;
 import casper.types.CustomASTNode;
 import casper.visit.GenerateScaffold.KvPair;
@@ -32,6 +33,9 @@ public class MyWhileExt extends MyStmtExt {
 	
 	// Save the parent node of this loop for analysis
 	public Node parent = null;
+	
+	// Does the loop contain conditionals
+	public boolean useConditionals = false;
 	
     // All variables that are used as indexes when accessing large
 	// data structures like arrays and collections. Must change with
@@ -84,38 +88,40 @@ public class MyWhileExt extends MyStmtExt {
    	// Use to save the fields of the user defined data types
 	public Map<String, Set<FieldDecl>> globalDataTypesFields;
  	
-    
+	// Save the initial values of input / output variables
+	public Map<String, CustomASTNode> initVals = new HashMap<String,CustomASTNode>();
+	
+	// Used to save mappings of constants to variables (required at times due to bounded domain)
+	public int constCount = 0;
+	public Map<String, String> constMapping = new HashMap<String, String>();
+	
+	// The ordering of post condition args
+	public Map<String,List<String>> postConditionArgsOrder = new HashMap<String,List<String>>();
+	
+	// The ordering of loop invariant args
+	public Map<String,List<String>> loopInvariantArgsOrder = new HashMap<String,List<String>>();
+		
+	// The loop invariant (expressed using function loopInvariant(..)
+	public Map<String,CustomASTNode> invariants = new HashMap<String,CustomASTNode>();	
+		
+	// Save how values change in loop body
+	public Map<String,CustomASTNode> wpcValues;
+	
+	// Input data collections
+	public boolean hasInputData = false;
+	public List<Variable> inputDataCollections = new ArrayList<Variable>();
 	
 	
 	
 	
 	
 	
-	// Increment expressions for loop counters
-    public List<CustomASTNode> incrementExps = new ArrayList<CustomASTNode>();
     
     // We perform an alias analysis. If two variables are aliases, then
     // modifying one should change the other too. Our generated programs
     // need to be able to capture this effect.
     // Note: Not used anywhere currently
     public Map<Variable, Set<Variable>> aliases = new HashMap<Variable, Set<Variable>>();
-   	
-   	
-	// The ordering of post condition args
-	public Map<String,List<String>> postConditionArgsOrder = new HashMap<String,List<String>>();
-	
-	// The ordering of loop invariant args
-	public Map<String,List<String>> loopInvariantArgsOrder = new HashMap<String,List<String>>();
-	
-	// The loop invariant (expressed using function loopInvariant(..)
-	public Map<String,CustomASTNode> invariants = new HashMap<String,CustomASTNode>();
-
-	// Save the initial values of input / output variables
-	public Map<String, CustomASTNode> initVals = new HashMap<String,CustomASTNode>();
-
-	// Input data collections
-	public boolean hasInputData = false;
-	public List<SketchVariable> inputDataCollections = new ArrayList<SketchVariable>();
 	
 	// Map Emits
 	public Map<String,List<KvPair>> mapEmits = null;
@@ -125,16 +131,12 @@ public class MyWhileExt extends MyStmtExt {
 
 	public String mapKeyType = "";
 	
-	public Map<String,Boolean> generateCode = new HashMap<String,Boolean>();
-
-	// Save how values change in loop body
-	public Map<String,CustomASTNode> wpcValues;
-
-	// Save mappings of const ints to vars
-	public int constCount;
-	public Map<String, String> constMapping;
-
-	public boolean useConditionals = false;
+	public Map<String,Boolean> generateCode = new HashMap<String,Boolean>();	
+	
+	
+	
+	
+	
 	
    	// Custom class to represent an expression.
     public class Expression{
@@ -183,7 +185,7 @@ public class MyWhileExt extends MyStmtExt {
     	
     	public Variable(String n, String t, String c, int cat){
     		varNameOrig = n;
-    		varName = n;
+    		varName = n.replace("$", "");
     		varType = t;
     		containerType = c;
     		category = cat;
@@ -239,7 +241,7 @@ public class MyWhileExt extends MyStmtExt {
     		return sketchType;
     	}
     	
-    	private String getType(String vtype){
+    	private String getSketchType(String vtype){
     		String targetType = vtype;
     		String templateType = vtype;
     		int end = targetType.indexOf('<');
@@ -251,7 +253,7 @@ public class MyWhileExt extends MyStmtExt {
     				case "java.util.ArrayList":
     					templateType = templateType.substring(end+1,templateType.length()-1);
     					this.category = Variable.ARRAY_ACCESS;
-    					return casper.Util.getSketchTypeFromRaw(this.getType(templateType))+"[]";
+    					return casper.Util.getSketchTypeFromRaw(this.getSketchType(templateType))+"[]";
     				case "java.util.Map":
     					templateType = templateType.substring(end+1,templateType.length()-1);
         				String[] subTypes = templateType.split(",");
@@ -265,7 +267,7 @@ public class MyWhileExt extends MyStmtExt {
 	        				case "java.lang.Byte":
 	        				case "java.lang.BigInteger":
 	        					this.category = Variable.ARRAY_ACCESS;
-	        					return casper.Util.getSketchTypeFromRaw(this.getType(subTypes[1]))+"[]";
+	        					return casper.Util.getSketchTypeFromRaw(this.getSketchType(subTypes[1]))+"[]";
 	        				default:
 	        					templateType = translateToSketchType(templateType);
 	        					return templateType + "Map";
@@ -280,8 +282,8 @@ public class MyWhileExt extends MyStmtExt {
     		return casper.Util.getSketchTypeFromRaw(components[components.length-1]);
     	}
     	
-    	public String getType(){		
-    		return this.getType(varType);
+    	public String getSketchType(){		
+    		return this.getSketchType(varType);
     	}
     	
     	public String getOriginalType(){		
@@ -327,7 +329,7 @@ public class MyWhileExt extends MyStmtExt {
     		return components[components.length-1];
     	}
     	
-    	// Should only be called for input data variable
+    	// Should only be called for input data set variable
     	public String getRDDType(){
     		String targetType = varType;
     		String templateType = varType;

@@ -13,27 +13,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import casper.Configuration;
-import casper.JavaLibModel;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import casper.extension.MyWhileExt.Variable;
-import casper.types.ArrayUpdateNode;
+import casper.types.BinaryOperatorNode;
 import casper.types.CallNode;
-import casper.types.ConditionalNode;
 import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
-import polyglot.ast.ArrayAccess;
-import polyglot.ast.Assign;
 import polyglot.ast.Block;
-import polyglot.ast.Call;
-import polyglot.ast.Eval;
-import polyglot.ast.Expr;
 import polyglot.ast.If;
-import polyglot.ast.LocalDecl;
 import polyglot.ast.Node;
 import polyglot.ast.NodeFactory;
 import polyglot.ast.Stmt;
@@ -45,15 +36,11 @@ public class GenerateVerification extends NodeVisitor {
 	
 	boolean debug;
 	NodeFactory nf;
-	Map<String,String> constMapping;
-	int constID;
 	
 	@SuppressWarnings("deprecation")
 	public GenerateVerification (NodeFactory nf) {
 		this.debug = false;
 		this.nf = nf;
-		this.constMapping = new HashMap<String,String>();
-		this.constID = 0;
 	}
 	
 	public NodeVisitor enter(Node parent, Node n){
@@ -62,24 +49,18 @@ public class GenerateVerification extends NodeVisitor {
 			// Get extension of loop node
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			
-			// Extract Initial Values of all input output variables
+			// Extract Initial Values of all input, output and lc variables
 			extractInitialValues(n, ext);
-			
-			// Extract Loop Increment
-			if(n instanceof While)
-				extractLoopIncrement((While)n, ext);
-			
-			// Reset constant mappings
-			this.constMapping.clear();
-			this.constID = 0;
+			if(n instanceof ExtendedFor)
+				ext.initVals.put("casper_i", new ConstantNode("0",ConstantNode.INTLIT));
 			
 			// If the loop was marked as interesting
 			if(ext.interesting){
-				// Generate the order for postcondition function arguments
+				// Generate verification conditions for each output type
 				Set<String> handledTypes = new HashSet<String>();
 				for(Variable var : ext.outputVars){
 					// Get sketch type
-					String sketchType = casper.Util.getSketchType(var.getType());
+					String sketchType = var.getSketchType();
 					
 					// Have we already handled this case?
 					if(handledTypes.contains(sketchType)){
@@ -117,100 +98,23 @@ public class GenerateVerification extends NodeVisitor {
 					CustomASTNode preCondBlock = generateWPC(sketchType,ext.parent,ext.loopInvariantArgsOrder,ext.terminationCondition,ext.initVals,wpcValues);
 					MyStmtExt blockExt = (MyStmtExt) JavaExt.ext(loopBody);
 					blockExt.preConditions.put(sketchType, preCondBlock);
-					ext.wpcValues = generateWPCValues(sketchType,wpcValues,loopBody);
+					ext.wpcValues = generateWPCValues(sketchType,wpcValues,loopBody,ext);
 					
-					// Save constant mapping
-					ext.constCount = constID;
-					ext.constMapping = constMapping;
+					if(debug){
+						System.err.println(ext.preConditions);
+						System.err.println(ext.invariants);
+						System.err.println(blockExt.preConditions);
+						System.err.println(ext.wpcValues);
+						System.err.println(ext.postConditions);
+					}
 				}
 			}
 		}
 		
 		return this;
 	}
-
-	private Map<String, CustomASTNode> generateWPCValues(String type, Map<String, CustomASTNode> wpcValues, Stmt body) {
-		if(body instanceof Block){
-			List<Stmt> statements = ((Block) body).statements();
-			
-			// Extract initial condition
-			for(int i=0; i<statements.size(); i++){
-				Stmt currStatement = statements.get(i);
-				
-				// Satement is a conditional
-				if(currStatement instanceof If){
-					Stmt cons = ((If) currStatement).consequent();
-					Stmt alt = ((If) currStatement).alternative(); 
-					
-					// And consequent or alternative does not contain a break
-					if(!casper.Util.containsBreak(cons) && !casper.Util.containsBreak(alt)){
-						// Must be the increment if, process it firs
-						for(String varname : wpcValues.keySet()){
-							wpcValues.put(varname, generatePreCondition(type,((If) currStatement).consequent(),wpcValues.get(varname)));
-						}
-						break;
-					}
-				}
-			}
-			
-			for(int i=0; i<statements.size(); i++){
-				Stmt currStatement = statements.get(i);
-				
-				// Satement is a conditional
-				if(currStatement instanceof If){
-					Stmt cons = ((If) currStatement).consequent();
-					Stmt alt = ((If) currStatement).alternative(); 
-					
-					// And consequent contains a break
-					if(casper.Util.containsBreak(cons)){
-						// Must be the increment if, process it first
-						for(String varname : wpcValues.keySet()){
-							wpcValues.put(varname, generatePreCondition(type,((If) currStatement).alternative(),wpcValues.get(varname)));
-						}
-					}
-					// And alternative contains a break
-					else if(casper.Util.containsBreak(alt)){
-						// Must be the increment if, process it first
-						for(String varname : wpcValues.keySet()){
-							wpcValues.put(varname, generatePreCondition(type,((If) currStatement).consequent(),wpcValues.get(varname)));
-						}
-					}
-				}
-			}
-		}
-		return wpcValues;
-	}
-
-	private CustomASTNode generateWPC(String type, Node parent, Map<String, List<String>> loopInvArgs, CustomASTNode tcond, Map<String, CustomASTNode> initVals, Map<String, CustomASTNode> wpcValues) {
-		String fname = "loopInvariant";
-		
-		boolean alt = false;
-		ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
-		args.add(new IdentifierNode(loopInvArgs.get(type).get(0)));
-		for(int i=1; i<loopInvArgs.get(type).size(); i++){
-			String varname = loopInvArgs.get(type).get(i);
-			CustomASTNode arg;
-			if(alt){
-				CustomASTNode n1;
-				if(initVals.containsKey(varname.substring(0,varname.length()-1)) && initVals.get(varname.substring(0,varname.length()-1)) instanceof ConstantNode){
-					n1 = new IdentifierNode(initVals.get(varname.substring(0,varname.length()-1)).toString());
-				}
-				else{
-					n1 = new IdentifierNode(varname.toString());
-					wpcValues.put(varname, n1);
-				}
-				arg = n1;
-			}
-			else{
-				arg = new IdentifierNode("ind_"+varname);
-				wpcValues.put(varname, new IdentifierNode(varname));
-			}
-			args.add(arg);
-			alt = !alt;
-		}
-		return new CallNode(fname,args);
-	}
-
+	
+	// Extract Initial Values of all input output variables
 	private void extractInitialValues(Node n, MyWhileExt ext) {
 		List<Stmt> filteredStmts = new ArrayList<Stmt>();
 		addStatementsBeforeWhile(n, ext.parent,filteredStmts);
@@ -222,7 +126,7 @@ public class GenerateVerification extends NodeVisitor {
 		
 		for(Variable var : ext.inputVars){
 			CustomASTNode n1 = new IdentifierNode(var.varName);
-			CustomASTNode n2 = generatePreCondition("initValExt",block,n1);
+			CustomASTNode n2 = casper.Util.generatePreCondition("initValExt",block,n1,ext,debug);
 			if(!n1.equals(n2) && n2 instanceof ConstantNode){
 				if(casper.Util.getSketchTypeFromRaw(var.varType) == "int" && ((ConstantNode)n2).type == ConstantNode.STRINGLIT){
 					if(!strToIntMap.containsKey(n2.toString())){
@@ -240,7 +144,7 @@ public class GenerateVerification extends NodeVisitor {
 		for(Variable var : ext.outputVars){
 			if(!ext.inputVars.contains(var)){
 				CustomASTNode n1 = new IdentifierNode(var.varName);
-				CustomASTNode n2 = generatePreCondition("initValExt",block,n1);
+				CustomASTNode n2 = casper.Util.generatePreCondition("initValExt",block,n1,ext,debug);
 				if(!n1.equals(n2) && n2 instanceof ConstantNode){
 					ext.initVals.put(var.varName.replace("$", ""),n2);
 				}
@@ -249,7 +153,7 @@ public class GenerateVerification extends NodeVisitor {
 		
 		for(Variable var : ext.loopCounters){
 			CustomASTNode n1 = new IdentifierNode(var.varName);
-			CustomASTNode n2 = generatePreCondition("initValExt",block,n1);
+			CustomASTNode n2 = casper.Util.generatePreCondition("initValExt",block,n1,ext,debug);
 			if(!n1.equals(n2) && n2 instanceof ConstantNode){
 				ext.initVals.put(var.varName.replace("$", ""),n2);
 			}
@@ -259,207 +163,82 @@ public class GenerateVerification extends NodeVisitor {
 			System.err.println(ext.initVals);
 	}
 	
-	private void extractLoopIncrement(While n, MyWhileExt ext) {
-		Stmt block = null;
-		
-		// Extract the increment block
-		Stmt body = n.body();
-		if(body instanceof Block){
-			List<Stmt> statements = ((Block) body).statements();
+	private boolean addStatementsBeforeWhile(Node loop, Node parent, List<Stmt> filteredStmts) {
+		if(parent instanceof Block){
+			List<Stmt> stmts = ((Block) parent).statements();
 			
-			// Extract initial condition
-			for(int i=0; i<statements.size(); i++){
-				Stmt currStatement = statements.get(i);
-				
-				// Satement is a conditional
-				if(currStatement instanceof If){
-					Stmt cons = ((If) currStatement).consequent();
-					Stmt alt = ((If) currStatement).alternative(); 
-					
-					// And consequent or alternative does not contain a break
-					if(!casper.Util.containsBreak(cons) && !casper.Util.containsBreak(alt)){
-						block = cons;
-						break;
-					}
-				}
-			}
-		}
-		
-		for(Variable lc : ext.loopCounters){
-			CustomASTNode n1 = new IdentifierNode(lc.varName);
-			CustomASTNode n2 = generatePreCondition("incExpExt",block,n1);
-			ext.incrementExps.add(n2);
-		}
-	}
-
-	private CustomASTNode generateVerificationConditions(String type, Stmt body, CustomASTNode postCondition) {
-		// TODO: Some pre-processing to remove extra breaks and returns and continues.
-		
-		CustomASTNode currVerifCondition = postCondition;
-		
-		if(body instanceof Block){
-			List<Stmt> statements = ((Block) body).statements();
-			
-			// Extract initial condition
-			for(int i=0; i<statements.size(); i++){
-				Stmt currStatement = statements.get(i);
-				
-				// Satement is a conditional
-				if(currStatement instanceof If){
-					Stmt cons = ((If) currStatement).consequent();
-					Stmt alt = ((If) currStatement).alternative(); 
-					
-					// And consequent or alternative does not contain a break
-					if(!casper.Util.containsBreak(cons) && !casper.Util.containsBreak(alt)){
-						// Must be the increment if, process it first
-						currVerifCondition = generatePreCondition(type,((If) currStatement).consequent(),currVerifCondition);
-						break;
-					}
-				}
-			}
-			
-			for(int i=0; i<statements.size(); i++){
-				Stmt currStatement = statements.get(i);
-				
-				// Satement is a conditional
-				if(currStatement instanceof If){
-					Stmt cons = ((If) currStatement).consequent();
-					Stmt alt = ((If) currStatement).alternative(); 
-					
-					// And consequent contains a break
-					if(casper.Util.containsBreak(cons)){
-						return generatePreCondition(type, ((If) currStatement).alternative(),currVerifCondition);
-					}
-					// And alternative contains a break
-					else if(casper.Util.containsBreak(alt)){
-						return generatePreCondition(type, ((If) currStatement).consequent(),currVerifCondition);
-					}
-				}
-			}
-		}
-		
-		// Should not be reached
-		System.err.println("Error: Unexpected loop body format!");
-		return currVerifCondition;
-	}
-
-	private CustomASTNode generatePreCondition(String type, Stmt body, CustomASTNode postCondition){
-		CustomASTNode currVerifCondition = postCondition;
-		
-		if(body instanceof Block){
-			List<Stmt> statements = ((Block) body).statements();
-			
-			for(int i=statements.size()-1; i>=0; i--){
-				// Get the statement
-				Stmt currStatement = statements.get(i);
-				
-				if(debug){
-					System.err.println("---------------------------");
-					System.err.println(currVerifCondition);
-					System.err.println(currStatement);
-					System.err.println("---------------------------");
-				}
-				
-				// Get extension of statement
-				MyStmtExt ext = (MyStmtExt) JavaExt.ext(currStatement);
-					
-				if(currStatement instanceof Eval){
-					Expr expr = ((Eval) currStatement).expr();
-					
-					if(expr instanceof Assign){
-						// Save post-condition
-						ext.postConditions.put(type,currVerifCondition);
-						
-						// Derive pre-condition
-						Expr lhs = ((Assign)expr).left();
-						Expr rhs = ((Assign)expr).right();
-						
-						CustomASTNode rhsAST = CustomASTNode.convertToAST(rhs);
-						constID = rhsAST.convertConstToIDs(constMapping,constID);
-						
-						if(lhs instanceof ArrayAccess){
-							currVerifCondition = currVerifCondition.replaceAll(((ArrayAccess) lhs).array().toString(), new ArrayUpdateNode(CustomASTNode.convertToAST(((ArrayAccess) lhs).array()),CustomASTNode.convertToAST(((ArrayAccess) lhs).index()),rhsAST));
-						}
-						else {
-							currVerifCondition = currVerifCondition.replaceAll(lhs.toString(), rhsAST);
-						}
-						
-						// Save pre-condition
-						ext.preConditions.put(type,currVerifCondition);
-					}
-					else if(expr instanceof Call){
-						// Save post-condition
-						ext.postConditions.put(type,currVerifCondition);
-						
-						currVerifCondition = JavaLibModel.updatePreCondition((Call)expr,currVerifCondition);
-						
-						// Save pre-condition
-						ext.preConditions.put(type,currVerifCondition);
+			for(Stmt s : stmts){
+				// We've reached a loop
+				if(s instanceof While){
+					// Is it the loop we are currently processing?
+					if(s.position() == loop.position()){
+						// Yes, we're done.
+						return true;
 					}
 					else{
-						System.err.println("Unexpected Eval type: " + expr.getClass() + " :::: " + expr);
+						// Some other loop, so clear filtered Stmts (since currently, we only go back
+						// till the previous loop or beginning of block -- whichever comes first)
+						filteredStmts.clear();
 					}
 				}
-				else if(currStatement instanceof LocalDecl){
-					// Save post-condition
-					ext.postConditions.put(type,currVerifCondition);
-
-					// Derive pre-condition
-					String lhs = ((LocalDecl)currStatement).name();
-					Expr rhs = ((LocalDecl)currStatement).init();
-					
-					CustomASTNode rhsAST = CustomASTNode.convertToAST(rhs);
-					constID = rhsAST.convertConstToIDs(constMapping,constID);
- 
-					currVerifCondition = currVerifCondition.replaceAll(lhs, rhsAST);
-					
-					// Save pre-condition
-					ext.preConditions.put(type,currVerifCondition);
+				else if(s instanceof Block){
+					if(addStatementsBeforeWhile(loop,s,filteredStmts))
+						return true;
 				}
-				else if(currStatement instanceof If){
-					// Save post-condition
-					ext.postConditions.put(type,currVerifCondition);
-					
-					// Derive pre-condition
-					Stmt cons = ((If) currStatement).consequent();
-					Stmt alt = ((If) currStatement).alternative();
-					Expr cond = ((If) currStatement).cond();
-					
-					CustomASTNode loopCond = CustomASTNode.convertToAST(cond);
-					constID = loopCond.convertConstToIDs(constMapping,constID);
-					
-					CustomASTNode verifCondCons = generatePreCondition(type,cons,currVerifCondition);
-					
-					CustomASTNode verifCondAlt;
-					if(alt != null)
-						verifCondAlt = generatePreCondition(type,alt,currVerifCondition);
-					else
-						verifCondAlt = currVerifCondition;
-					
-					if(!verifCondCons.toString().equals(verifCondAlt.toString()))
-						currVerifCondition = new ConditionalNode(loopCond,verifCondCons,verifCondAlt);
-					
-					// Save pre-condition
-					ext.preConditions.put(type, currVerifCondition);
-				}
-				else if(currStatement instanceof Block){
-					// Save post-condition
-					ext.postConditions.put(type,currVerifCondition);
-					
-					// Derive pre-condition
-					currVerifCondition = generatePreCondition(type,currStatement,currVerifCondition);
-					
-					// Save pre-condition
-					ext.preConditions.put(type, currVerifCondition);
+				else{
+					filteredStmts.add(s);
 				}
 			}
 		}
-		else{
-			// This should never be the case
-			System.err.println("Error: body was not an instance of Block. ("+ body.getClass() +")");
+		return false;
+	}
+	
+	private List<String> generatePostConditionArgsOrder(String outputType, Set<Variable> outputVars, List<Variable> loopCounters) {
+		List<String> order = new ArrayList<String>();
+		// Add input data as arg
+		order.add("casper_data_set");
+		
+		// Add output variables
+		for(Variable var : outputVars){
+			// If desired type, add as option
+			if(var.getSketchType().equals(outputType) || var.getSketchType().equals(outputType.replace("["+Configuration.arraySizeBound+"]", ""))){
+				String varname = var.varName.replace("$", "");
+				order.add(varname);
+				order.add(varname+"0");
+			}
 		}
 		
-		return currVerifCondition;
+		// Add loop counters
+		for(Variable var : loopCounters){
+			String varname = var.varName.replace("$", "");
+			order.add(varname);
+			order.add(varname+"0");
+		}
+		return order;
+	}
+	
+	private List<String> generateLoopInvariantArgsOrder(String outputType, Set<Variable> outputVars, List<Variable> loopCounters) {
+		List<String> order = new ArrayList<String>();
+		// Add input data as arg
+		order.add("casper_data_set");
+		
+		// Add output variables
+		for(Variable var : outputVars){
+			// If desired type, add as option
+			if(var.getSketchType().equals(outputType) || var.getSketchType().equals(outputType.replace("["+Configuration.arraySizeBound+"]", ""))){
+				String varname = var.varName.replace("$", "");
+				order.add(varname);
+				order.add(varname+"0");
+			}
+		}
+		
+		// Add loop counters
+		for(Variable var : loopCounters){
+			String varname = var.varName.replace("$", "");
+			order.add(varname);
+			order.add(varname+"0");
+		}
+		return order;
 	}
 	
 	private CustomASTNode generatePostCondition(String type, Map<String, List<String>> postCondArgs, Map<String, CustomASTNode> initVals) {
@@ -537,84 +316,93 @@ public class GenerateVerification extends NodeVisitor {
 		}
 		return pCond;
 	}
-
-	private boolean addStatementsBeforeWhile(Node loop, Node parent, List<Stmt> filteredStmts) {
-		if(parent instanceof Block){
-			List<Stmt> stmts = ((Block) parent).statements();
-			
-			for(Stmt s : stmts){
-				// We've reached a loop
-				if(s instanceof While){
-					// Is it the loop we are currently processing?
-					if(s.position() == loop.position()){
-						// Yes, we're done.
-						return true;
-					}
-					else{
-						// Some other loop, so clear filtered Stmts (since currently, we only go back
-						// till the previous loop or beginning of function -- whichever comes first)
-						filteredStmts.clear();
-					}
-				}
-				else if(s instanceof Block){
-					if(addStatementsBeforeWhile(loop,s,filteredStmts))
-						return true;
+	
+	private CustomASTNode generateWPC(String type, Node parent, Map<String, List<String>> loopInvArgs, CustomASTNode tcond, Map<String, CustomASTNode> initVals, Map<String, CustomASTNode> wpcValues) {
+		String fname = "loopInvariant";
+		
+		boolean alt = false;
+		ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
+		args.add(new IdentifierNode(loopInvArgs.get(type).get(0)));
+		for(int i=1; i<loopInvArgs.get(type).size(); i++){
+			String varname = loopInvArgs.get(type).get(i);
+			CustomASTNode arg;
+			if(alt){
+				CustomASTNode n1;
+				if(initVals.containsKey(varname.substring(0,varname.length()-1)) && initVals.get(varname.substring(0,varname.length()-1)) instanceof ConstantNode){
+					n1 = new IdentifierNode(initVals.get(varname.substring(0,varname.length()-1)).toString());
 				}
 				else{
-					filteredStmts.add(s);
+					n1 = new IdentifierNode(varname.toString());
+					wpcValues.put(varname, n1);
+				}
+				arg = n1;
+			}
+			else{
+				arg = new IdentifierNode("ind_"+varname);
+				wpcValues.put(varname, new IdentifierNode(varname));
+			}
+			args.add(arg);
+			alt = !alt;
+		}
+		return new CallNode(fname,args);
+	}
+	
+	private Map<String, CustomASTNode> generateWPCValues(String type, Map<String, CustomASTNode> wpcValues, Stmt body, MyWhileExt ext) {
+		if(body instanceof Block){
+			List<Stmt> statements = ((Block) body).statements();
+			
+			// Extract initial condition
+			for(int i=0; i<statements.size(); i++){
+				Stmt currStatement = statements.get(i);
+				
+				// Satement is a conditional
+				if(currStatement instanceof If){
+					Stmt cons = ((If) currStatement).consequent();
+					Stmt alt = ((If) currStatement).alternative(); 
+					
+					// And consequent or alternative does not contain a break
+					if(!casper.Util.containsBreak(cons) && !casper.Util.containsBreak(alt)){
+						// Must be the increment if, process it firs
+						for(String varname : wpcValues.keySet()){
+							wpcValues.put(varname, casper.Util.generatePreCondition(type,((If) currStatement).consequent(),wpcValues.get(varname),ext,debug));
+							if(varname.equals("ind_casper_i"))
+								wpcValues.put(varname, new BinaryOperatorNode("+",new IdentifierNode(varname),new ConstantNode("1",ConstantNode.INTLIT)));
+						}
+						break;
+					}
+				}
+			}
+			
+			for(int i=0; i<statements.size(); i++){
+				Stmt currStatement = statements.get(i);
+				
+				// Satement is a conditional
+				if(currStatement instanceof If){
+					Stmt cons = ((If) currStatement).consequent();
+					Stmt alt = ((If) currStatement).alternative(); 
+					
+					// And consequent contains a break
+					if(casper.Util.containsBreak(cons)){
+						// Must be the increment if, process it first
+						for(String varname : wpcValues.keySet()){
+							wpcValues.put(varname, casper.Util.generatePreCondition(type,((If) currStatement).alternative(),wpcValues.get(varname),ext,debug));
+							if(varname.equals("ind_casper_i"))
+								wpcValues.put(varname, new BinaryOperatorNode("+",new IdentifierNode(varname),new ConstantNode("1",ConstantNode.INTLIT)));
+						}
+					}
+					// And alternative contains a break
+					else if(casper.Util.containsBreak(alt)){
+						// Must be the increment if, process it first
+						for(String varname : wpcValues.keySet()){
+							wpcValues.put(varname, casper.Util.generatePreCondition(type,((If) currStatement).consequent(),wpcValues.get(varname),ext,debug));
+							if(varname.equals("ind_casper_i"))
+								wpcValues.put(varname, new BinaryOperatorNode("+",new IdentifierNode(varname),new ConstantNode("1",ConstantNode.INTLIT)));
+						}
+					}
 				}
 			}
 		}
-		return false;
-	}
-
-	private List<String> generatePostConditionArgsOrder(String outputType, Set<Variable> outputVars, List<Variable> loopCounters) {
-		List<String> order = new ArrayList<String>();
-		// Add input data as arg
-		order.add("input_data");
-		
-		// Add output variables
-		for(Variable var : outputVars){
-			// If desired type, add as option
-			if(casper.Util.getSketchType(var.getType()).equals(outputType) || casper.Util.getSketchType(var.getType()).equals(outputType.replace("["+Configuration.arraySizeBound+"]", ""))){
-				String varname = var.varName.replace("$", "");
-				order.add(varname);
-				order.add(varname+"0");
-			}
-		}
-		
-		// Add loop counters
-		for(Variable var : loopCounters){
-			String varname = var.varName.replace("$", "");
-			order.add(varname);
-			order.add(varname+"0");
-		}
-
-		return order;
-	}
-
-	private List<String> generateLoopInvariantArgsOrder(String outputType, Set<Variable> outputVars, List<Variable> loopCounters) {
-		List<String> order = new ArrayList<String>();
-		// Add input data as arg
-		order.add("input_data");
-		
-		// Add output variables
-		for(Variable var : outputVars){
-			// If desired type, add as option
-			if(casper.Util.getSketchType(var.getType()).equals(outputType) || casper.Util.getSketchType(var.getType()).equals(outputType.replace("["+Configuration.arraySizeBound+"]", ""))){
-				String varname = var.varName.replace("$", "");
-				order.add(varname);
-				order.add(varname+"0");
-			}
-		}
-		
-		// Add loop counters
-		for(Variable var : loopCounters){
-			String varname = var.varName.replace("$", "");
-			order.add(varname);
-			order.add(varname+"0");
-		}
-		return order;
+		return wpcValues;
 	}
 	
 	@Override

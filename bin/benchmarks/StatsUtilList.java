@@ -197,7 +197,7 @@ public class StatsUtilList {
      * @return
      *                  The regression sum of squares as a double
      */
-    public static double regressionSumOfSquares(List<Double> fit, double yMean){
+    /*public static double regressionSumOfSquares(List<Double> fit, double yMean){
         double ssr = 0.0;
         for (int i = 0; i < fit.size(); i++) ssr += (fit.get(i) - yMean) * (fit.get(i) - yMean);
         return ssr;
@@ -213,6 +213,13 @@ public class StatsUtilList {
      * @return
      *                  Array of doubles holding the data's residual points
      */
+     /*public static double[] residuals(List<Double> y, List<Double> fit){
+        double[] residuals=new double[y.size()];
+        for (int i = 0; i < y.size(); i++)
+            residuals[i] = y.get(i) - fit.get(i);
+        return residuals;
+    }
+    
    /* class RecordResidual {
     	public double y;
     	public double fit;

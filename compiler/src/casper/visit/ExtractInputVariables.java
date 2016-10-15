@@ -37,7 +37,6 @@ import polyglot.ast.Switch;
 import polyglot.ast.Unary;
 import polyglot.ast.While;
 import polyglot.ext.jl5.ast.ExtendedFor;
-import polyglot.lex.Literal;
 import polyglot.visit.NodeVisitor;
 
 public class ExtractInputVariables extends NodeVisitor {

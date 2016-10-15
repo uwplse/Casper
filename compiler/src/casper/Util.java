@@ -1,14 +1,22 @@
 package casper;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import casper.visit.GenerateScaffold.SketchVariable;
+import casper.ast.JavaExt;
+import casper.extension.MyStmtExt;
+import casper.extension.MyWhileExt;
+import casper.types.ArrayUpdateNode;
+import casper.types.ConditionalNode;
+import casper.types.CustomASTNode;
+import polyglot.ast.ArrayAccess;
+import polyglot.ast.Assign;
 import polyglot.ast.Block;
 import polyglot.ast.Branch;
+import polyglot.ast.Call;
+import polyglot.ast.Eval;
+import polyglot.ast.Expr;
+import polyglot.ast.If;
+import polyglot.ast.LocalDecl;
 import polyglot.ast.Stmt;
-import polyglot.ast.TypeNode;
 
 public class Util {
 	public static String getSketchTypeFromRaw(String original){
@@ -80,43 +88,6 @@ public class Util {
 		default:
 			// should not happen for now
 			return -1;
-		}
-	}
-	
-	public static String getSketchType(String original){
-		switch(original){
-			case "boolean":
-				return "bit";
-			case "char":
-				return "char";
-			case "short":
-			case "byte":
-			case "int":
-			case "long":
-			case "double":
-			case "float":
-			case "Integer":
-			case "Double":
-			case "Float":
-			case "String":				
-				return "int";
-			case "boolean[]":
-				return "bit["+Configuration.arraySizeBound+"]";
-			case "char[]":
-				return "char["+Configuration.arraySizeBound+"]";
-			case "short[]":
-			case "byte[]":
-			case "int[]":
-			case "long[]":
-			case "float[]":
-			case "double[]":
-			case "Integer[]":
-			case "Float[]":
-			case "String[]":
-			case "Double[]":	
-				return "int["+Configuration.arraySizeBound+"]";	
-			default:
-				return original;
 		}
 	}
 	
@@ -276,27 +247,41 @@ public class Util {
 	}
 	
 	public static String getDafnyType(String original){
-		switch(original){
-		case "bit":
+		final int arrBnd = Configuration.arraySizeBound;
+		if(original.equals("bit")){
 			return "bool";
-		case "char":
+		}
+		else if(original.equals("char")){
 			return "char";
-		case "int":
-		case "string":
+		}
+		else if(original.equals("int")){
 			return "int";
-		case "float":
-		case "double":
+		}
+		else if(original.equals("String")){
+			return "int";
+		}
+		else if(original.equals("float")){
 			return "real";
-		case "bit["+Configuration.arraySizeBound+"]":
+		}
+		else if(original.equals("double")){
+			return "real";
+		}
+		else if(original.equals("bit["+Configuration.arraySizeBound+"]")){
 			return "seq<bool>";
-		case "char["+Configuration.arraySizeBound+"]":
-			return "seq<char>";
-		case "int["+Configuration.arraySizeBound+"]":
-			return "seq<int>";
-		case "float["+Configuration.arraySizeBound+"]":
-		case "real["+Configuration.arraySizeBound+"]":
+		}
+		else if(original.equals("char["+Configuration.arraySizeBound+"]")){
+			return "int<int>";
+		}
+		else if(original.equals("float["+Configuration.arraySizeBound+"]")){
 			return "seq<real>";
-		default:
+		}
+		else if(original.equals("duble["+Configuration.arraySizeBound+"]")){
+			return "seq<real>";
+		}
+		else if(original.equals("String["+Configuration.arraySizeBound+"]")){
+			return "seq<int>";
+		}
+		else{
 			return original;
 		}
 	}
@@ -468,4 +453,122 @@ public class Util {
 		}
 	}
 	
+	public static CustomASTNode generatePreCondition(String type, Stmt body, CustomASTNode postCondition, MyWhileExt loopExt, boolean debug){
+		CustomASTNode currVerifCondition = postCondition;
+		
+		if(body instanceof Block){
+			List<Stmt> statements = ((Block) body).statements();
+			
+			for(int i=statements.size()-1; i>=0; i--){
+				// Get the statement
+				Stmt currStatement = statements.get(i);
+				
+				if(debug){
+					System.err.println("---------------------------");
+					System.err.println(currVerifCondition);
+					System.err.println(currStatement);
+					System.err.println("---------------------------");
+				}
+				
+				// Get extension of statement
+				MyStmtExt ext = (MyStmtExt) JavaExt.ext(currStatement);
+					
+				if(currStatement instanceof Eval){
+					Expr expr = ((Eval) currStatement).expr();
+					
+					if(expr instanceof Assign){
+						// Save post-condition
+						ext.postConditions.put(type,currVerifCondition);
+						
+						// Derive pre-condition
+						Expr lhs = ((Assign)expr).left();
+						Expr rhs = ((Assign)expr).right();
+						
+						CustomASTNode rhsAST = CustomASTNode.convertToAST(rhs);
+						loopExt.constCount = rhsAST.convertConstToIDs(loopExt.constMapping,loopExt.constCount);
+						
+						if(lhs instanceof ArrayAccess){
+							currVerifCondition = currVerifCondition.replaceAll(((ArrayAccess) lhs).array().toString(), new ArrayUpdateNode(CustomASTNode.convertToAST(((ArrayAccess) lhs).array()),CustomASTNode.convertToAST(((ArrayAccess) lhs).index()),rhsAST));
+						}
+						else {
+							currVerifCondition = currVerifCondition.replaceAll(lhs.toString(), rhsAST);
+						}
+						
+						// Save pre-condition
+						ext.preConditions.put(type,currVerifCondition);
+					}
+					else if(expr instanceof Call){
+						// Save post-condition
+						ext.postConditions.put(type,currVerifCondition);
+						
+						currVerifCondition = JavaLibModel.updatePreCondition((Call)expr,currVerifCondition);
+						
+						// Save pre-condition
+						ext.preConditions.put(type,currVerifCondition);
+					}
+					else{
+						System.err.println("Unexpected Eval type: " + expr.getClass() + " :::: " + expr);
+					}
+				}
+				else if(currStatement instanceof LocalDecl){
+					// Save post-condition
+					ext.postConditions.put(type,currVerifCondition);
+
+					// Derive pre-condition
+					String lhs = ((LocalDecl)currStatement).name();
+					Expr rhs = ((LocalDecl)currStatement).init();
+					
+					CustomASTNode rhsAST = CustomASTNode.convertToAST(rhs);
+					loopExt.constCount = rhsAST.convertConstToIDs(loopExt.constMapping,loopExt.constCount);
+ 
+					currVerifCondition = currVerifCondition.replaceAll(lhs, rhsAST);
+					
+					// Save pre-condition
+					ext.preConditions.put(type,currVerifCondition);
+				}
+				else if(currStatement instanceof If){
+					// Save post-condition
+					ext.postConditions.put(type,currVerifCondition);
+					
+					// Derive pre-condition
+					Stmt cons = ((If) currStatement).consequent();
+					Stmt alt = ((If) currStatement).alternative();
+					Expr cond = ((If) currStatement).cond();
+					
+					CustomASTNode loopCond = CustomASTNode.convertToAST(cond);
+					loopExt.constCount = loopCond.convertConstToIDs(loopExt.constMapping,loopExt.constCount);
+					
+					CustomASTNode verifCondCons = generatePreCondition(type,cons,currVerifCondition,loopExt,debug);
+					
+					CustomASTNode verifCondAlt;
+					if(alt != null)
+						verifCondAlt = generatePreCondition(type,alt,currVerifCondition,loopExt,debug);
+					else
+						verifCondAlt = currVerifCondition;
+					
+					if(!verifCondCons.toString().equals(verifCondAlt.toString()))
+						currVerifCondition = new ConditionalNode(loopCond,verifCondCons,verifCondAlt);
+					
+					// Save pre-condition
+					ext.preConditions.put(type, currVerifCondition);
+				}
+				else if(currStatement instanceof Block){
+					// Save post-condition
+					ext.postConditions.put(type,currVerifCondition);
+					
+					// Derive pre-condition
+					currVerifCondition = generatePreCondition(type,currStatement,currVerifCondition,loopExt,debug);
+					
+					// Save pre-condition
+					ext.preConditions.put(type, currVerifCondition);
+				}
+			}
+		}
+		else{
+			// This should never be the case
+			System.err.println("Error: body was not an instance of Block. ("+ body.getClass() +")");
+		}
+		
+		return currVerifCondition;
+	}
 }

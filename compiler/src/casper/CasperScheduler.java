@@ -30,6 +30,7 @@ import casper.visit.ExtractUserDefinedDataTypes;
 import casper.visit.GenerateScaffold;
 import casper.visit.GenerateSparkCode;
 import casper.visit.GenerateVerification;
+import casper.visit.IdentifyDataSet;
 import casper.visit.SelectLoopsForTranslation;
 import casper.visit.UpdateConfigurations;
 import polyglot.ast.NodeFactory;
@@ -190,6 +191,23 @@ public class CasperScheduler extends JL7Scheduler {
     }
     
     /*
+     * Identfy the data set being operated on
+     */
+    public Goal DataSetIdentified (Job job)
+    {
+    	Goal g = internGoal(new VisitorGoal(job, new IdentifyDataSet()));
+    	
+    	try { 
+			g.addPrerequisiteGoal(OutputVariablesExtracted(job), this); 
+		}
+    	catch (CyclicDependencyException e) { 
+    		throw new InternalCompilerError(e); 
+		}        
+
+    	return internGoal(g);    	
+    }
+    
+    /*
      * Extract the set of operators
      */
     public Goal OperatorsExtracted (Job job)
@@ -197,7 +215,7 @@ public class CasperScheduler extends JL7Scheduler {
     	Goal g = internGoal(new VisitorGoal(job, new ExtractOperators()));
     	
     	try { 
-			g.addPrerequisiteGoal(OutputVariablesExtracted(job), this); 
+			g.addPrerequisiteGoal(DataSetIdentified(job), this); 
 		}
     	catch (CyclicDependencyException e) { 
     		throw new InternalCompilerError(e); 
@@ -302,7 +320,7 @@ public class CasperScheduler extends JL7Scheduler {
 			{
 				List<Goal> l = new ArrayList<Goal>();
 				l.addAll(super.prerequisiteGoals(scheduler));
-				l.add(VerificationCodeGenerated(job));
+				l.add(ScaffoldGenerated(job));
 				return l;
 			}
 		});

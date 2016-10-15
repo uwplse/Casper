@@ -34,7 +34,6 @@ import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import casper.extension.MyWhileExt.Variable;
 import casper.types.IdentifierNode;
-import polyglot.ast.Block;
 import polyglot.ast.Node;
 import polyglot.ast.NodeFactory;
 import polyglot.ast.Stmt;
@@ -45,16 +44,144 @@ import polyglot.visit.NodeVisitor;
 public class GenerateScaffold extends NodeVisitor{
 	boolean debug;
 	int id;
-	Set<String> arrays;
 	NodeFactory nf;
 	
 	@SuppressWarnings("deprecation")
 	public GenerateScaffold(NodeFactory nf){
 		this.debug = false;
 		this.id = 0;
-		this.arrays = new HashSet<String>();
 		this.nf = nf;
 	}
+	
+	@SuppressWarnings("deprecation")
+	public NodeVisitor enter(Node parent, Node n){
+		// If the node is a loop
+		if(n instanceof While || n instanceof ExtendedFor){
+			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
+			
+			if(ext.interesting){	
+				if(debug){
+					System.err.println("Attempting to translate code fragment:-");
+					n.prettyPrint(System.err);
+					System.err.println("");
+				}
+				else{
+					System.err.println("Attempting to translate code fragment (Fragment ID: " + id + ")");
+				}
+				
+				Set<String> handledTypes = new HashSet<String>();
+				try {
+					Set<SketchVariable> sketchInputVars = new HashSet<SketchVariable>();
+					Set<SketchVariable> sketchOutputVars = new HashSet<SketchVariable>();
+					List<SketchVariable> sketchLoopCounters = new ArrayList<SketchVariable>();
+					
+					/* Translate input variables to sketch appropriate types */
+					generateSketchInputVars(n, sketchInputVars);
+					
+					/* Translate output variables to sketch appropriate types */
+					generateSketchOutputVars(n, sketchOutputVars);
+					
+					/* Translate loop counters to sketch appropriate types */
+					generateSketchLoopCounters(n, sketchLoopCounters);
+					
+					/* Generate output class */
+					generateOutputClass(sketchOutputVars);
+					
+					for(SketchVariable var : sketchOutputVars){
+						// Have we already handled this case?
+						if(handledTypes.contains(var.type)){
+							continue;
+						}
+						handledTypes.add(var.type);
+						
+						for(Variable v : ext.outputVars){
+							if(v.varName.equals(var.name)){
+								System.err.println("Output type: " + v.varType);
+								break;
+							}
+						}
+						
+						Set<SketchVariable> sketchFilteredOutputVars = new HashSet<SketchVariable>();
+						for(SketchVariable v : sketchOutputVars){
+							if(v.type == var.type){
+								sketchFilteredOutputVars.add(v);
+							}
+						}
+						
+						// Calculate number of emits
+						Configuration.emitCount = 0;
+						for(SketchVariable v : sketchOutputVars){ if(var.type.equals(v.type)) Configuration.emitCount++; }
+						
+						/* Generate Key-Value pair list */
+						generateKvListClass(n, var.type);
+						
+						while(true){
+							/* Generate main scaffold */
+							generateScaffold(sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, n, var.type);
+							
+							/* Run synthesizer to generate summary */
+							int exitCode = runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk",var.type,ext);
+							if(exitCode == 0){
+								/* Run theorem prover to verify summary */
+								verifySummary("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".dfy", n, ext, sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, var.type);
+								ext.generateCode.put(var.type, true);
+								break;
+							}
+							else if(exitCode == 1){
+								// Clear data structures before next run
+								ext.inputDataCollections.clear();
+							}
+							else if(exitCode == 2){
+								System.err.println("Casper failed to synthesize a summary for this code fragment.\nPlease submit your code example at our"
+													+ " GitHub Issues tracker (https://github.com/uwplse/Casper/issues)");
+								ext.generateCode.put(var.type, false);
+								break;
+							}
+						}
+					}
+					
+					// Increment id counter
+					this.id++;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				Configuration.useConditionals = false;
+			}
+		}		
+		
+		return this;
+	}
+	
+	
+	
+	
+	
+	@Override
+	public Node leave(Node old, Node n, NodeVisitor v){
+		return n;
+	}
+	
+	@Override
+	public void finish(){		
+		if(debug)
+			System.err.println("\n************* Finished generate scaffold complier pass *************");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static class SketchVariable{
 		public String name;
@@ -126,16 +253,16 @@ public class GenerateScaffold extends NodeVisitor{
 			loopBody = ((ExtendedFor)n).body();
 		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(loopBody));
 		
-		String invariant = ext.invariants.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
+		String invariant = ext.invariants.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).varName)).toString();
 		String loopCond = "("+sketchLoopCounters.get(0).name+"<"+(Configuration.arraySizeBound-1)+")";
 		
 		String loopCondFalse = loopCond; if(ext.condInv) loopCondFalse = "!" + loopCondFalse;
 		
-		String wpc = bodyExt.preConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
+		String wpc = bodyExt.preConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).varName)).toString();
 		
-		String postC = ext.postConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
+		String postC = ext.postConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).varName)).toString();
 		
-		String preC = ext.preConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).name)).toString();
+		String preC = ext.preConditions.get(outputType).replaceAll("input_data", new IdentifierNode(ext.inputDataCollections.get(0).varName)).toString();
 		
 		// Generate weakest pre condition values initialization
 		String wpcValuesInit = SketchCodeGenerator.generateWPCValuesInit(ext.wpcValues,sketchOutputVars,sketchLoopCounters);
@@ -251,7 +378,7 @@ public class GenerateScaffold extends NodeVisitor{
 		MyWhileExt ext = (MyWhileExt)JavaExt.ext(n);
 		for(Variable var : ext.inputVars){
 			var.varName = var.varName.replace("$", "");
-			switch(var.getType()){
+			switch(var.getSketchType()){
 				case "boolean":
 				case "char":
 				case "short":
@@ -261,7 +388,7 @@ public class GenerateScaffold extends NodeVisitor{
 				case "float":
 				case "double":
 				case "String":
-					sketchInputVars.add(new SketchVariable(var.varName,casper.Util.getSketchType(var.getType()),var.category));
+					sketchInputVars.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					break;
 				case "boolean[]":
 				case "char[]":
@@ -272,20 +399,20 @@ public class GenerateScaffold extends NodeVisitor{
 				case "float[]":
 				case "double[]":
 				case "String[]":
-					sketchInputVars.add(new SketchVariable(var.varName,casper.Util.getSketchType(var.getType()),var.category));
+					sketchInputVars.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					break;
 				default:
 					if(var.category == Variable.VAR){
-						sketchInputVars.add(new SketchVariable(var.varName,var.getType(),var.category));
+						sketchInputVars.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					}
 					else if(var.category == Variable.FIELD_ACCESS){
-						sketchInputVars.add(new SketchVariable(var.varName,var.getType(),var.category));
+						sketchInputVars.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					}
 					else if(var.category == Variable.ARRAY_ACCESS){
-						sketchInputVars.add(new SketchVariable(var.varName, var.getType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
+						sketchInputVars.add(new SketchVariable(var.varName, var.getSketchType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
 					}
 					else if(var.category == Variable.CONST_ARRAY_ACCESS){
-						sketchInputVars.add(new SketchVariable(var.varName, var.getType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
+						sketchInputVars.add(new SketchVariable(var.varName, var.getSketchType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
 					}
 					break;
 			}
@@ -297,7 +424,7 @@ public class GenerateScaffold extends NodeVisitor{
 		MyWhileExt ext = (MyWhileExt)JavaExt.ext(n);
 		for(Variable var : ext.outputVars){
 			var.varName = var.varName.replace("$", "");
-			switch(var.getType()){
+			switch(var.getSketchType()){
 				case "boolean":
 				case "char":
 				case "short":
@@ -307,7 +434,7 @@ public class GenerateScaffold extends NodeVisitor{
 				case "float":
 				case "double":
 				case "String":
-					sketchOutputVars.add(new SketchVariable(var.varName,casper.Util.getSketchType(var.getType()),var.category));
+					sketchOutputVars.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					break;
 				case "boolean[]":
 				case "char[]":
@@ -318,20 +445,20 @@ public class GenerateScaffold extends NodeVisitor{
 				case "float[]":
 				case "double[]":
 				case "String[]":
-					sketchOutputVars.add(new SketchVariable(var.varName,casper.Util.getSketchType(var.getType()),var.category));
+					sketchOutputVars.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					break;
 				default:
 					if(var.category == Variable.VAR){
-						sketchOutputVars.add(new SketchVariable(var.varName,var.getType(),var.category));
+						sketchOutputVars.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					}
 					else if(var.category == Variable.FIELD_ACCESS){
-						sketchOutputVars.add(new SketchVariable(var.varName,var.getType(),var.category));
+						sketchOutputVars.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					}
 					else if(var.category == Variable.ARRAY_ACCESS){
-						sketchOutputVars.add(new SketchVariable(var.varName, var.getType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
+						sketchOutputVars.add(new SketchVariable(var.varName, var.getSketchType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
 					}
 					else if(var.category == Variable.CONST_ARRAY_ACCESS){
-						sketchOutputVars.add(new SketchVariable(var.varName, var.getType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
+						sketchOutputVars.add(new SketchVariable(var.varName, var.getSketchType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
 					}
 					break;
 			}
@@ -343,7 +470,7 @@ public class GenerateScaffold extends NodeVisitor{
 		MyWhileExt ext = (MyWhileExt)JavaExt.ext(n);
 		for(Variable var : ext.loopCounters){
 			var.varName = var.varName.replace("$", "");
-			switch(var.getType()){
+			switch(var.getSketchType()){
 				case "boolean":
 				case "char":
 				case "short":
@@ -353,7 +480,7 @@ public class GenerateScaffold extends NodeVisitor{
 				case "float":
 				case "double":
 				case "String":
-					sketchLoopCounters.add(new SketchVariable(var.varName,casper.Util.getSketchType(var.getType()),var.category));
+					sketchLoopCounters.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					break;
 				case "boolean[]":
 				case "char[]":
@@ -364,20 +491,20 @@ public class GenerateScaffold extends NodeVisitor{
 				case "float[]":
 				case "double[]":
 				case "String[]":
-					sketchLoopCounters.add(new SketchVariable(var.varName,casper.Util.getSketchType(var.getType()),var.category));
+					sketchLoopCounters.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					break;
 				default:
 					if(var.category == Variable.VAR){
-						sketchLoopCounters.add(new SketchVariable(var.varName,var.getType(),var.category));
+						sketchLoopCounters.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					}
 					else if(var.category == Variable.FIELD_ACCESS){
-						sketchLoopCounters.add(new SketchVariable(var.varName,var.getType(),var.category));
+						sketchLoopCounters.add(new SketchVariable(var.varName,var.getSketchType(),var.category));
 					}
 					else if(var.category == Variable.ARRAY_ACCESS){
-						sketchLoopCounters.add(new SketchVariable(var.varName, var.getType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
+						sketchLoopCounters.add(new SketchVariable(var.varName, var.getSketchType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
 					}
 					else if(var.category == Variable.CONST_ARRAY_ACCESS){
-						sketchLoopCounters.add(new SketchVariable(var.varName, var.getType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
+						sketchLoopCounters.add(new SketchVariable(var.varName, var.getSketchType().replace("[]", "["+Configuration.arraySizeBound+"]"),var.category));
 					}
 					break;
 			}
@@ -463,106 +590,7 @@ public class GenerateScaffold extends NodeVisitor{
 		writer.close();
 	}
 
-	public NodeVisitor enter(Node parent, Node n){
-		// If the node is a loop
-		if(n instanceof While || n instanceof ExtendedFor){
-			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
-			if(ext.interesting){
-				
-				System.err.println(ext.inputVars);
-				
-				if(debug){
-					System.err.println("Attempting to translate code fragment:-");
-					n.prettyPrint(System.err);
-					System.err.println("");
-				}
-				else{
-					System.err.println("Attempting to translate code fragment (Fragment ID: " + id + ")");
-				}
-				
-				Set<String> handledTypes = new HashSet<String>();
-				try {
-					Set<SketchVariable> sketchInputVars = new HashSet<SketchVariable>();
-					Set<SketchVariable> sketchOutputVars = new HashSet<SketchVariable>();
-					List<SketchVariable> sketchLoopCounters = new ArrayList<SketchVariable>();
-					
-					/* Translate input variables to sketch appropriate types */
-					generateSketchInputVars(n, sketchInputVars);
-					
-					/* Translate output variables to sketch appropriate types */
-					generateSketchOutputVars(n, sketchOutputVars);
-					
-					/* Translate loop counters to sketch appropriate types */
-					generateSketchLoopCounters(n, sketchLoopCounters);
-					
-					/* Generate output class */
-					generateOutputClass(sketchOutputVars);
-					
-					for(SketchVariable var : sketchOutputVars){
-						// Have we already handled this case?
-						if(handledTypes.contains(var.type)){
-							continue;
-						}
-						handledTypes.add(var.type);
-						
-						for(Variable v : ext.outputVars){
-							if(v.varName.equals(var.name)){
-								System.err.println("Output type: " + v.varType);
-								break;
-							}
-						}
-						
-						Set<SketchVariable> sketchFilteredOutputVars = new HashSet<SketchVariable>();
-						for(SketchVariable v : sketchOutputVars){
-							if(v.type == var.type){
-								sketchFilteredOutputVars.add(v);
-							}
-						}
-						
-						// Calculate number of emits
-						Configuration.emitCount = 0;
-						for(SketchVariable v : sketchOutputVars){ if(var.type.equals(v.type)) Configuration.emitCount++; }
-						
-						/* Generate Key-Value pair list */
-						generateKvListClass(n, var.type);
-						
-						while(true){
-							/* Generate main scaffold */
-							generateScaffold(sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, n, var.type);
-							
-							/* Run synthesizer to generate summary */
-							int exitCode = runSynthesizer("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".sk",var.type,ext);
-							if(exitCode == 0){
-								/* Run theorem prover to verify summary */
-								verifySummary("output/main_"+var.type.replace("["+Configuration.arraySizeBound+"]","")+id+".dfy", n, ext, sketchInputVars, sketchFilteredOutputVars, sketchLoopCounters, var.type);
-								ext.generateCode.put(var.type, true);
-								break;
-							}
-							else if(exitCode == 1){
-								// Clear data structures before next run
-								ext.inputDataCollections.clear();
-							}
-							else if(exitCode == 2){
-								System.err.println("Casper failed to synthesize a summary for this code fragment.\nPlease submit your code example at our"
-													+ " GitHub Issues tracker (https://github.com/uwplse/Casper/issues)");
-								ext.generateCode.put(var.type, false);
-								break;
-							}
-						}
-					}
-					
-					// Increment id counter
-					this.id++;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				Configuration.useConditionals = false;
-			}
-		}		
-		
-		return this;
-	}
+	
 	
 	public class ReadStream implements Runnable {
 	    String name;
@@ -1034,7 +1062,7 @@ public class GenerateScaffold extends NodeVisitor{
 		// Generate verification code
 		String preC = DafnyCodeGenerator.generatePreCondition(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
 		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(((While)n).body()));
-		String loopCond = "("+sketchLoopCounters.get(0).name+"<|"+ext.inputDataCollections.get(0).name+"|)";
+		String loopCond = "("+sketchLoopCounters.get(0).name+"<|"+ext.inputDataCollections.get(0).varName+"|)";
 		String loopCondFalse = loopCond; if(ext.condInv) loopCondFalse = "!" + loopCondFalse;
 		String invariant = DafnyCodeGenerator.generateInvariant(ext,outputType,sketchInputVars,sketchOutputVars,sketchLoopCounters);
 		String lemma = invariant.replace("loopInvariant", "Lemma");
@@ -1278,27 +1306,5 @@ public class GenerateScaffold extends NodeVisitor{
 		ext.mapKeyType = mapKeyType;
 		
 		return emits;
-	}
-
-	@Override
-	public Node leave(Node old, Node n, NodeVisitor v){
-		return n;
-	}
-	
-	@Override
-	public void finish(){
-		/* Generate required array data structures */
-		try {
-			// Generate any arrays that were used in the generated scaffold
-			// This is only necessary when using custom array types
-			//for(String array : arrays){
-				//generateArray(array);
-			//}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		if(debug)
-			System.err.println("\n************* Finished generate scaffold complier pass *************");
 	}
 }
