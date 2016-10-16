@@ -20,6 +20,7 @@ import casper.JavaLibModel;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
+import casper.types.Variable;
 import polyglot.ast.ArrayAccess;
 import polyglot.ast.Assign;
 import polyglot.ast.Block;
@@ -111,24 +112,24 @@ public class ExtractOutputVariables extends NodeVisitor  {
 			if(left instanceof ArrayAccess){
 				for(MyWhileExt ext : this.extensions){
 					// Save the array
-					ext.saveOutputVariable(((ArrayAccess)left).array().toString(), ((ArrayAccess)left).array().type().toString(),MyWhileExt.Variable.ARRAY_ACCESS);
+					ext.saveOutputVariable(((ArrayAccess)left).array().toString(), ((ArrayAccess)left).array().type().toString(),Variable.ARRAY_ACCESS);
 					
 					// Save the index (unless it is a constant)
 					Expr index = ((ArrayAccess)left).index();
 					if(index instanceof Local)
-						ext.saveInputVariable(index.toString(), index.type().toString(),MyWhileExt.Variable.VAR);
+						ext.saveInputVariable(index.toString(), index.type().toString(),Variable.VAR);
 				}
 			}
 			else if(left instanceof Field){
 				for(MyWhileExt ext : this.extensions){
 					// Save the variable
-					ext.saveOutputVariable(left.toString(), left.type().toString(), ((Field) left).target().type().toString(),MyWhileExt.Variable.FIELD_ACCESS);
+					ext.saveOutputVariable(left.toString(), left.type().toString(), ((Field) left).target().type().toString(),Variable.FIELD_ACCESS);
 				}
 			}
 			else{
 				for(MyWhileExt ext : this.extensions){
 					// Save the variable
-					ext.saveOutputVariable(left.toString(), left.type().toString(),MyWhileExt.Variable.VAR);
+					ext.saveOutputVariable(left.toString(), left.type().toString(),Variable.VAR);
 				}
 			}
 		}
@@ -138,10 +139,10 @@ public class ExtractOutputVariables extends NodeVisitor  {
 				List<Node> writes = JavaLibModel.extractWrites((Call)n,ext);
 				for(Node node : writes){
 					if(node instanceof Receiver){
-						ext.saveOutputVariable(node.toString(),((Receiver)node).type().toString(),MyWhileExt.Variable.FIELD_ACCESS);
+						ext.saveOutputVariable(node.toString(),((Receiver)node).type().toString(),Variable.FIELD_ACCESS);
 					}
 					else if(node instanceof Local){
-						ext.saveOutputVariable(ext.toString(),node.toString(),((Local) node).type().toString(),MyWhileExt.Variable.VAR);
+						ext.saveOutputVariable(ext.toString(),node.toString(),((Local) node).type().toString(),Variable.VAR);
 					}
 				}
 			}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
-import casper.extension.MyWhileExt.Variable;
+import casper.types.Variable;
 import polyglot.ast.Node;
 import polyglot.ast.While;
 import polyglot.visit.NodeVisitor;
@@ -32,6 +32,9 @@ public class IdentifyDataSet extends NodeVisitor{
 						ext.hasInputData = true;
 					}
 				}
+				
+				if(!ext.hasInputData)
+					ext.interesting = false;
 			}
 			
 			if(debug)

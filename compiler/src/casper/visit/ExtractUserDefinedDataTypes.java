@@ -17,8 +17,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
+import casper.types.Variable;
 import polyglot.ast.ClassDecl;
 import polyglot.ast.FieldDecl;
 import polyglot.ast.Node;
@@ -31,14 +33,14 @@ public class ExtractUserDefinedDataTypes extends NodeVisitor {
 	ArrayList<String> dataTypes;
 	ArrayList<MyWhileExt> extensions;
 	Stack<String> classes;
-	Map<String,Set<FieldDecl>> fields;
+	Map<String,Set<Variable>> fields;
    
 	@SuppressWarnings("deprecation")
 	public ExtractUserDefinedDataTypes(){
 		this.debug = false;
 		this.dataTypes = new ArrayList<String>();
 		this.extensions = new ArrayList<MyWhileExt>();
-		this.fields = new HashMap<String,Set<FieldDecl>>();
+		this.fields = new HashMap<String,Set<Variable>>();
 		this.classes = new Stack<String>();
 	}
 	
@@ -63,12 +65,12 @@ public class ExtractUserDefinedDataTypes extends NodeVisitor {
 			this.classes.push(((ClassDecl) n).id().toString());
 			
 			// Create empty field set
-			Set<FieldDecl> fieldSet = new HashSet<FieldDecl>();
+			Set<Variable> fieldSet = new HashSet<Variable>();
 			this.fields.put(this.classes.peek(), fieldSet);
 		}
 		else if(n instanceof FieldDecl){
 			// Class field definition found, save it
-			this.fields.get(this.classes.peek()).add((FieldDecl) n);
+			this.fields.get(this.classes.peek()).add(new Variable(((FieldDecl) n).id().toString(),((FieldDecl) n).type().toString(),"",Variable.VAR));
 		}
 		
 		if(debug){
@@ -96,8 +98,8 @@ public class ExtractUserDefinedDataTypes extends NodeVisitor {
 
 				// Generate class with field variables
 				String text = "struct " + name + "{\n\t";
-				for(FieldDecl field : fields.get(name)){
-					text += casper.Util.getSketchTypeFromRaw(field.type().toString()) + " " + field.name() + ";\n\t";
+				for(Variable field : fields.get(name)){
+					text += field.getSketchType() + " " + field.varName + ";\n\t";
 				}
 				text += "}";
 				

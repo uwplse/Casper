@@ -3,10 +3,9 @@
 
 include "output/utils.sk";
 <include-libs>
-
 /******************************************************************************/
 /* Global Control Variables                                                   */
-int mapKeyType = ??(1);
+int CASPER_NUM_OUTVARS = <num-out-vars>;
 
 // Input variables decl
 <decl-broadcast-vars>
@@ -32,133 +31,53 @@ harness void main(<main-args-decl>){
 /* Verification functions                                                     */
 
 bit postCondition(<post-cond-args-decl>){
-	Output resMR = collect(reduce(map(<map-args-call>)),<collect-args-call>);
+	<output-type> [<r-size>] casper_r;
 	<post-cond-body>
 }
 
 bit loopInvariant(<loop-inv-args-decl>){
-	Output resMR = collect(reduce(map(<map-args-call>)),<collect-args-call>);
+	<output-type> [<r-size>] casper_r;
 	<loop-inv-body>
 }
 
 /******************************************************************************/
 /* MapReduce Implementation                                                   */
 
-<generate-int-map>
+<map-generators>
 
-<generate-bit-vec-map>
-
-<generate-string-map>
-
-<generate-bit-map>
-
-List do_map(<domap-func-args-decl>){
-	List result = new List();
-
-	<do-map-emits>
-
-	return result;
+void map (<map-args-decl>)
+{
+  	<map-emits>
 }
 
-<generate-reduce-exp>
+<reduce-generator>
 
-Pair do_reduce(ListNode values){
-	Pair p = new Pair();
+<init-functions>
 
-	if(values == null)
-		return p;
+<reduce-functions>
 
-	if(mapKeyType == 0){
-		p.intkey = values.intkey;
-		p.intkey2 = values.intkey2;
-	}
-	else if(mapKeyType == 1){
-		p.intkey = values.intkey;
-		p.stringkey = values.stringkey;
-	}
+<merge-functions>
 
-	<do-reduce-emits>
+<output-type> [<r-size>] reduce (<loop-inv-args-decl>) {
+	<output-type> [<r-size>] casper_r;
+	<casper-r-init>
+	for (int casper_i = <lc>0; casper_i < <lc>; ++casper_i)
+	{
+		<init-keys-vals>
+		int num_pairs = CASPER_NUM_OUTVARS;
 
-	return p;
-}
+		map(<map-args-call>);
 
-// Calls do_map on each index of the collection
-// Equivelant to flatmap() in functional programming
-List map(<map-args-decl>){
-	List result = new List(handle = null);
-	
-	<map-loop-init>
-	while(<map-loop-cond>){
-		
-		List kvPairs = do_map(<domap-func-args-call>);
-		
-		if(mapKeyType == 0){
-			intlist_merge(result, kvPairs);
-		}
-		else if(mapKeyType == 1){
-			stringlist_merge(result, kvPairs);
-		}
-
-		<map-loop-increment>
-	}
-	return result;
-}
-
-// Groups kvPairs by key and calls do_reduce for each key-values pair
-// Equivelant to reduce() in functional programming
-List reduce(List kvPairs){
-	List result = new List(handle = null);
-	
-	// If map did not emit anything, we are done.
-	if(kvPairs.handle == null) return result;
-
-	// Create value arrays by grouping on keys and run reduce function for 
-	// each key
-	ListNode ptr_st = kvPairs.handle;
-	ListNode ptr_end = kvPairs.handle;
-
-	while(ptr_end.next != null){
-		if( (mapKeyType == 0 && ptr_end.next.intkey == ptr_st.intkey && ptr_end.next.intkey2 == ptr_st.intkey2) 		||
-		    (mapKeyType == 1 && ptr_end.next.intkey == ptr_st.intkey && ptr_end.next.stringkey == ptr_st.stringkey) )
-		{
-			ptr_end = ptr_end.next;
-		}
-		else{
-			// break chain
-			ListNode ptr_temp = ptr_end.next;
-			ptr_end.next = null;
-
-			// Run for this key
-			Pair kv = do_reduce(ptr_st);
-			if(mapKeyType == 0){
-				intlist_insert(result,kv);
-			}
-			else if(mapKeyType == 1){
-				stringlist_insert(result,kv);
-			}
-			
-			// Reset for next key
-			ptr_st = ptr_temp;
-			ptr_end = ptr_temp;
-		}
+		for (int casper_j = 0; casper_j < num_pairs; ++casper_j)
+		{ 
+	  		<init-keys>
+	  		if(key0 == 0) {	}
+	  		<reduce-by-key>
+	  		else{ assert 0; }
+		} 
 	}
 
-	// Run for last key
-	Pair kv = do_reduce(ptr_st);
-	if(mapKeyType == 0){
-		intlist_insert(result,kv);
-	}
-	else if(mapKeyType == 1){
-		stringlist_insert(result,kv);
-	}
+	<merge-r>
 
-	return result;
-}
-
-Output collect(List resMR,<collect-func-args-decl>){
-	Output output = new Output();
-
-	<output-reconstruction>
-
-	return output;
+	return casper_r;
 }

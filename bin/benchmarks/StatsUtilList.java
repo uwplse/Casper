@@ -213,7 +213,7 @@ public class StatsUtilList {
      * @return
      *                  Array of doubles holding the data's residual points
      */
-     /*public static double[] residuals(List<Double> y, List<Double> fit){
+     public static double[] residuals(List<Double> y, List<Double> fit){
         double[] residuals=new double[y.size()];
         for (int i = 0; i < y.size(); i++)
             residuals[i] = y.get(i) - fit.get(i);

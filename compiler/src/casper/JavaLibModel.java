@@ -17,6 +17,7 @@ import casper.types.ArrayUpdateNode;
 import casper.types.CallNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
+import casper.types.Variable;
 import polyglot.ast.Call;
 import polyglot.ast.Expr;
 import polyglot.ast.Lit;
@@ -138,16 +139,16 @@ public class JavaLibModel {
 			case "java.util.List":
 				switch(exp.id().toString()){
 					case "size":
-						ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.CONST_ARRAY_ACCESS);
+						ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), Variable.CONST_ARRAY_ACCESS);
 						break;
 					case "get":
 						for(Expr arg : exp.arguments()){
 							if(arg instanceof Local){
 								reads.add(arg);
-								ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.ARRAY_ACCESS);
+								ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), Variable.ARRAY_ACCESS);
 							}
 							else if(arg instanceof Lit){
-								ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.CONST_ARRAY_ACCESS);
+								ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), Variable.CONST_ARRAY_ACCESS);
 							}
 						}
 						break;
@@ -216,7 +217,7 @@ public class JavaLibModel {
 							writes.add(exp.target());
 						}
 						else if(exp.arguments().get(0) instanceof Lit){
-							ext.saveOutputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.CONST_ARRAY_ACCESS);
+							ext.saveOutputVariable(exp.target().toString(), exp.target().type().toString(), Variable.CONST_ARRAY_ACCESS);
 						}
 						break;
 					default:
@@ -237,7 +238,7 @@ public class JavaLibModel {
 							writes.add(exp.target());
 						}
 						else if(exp.arguments().get(0) instanceof Lit){
-							ext.saveOutputVariable(exp.target().toString(), exp.target().type().toString(), MyWhileExt.Variable.CONST_ARRAY_ACCESS);
+							ext.saveOutputVariable(exp.target().toString(), exp.target().type().toString(), Variable.CONST_ARRAY_ACCESS);
 						}
 						break;
 					default:

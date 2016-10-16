@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import casper.JavaLibModel.SketchCall;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
-import casper.extension.MyWhileExt.Variable;
+import casper.types.Variable;
 import polyglot.ast.Import;
 import polyglot.ast.Node;
 import polyglot.ast.NodeFactory;
@@ -119,7 +119,7 @@ public class GenerateSparkCode extends NodeVisitor{
 		return n;
 	}
    
-	private String generateDuplicateVarInit(MyWhileExt ext) {
+/*	private String generateDuplicateVarInit(MyWhileExt ext) {
 		String code = "";
 		for(Variable var : ext.inputVars){
 			if(!ext.outputVars.contains(var) && var.category != Variable.ARRAY_ACCESS)
@@ -273,7 +273,7 @@ public class GenerateSparkCode extends NodeVisitor{
 			return varType;
 		}
 	}
-
+*/
 	@Override
 	public void finish(){
 		if(debug)

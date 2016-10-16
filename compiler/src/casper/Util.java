@@ -1,6 +1,7 @@
 package casper;
 
 import java.util.List;
+
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
@@ -56,6 +57,50 @@ public class Util {
 				String dataType = components[components.length-1];
 				if(dataType.contains("[]")){
 					dataType.replace("[]", "["+Configuration.arraySizeBound+"]");
+				}
+				return dataType;
+		}
+	}
+	
+	public static String getPrimitiveTypeFromRaw(String original){
+		switch(original){
+			case "boolean":
+			case "char":
+			case "short":
+			case "byte":
+			case "int":
+			case "long":
+			case "float":
+			case "double":
+			case "String":
+				return original;
+			case "boolean[]":
+			case "char[]":
+			case "short[]":
+			case "byte[]":
+			case "int[]":
+			case "long[]":
+			case "double[]":
+			case "float[]":
+			case "String[]":
+				return original.replace("[]", "");
+			case "Integer":
+				return "int";
+			case "Double":
+				return "double";
+			case "Float":
+				return "float";
+			case "Integer[]":
+				return "int";
+			case "Double[]":
+				return "ddouble";
+			case "Float[]":
+				return "float";
+			default:
+				String[] components = original.split("\\.");
+				String dataType = components[components.length-1];
+				if(dataType.contains("[]")){
+					dataType.replace("[]", "");
 				}
 				return dataType;
 		}
@@ -519,6 +564,7 @@ public class Util {
 					Expr rhs = ((LocalDecl)currStatement).init();
 					
 					CustomASTNode rhsAST = CustomASTNode.convertToAST(rhs);
+
 					loopExt.constCount = rhsAST.convertConstToIDs(loopExt.constMapping,loopExt.constCount);
  
 					currVerifCondition = currVerifCondition.replaceAll(lhs, rhsAST);
@@ -570,5 +616,9 @@ public class Util {
 		}
 		
 		return currVerifCondition;
+	}
+
+	public static String reducerType(String outputType) {
+		return outputType.replace("["+Configuration.arraySizeBound+"]", "");
 	}
 }

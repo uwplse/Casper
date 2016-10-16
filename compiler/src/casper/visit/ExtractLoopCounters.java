@@ -11,9 +11,9 @@ import casper.JavaLibModel;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
-import casper.extension.MyWhileExt.Variable;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
+import casper.types.Variable;
 import polyglot.ast.ArrayAccess;
 import polyglot.ast.Block;
 import polyglot.ast.Call;
@@ -98,7 +98,7 @@ public class ExtractLoopCounters extends NodeVisitor {
 			Node lc = JavaLibModel.extractLoopCounters((Call) n);
 			if(lc instanceof Local){
 				for(MyWhileExt ext : this.extensions){
-					ext.saveLoopCounterVariable(lc.toString(),lc.toString(),MyWhileExt.Variable.VAR);
+					ext.saveLoopCounterVariable(lc.toString(),((Local) lc).type().toString(),Variable.VAR);
 				}
 			}
 		}
@@ -118,7 +118,7 @@ public class ExtractLoopCounters extends NodeVisitor {
 				
 				// Filter out loop counters
 				for(Variable var : ext.loopCounters){
-					CustomASTNode lcExp = new IdentifierNode(var.varName);
+					CustomASTNode lcExp = new IdentifierNode(var.varNameOrig);
 					
 					if(body instanceof Block){
 						List<Stmt> statements = ((Block) body).statements();
@@ -168,6 +168,9 @@ public class ExtractLoopCounters extends NodeVisitor {
 					}
 				}
 			
+				if(ext.loopCounters.size() == 0)
+					ext.interesting = false;
+				
 				if(debug){
 					System.err.println("Loop Counters:\n"+((MyWhileExt)JavaExt.ext(n)).loopCounters.toString());
 				}

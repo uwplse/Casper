@@ -19,6 +19,7 @@ import java.util.List;
 import casper.JavaLibModel;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
+import casper.types.Variable;
 import polyglot.ast.ArrayAccess;
 import polyglot.ast.Assign;
 import polyglot.ast.Binary;
@@ -57,7 +58,7 @@ public class ExtractInputVariables extends NodeVisitor {
 		else if(exp instanceof Local){
 			// If expression is a local variable
 			for(MyWhileExt ext : extensions){
-				ext.saveInputVariable(exp.toString(), exp.type().toString(),MyWhileExt.Variable.VAR);
+				ext.saveInputVariable(exp.toString(), exp.type().toString(),Variable.VAR);
 			}
 		}
 		else if(exp instanceof Unary){
@@ -66,7 +67,7 @@ public class ExtractInputVariables extends NodeVisitor {
 			if(operand instanceof Local){
 				// If operand is a variable
 				for(MyWhileExt ext : extensions){
-					ext.saveInputVariable(operand.toString(),operand.type().toString(),MyWhileExt.Variable.VAR);
+					ext.saveInputVariable(operand.toString(),operand.type().toString(),Variable.VAR);
 				}
 			}
 
@@ -80,13 +81,13 @@ public class ExtractInputVariables extends NodeVisitor {
 			if(operandLeft instanceof Local){
 				// If operand is a variable
 				for(MyWhileExt ext : extensions){
-					ext.saveInputVariable(operandLeft.toString(),operandLeft.type().toString(),MyWhileExt.Variable.VAR);	
+					ext.saveInputVariable(operandLeft.toString(),operandLeft.type().toString(),Variable.VAR);	
 				}
 			}
 			if(operandRight instanceof Local){
 				// If operand is a variable
 				for(MyWhileExt ext : extensions){
-					ext.saveInputVariable(operandRight.toString(),operandRight.type().toString(),MyWhileExt.Variable.VAR);
+					ext.saveInputVariable(operandRight.toString(),operandRight.type().toString(),Variable.VAR);
 				}
 			}
 			// For now, not saving unary or binary expressions - but their components instead
@@ -102,7 +103,7 @@ public class ExtractInputVariables extends NodeVisitor {
 				List<Node> reads = JavaLibModel.extractReads((Call)exp,ext);
 				for(Node node : reads){
 					if(node instanceof Receiver){
-						ext.saveInputVariable(node.toString(),((Receiver)node).type().toString(),MyWhileExt.Variable.FIELD_ACCESS);
+						ext.saveInputVariable(node.toString(),((Receiver)node).type().toString(),Variable.FIELD_ACCESS);
 					}
 					else if(node instanceof Expr){
 						extractReadsFromExpr((Expr)node);
@@ -113,7 +114,7 @@ public class ExtractInputVariables extends NodeVisitor {
 		else if(exp instanceof Field){
 			// If right hand side is a field load
 			for(MyWhileExt ext : extensions){
-				ext.saveInputVariable(exp.toString(), exp.type().toString(), ((Field) exp).target().type().toString(),MyWhileExt.Variable.FIELD_ACCESS);
+				ext.saveInputVariable(exp.toString(), exp.type().toString(), ((Field) exp).target().type().toString(),Variable.FIELD_ACCESS);
 			}
 		}
 		else if(exp instanceof ArrayAccess){
@@ -124,14 +125,14 @@ public class ExtractInputVariables extends NodeVisitor {
 				// Very naive. Should scan previous code. Locals may be holding constant values.
 				if(index instanceof Local){
 					// Save the array
-					ext.saveInputVariable(((ArrayAccess)exp).array().toString(), ((ArrayAccess)exp).array().type().toString(),MyWhileExt.Variable.ARRAY_ACCESS);
+					ext.saveInputVariable(((ArrayAccess)exp).array().toString(), ((ArrayAccess)exp).array().type().toString(),Variable.ARRAY_ACCESS);
 				
 					// Save the index (unless it is a constant)
-					ext.saveInputVariable(index.toString(), index.type().toString(),MyWhileExt.Variable.VAR);
+					ext.saveInputVariable(index.toString(), index.type().toString(),Variable.VAR);
 				}
 				else if(index instanceof Lit){
 					// Save the array
-					ext.saveInputVariable(((ArrayAccess)exp).array().toString(), ((ArrayAccess)exp).array().type().toString(),MyWhileExt.Variable.CONST_ARRAY_ACCESS);
+					ext.saveInputVariable(((ArrayAccess)exp).array().toString(), ((ArrayAccess)exp).array().type().toString(),Variable.CONST_ARRAY_ACCESS);
 				}
 			}
 		}
@@ -168,7 +169,7 @@ public class ExtractInputVariables extends NodeVisitor {
 				// begin extraction
 				MyWhileExt ext = (MyWhileExt)JavaExt.ext(n);
 				this.extensions.add(ext);
-				ext.saveInputVariable(((ExtendedFor) n).expr().toString(), ((ExtendedFor) n).expr().type().toString(), MyWhileExt.Variable.ARRAY_ACCESS);
+				ext.saveInputVariable(((ExtendedFor) n).expr().toString(), ((ExtendedFor) n).expr().type().toString(), Variable.ARRAY_ACCESS);
 			}
 		}
 		
@@ -208,7 +209,7 @@ public class ExtractInputVariables extends NodeVisitor {
 				List<Node> reads = JavaLibModel.extractReads((Call)n,ext);
 				for(Node node : reads){
 					if(node instanceof Receiver){
-						ext.saveInputVariable(node.toString(),((Receiver)node).type().toString(),MyWhileExt.Variable.FIELD_ACCESS);
+						ext.saveInputVariable(node.toString(),((Receiver)node).type().toString(),Variable.FIELD_ACCESS);
 					}
 					else if(node instanceof Expr){
 						extractReadsFromExpr((Expr)node);

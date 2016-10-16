@@ -1,3 +1,65 @@
 bit str_equal(int a, int b){
 	return a == b;
 }
+
+generator bit[32] genRandBitVec(){
+	bit[32] val;
+	val[0] = {| 0 | 1 |};
+	val[1] = {| 0 | 1 |};
+	val[2] = {| 0 | 1 |};
+	val[3] = {| 0 | 1 |};
+	val[4] = {| 0 | 1 |};
+	val[5] = {| 0 | 1 |};
+	val[6] = {| 0 | 1 |};
+	val[7] = {| 0 | 1 |};
+	val[8] = {| 0 | 1 |};
+	val[9] = {| 0 | 1 |};
+	val[10] = {| 0 | 1 |};
+	val[11] = {| 0 | 1 |};
+	val[12] = {| 0 | 1 |};
+	val[13] = {| 0 | 1 |};
+	val[14] = {| 0 | 1 |};
+	val[15] = {| 0 | 1 |};
+	val[16] = {| 0 | 1 |};
+	val[17] = {| 0 | 1 |};
+	val[18] = {| 0 | 1 |};
+	val[19] = {| 0 | 1 |};
+	val[20] = {| 0 | 1 |};
+	val[21] = {| 0 | 1 |};
+	val[22] = {| 0 | 1 |};
+	val[23] = {| 0 | 1 |};
+	val[24] = {| 0 | 1 |};
+	val[25] = {| 0 | 1 |};
+	val[26] = {| 0 | 1 |};
+	val[27] = {| 0 | 1 |};
+	val[28] = {| 0 | 1 |};
+	val[29] = {| 0 | 1 |};
+	val[30] = {| 0 | 1 |};
+	val[31] = {| 0 | 1 |};
+	return val;
+}
+
+int math_pow(int a, int b){
+	if(b == 0)
+		return 1;
+	if(b == 1)
+		return a;
+	if(b == 2)
+		return a*a;
+	if(b == 3)
+		return a*a*a;
+	if(b == 4)
+		return a*a*a*a;
+	if(b == 5)
+		return a*a*a*a*a;
+	if(b == 6)
+		return a*a*a*a*a*a;
+	if(b == 7)
+		return a*a*a*a*a*a*a;
+	if(b == 8)
+		return a*a*a*a*a*a*a*a;
+	if(b == 9)
+		return a*a*a*a*a*a*a*a*a;
+	if(b == 10)
+		return a*a*a*a*a*a*a*a*a*a;
+}

@@ -68,7 +68,7 @@ abstract public class CustomASTNode {
 			}
 		}
 		else  if(exp instanceof NewArray){
-			node = new ConstantNode(casper.Util.getInitVal(((NewArray) exp).baseType().toString()),ConstantNode.INTLIT);
+			node = new ConstantNode(casper.Util.getInitVal(((NewArray) exp).baseType().toString()),ConstantNode.ARRAYLIT);
 		}
 		else if(exp instanceof Cast){
 			node = convertToAST(((Cast) exp).expr());

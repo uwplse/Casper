@@ -18,10 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import casper.Configuration;
 import casper.JavaLibModel.SketchCall;
 import casper.types.CustomASTNode;
-import casper.visit.GenerateScaffold.KvPair;
-import casper.visit.GenerateScaffold.SketchVariable;
+import casper.types.Expression;
+import casper.types.Variable;
 import polyglot.ast.FieldDecl;
 import polyglot.ast.Node;
 
@@ -40,7 +41,7 @@ public class MyWhileExt extends MyStmtExt {
     // All variables that are used as indexes when accessing large
 	// data structures like arrays and collections. Must change with
 	// loop iterations.
-    public List<Variable> loopCounters = new ArrayList<Variable>();
+    public Set<Variable> loopCounters = new HashSet<Variable>();
 	
 	// Input variables are variables that were declared outside of the
 	// loop body, but were read within the loop. They are thus inputs
@@ -86,7 +87,7 @@ public class MyWhileExt extends MyStmtExt {
    	public ArrayList<String> globalDataTypes;
 
    	// Use to save the fields of the user defined data types
-	public Map<String, Set<FieldDecl>> globalDataTypesFields;
+	public Map<String, Set<Variable>> globalDataTypesFields;
  	
 	// Save the initial values of input / output variables
 	public Map<String, CustomASTNode> initVals = new HashMap<String,CustomASTNode>();
@@ -111,11 +112,11 @@ public class MyWhileExt extends MyStmtExt {
 	public boolean hasInputData = false;
 	public List<Variable> inputDataCollections = new ArrayList<Variable>();
 	
+	// Input data set. Generated from inputDataCollections
+	public Variable inputDataSet = null;
 	
-	
-	
-	
-	
+	// Flags to enable disable code generation pass
+	public Map<String,Boolean> generateCode = new HashMap<String,Boolean>();
     
     // We perform an alias analysis. If two variables are aliases, then
     // modifying one should change the other too. Our generated programs
@@ -123,265 +124,36 @@ public class MyWhileExt extends MyStmtExt {
     // Note: Not used anywhere currently
     public Map<Variable, Set<Variable>> aliases = new HashMap<Variable, Set<Variable>>();
 	
-	// Map Emits
-	public Map<String,List<KvPair>> mapEmits = null;
+
+    
+    
+    
+    
+    
+    
+    // Map Emits
+	//public Map<String,List<KvPair>> mapEmits = null;
 	
 	// Reduce Expression
 	public String reduceExp = null;
 
 	public String mapKeyType = "";
 	
-	public Map<String,Boolean> generateCode = new HashMap<String,Boolean>();	
+		
 	
-	
-	
-	
-	
-	
-   	// Custom class to represent an expression.
-    public class Expression{
-    	String exp;
-    	String expType;
-    	
-    	Expression(String e, String t){
-    		exp = e;
-    		expType = t;
-    	}
-    	
-    	@Override
-    	public String toString(){
-    		return "{" + exp + " : " + expType + "}";
-    	}
-    	
-    	@Override
-    	public boolean equals(Object obj){
-    		if(obj != null && obj instanceof Expression){
-    			Expression inp = (Expression)obj;
-    			return this.exp.equals(inp.exp) && this.expType.equals(inp.expType);
-    		}
-    		
-    		return false;
-    	}
-    	
-    	@Override
-    	public int hashCode(){
-    		return 0;
-    	}
-    }
-    
-    // Custom class to represent a variable
-    public class Variable{
-    	public String varNameOrig;
-    	public String varName;
-    	public String varType;
-    	public String containerType;
-    	public int category;
-    	public boolean bitVec = false;
-    	
-    	public static final int VAR = 0;
-    	public static final int FIELD_ACCESS = 1;
-    	public static final int ARRAY_ACCESS = 2;
-    	public static final int CONST_ARRAY_ACCESS = 3;
-    	
-    	public Variable(String n, String t, String c, int cat){
-    		varNameOrig = n;
-    		varName = n.replace("$", "");
-    		varType = t;
-    		containerType = c;
-    		category = cat;
-    	}
-    	
-    	public String translateToSketchType(String templateType) {
-    		templateType = templateType.substring(templateType.indexOf("<")+1,templateType.lastIndexOf(">"));
-    		
-    		int depth = 0;
-    		int i=0; 
-    		while(i<templateType.length()){
-    			if(templateType.charAt(i) == ',' && depth == 0){
-    				break;
-    			}
-    			else if(templateType.charAt(i) == '<'){
-    				depth++;
-    			}
-    			else if(templateType.charAt(i) == '>'){
-    				depth--;
-    			}
-    			i++;
-    		}
-    		
-    		String sketchType = "";
-    		
-    		if(i < templateType.length()){
-    			String p1 = templateType.substring(0, i);
-    			String p2 = templateType.substring(i+1, templateType.length());
-    			
-    			if(p1.equals("java.lang.String")){
-    				sketchType = "Int";
-    			}
-    			else if(p1.equals("java.lang.Integer")){
-    				sketchType = "Int";
-    			}
-    			
-    			if(p2.equals("java.lang.String")){
-    				sketchType += "Int";
-    			}
-    			else if(p2.equals("java.lang.Integer")){
-    				sketchType += "Int";
-    			}
-    		}
-    		else{
-    			if(templateType.equals("java.lang.String")){
-    				sketchType = "Int";
-    			}
-    			else if(templateType.equals("java.lang.Integer")){
-    				sketchType = "Int";
-    			}
-    		}
-    		
-    		return sketchType;
-    	}
-    	
-    	private String getSketchType(String vtype){
-    		String targetType = vtype;
-    		String templateType = vtype;
-    		int end = targetType.indexOf('<');
-    		if(end != -1){
-    			targetType = targetType.substring(0, end);
-    			
-    			switch(targetType){
-    				case "java.util.List":
-    				case "java.util.ArrayList":
-    					templateType = templateType.substring(end+1,templateType.length()-1);
-    					this.category = Variable.ARRAY_ACCESS;
-    					return casper.Util.getSketchTypeFromRaw(this.getSketchType(templateType))+"[]";
-    				case "java.util.Map":
-    					templateType = templateType.substring(end+1,templateType.length()-1);
-        				String[] subTypes = templateType.split(",");
-        				switch(subTypes[0]){
-	        				case "java.lang.Integer":
-	        				case "java.lang.String":
-	        				case "java.lang.Double":
-	        				case "java.lang.Float":
-	        				case "java.lang.Long":
-	        				case "java.lang.Short":
-	        				case "java.lang.Byte":
-	        				case "java.lang.BigInteger":
-	        					this.category = Variable.ARRAY_ACCESS;
-	        					return casper.Util.getSketchTypeFromRaw(this.getSketchType(subTypes[1]))+"[]";
-	        				default:
-	        					templateType = translateToSketchType(templateType);
-	        					return templateType + "Map";
-        				}
-    				default:
-    					String[] components = vtype.split("\\.");
-    	        		return casper.Util.getSketchTypeFromRaw(components[components.length-1]);
-    			}
-    		}
-    		
-    		String[] components = vtype.split("\\.");
-    		return casper.Util.getSketchTypeFromRaw(components[components.length-1]);
-    	}
-    	
-    	public String getSketchType(){		
-    		return this.getSketchType(varType);
-    	}
-    	
-    	public String getOriginalType(){		
-    		String targetType = varType;
-    		String templateType = varType;
-    		int end = targetType.indexOf('<');
-    		
-    		if(end != -1){
-    			targetType = targetType.substring(0, end);
-    			
-    			switch(targetType){
-    				case "java.util.List":
-    				case "java.util.ArrayList":
-    					templateType = templateType.substring(end+1,templateType.length()-1);
-    					String[] components = templateType.split("\\.");
-    					this.category = Variable.ARRAY_ACCESS;
-    					return components[components.length-1]+"[]";
-    				case "java.util.Map":
-    					templateType = templateType.substring(end+1,templateType.length()-1);
-        				String[] subTypes = templateType.split(",");
-        				switch(subTypes[0]){
-	        				case "java.lang.Integer":
-	        				case "java.lang.String":
-	        				case "java.lang.Double":
-	        				case "java.lang.Float":
-	        				case "java.lang.Long":
-	        				case "java.lang.Short":
-	        				case "java.lang.Byte":
-	        				case "java.lang.BigInteger":
-	        					this.category = Variable.ARRAY_ACCESS;
-	        					return subTypes[1]+"[]";
-	        				default:
-	        					templateType = translateToSketchType(templateType);
-	        					return templateType + "Map";
-        				}
-    				default:
-    					String[] components2 = varType.split("\\.");
-    	        		return components2[components2.length-1];
-    			}
-    		}
-    		
-    		String[] components = varType.split("\\.");
-    		return components[components.length-1];
-    	}
-    	
-    	// Should only be called for input data set variable
-    	public String getRDDType(){
-    		String targetType = varType;
-    		String templateType = varType;
-    		int end = targetType.indexOf('<');
-    		if(end != -1){
-    			targetType = targetType.substring(0, end);
-    			
-    			switch(targetType){
-    				case "java.util.List":
-    				case "java.util.ArrayList":
-    					return templateType.substring(end+1,templateType.length()-1);
-    				default:
-    					System.err.println("Currently not supported: "+targetType+" (For input data type)");
-    					return varType;
-    			}
-    		}
-    		
-    		return varType;
-    	}
-    	
-    	@Override
-    	public String toString(){
-    		return "{[" + category + "] " + varName + " : " + containerType + " -> " + varType + "}";
-    	}
-    	
-    	@Override
-    	public boolean equals(Object obj){
-    		if(obj != null && obj instanceof Variable){
-    			Variable inp = (Variable)obj;
-    			return this.varName.equals(inp.varName);
-    		}
-    		
-    		return false;
-    	}
-    	
-    	@Override
-    	public int hashCode(){
-    		return 0;
-    	}
-    }
+   	
     
     // Save an loop counter variable.
     public void saveLoopCounterVariable(String varName, String varType, int category){
-    	if(category == MyWhileExt.Variable.VAR){
+    	if(category == Variable.VAR){
     		Variable var = new Variable(varName,varType,"",category);
         	loopCounters.add(var);
     	}
-    	else if(category == MyWhileExt.Variable.FIELD_ACCESS){
+    	else if(category == Variable.FIELD_ACCESS){
     		Variable var = new Variable(varName,varType,"",category);
     		loopCounters.add(var);
     	}
-    	else if(category == MyWhileExt.Variable.ARRAY_ACCESS){
+    	else if(category == Variable.ARRAY_ACCESS){
     		Variable var = new Variable(varName,varType,"",category);
     		loopCounters.add(var);
     	}
@@ -395,18 +167,18 @@ public class MyWhileExt extends MyStmtExt {
     	if(loopCounters.contains(var))
     		return;
     	
-    	if(category == MyWhileExt.Variable.VAR){
+    	if(category == Variable.VAR){
     		if(!localVars.contains(var))
         		inputVars.add(var);
     	}
-    	else if(category == MyWhileExt.Variable.FIELD_ACCESS){
+    	else if(category == Variable.FIELD_ACCESS){
     		String rootContainerName = varName.split("\\.")[0]; 
     		Variable rootContainer = new Variable(rootContainerName,"", "",category);
     		if(!localVars.contains(rootContainer)){
     			pendingInputVars.add(var);
     		}
     	}
-    	else if(category == MyWhileExt.Variable.ARRAY_ACCESS){
+    	else if(category == Variable.ARRAY_ACCESS){
     		if(!localVars.contains(var)){
         		inputVars.add(var);
     		}
@@ -458,7 +230,7 @@ public class MyWhileExt extends MyStmtExt {
     
     // Save a local variable.
     public void saveLocalVariable(String varName, String varType){
-    	localVars.add(new Variable(varName,varType,"",MyWhileExt.Variable.VAR));
+    	localVars.add(new Variable(varName,varType,"",Variable.VAR));
     }
     
     // Save an output variable which is a field of a class.
@@ -469,13 +241,13 @@ public class MyWhileExt extends MyStmtExt {
     	if(loopCounters.contains(var))
     		return;
     	
-    	if(category == MyWhileExt.Variable.VAR){
+    	if(category == Variable.VAR){
         	if(!localVars.contains(var)){
         		inputVars.remove(var);
         		outputVars.add(var);
         	}
     	}
-    	else if(category == MyWhileExt.Variable.FIELD_ACCESS){
+    	else if(category == Variable.FIELD_ACCESS){
     		String rootContainerName = varName.split("\\.")[0]; 
     		Variable rootContainer = new Variable(rootContainerName,"", "",category);
     		if(!localVars.contains(rootContainer)){
@@ -483,7 +255,7 @@ public class MyWhileExt extends MyStmtExt {
     			outputVars.add(var);
     		}
     	}
-    	else if(category == MyWhileExt.Variable.ARRAY_ACCESS){
+    	else if(category == Variable.ARRAY_ACCESS){
         	if(!localVars.contains(var)){
         		inputVars.remove(var);
         		outputVars.add(var);
