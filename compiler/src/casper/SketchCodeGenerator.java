@@ -847,19 +847,6 @@ public class SketchCodeGenerator {
 		
 		// Grammar options
 		List<String> exprs = new ArrayList<String>();
-		Map<String,Integer> constants = new HashMap<String,Integer>();
-		getConstantsRequired(	type,
-								ext.binaryOperators,
-								ext.unaryOperators,
-								ext.methodOperators,
-								constants,
-								terminalNames,
-								Configuration.recursionDepth
-							);
-		if(type.equals("bit") && !constants.containsKey(type)){
-			constants.put(type, 1);
-		}
-			
 		getMapExpressions(	type,
 							ext.binaryOperators,
 							ext.unaryOperators,
@@ -882,6 +869,20 @@ public class SketchCodeGenerator {
 			terminalOptions.put(ttype, "");
 			for(int i=0; i<terminals.get(ttype).size(); i++){
 				terminalOptions.put(ttype, terminalOptions.get(ttype) + terminals.get(ttype).get(i) + " | ");
+			}	
+			switch(ttype){
+				case "int":
+					terminalOptions.put(ttype, terminalOptions.get(ttype) + "?? | ");
+					break;
+				case "bit":
+					terminalOptions.put(ttype, terminalOptions.get(ttype) + "true  | false | ");
+					break;
+				case "bit[32]":
+					terminalOptions.put(ttype, terminalOptions.get(ttype) + "casper_genRandBitVec()" + " | ");
+					break;
+				case "String":
+					terminalOptions.put(ttype, terminalOptions.get(ttype) + "?? | ");
+					break;
 			}
 			terminalOptions.put(ttype,terminalOptions.get(ttype).substring(0,terminalOptions.get(ttype).length()-3));
 		}
@@ -897,49 +898,16 @@ public class SketchCodeGenerator {
 			}
 		}
 		
-		Map<String, List<String>> constantTerminals = new HashMap<String, List<String>>();
-		for(String cType : constants.keySet()){
-			for(int i=0; i<constants.get(cType); i++){
-				String ctypeName = cType.toLowerCase();
-				if(cType == "bit[32]")
-					ctypeName = "bitInt";
-				
-				switch(cType){
-					case "int":
-						terminalsCode += cType+" _"+ctypeName+"_terminal"+(termIndex.get(cType))+" = ??;\n\t";
-						break;
-					case "bit":
-						terminalsCode += cType+" _"+ctypeName+"_terminal"+(termIndex.get(cType))+" = {| true | false |};\n\t";
-						break;
-					case "bit[32]":
-						terminalsCode += cType+" _"+ctypeName+"_terminal"+(termIndex.get(cType))+" = casper_genRandBitVec();\n\t";
-						break;
-					case "String":
-						terminalsCode += cType+" _"+ctypeName+"_terminal"+(termIndex.get(cType))+" = ??;\n\t";
-						break;
-				}
-				if(!constantTerminals.containsKey(cType)) constantTerminals.put(cType, new ArrayList<String>());
-				constantTerminals.get(cType).add("_"+ctypeName+"_terminal"+(termIndex.get(cType)));
-				termIndex.put(cType, termIndex.get(cType)+1);
-			}
-		}
-		
 		/******** Generate expressions code *******/
 		String expressions = "int c = ??("+(int)Math.ceil(Math.log(exprs.size())/Math.log(2))+");\n\t";
 		int c = 0;
 		for(String expr : exprs){
-			for(String ttype : constants.keySet()){
+			for(String ttype : terminals.keySet()){
 				String ttypeName = ttype.toLowerCase();
 				if(ttypeName == "bit[32]")
 					ttypeName = "bitInt";			
 					
 				int i=0;
-				while(expr.contains("<"+ttype+"-const>")){
-					int st_ind = expr.indexOf("<"+ttype+"-const>");
-					expr = expr.substring(0,st_ind) + constantTerminals.get(ttype).get(i++) + expr.substring(st_ind+("<"+ttype+"-const>").length(),expr.length());
-				}
-				
-				i=0;
 				while(expr.contains("<"+ttype+"-term>")){
 					int st_ind = expr.indexOf("<"+ttype+"-term>");
 					expr = expr.substring(0,st_ind) + terminalNames.get(ttype).get(i++) + expr.substring(st_ind+("<"+ttype+"-term>").length(),expr.length());
@@ -953,102 +921,6 @@ public class SketchCodeGenerator {
 		
 		return generator;
 	}
-	
-	private static void getConstantsRequired(String type, Set<String> binaryOps, Set<String> unaryOps, Set<SketchCall> methodOps, Map<String, Integer> constants, Map<String, List<String>> terminals, int depth) {
-		if(depth == 0){
-			return;
-		}
-		if(depth == 1){
-			constants.put(type, 1);
-			return;
-		}
-		else{
-			for(String op : binaryOps){
-				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
-					if(type.equals("bit")){
-						if(casper.Util.operandTypes(op) == casper.Util.INT_ONLY){
-							Map<String,Integer> subConstants = new HashMap<String,Integer>();
-							getConstantsRequired("int",binaryOps,unaryOps,methodOps,subConstants,terminals,depth-1);
-							for(String ctype : subConstants.keySet()){
-								if(!constants.containsKey(ctype)) constants.put(ctype, 0);
-								if(depth == 2)
-									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
-								else
-									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
-							}
-						}
-						else if(casper.Util.operandTypes(op) == casper.Util.ALL_TYPES){
-							for(String ttype : terminals.keySet()){
-								Map<String,Integer> subConstants = new HashMap<String,Integer>();
-								getConstantsRequired(ttype,binaryOps,unaryOps,methodOps,subConstants,terminals,depth-1);
-								for(String ctype : subConstants.keySet()){
-									if(!constants.containsKey(ctype)) constants.put(ctype, 0);
-									if(depth == 2)
-										constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
-									else
-										constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
-								}
-							}
-						}
-					}
-					else if(type.equals("bit[32]")){
-						if(casper.Util.operandTypes(op) == casper.Util.VEC_ONLY){
-							Map<String,Integer> subConstants = new HashMap<String,Integer>();
-							getConstantsRequired(type,binaryOps,unaryOps,methodOps,subConstants,terminals,depth-1);
-							for(String ctype : subConstants.keySet()){
-								if(!constants.containsKey(ctype)) constants.put(ctype, 0);
-								if(depth == 2)
-									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
-								else
-									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
-							}
-						}
-						else if(casper.Util.operandTypes(op) == casper.Util.VEC_INT){
-							Map<String,Integer> subConstants = new HashMap<String,Integer>();
-							getConstantsRequired(type,binaryOps,unaryOps,methodOps,subConstants,terminals,depth-1);
-							getConstantsRequired("int",binaryOps,unaryOps,methodOps,subConstants,terminals,depth-1);
-							for(String ctype : subConstants.keySet()){
-								if(!constants.containsKey(ctype)) constants.put(ctype, 0);
-								if(depth == 2)
-									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
-								else
-									constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
-							}
-						}
-					}
-					else{
-						Map<String,Integer> subConstants = new HashMap<String,Integer>();
-						getConstantsRequired(type,binaryOps,unaryOps,methodOps,subConstants,terminals,depth-1);
-						for(String ctype : subConstants.keySet()){
-							if(!constants.containsKey(ctype)) constants.put(ctype, 0);
-							if(depth == 2)
-								constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
-							else
-								constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
-						}
-					}
-				}
-			}
-			for(String op : unaryOps){
-				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
-					Map<String,Integer> subConstants = new HashMap<String,Integer>();
-					getConstantsRequired(type,binaryOps,unaryOps,methodOps,subConstants,terminals,depth-1);
-					for(String ctype : subConstants.keySet()){
-						if(!constants.containsKey(ctype)) constants.put(ctype, 0);
-						if(depth == 2)
-							constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)));
-						else
-							constants.put(ctype, Math.max(constants.get(ctype),subConstants.get(ctype)*2));
-					}
-				}
-			}
-			for(SketchCall op : methodOps){
-				// TODO
-			}
-			
-			return;
-		}
-	}
 
 	
 	
@@ -1058,15 +930,10 @@ public class SketchCodeGenerator {
 		}
 		if(depth == 1){
 			exprs.add("<"+type+"-term>");
-			if(!type.equals("bit"))
-				exprs.add("<"+type+"-const>");
 			return;
 		}
 		else{
 			exprs.add("<"+type+"-term>");
-			
-			if(!type.equals("bit") || depth == Configuration.recursionDepth)
-				exprs.add("<"+type+"-const>");
 			
 			for(String op : binaryOps){
 				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
@@ -1081,10 +948,6 @@ public class SketchCodeGenerator {
 											continue;
 										if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
 											continue;
-										boolean rhsIsConstant = exprRight.equals("<"+type+"-const>");
-										boolean lhsIsConstant = exprLeft.equals("<"+type+"-const>");
-										if(lhsIsConstant || rhsIsConstant)
-											continue;
 										exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 									}
 								}
@@ -1096,10 +959,6 @@ public class SketchCodeGenerator {
 							for(String exprLeft : subExprs){
 								for(String exprRight : subExprs){
 									if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
-										continue;
-									boolean rhsIsConstant = exprRight.equals("<int-const>");
-									boolean lhsIsConstant = exprLeft.equals("<int-const>");
-									if(depth == 2 && lhsIsConstant && rhsIsConstant)
 										continue;
 									exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 								}
@@ -1115,10 +974,6 @@ public class SketchCodeGenerator {
 											continue;
 										if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
 											continue;
-										boolean rhsIsConstant = exprRight.equals("<"+ttype+"-const>");
-										boolean lhsIsConstant = exprLeft.equals("<"+ttype+"-const>");
-										if(lhsIsConstant || rhsIsConstant)
-											continue;
 										exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 									}
 								}
@@ -1136,10 +991,6 @@ public class SketchCodeGenerator {
 											continue;
 										if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
 											continue;
-										boolean rhsIsConstant = exprRight.equals("<"+type+"-const>");
-										boolean lhsIsConstant = exprLeft.equals("<"+type+"-const>");
-										if(depth == 2 && rhsIsConstant && lhsIsConstant)
-											continue;
 										exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 									}
 								}
@@ -1153,10 +1004,6 @@ public class SketchCodeGenerator {
 							for(String exprLeft : lhsSubExprs){
 								for(String exprRight : rhsSubExprs){
 									if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
-										continue;
-									boolean rhsIsConstant = exprRight.equals("<int-const>");
-									boolean lhsIsConstant = exprLeft.equals("<"+type+"-const>");
-									if(lhsIsConstant && rhsIsConstant)
 										continue;
 									exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 								}
@@ -1173,10 +1020,6 @@ public class SketchCodeGenerator {
 										continue;
 									if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
 										continue;
-									boolean rhsIsConstant = exprRight.equals("<"+type+"-const>");
-									boolean lhsIsConstant = exprLeft.equals("<"+type+"-const>");
-									if(rhsIsConstant && lhsIsConstant && depth == 2)
-										continue;
 									exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 								}
 							}
@@ -1187,10 +1030,6 @@ public class SketchCodeGenerator {
 							for(String exprLeft : subExprs){
 								for(String exprRight : subExprs){
 									if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
-										continue;
-									boolean rhsIsConstant = exprRight.equals("<"+type+"-const>");
-									boolean lhsIsConstant = exprLeft.equals("<"+type+"-const>");
-									if(rhsIsConstant && lhsIsConstant && depth == 2)
 										continue;
 									exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 								}
@@ -1393,19 +1232,6 @@ public class SketchCodeGenerator {
 		
 		// Grammar options
 		List<String> exprs = new ArrayList<String>();
-		Map<String,Integer> constants = new HashMap<String,Integer>();
-		getConstantsRequired(	type,
-								ext.binaryOperators,
-								ext.unaryOperators,
-								ext.methodOperators,
-								constants,
-								terminalNames,
-								Configuration.recursionDepth
-							);
-		if(type.equals("bit") && !constants.containsKey(type)){
-			constants.put(type, 1);
-		}
-		
 		getMapExpressions(	type,
 							ext.binaryOperators,
 							ext.unaryOperators,
@@ -1425,6 +1251,20 @@ public class SketchCodeGenerator {
 			terminalOptions.put(ttype, "");
 			for(int i=0; i<terminals.get(ttype).size(); i++){
 				terminalOptions.put(ttype, terminalOptions.get(ttype) + terminals.get(ttype).get(i) + " | ");
+			}	
+			switch(ttype){
+				case "int":
+					terminalOptions.put(ttype, terminalOptions.get(ttype) + "?? | ");
+					break;
+				case "bit":
+					terminalOptions.put(ttype, terminalOptions.get(ttype) + "true  | false | ");
+					break;
+				case "bit[32]":
+					terminalOptions.put(ttype, terminalOptions.get(ttype) + "casper_genRandBitVec()" + " | ");
+					break;
+				case "String":
+					terminalOptions.put(ttype, terminalOptions.get(ttype) + "?? | ");
+					break;
 			}
 			terminalOptions.put(ttype,terminalOptions.get(ttype).substring(0,terminalOptions.get(ttype).length()-3));
 		}
@@ -1440,48 +1280,16 @@ public class SketchCodeGenerator {
 			}
 		}
 		
-		Map<String, List<String>> constantTerminals = new HashMap<String, List<String>>();
-		for(String cType : constants.keySet()){
-			for(int i=0; i<constants.get(cType); i++){
-				String ctypeName = cType.toLowerCase();
-				if(cType == "bit[32]")
-					ctypeName = "bitInt";
-				
-				switch(cType){
-					case "int":
-						terminalsCode += cType+" _"+ctypeName+"_terminal"+(termIndex.get(cType))+" = ??;\n\t";
-						break;
-					case "bit":
-						terminalsCode += cType+" _"+ctypeName+"_terminal"+(termIndex.get(cType))+" = {| true | false |};\n\t";
-						break;
-					case "bit[32]":
-						terminalsCode += cType+" _"+ctypeName+"_terminal"+(termIndex.get(cType))+" = casper_genRandBitVec();\n\t";
-						break;
-					case "String":
-						terminalsCode += cType+" _"+ctypeName+"_terminal"+(termIndex.get(cType))+" = ??;\n\t";
-						break;
-				}
-				if(!constantTerminals.containsKey(cType)) constantTerminals.put(cType, new ArrayList<String>());
-				constantTerminals.get(cType).add("_"+ctypeName+"_terminal"+(termIndex.get(cType)));
-				termIndex.put(cType, termIndex.get(cType)+1);
-			}
-		}
-		
-		/******** Generate expressions code *******/
+				/******** Generate expressions code *******/
 		String expressions = "int c = ??("+(int)Math.ceil(Math.log(exprs.size())/Math.log(2))+");\n\t";
 		int c = 0;
 		for(String expr : exprs){
-			for(String ttype : constants.keySet()){
+			for(String ttype : terminals.keySet()){
 				String ttypeName = ttype.toLowerCase();
 				if(ttypeName == "bit[32]")
 					ttypeName = "bitInt";			
 					
 				int i=0;
-				while(expr.contains("<"+ttype+"-const>")){
-					int st_ind = expr.indexOf("<"+ttype+"-const>");
-					expr = expr.substring(0,st_ind) + constantTerminals.get(ttype).get(i++) + expr.substring(st_ind+("<"+ttype+"-const>").length(),expr.length());
-				}
-				i=0;
 				while(expr.contains("<"+ttype+"-term>")){
 					int st_ind = expr.indexOf("<"+ttype+"-term>");
 					expr = expr.substring(0,st_ind) + terminalNames.get(ttype).get(i++) + expr.substring(st_ind+("<"+ttype+"-term>").length(),expr.length());

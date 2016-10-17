@@ -83,29 +83,38 @@ bit loopInvariant(int[3] data, int second, int second0, int first, int first0, i
 /* MapReduce Implementation                                                   */
 
 generator int intMapGenerator(int[3] data, int i){
-	int _int_terminal0 = {| i | data[i] | casperConst0 | casperConst1 |};
-	int _int_terminal1 = {| i | data[i] | casperConst0 | casperConst1 |};
-	int _int_terminal2 = ??;
+	int _int_terminal0 = {| i | data[i] | casperConst0 | casperConst1 | ?? |};
+	int _int_terminal1 = {| i | data[i] | casperConst0 | casperConst1 | ?? |};
+	int _int_terminal2 = {| i | data[i] | casperConst0 | casperConst1 | ?? |};
+	int _int_terminal3 = {| i | data[i] | casperConst0 | casperConst1 | ?? |};
 	int c = ??(2);
 	if(c==0){ return _int_terminal0; }
-	if(c==1){ return _int_terminal2; }
-	if(c==2){ return (_int_terminal0 + _int_terminal1); }
-	if(c==3){ return (_int_terminal0 + _int_terminal2); }
+	if(c==1){ return (_int_terminal0 + _int_terminal1); }
+	if(c==2){ return (_int_terminal0 + (_int_terminal1 + _int_terminal2)); }
+	if(c==3){ return ((_int_terminal0 + _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
 	
 }
 
 generator bit bitMapGenerator(int[3] data, int i){
-	bit _bit_terminal0 = {| loop0 |};
-	bit _bit_terminal1 = {| loop0 |};
-	int _int_terminal0 = {| i | data[i] | casperConst0 | casperConst1 |};
-	int _int_terminal1 = {| i | data[i] | casperConst0 | casperConst1 |};
-	bit _bit_terminal2 = {| true | false |};
-	int _int_terminal2 = ??;
-	int c = ??(2);
+	bit _bit_terminal0 = {| loop0 | true  | false |};
+	bit _bit_terminal1 = {| loop0 | true  | false |};
+	bit _bit_terminal2 = {| loop0 | true  | false |};
+	bit _bit_terminal3 = {| loop0 | true  | false |};
+	int _int_terminal0 = {| i | data[i] | casperConst0 | casperConst1 | ?? |};
+	int _int_terminal1 = {| i | data[i] | casperConst0 | casperConst1 | ?? |};
+	int _int_terminal2 = {| i | data[i] | casperConst0 | casperConst1 | ?? |};
+	int _int_terminal3 = {| i | data[i] | casperConst0 | casperConst1 | ?? |};
+	int c = ??(4);
 	if(c==0){ return _bit_terminal0; }
-	if(c==1){ return _bit_terminal2; }
-	if(c==2){ return (_bit_terminal0 == _bit_terminal1); }
-	if(c==3){ return (_int_terminal0 == _int_terminal1); }
+	if(c==1){ return (_bit_terminal0 == _bit_terminal1); }
+	if(c==2){ return (_bit_terminal0 == (_bit_terminal1 == _bit_terminal2)); }
+	if(c==3){ return (_bit_terminal0 == (_int_terminal0 == _int_terminal1)); }
+	if(c==4){ return ((_bit_terminal0 == _bit_terminal1) == (_bit_terminal2 == _bit_terminal3)); }
+	if(c==5){ return ((_bit_terminal0 == _bit_terminal1) == (_int_terminal0 == _int_terminal1)); }
+	if(c==6){ return ((_int_terminal0 == _int_terminal1) == (_int_terminal2 == _int_terminal3)); }
+	if(c==7){ return (_int_terminal0 == _int_terminal1); }
+	if(c==8){ return (_int_terminal0 == (_int_terminal1 + _int_terminal2)); }
+	if(c==9){ return ((_int_terminal0 + _int_terminal1) == (_int_terminal2 + _int_terminal3)); }
 	
 }
 
@@ -121,14 +130,15 @@ void map (int[3] data, int i, ref int[CASPER_NUM_OUTVARS] keys0, ref int[CASPER_
 }
 
 generator int intReduceGenerator(int val1, int val2){
-	int _int_terminal0 = {| val1 | val2 | casperConst0 | casperConst1 |};
-	int _int_terminal1 = {| val1 | val2 | casperConst0 | casperConst1 |};
-	int _int_terminal2 = ??;
+	int _int_terminal0 = {| val1 | val2 | casperConst0 | casperConst1 | ?? |};
+	int _int_terminal1 = {| val1 | val2 | casperConst0 | casperConst1 | ?? |};
+	int _int_terminal2 = {| val1 | val2 | casperConst0 | casperConst1 | ?? |};
+	int _int_terminal3 = {| val1 | val2 | casperConst0 | casperConst1 | ?? |};
 	int c = ??(2);
 	if(c==0){ return _int_terminal0; }
-	if(c==1){ return _int_terminal2; }
-	if(c==2){ return (_int_terminal0 + _int_terminal1); }
-	if(c==3){ return (_int_terminal0 + _int_terminal2); }
+	if(c==1){ return (_int_terminal0 + _int_terminal1); }
+	if(c==2){ return (_int_terminal0 + (_int_terminal1 + _int_terminal2)); }
+	if(c==3){ return ((_int_terminal0 + _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
 	
 }
 

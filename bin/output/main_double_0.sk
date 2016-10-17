@@ -3,31 +3,48 @@
 
 include "output/utils.sk";
 include "output/StatsUtilList.sk";
+include "output/Point.sk";
 
 /******************************************************************************/
 /* Global Control Variables                                                   */
 int CASPER_NUM_OUTVARS = 1;
 
 // Input variables decl
-int yMean;
+int offset;
+int gradient;
 bit loop0;
 
 /******************************************************************************/
 /* Main function to verify the two results generated are equal                */
 
-harness void main(int[6] intSet){
+harness void main(int[13] intSet){
 	// Initialize output variables.
-	int ssr0 = 0;
-	int ssr = intSet[5];
+	int[4] fit0;
+	fit0[0] = 0;
+	fit0[1] = 0;
+	fit0[2] = 0;
+	fit0[3] = 0;
+	int[4] fit;
+	fit[0] = intSet[12];
+	fit[1] = intSet[11];
+	fit[2] = intSet[10];
+	fit[3] = intSet[9];
 
 	// Initialize input data and variables
-    int[3] fit;
-	fit[0] = intSet[3];
-	fit[1] = intSet[2];
-	fit[2] = intSet[1];
+    Point[3] data;
+	data[0] = new Point();
+	data[0].y = intSet[6];
+	data[0].x = intSet[5];
+	data[1] = new Point();
+	data[1].y = intSet[4];
+	data[1].x = intSet[3];
+	data[2] = new Point();
+	data[2].y = intSet[2];
+	data[2].x = intSet[1];
 	
     // Initialize input broadcast variables
-    yMean = intSet[4];
+    offset = intSet[8];
+	gradient = intSet[7];
 	loop0 = false;
 	
     // Initialize loop counters
@@ -35,177 +52,141 @@ harness void main(int[6] intSet){
 	int i = intSet[0];
 
 	// Verification code
-	assert loopInvariant(fit,0,0,0,0);
-	if(loopInvariant(fit,ssr,0,i,0) && (i<3)) {
-		int ind_ssr = ssr;
-		ind_ssr = (ssr+((fit[i]-yMean)*(fit[i]-yMean)));
+	assert loopInvariant(data,0,0,0,0);
+	if(loopInvariant(data,fit,0,i,0) && (i<3)) {
+		int[4] ind_fit = fit;
+		ind_fit[i] = ((gradient*data[i].x)+offset);
 		int ind_i = i;
 		ind_i = (i+1);
-		assert loopInvariant(fit,ind_ssr,0,ind_i,0);
+		assert loopInvariant(data,ind_fit,0,ind_i,0);
 	}
-	if(loopInvariant(fit,ssr,0,i,0) && !(i<3)) {
-		assert postCondition(fit,ssr,0,i,0);
+	if(loopInvariant(data,fit,0,i,0) && !(i<3)) {
+		assert postCondition(data,fit,0,i,0);
 	}
 }
 
 /******************************************************************************/
 /* Verification functions                                                     */
 
-bit postCondition(int[3] fit, int ssr, int ssr0, int i, int i0){
-	int [1] casper_r;
-	casper_r[0] = ssr;
-	return reduce(fit, ssr, ssr0, i, i0) == casper_r;
+bit postCondition(Point[3] data, int[4] fit, int[4] fit0, int i, int i0){
+	int [4] casper_r;
+	casper_r[0] = fit[0];
+	casper_r[1] = fit[1];
+	casper_r[2] = fit[2];
+	casper_r[3] = fit[3];
+	return reduce(data, fit, fit0, i, i0) == casper_r;
 }
 
-bit loopInvariant(int[3] fit, int ssr, int ssr0, int i, int i0){
-	int [1] casper_r;
-	casper_r[0] = ssr;
-	return 0 <= i && i <= 3 && reduce(fit, ssr, ssr0, i, i0) == casper_r;
+bit loopInvariant(Point[3] data, int[4] fit, int[4] fit0, int i, int i0){
+	int [4] casper_r;
+	casper_r[0] = fit[0];
+	casper_r[1] = fit[1];
+	casper_r[2] = fit[2];
+	casper_r[3] = fit[3];
+	return 0 <= i && i <= 3 && reduce(data, fit, fit0, i, i0) == casper_r;
 }
 
 /******************************************************************************/
 /* MapReduce Implementation                                                   */
 
-generator int intMapGenerator(int[3] fit, int i){
-	int _int_terminal0 = {| i | yMean | fit[i] |};
-	int _int_terminal1 = {| i | yMean | fit[i] |};
-	int _int_terminal2 = {| i | yMean | fit[i] |};
-	int _int_terminal3 = {| i | yMean | fit[i] |};
-	int _int_terminal4 = ??;
-	int _int_terminal5 = ??;
-	int c = ??(6);
+generator int intMapGenerator(Point[3] data, int i){
+	int _int_terminal0 = {| i | offset | gradient | data[i].y | data[i].x | ?? |};
+	int _int_terminal1 = {| i | offset | gradient | data[i].y | data[i].x | ?? |};
+	int _int_terminal2 = {| i | offset | gradient | data[i].y | data[i].x | ?? |};
+	int _int_terminal3 = {| i | offset | gradient | data[i].y | data[i].x | ?? |};
+	int c = ??(4);
 	if(c==0){ return _int_terminal0; }
 	if(c==1){ return (_int_terminal0 * _int_terminal1); }
 	if(c==2){ return (_int_terminal0 * (_int_terminal1 * _int_terminal2)); }
 	if(c==3){ return (_int_terminal0 * (_int_terminal1 + _int_terminal2)); }
-	if(c==4){ return (_int_terminal0 * (_int_terminal1 - _int_terminal2)); }
-	if(c==5){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 * _int_terminal3)); }
-	if(c==6){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 + _int_terminal3)); }
-	if(c==7){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 - _int_terminal3)); }
-	if(c==8){ return ((_int_terminal0 + _int_terminal1) * (_int_terminal2 + _int_terminal3)); }
-	if(c==9){ return ((_int_terminal0 + _int_terminal1) * (_int_terminal2 - _int_terminal3)); }
-	if(c==10){ return ((_int_terminal0 - _int_terminal1) * (_int_terminal2 - _int_terminal3)); }
-	if(c==11){ return (_int_terminal0 + _int_terminal1); }
-	if(c==12){ return (_int_terminal0 + (_int_terminal1 * _int_terminal2)); }
-	if(c==13){ return (_int_terminal0 + (_int_terminal1 + _int_terminal2)); }
-	if(c==14){ return (_int_terminal0 + (_int_terminal1 - _int_terminal2)); }
-	if(c==15){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 * _int_terminal3)); }
-	if(c==16){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
-	if(c==17){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 - _int_terminal3)); }
-	if(c==18){ return ((_int_terminal0 + _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
-	if(c==19){ return ((_int_terminal0 + _int_terminal1) + (_int_terminal2 - _int_terminal3)); }
-	if(c==20){ return ((_int_terminal0 - _int_terminal1) + (_int_terminal2 - _int_terminal3)); }
-	if(c==21){ return (_int_terminal0 - _int_terminal1); }
-	if(c==22){ return (_int_terminal0 - (_int_terminal1 * _int_terminal2)); }
-	if(c==23){ return (_int_terminal0 - (_int_terminal1 + _int_terminal2)); }
-	if(c==24){ return (_int_terminal0 - (_int_terminal1 - _int_terminal2)); }
-	if(c==25){ return ((_int_terminal0 * _int_terminal1) - _int_terminal2); }
-	if(c==26){ return ((_int_terminal0 * _int_terminal1) - (_int_terminal2 * _int_terminal3)); }
-	if(c==27){ return ((_int_terminal0 * _int_terminal1) - (_int_terminal2 + _int_terminal3)); }
-	if(c==28){ return ((_int_terminal0 * _int_terminal1) - (_int_terminal2 - _int_terminal3)); }
-	if(c==29){ return ((_int_terminal0 + _int_terminal1) - _int_terminal2); }
-	if(c==30){ return ((_int_terminal0 + _int_terminal1) - (_int_terminal2 * _int_terminal3)); }
-	if(c==31){ return ((_int_terminal0 + _int_terminal1) - (_int_terminal2 + _int_terminal3)); }
-	if(c==32){ return ((_int_terminal0 + _int_terminal1) - (_int_terminal2 - _int_terminal3)); }
-	if(c==33){ return ((_int_terminal0 - _int_terminal1) - _int_terminal2); }
-	if(c==34){ return ((_int_terminal0 - _int_terminal1) - (_int_terminal2 * _int_terminal3)); }
-	if(c==35){ return ((_int_terminal0 - _int_terminal1) - (_int_terminal2 + _int_terminal3)); }
-	if(c==36){ return ((_int_terminal0 - _int_terminal1) - (_int_terminal2 - _int_terminal3)); }
+	if(c==4){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 * _int_terminal3)); }
+	if(c==5){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 + _int_terminal3)); }
+	if(c==6){ return ((_int_terminal0 + _int_terminal1) * (_int_terminal2 + _int_terminal3)); }
+	if(c==7){ return (_int_terminal0 + _int_terminal1); }
+	if(c==8){ return (_int_terminal0 + (_int_terminal1 * _int_terminal2)); }
+	if(c==9){ return (_int_terminal0 + (_int_terminal1 + _int_terminal2)); }
+	if(c==10){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 * _int_terminal3)); }
+	if(c==11){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
+	if(c==12){ return ((_int_terminal0 + _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
 	
 }
 
-void map (int[3] fit, int i, ref int[CASPER_NUM_OUTVARS] keys0, ref int[CASPER_NUM_OUTVARS] values0)
+void map (Point[3] data, int i, ref int[CASPER_NUM_OUTVARS] keys0, ref int[CASPER_NUM_OUTVARS] keys1, ref int[CASPER_NUM_OUTVARS] values0)
 {
   	keys0[0] = ??;
-	values0[0] = intMapGenerator(fit, i);
+	keys1[0] = intMapGenerator(data, i);
+	values0[0] = intMapGenerator(data, i);
 	
 }
 
 generator int intReduceGenerator(int val1, int val2){
-	int _int_terminal0 = {| val1 | val2 | yMean |};
-	int _int_terminal1 = {| val1 | val2 | yMean |};
-	int _int_terminal2 = {| val1 | val2 | yMean |};
-	int _int_terminal3 = {| val1 | val2 | yMean |};
-	int _int_terminal4 = ??;
-	int _int_terminal5 = ??;
-	int c = ??(6);
+	int _int_terminal0 = {| val1 | val2 | offset | gradient | ?? |};
+	int _int_terminal1 = {| val1 | val2 | offset | gradient | ?? |};
+	int _int_terminal2 = {| val1 | val2 | offset | gradient | ?? |};
+	int _int_terminal3 = {| val1 | val2 | offset | gradient | ?? |};
+	int c = ??(4);
 	if(c==0){ return _int_terminal0; }
 	if(c==1){ return (_int_terminal0 * _int_terminal1); }
 	if(c==2){ return (_int_terminal0 * (_int_terminal1 * _int_terminal2)); }
 	if(c==3){ return (_int_terminal0 * (_int_terminal1 + _int_terminal2)); }
-	if(c==4){ return (_int_terminal0 * (_int_terminal1 - _int_terminal2)); }
-	if(c==5){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 * _int_terminal3)); }
-	if(c==6){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 + _int_terminal3)); }
-	if(c==7){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 - _int_terminal3)); }
-	if(c==8){ return ((_int_terminal0 + _int_terminal1) * (_int_terminal2 + _int_terminal3)); }
-	if(c==9){ return ((_int_terminal0 + _int_terminal1) * (_int_terminal2 - _int_terminal3)); }
-	if(c==10){ return ((_int_terminal0 - _int_terminal1) * (_int_terminal2 - _int_terminal3)); }
-	if(c==11){ return (_int_terminal0 + _int_terminal1); }
-	if(c==12){ return (_int_terminal0 + (_int_terminal1 * _int_terminal2)); }
-	if(c==13){ return (_int_terminal0 + (_int_terminal1 + _int_terminal2)); }
-	if(c==14){ return (_int_terminal0 + (_int_terminal1 - _int_terminal2)); }
-	if(c==15){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 * _int_terminal3)); }
-	if(c==16){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
-	if(c==17){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 - _int_terminal3)); }
-	if(c==18){ return ((_int_terminal0 + _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
-	if(c==19){ return ((_int_terminal0 + _int_terminal1) + (_int_terminal2 - _int_terminal3)); }
-	if(c==20){ return ((_int_terminal0 - _int_terminal1) + (_int_terminal2 - _int_terminal3)); }
-	if(c==21){ return (_int_terminal0 - _int_terminal1); }
-	if(c==22){ return (_int_terminal0 - (_int_terminal1 * _int_terminal2)); }
-	if(c==23){ return (_int_terminal0 - (_int_terminal1 + _int_terminal2)); }
-	if(c==24){ return (_int_terminal0 - (_int_terminal1 - _int_terminal2)); }
-	if(c==25){ return ((_int_terminal0 * _int_terminal1) - _int_terminal2); }
-	if(c==26){ return ((_int_terminal0 * _int_terminal1) - (_int_terminal2 * _int_terminal3)); }
-	if(c==27){ return ((_int_terminal0 * _int_terminal1) - (_int_terminal2 + _int_terminal3)); }
-	if(c==28){ return ((_int_terminal0 * _int_terminal1) - (_int_terminal2 - _int_terminal3)); }
-	if(c==29){ return ((_int_terminal0 + _int_terminal1) - _int_terminal2); }
-	if(c==30){ return ((_int_terminal0 + _int_terminal1) - (_int_terminal2 * _int_terminal3)); }
-	if(c==31){ return ((_int_terminal0 + _int_terminal1) - (_int_terminal2 + _int_terminal3)); }
-	if(c==32){ return ((_int_terminal0 + _int_terminal1) - (_int_terminal2 - _int_terminal3)); }
-	if(c==33){ return ((_int_terminal0 - _int_terminal1) - _int_terminal2); }
-	if(c==34){ return ((_int_terminal0 - _int_terminal1) - (_int_terminal2 * _int_terminal3)); }
-	if(c==35){ return ((_int_terminal0 - _int_terminal1) - (_int_terminal2 + _int_terminal3)); }
-	if(c==36){ return ((_int_terminal0 - _int_terminal1) - (_int_terminal2 - _int_terminal3)); }
+	if(c==4){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 * _int_terminal3)); }
+	if(c==5){ return ((_int_terminal0 * _int_terminal1) * (_int_terminal2 + _int_terminal3)); }
+	if(c==6){ return ((_int_terminal0 + _int_terminal1) * (_int_terminal2 + _int_terminal3)); }
+	if(c==7){ return (_int_terminal0 + _int_terminal1); }
+	if(c==8){ return (_int_terminal0 + (_int_terminal1 * _int_terminal2)); }
+	if(c==9){ return (_int_terminal0 + (_int_terminal1 + _int_terminal2)); }
+	if(c==10){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 * _int_terminal3)); }
+	if(c==11){ return ((_int_terminal0 * _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
+	if(c==12){ return ((_int_terminal0 + _int_terminal1) + (_int_terminal2 + _int_terminal3)); }
 	
 }
 
-int init_ssr(){
+int init_fit(){
 	return {| 0 | 1 |};
 }
 
-int reduce_ssr(int val1, int val2){
+int reduce_fit(int val1, int val2){
 	return intReduceGenerator(val1, val2);
 }
 
-int merge_ssr(int val1, int val2){
+int merge_fit(int val1, int val2){
 	return {| val1 | val1+val2 |};
 }
 
 
-int [1] reduce (int[3] fit, int ssr, int ssr0, int i, int i0) {
-	int [1] casper_r;
-	casper_r[0] = init_ssr();
+int [4] reduce (Point[3] data, int[4] fit, int[4] fit0, int i, int i0) {
+	int [4] casper_r;
+	casper_r[0] = init_fit();
+	casper_r[1] = init_fit();
+	casper_r[2] = init_fit();
+	casper_r[3] = init_fit();
 	
 	for (int casper_i = i0; casper_i < i; ++casper_i)
 	{
 		int[CASPER_NUM_OUTVARS] keys0;
+		int[CASPER_NUM_OUTVARS] keys1;
 		int[CASPER_NUM_OUTVARS] values0;
+		int[CASPER_NUM_OUTVARS] values1;
 		
 		int num_pairs = CASPER_NUM_OUTVARS;
 
-		map(fit, casper_i, keys0, values0);
+		map(data, casper_i, keys0, keys1, values0);
 
 		for (int casper_j = 0; casper_j < num_pairs; ++casper_j)
 		{ 
 	  		int key0 = keys0[casper_j];
+	int key1 = keys1[casper_j];
 	
 	  		if(key0 == 0) {	}
-	  		else if (key0 == 1){ casper_r[0] = reduce_ssr(casper_r[0], values0[casper_j]); }
+	  		else if (key0 == 1 && key1 == 0){ casper_r[0] = reduce_fit(casper_r[0], values0[casper_j]); }else if (key0 == 1 && key1 == 1){ casper_r[1] = reduce_fit(casper_r[1], values0[casper_j]); }else if (key0 == 1 && key1 == 2){ casper_r[2] = reduce_fit(casper_r[2], values0[casper_j]); }else if (key0 == 1 && key1 == 3){ casper_r[3] = reduce_fit(casper_r[3], values0[casper_j]); }
 	  		else{ assert 0; }
 		} 
 	}
 
-	casper_r[0] = merge_ssr(casper_r[0],ssr0);
+	casper_r[0] = merge_fit(casper_r[0],fit0[0]);
+	casper_r[1] = merge_fit(casper_r[1],fit0[1]);
+	casper_r[2] = merge_fit(casper_r[2],fit0[2]);
+	casper_r[3] = merge_fit(casper_r[3],fit0[3]);
 	
 
 	return casper_r;

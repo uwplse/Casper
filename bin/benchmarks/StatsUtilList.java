@@ -77,53 +77,6 @@ public class StatsUtilList {
     }
 
     /**
-     * standardDeviation
-     *                   Works out the standard deviation of least squares fit
-     * @param variance
-     *                   The variance of the data being analysed
-     * @param n
-     *                   The integer length of the data array
-     *
-     * @return
-     *                   The the standard deviation of least squares fit as a double
-     */
-  /*  public static double standardDeviation(double variance, int n){
-        double stdDev= 0.0;
-        if(n > 0) stdDev = Math.sqrt(variance / n);
-        return stdDev;
-    }
-
-    /**
-     * gradient
-     *                   Works out the standard deviation of least squares fit
-     * @param covariance
-     *                   The covariance of the data being analysed
-     * @param xVariance
-     *                   The integer length of the data array
-     * @return
-     *          The the standard deviation of least squares fit as a double
-     */
-  /*  public static double gradient(double covariance, double xVariance){
-        return covariance / xVariance;
-    }
-
-    /**
-     * yIntercept
-     *                   Works out the offset of the data (i.e the constant value by which y is offset)
-     * @xMean
-     *                   The mean value of the x coordinate of the data being analysed
-     * @yMean
-     *                   The mean value of the y coordinate of the data being analysed
-     * @gradient
-     *                  The gradient
-     * @return
-     *          The the standard deviation of least squares fit as a double
-     */
-   /* public static double yIntercept(double xMean, double yMean, double gradient){
-        return yMean - gradient * xMean;
-    }
-
-    /**
      * fit
      *                   Works out the fit of the data
      * @param data
@@ -139,7 +92,7 @@ public class StatsUtilList {
     	double x;
     	double y;
     }
-    /*public static double[] fit(List<Point> data, double gradient, double offset){
+    public static double[] fit(List<Point> data, double gradient, double offset){
         double[] fit=new double[data.size()];
         for(int i=0; i<data.size(); i++)
             fit[i] = gradient*data.get(i).x + offset;
@@ -176,7 +129,7 @@ public class StatsUtilList {
      *                  Standard error in mean i.e. residual sum of squares
      *                  as a double
      */
-   /* class RecordError {
+    /*class RecordError {
     	public double y;
     	public double fit;
     }
@@ -197,7 +150,7 @@ public class StatsUtilList {
      * @return
      *                  The regression sum of squares as a double
      */
-    public static double regressionSumOfSquares(List<Double> fit, double yMean){
+   /* public static double regressionSumOfSquares(List<Double> fit, double yMean){
         double ssr = 0.0;
         for (int i = 0; i < fit.size(); i++) ssr += (fit.get(i) - yMean) * (fit.get(i) - yMean);
         return ssr;

@@ -71,17 +71,23 @@ bit loopInvariant(int[3] data, bit equal, bit equal0, int i, int i0){
 /* MapReduce Implementation                                                   */
 
 generator bit bitMapGenerator(int[3] data, int i){
-	bit _bit_terminal0 = {| loop0 |};
-	bit _bit_terminal1 = {| loop0 |};
-	int _int_terminal0 = {| i | val | data[i] |};
-	int _int_terminal1 = {| i | val | data[i] |};
-	bit _bit_terminal2 = {| true | false |};
-	int _int_terminal2 = ??;
-	int c = ??(2);
+	bit _bit_terminal0 = {| loop0 | true  | false |};
+	bit _bit_terminal1 = {| loop0 | true  | false |};
+	bit _bit_terminal2 = {| loop0 | true  | false |};
+	bit _bit_terminal3 = {| loop0 | true  | false |};
+	int _int_terminal0 = {| i | val | data[i] | ?? |};
+	int _int_terminal1 = {| i | val | data[i] | ?? |};
+	int _int_terminal2 = {| i | val | data[i] | ?? |};
+	int _int_terminal3 = {| i | val | data[i] | ?? |};
+	int c = ??(3);
 	if(c==0){ return _bit_terminal0; }
-	if(c==1){ return _bit_terminal2; }
-	if(c==2){ return (_bit_terminal0 != _bit_terminal1); }
-	if(c==3){ return (_int_terminal0 != _int_terminal1); }
+	if(c==1){ return (_bit_terminal0 != _bit_terminal1); }
+	if(c==2){ return (_bit_terminal0 != (_bit_terminal1 != _bit_terminal2)); }
+	if(c==3){ return (_bit_terminal0 != (_int_terminal0 != _int_terminal1)); }
+	if(c==4){ return ((_bit_terminal0 != _bit_terminal1) != (_bit_terminal2 != _bit_terminal3)); }
+	if(c==5){ return ((_bit_terminal0 != _bit_terminal1) != (_int_terminal0 != _int_terminal1)); }
+	if(c==6){ return ((_int_terminal0 != _int_terminal1) != (_int_terminal2 != _int_terminal3)); }
+	if(c==7){ return (_int_terminal0 != _int_terminal1); }
 	
 }
 
@@ -94,17 +100,23 @@ void map (int[3] data, int i, ref int[CASPER_NUM_OUTVARS] keys0, ref int[CASPER_
 }
 
 generator bit bitReduceGenerator(bit val1, bit val2){
-	bit _bit_terminal0 = {| val1 | val2 | loop0 |};
-	bit _bit_terminal1 = {| val1 | val2 | loop0 |};
-	int _int_terminal0 = {| val |};
-	int _int_terminal1 = {| val |};
-	bit _bit_terminal2 = {| true | false |};
-	int _int_terminal2 = ??;
-	int c = ??(2);
+	bit _bit_terminal0 = {| val1 | val2 | loop0 | true  | false |};
+	bit _bit_terminal1 = {| val1 | val2 | loop0 | true  | false |};
+	bit _bit_terminal2 = {| val1 | val2 | loop0 | true  | false |};
+	bit _bit_terminal3 = {| val1 | val2 | loop0 | true  | false |};
+	int _int_terminal0 = {| val | ?? |};
+	int _int_terminal1 = {| val | ?? |};
+	int _int_terminal2 = {| val | ?? |};
+	int _int_terminal3 = {| val | ?? |};
+	int c = ??(3);
 	if(c==0){ return _bit_terminal0; }
-	if(c==1){ return _bit_terminal2; }
-	if(c==2){ return (_bit_terminal0 != _bit_terminal1); }
-	if(c==3){ return (_int_terminal0 != _int_terminal1); }
+	if(c==1){ return (_bit_terminal0 != _bit_terminal1); }
+	if(c==2){ return (_bit_terminal0 != (_bit_terminal1 != _bit_terminal2)); }
+	if(c==3){ return (_bit_terminal0 != (_int_terminal0 != _int_terminal1)); }
+	if(c==4){ return ((_bit_terminal0 != _bit_terminal1) != (_bit_terminal2 != _bit_terminal3)); }
+	if(c==5){ return ((_bit_terminal0 != _bit_terminal1) != (_int_terminal0 != _int_terminal1)); }
+	if(c==6){ return ((_int_terminal0 != _int_terminal1) != (_int_terminal2 != _int_terminal3)); }
+	if(c==7){ return (_int_terminal0 != _int_terminal1); }
 	
 }
 

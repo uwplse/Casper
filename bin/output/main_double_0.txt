@@ -1,2063 +1,1791 @@
 SKETCH version 1.7.2
 Benchmark = output/main_double_0.sk
-[SATBackend] === parallel trial w/ degree -1 (0) start ===
+[SATBackend] === parallel trial w/ degree -1 (2) start ===
 Overriding inputs with 1
 boundmode = CALLNAME
 assuming  bounds checks
 BND W RAND = 20
-SOLVER RAND SEED = 795742992
+SOLVER RAND SEED = 794897344
 Reading SKETCH Program in File /home/Maaz/.sketch/tmp/main_double_0.sk/input0.tmp
 End of File
 ATTEMPT 0
-H__12_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__12_7: replacing with value 1 bnd= 3 totsize= 1.09861
-H__15_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__15_7: replacing with value 0 bnd= 3 totsize= 2.19722
-H__2_7 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__2_7: replacing with value 17 bnd= 36 totsize= 5.78074
-H__8_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__8_8: replacing with value 0 bnd= 3 totsize= 6.87936
-H__6_8 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__6_8: replacing with value 31 bnd= 36 totsize= 10.4629
-H__13_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
-H__13_7: replacing with value 1 bnd= 3 totsize= 11.5615
-H__14_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
-H__14_7: replacing with value 0 bnd= 3 totsize= 12.6601
-H__3 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__3: replacing with value 7 bnd= 32 totsize= 16.1258
-H__9_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__9_8: replacing with value 2 bnd= 3 totsize= 17.2244
-H__10_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__10_8: replacing with value 1 bnd= 3 totsize= 18.3231
-H__11_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__11_8: replacing with value 1 bnd= 3 totsize= 19.4217
-* Final Problem size: Problem nodes = 210
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.4= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-******** FAILED ********
-* FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
-RESULT = 1  
-**ROUND 0 : 19.4217 Round time:  0.017 ms 
-RNDDEG = 5
-SUMMRY , 143, 177, 611, 711, 1209, 155, 165, 87, 727, 737, 749
- charness = 0
-POST-SUMMRY , 87, 143, 155, 165, 177, 611, 711, 727, 737, 749, 1209
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 1
-H__14_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__14_7: replacing with value 0 bnd= 3 totsize= 1.09861
-H__2_7 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__2_7: replacing with value 28 bnd= 36 totsize= 4.68213
-H__8_8 odds = 1/2.5 0.197375 (4, 4)  try to replace
-H__8_8: replacing with value 1 bnd= 3 totsize= 5.78074
-H__6_8 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__6_8: replacing with value 29 bnd= 36 totsize= 9.36426
-H__16 odds = 1/2 0.244919 (5, 5)  try to replace
-H__16: replacing with value 1 bnd= 2 totsize= 10.0574
-H__12_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__12_7: replacing with value 0 bnd= 3 totsize= 11.156
-H__15_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__15_7: replacing with value 1 bnd= 3 totsize= 12.2546
-H__3 odds = 1/0.47619 0.781806 (21, 21)  try to replace
-H__3: replacing with value 15 bnd= 32 totsize= 15.7204
-H__9_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__9_8: replacing with value 0 bnd= 3 totsize= 16.819
-H__10_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 17.9176
-* Final Problem size: Problem nodes = 273
-Assert at main_double_0.sk:38 (8085420812314574818)
+H__16_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_7: replacing with value 3 bnd= 6 totsize= 1.79176
+H__4_7 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_7: replacing with value 0 bnd= 12 totsize= 4.27667
+H__16_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_8: replacing with value 1 bnd= 6 totsize= 6.06843
+H__17_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_8: replacing with value 4 bnd= 6 totsize= 7.86019
+H__18_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_8: replacing with value 4 bnd= 6 totsize= 9.65194
+H__19_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_8: replacing with value 5 bnd= 6 totsize= 11.4437
+H__4_8 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_8: replacing with value 10 bnd= 12 totsize= 13.9286
+H__10_9 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__10_9: replacing with value 2 bnd= 12 totsize= 16.4135
+H__20 odds = 1/0.238095 0.970452 (21, 21)  try to replace
+H__20: replacing with value 1 bnd= 2 totsize= 17.1067
+H__12_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__12_9: replacing with value 2 bnd= 5 totsize= 18.7161
+H__13_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__13_9: replacing with value 4 bnd= 5 totsize= 20.3255
+H__14_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__14_9: replacing with value 0 bnd= 5 totsize= 21.935
+H__5 odds = 1/0.0641026 1 (78, 78)  try to replace
+H__5: replacing with value 7 bnd= 32 totsize= 25.4007
+H__8_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__8_9: replacing with value 23 bnd= 32 totsize= 28.8665
+H__7_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__7_9: replacing with value 11 bnd= 32 totsize= 32.3322
+H__6_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__6_9: replacing with value 30 bnd= 32 totsize= 35.7979
+* Final Problem size: Problem nodes = 605
+Assert at main_double_0.sk:55 (8384633159460943249)
 ********  0	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
 ******** FAILED ********
 * FIND TIME:  0 ms 
 * CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
  *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 1 : 17.9176 Round time:  0.017 ms 
-RNDDEG = 10
-SUMMRY , 165, 633, 713, 1205, 3, 141, 179, 103, 723, 735
+**ROUND 0 : 35.7979 Round time:  0.034 ms 
+RNDDEG = 5
+SUMMRY , 157, 809, 857, 893, 923, 955, 1533, 2223, 3, 1565, 1599, 1621, 87, 2039, 1885, 1793
  charness = 0
-POST-SUMMRY , 3, 103, 141, 165, 179, 633, 713, 723, 735, 1205
+POST-SUMMRY , 3, 87, 157, 809, 857, 893, 923, 955, 1533, 1565, 1599, 1621, 1793, 1885, 2039, 2223
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 1
+H__16_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_7: replacing with value 1 bnd= 6 totsize= 1.79176
+H__4_7 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_7: replacing with value 0 bnd= 12 totsize= 4.27667
+H__16_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_8: replacing with value 3 bnd= 6 totsize= 6.06843
+H__4_8 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_8: replacing with value 11 bnd= 12 totsize= 8.55333
+H__14_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__14_9: replacing with value 4 bnd= 5 totsize= 10.1628
+H__8_9 odds = 1/5 0.099668 (2, 2)  try to replace
+H__8_9: replacing with value 18 bnd= 32 totsize= 13.6285
+H__10_9 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__10_9: replacing with value 0 bnd= 12 totsize= 16.1134
+H__20 odds = 1/0.526316 0.739783 (19, 19)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 16.8066
+H__12_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__12_9: replacing with value 4 bnd= 5 totsize= 18.416
+H__5 odds = 1/0.128205 0.999181 (78, 78)  try to replace
+H__5: replacing with value 24 bnd= 32 totsize= 21.8817
+H__6_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__6_9: replacing with value 27 bnd= 32 totsize= 25.3475
+H__3_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__3_8: replacing with value 21 bnd= 32 totsize= 28.8132
+H__2_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__2_8: replacing with value 25 bnd= 32 totsize= 32.2789
+H__1_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_8: replacing with value 16 bnd= 32 totsize= 35.7447
+* Final Problem size: Problem nodes = 934
+regen H__13
+********  0	ftime= 0	ctime= 0.001
+Assert at main_double_0.sk:181 (511591761868268358)
+********  1	ftime= 0.002	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.27= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+******** FAILED ********
+* FIND TIME:  0 ms 0.002 ms
+* CHECK TIME:  0.001 ms 0.002 ms
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.002 CHECK TIME 0.002 TOTAL TIME 0.004
+RESULT = 1  
+**ROUND 1 : 35.7447 Round time:  0.038 ms 
+RNDDEG = 10
+SUMMRY , 153, 809, 861, 1535, 1629, 2029, 2219, 2, 1569, 121, 1787, 1459, 1337, 1189
+ charness = 0
+POST-SUMMRY , 2, 121, 153, 809, 861, 1189, 1337, 1459, 1535, 1569, 1629, 1787, 2029, 2219
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 2
-H__13_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__13_7: replacing with value 2 bnd= 3 totsize= 1.09861
-H__14_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__14_7: replacing with value 0 bnd= 3 totsize= 2.19722
-H__2_7 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__2_7: replacing with value 9 bnd= 36 totsize= 5.78074
-H__8_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__8_8: replacing with value 0 bnd= 3 totsize= 6.87936
-H__6_8 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__6_8: replacing with value 27 bnd= 36 totsize= 10.4629
-H__16 odds = 1/0.714286 0.604368 (7, 7)  try to replace
-H__16: replacing with value 0 bnd= 2 totsize= 11.156
-H__12_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
-H__12_7: replacing with value 2 bnd= 3 totsize= 12.2546
-H__15_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
-H__15_7: replacing with value 1 bnd= 3 totsize= 13.3532
-H__3 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__3: replacing with value 18 bnd= 32 totsize= 16.819
-H__9_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__9_8: replacing with value 1 bnd= 3 totsize= 17.9176
-H__10_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 19.0162
-H__11_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__11_8: replacing with value 0 bnd= 3 totsize= 20.1148
-* Final Problem size: Problem nodes = 141
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+H__11 odds = 1/5 0.099668 (1, 1)  try to replace
+H__11: replacing with value 1 bnd= 2 totsize= 0.693147
+H__16_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_7: replacing with value 5 bnd= 6 totsize= 2.48491
+H__17_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_7: replacing with value 4 bnd= 6 totsize= 4.27667
+H__18_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_7: replacing with value 2 bnd= 6 totsize= 6.06843
+H__19_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_7: replacing with value 2 bnd= 6 totsize= 7.86019
+H__0_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__0_7: replacing with value 17 bnd= 32 totsize= 11.3259
+H__4_7 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_7: replacing with value 7 bnd= 12 totsize= 13.8108
+H__16_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_8: replacing with value 5 bnd= 6 totsize= 15.6026
+H__17_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_8: replacing with value 1 bnd= 6 totsize= 17.3943
+H__18_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_8: replacing with value 1 bnd= 6 totsize= 19.1861
+H__4_8 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_8: replacing with value 4 bnd= 12 totsize= 21.671
+H__12_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__12_9: replacing with value 1 bnd= 5 totsize= 23.2805
+H__13_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__13_9: replacing with value 1 bnd= 5 totsize= 24.8899
+H__15_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__15_9: replacing with value 1 bnd= 5 totsize= 26.4993
+H__8_9 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__8_9: replacing with value 3 bnd= 32 totsize= 29.9651
+H__10_9 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__10_9: replacing with value 0 bnd= 12 totsize= 32.45
+H__20 odds = 1/0.277778 0.946806 (18, 18)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 33.1431
+H__5 odds = 1/0.0641026 1 (78, 78)  try to replace
+H__5: replacing with value 28 bnd= 32 totsize= 36.6089
+H__3_8 odds = 1/0.208333 0.983675 (24, 24)  try to replace
+H__3_8: replacing with value 18 bnd= 32 totsize= 40.0746
+* Final Problem size: Problem nodes = 374
+regen H__19
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.9= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
 * FIND TIME:  0 ms 
-* CHECK TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
- *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 2 : 20.1148 Round time:  0.017 ms 
+**ROUND 2 : 40.0746 Round time:  0.027 ms 
 RNDDEG = 5
-SUMMRY , 157, 165, 595, 711, 1201, 2, 145, 179, 109, 725, 735, 747
+SUMMRY , 1545, 161, 189, 215, 245, 357, 823, 865, 887, 917, 1521, 1563, 1593, 1653, 1999, 2219, 2, 129, 1453
  charness = 0
-POST-SUMMRY , 2, 109, 145, 157, 165, 179, 595, 711, 725, 735, 747, 1201
+POST-SUMMRY , 2, 129, 161, 189, 215, 245, 357, 823, 865, 887, 917, 1453, 1521, 1545, 1563, 1593, 1653, 1999, 2219
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 3
-H__13_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__13_7: replacing with value 1 bnd= 3 totsize= 1.09861
-H__14_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__14_7: replacing with value 2 bnd= 3 totsize= 2.19722
-H__15_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__15_7: replacing with value 0 bnd= 3 totsize= 3.29584
-H__2_7 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__2_7: replacing with value 35 bnd= 36 totsize= 6.87936
-H__8_8 odds = 1/2.5 0.197375 (4, 4)  try to replace
-H__8_8: replacing with value 0 bnd= 3 totsize= 7.97797
-H__11_8 odds = 1/2.5 0.197375 (4, 4)  try to replace
-H__11_8: replacing with value 1 bnd= 3 totsize= 9.07658
-H__6_8 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__6_8: replacing with value 1 bnd= 36 totsize= 12.6601
-H__12_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__12_7: replacing with value 2 bnd= 3 totsize= 13.7587
-H__3 odds = 1/0.47619 0.781806 (21, 21)  try to replace
-H__3: replacing with value 22 bnd= 32 totsize= 17.2244
-H__9_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__9_8: replacing with value 0 bnd= 3 totsize= 18.3231
-* Final Problem size: Problem nodes = 186
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.4= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+H__3_7 odds = 1/5 0.099668 (2, 2)  try to replace
+H__3_7: replacing with value 30 bnd= 32 totsize= 3.46574
+H__4_7 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_7: replacing with value 4 bnd= 12 totsize= 5.95064
+H__0_8 odds = 1/5 0.099668 (2, 2)  try to replace
+H__0_8: replacing with value 15 bnd= 32 totsize= 9.41638
+H__10_9 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__10_9: replacing with value 0 bnd= 12 totsize= 11.9013
+H__20 odds = 1/0.526316 0.739783 (19, 19)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 12.5944
+H__12_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__12_9: replacing with value 2 bnd= 5 totsize= 14.2039
+H__5 odds = 1/0.128205 0.999181 (78, 78)  try to replace
+H__5: replacing with value 27 bnd= 32 totsize= 17.6696
+H__2_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__2_7: replacing with value 25 bnd= 32 totsize= 21.1353
+H__0_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__0_7: replacing with value 5 bnd= 32 totsize= 24.6011
+H__6_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__6_9: replacing with value 26 bnd= 32 totsize= 28.0668
+H__4_8 odds = 1/0.0552486 1 (181, 181)  try to replace
+H__4_8: replacing with value 6 bnd= 12 totsize= 30.5517
+H__1_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_8: replacing with value 16 bnd= 32 totsize= 34.0175
+H__2_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__2_8: replacing with value 20 bnd= 32 totsize= 37.4832
+H__3_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__3_8: replacing with value 26 bnd= 32 totsize= 40.9489
+* Final Problem size: Problem nodes = 1178
+regen H__13
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.36= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
 * FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 3 : 18.3231 Round time:  999.017 ms 
+**ROUND 3 : 40.9489 Round time:  0.033 ms 
 RNDDEG = 10
-SUMMRY , 155, 169, 177, 647, 711, 749, 1149, 145, 117, 723
+SUMMRY , 773, 817, 1057, 2219, 2, 1565, 127, 633, 333, 1785, 1525, 1189, 1327, 1469
  charness = 0
-POST-SUMMRY , 117, 145, 155, 169, 177, 647, 711, 723, 749, 1149
+POST-SUMMRY , 2, 127, 333, 633, 773, 817, 1057, 1189, 1327, 1469, 1525, 1565, 1785, 2219
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 4
 Nothing read
-cur=5 next=10 scorecur=15 scorenext=19
+cur=5 next=10 scorecur=34 scorenext=35
  Switch by luck
-Averages 19.5364, 15.6937
+Averages 35.0061, 34.4396
 Climbing to 5, 10
-H__13_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__13_7: replacing with value 2 bnd= 3 totsize= 1.09861
-H__14_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__14_7: replacing with value 0 bnd= 3 totsize= 2.19722
-H__2_7 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__2_7: replacing with value 27 bnd= 36 totsize= 5.78074
-H__9_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__9_8: replacing with value 0 bnd= 3 totsize= 6.87936
-H__10_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__10_8: replacing with value 1 bnd= 3 totsize= 7.97797
-H__11_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__11_8: replacing with value 2 bnd= 3 totsize= 9.07658
-H__6_8 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__6_8: replacing with value 27 bnd= 36 totsize= 12.6601
-H__15_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
-H__15_7: replacing with value 1 bnd= 3 totsize= 13.7587
-H__3 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__3: replacing with value 8 bnd= 32 totsize= 17.2244
-H__8_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__8_8: replacing with value 0 bnd= 3 totsize= 18.3231
-* Final Problem size: Problem nodes = 306
-Assert at main_double_0.sk:203 (-2014022263682476150)
+H__16_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_7: replacing with value 1 bnd= 6 totsize= 1.79176
+H__17_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_7: replacing with value 3 bnd= 6 totsize= 3.58352
+H__19_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_7: replacing with value 1 bnd= 6 totsize= 5.37528
+H__0_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__0_7: replacing with value 29 bnd= 32 totsize= 8.84101
+H__2_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__2_7: replacing with value 18 bnd= 32 totsize= 12.3068
+H__4_7 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_7: replacing with value 8 bnd= 12 totsize= 14.7917
+H__17_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_8: replacing with value 3 bnd= 6 totsize= 16.5834
+H__18_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_8: replacing with value 5 bnd= 6 totsize= 18.3752
+H__19_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_8: replacing with value 1 bnd= 6 totsize= 20.1669
+H__4_8 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_8: replacing with value 3 bnd= 12 totsize= 22.6518
+H__12_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__12_9: replacing with value 2 bnd= 5 totsize= 24.2613
+H__13_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__13_9: replacing with value 4 bnd= 5 totsize= 25.8707
+H__15_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__15_9: replacing with value 2 bnd= 5 totsize= 27.4802
+H__10_9 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__10_9: replacing with value 2 bnd= 12 totsize= 29.9651
+H__20 odds = 1/0.263158 0.956237 (19, 19)  try to replace
+H__20: replacing with value 1 bnd= 2 totsize= 30.6582
+H__14_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__14_9: replacing with value 3 bnd= 5 totsize= 32.2676
+H__5 odds = 1/0.0641026 1 (78, 78)  try to replace
+H__5: replacing with value 10 bnd= 32 totsize= 35.7334
+H__8_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__8_9: replacing with value 29 bnd= 32 totsize= 39.1991
+H__0_8 odds = 1/0.208333 0.983675 (24, 24)  try to replace
+H__0_8: replacing with value 30 bnd= 32 totsize= 42.6649
+H__7_9 odds = 1/0.0684932 0.999999 (73, 73)  try to replace
+H__7_9: replacing with value 18 bnd= 32 totsize= 46.1306
+* Final Problem size: Problem nodes = 447
+Assert at main_double_0.sk:55 (8384633159460943249)
 ********  0	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.8= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+******** FAILED ********
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
+RESULT = 1  
+**ROUND 4 : 46.1306 Round time:  0.031 ms 
+RNDDEG = 5
+SUMMRY , 153, 187, 243, 381, 619, 825, 891, 925, 947, 1519, 1565, 1599, 1655, 2223, 3, 1627, 93, 2051, 1087, 1899
+ charness = 0
+POST-SUMMRY , 3, 93, 153, 187, 243, 381, 619, 825, 891, 925, 947, 1087, 1519, 1565, 1599, 1627, 1655, 1899, 2051, 2223
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 5
+H__16_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_7: replacing with value 1 bnd= 6 totsize= 1.79176
+H__19_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__19_7: replacing with value 4 bnd= 6 totsize= 3.58352
+H__4_7 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_7: replacing with value 11 bnd= 12 totsize= 6.06843
+H__18_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__18_8: replacing with value 0 bnd= 6 totsize= 7.86019
+H__3_8 odds = 1/5 0.099668 (2, 2)  try to replace
+H__3_8: replacing with value 30 bnd= 32 totsize= 11.3259
+H__4_8 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_8: replacing with value 3 bnd= 12 totsize= 13.8108
+H__14_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__14_9: replacing with value 4 bnd= 5 totsize= 15.4203
+H__15_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__15_9: replacing with value 1 bnd= 5 totsize= 17.0297
+H__10_9 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__10_9: replacing with value 1 bnd= 12 totsize= 19.5146
+H__20 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 20.2078
+H__12_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__12_9: replacing with value 0 bnd= 5 totsize= 21.8172
+H__13_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__13_9: replacing with value 3 bnd= 5 totsize= 23.4266
+H__5 odds = 1/0.128205 0.999181 (78, 78)  try to replace
+H__5: replacing with value 15 bnd= 32 totsize= 26.8924
+H__1_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_7: replacing with value 8 bnd= 32 totsize= 30.3581
+H__7_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__7_9: replacing with value 9 bnd= 32 totsize= 33.8238
+H__1_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_8: replacing with value 5 bnd= 32 totsize= 37.2896
+H__6_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__6_9: replacing with value 12 bnd= 32 totsize= 40.7553
+* Final Problem size: Problem nodes = 783
+Assert at main_double_0.sk:181 (511591761868268358)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.17= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+******** FAILED ********
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
+RESULT = 1  
+**ROUND 5 : 40.7553 Round time:  0.034 ms 
+RNDDEG = 10
+SUMMRY , 153, 249, 831, 915, 1477, 1519, 1629, 1653, 2221, 2, 1561, 1597, 103, 469, 1881, 1167, 1757
+ charness = 0
+POST-SUMMRY , 2, 103, 153, 249, 469, 831, 915, 1167, 1477, 1519, 1561, 1597, 1629, 1653, 1757, 1881, 2221
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 6
+H__16_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_7: replacing with value 3 bnd= 6 totsize= 1.79176
+H__18_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_7: replacing with value 3 bnd= 6 totsize= 3.58352
+H__19_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_7: replacing with value 3 bnd= 6 totsize= 5.37528
+H__2_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__2_7: replacing with value 27 bnd= 32 totsize= 8.84101
+H__4_7 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_7: replacing with value 0 bnd= 12 totsize= 11.3259
+H__16_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_8: replacing with value 2 bnd= 6 totsize= 13.1177
+H__17_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_8: replacing with value 4 bnd= 6 totsize= 14.9094
+H__19_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_8: replacing with value 4 bnd= 6 totsize= 16.7012
+H__0_8 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__0_8: replacing with value 17 bnd= 32 totsize= 20.1669
+H__1_8 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__1_8: replacing with value 7 bnd= 32 totsize= 23.6327
+H__4_8 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_8: replacing with value 1 bnd= 12 totsize= 26.1176
+H__13_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__13_9: replacing with value 2 bnd= 5 totsize= 27.727
+H__14_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__14_9: replacing with value 3 bnd= 5 totsize= 29.3365
+H__10_9 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__10_9: replacing with value 10 bnd= 12 totsize= 31.8214
+H__20 odds = 1/0.25 0.964028 (20, 20)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 32.5145
+H__12_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__12_9: replacing with value 2 bnd= 5 totsize= 34.1239
+H__15_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__15_9: replacing with value 2 bnd= 5 totsize= 35.7334
+H__5 odds = 1/0.0641026 1 (78, 78)  try to replace
+H__5: replacing with value 11 bnd= 32 totsize= 39.1991
+H__9_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__9_9: replacing with value 21 bnd= 32 totsize= 42.6649
+H__6_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__6_9: replacing with value 0 bnd= 32 totsize= 46.1306
+* Final Problem size: Problem nodes = 447
+Assert at main_double_0.sk:181 (511591761868268358)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.8= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
 * FIND TIME:  0 ms 
 * CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
  *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 4 : 18.3231 Round time:  0.017 ms 
+**ROUND 6 : 46.1306 Round time:  0.032 ms 
 RNDDEG = 5
-SUMMRY , 157, 165, 631, 723, 737, 751, 1201, 179, 89, 711
+SUMMRY , 157, 217, 247, 637, 809, 859, 893, 953, 1061, 1171, 1515, 1595, 1627, 2239, 2, 1565, 1655, 95, 2165, 1733
  charness = 0
-POST-SUMMRY , 89, 157, 165, 179, 631, 711, 723, 737, 751, 1201
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 5
-H__2_7 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__2_7: replacing with value 26 bnd= 36 totsize= 3.58352
-H__8_8 odds = 1/2.5 0.197375 (4, 4)  try to replace
-H__8_8: replacing with value 1 bnd= 3 totsize= 4.68213
-H__6_8 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__6_8: replacing with value 15 bnd= 36 totsize= 8.26565
-H__16 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__16: replacing with value 1 bnd= 2 totsize= 8.9588
-H__12_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__12_7: replacing with value 0 bnd= 3 totsize= 10.0574
-H__14_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__14_7: replacing with value 2 bnd= 3 totsize= 11.156
-H__9_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__9_8: replacing with value 1 bnd= 3 totsize= 12.2546
-H__10_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 13.3532
-H__11_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__11_8: replacing with value 2 bnd= 3 totsize= 14.4519
-* Final Problem size: Problem nodes = 405
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-******** FAILED ********
-* FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
-RESULT = 1  
-**ROUND 5 : 14.4519 Round time:  0.018 ms 
-RNDDEG = 10
-SUMMRY , 629, 713, 1177, 3, 141, 169, 725, 739, 751
- charness = 0
-POST-SUMMRY , 3, 141, 169, 629, 713, 725, 739, 751, 1177
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 6
-H__7 odds = 1/5 0.099668 (1, 1)  try to replace
-H__7: replacing with value 0 bnd= 2 totsize= 0.693147
-H__13_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__13_7: replacing with value 2 bnd= 3 totsize= 1.79176
-H__15_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__15_7: replacing with value 2 bnd= 3 totsize= 2.89037
-H__2_7 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__2_7: replacing with value 11 bnd= 36 totsize= 6.47389
-H__10_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 7.5725
-H__6_8 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__6_8: replacing with value 34 bnd= 36 totsize= 11.156
-H__12_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
-H__12_7: replacing with value 0 bnd= 3 totsize= 12.2546
-H__3 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__3: replacing with value 8 bnd= 32 totsize= 15.7204
-H__8_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__8_8: replacing with value 2 bnd= 3 totsize= 16.819
-H__9_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__9_8: replacing with value 0 bnd= 3 totsize= 17.9176
-H__11_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__11_8: replacing with value 1 bnd= 3 totsize= 19.0162
-* Final Problem size: Problem nodes = 294
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.8= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-******** FAILED ********
-* FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
-RESULT = 1  
-**ROUND 6 : 19.0162 Round time:  0.018 ms 
-RNDDEG = 5
-SUMMRY , 704, 157, 181, 599, 739, 1215, 141, 89, 715, 723, 749
- charness = 0
-POST-SUMMRY , 89, 141, 157, 181, 599, 704, 715, 723, 739, 749, 1215
+POST-SUMMRY , 2, 95, 157, 217, 247, 637, 809, 859, 893, 953, 1061, 1171, 1515, 1565, 1595, 1627, 1655, 1733, 2165, 2239
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 7
-H__15_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__15_7: replacing with value 2 bnd= 3 totsize= 1.09861
-H__2_7 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__2_7: replacing with value 28 bnd= 36 totsize= 4.68213
-H__6_8 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__6_8: replacing with value 7 bnd= 36 totsize= 8.26565
-H__12_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__12_7: replacing with value 0 bnd= 3 totsize= 9.36426
-H__13_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__13_7: replacing with value 0 bnd= 3 totsize= 10.4629
-H__14_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__14_7: replacing with value 2 bnd= 3 totsize= 11.5615
-H__3 odds = 1/0.47619 0.781806 (21, 21)  try to replace
-H__3: replacing with value 13 bnd= 32 totsize= 15.0272
-H__8_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__8_8: replacing with value 2 bnd= 3 totsize= 16.1258
-H__9_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__9_8: replacing with value 2 bnd= 3 totsize= 17.2244
-H__10_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__10_8: replacing with value 1 bnd= 3 totsize= 18.3231
-H__11_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__11_8: replacing with value 2 bnd= 3 totsize= 19.4217
-* Final Problem size: Problem nodes = 197
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.3= ASSERT H__16 : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+H__19_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__19_7: replacing with value 5 bnd= 6 totsize= 1.79176
+H__4_7 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_7: replacing with value 3 bnd= 12 totsize= 4.27667
+H__16_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_8: replacing with value 1 bnd= 6 totsize= 6.06843
+H__17_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__17_8: replacing with value 4 bnd= 6 totsize= 7.86019
+H__0_8 odds = 1/5 0.099668 (2, 2)  try to replace
+H__0_8: replacing with value 13 bnd= 32 totsize= 11.3259
+H__4_8 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_8: replacing with value 5 bnd= 12 totsize= 13.8108
+H__7_9 odds = 1/5 0.099668 (2, 2)  try to replace
+H__7_9: replacing with value 31 bnd= 32 totsize= 17.2766
+H__10_9 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__10_9: replacing with value 3 bnd= 12 totsize= 19.7615
+H__20 odds = 1/0.47619 0.781806 (21, 21)  try to replace
+H__20: replacing with value 1 bnd= 2 totsize= 20.4546
+H__12_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__12_9: replacing with value 3 bnd= 5 totsize= 22.0641
+H__13_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__13_9: replacing with value 4 bnd= 5 totsize= 23.6735
+H__14_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__14_9: replacing with value 2 bnd= 5 totsize= 25.2829
+H__5 odds = 1/0.128205 0.999181 (78, 78)  try to replace
+H__5: replacing with value 9 bnd= 32 totsize= 28.7487
+H__2_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__2_7: replacing with value 1 bnd= 32 totsize= 32.2144
+H__1_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_7: replacing with value 11 bnd= 32 totsize= 35.6801
+H__0_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__0_7: replacing with value 21 bnd= 32 totsize= 39.1459
+H__8_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__8_9: replacing with value 12 bnd= 32 totsize= 42.6116
+H__3_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__3_8: replacing with value 27 bnd= 32 totsize= 46.0773
+H__2_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__2_8: replacing with value 18 bnd= 32 totsize= 49.5431
+H__6_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__6_9: replacing with value 7 bnd= 32 totsize= 53.0088
+* Final Problem size: Problem nodes = 812
+Assert at main_double_0.sk:55 (8384633159460943249)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
 ******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0 ms 
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
- *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 7 : 19.4217 Round time:  0.014 ms 
+**ROUND 7 : 53.0088 Round time:  0.036 ms 
 RNDDEG = 10
-SUMMRY , 181, 633, 1161, 141, 153, 169, 99, 715, 727, 737, 751
+SUMMRY , 251, 815, 857, 893, 1053, 1523, 1925, 2225, 3, 1567, 1599, 1625, 91, 585, 475, 365, 2017, 1471, 1323, 1747
  charness = 0
-POST-SUMMRY , 99, 141, 153, 169, 181, 633, 715, 727, 737, 751, 1161
+POST-SUMMRY , 3, 91, 251, 365, 475, 585, 815, 857, 893, 1053, 1323, 1471, 1523, 1567, 1599, 1625, 1747, 1925, 2017, 2225
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 8
-H__12_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__12_7: replacing with value 1 bnd= 3 totsize= 1.09861
-H__13_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__13_7: replacing with value 1 bnd= 3 totsize= 2.19722
-H__14_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__14_7: replacing with value 0 bnd= 3 totsize= 3.29584
-H__15_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__15_7: replacing with value 2 bnd= 3 totsize= 4.39445
-H__2_7 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__2_7: replacing with value 2 bnd= 36 totsize= 7.97797
-H__11_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__11_8: replacing with value 2 bnd= 3 totsize= 9.07658
-H__6_8 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__6_8: replacing with value 0 bnd= 36 totsize= 12.6601
-H__3 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__3: replacing with value 23 bnd= 32 totsize= 16.1258
-H__8_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__8_8: replacing with value 1 bnd= 3 totsize= 17.2244
-* Final Problem size: Problem nodes = 193
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.10= ASSERT H__16 : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+H__16_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_7: replacing with value 4 bnd= 6 totsize= 1.79176
+H__17_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_7: replacing with value 5 bnd= 6 totsize= 3.58352
+H__18_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_7: replacing with value 4 bnd= 6 totsize= 5.37528
+H__19_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_7: replacing with value 5 bnd= 6 totsize= 7.16704
+H__4_7 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_7: replacing with value 8 bnd= 12 totsize= 9.65194
+H__16_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_8: replacing with value 1 bnd= 6 totsize= 11.4437
+H__18_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_8: replacing with value 3 bnd= 6 totsize= 13.2355
+H__0_8 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__0_8: replacing with value 4 bnd= 32 totsize= 16.7012
+H__3_8 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__3_8: replacing with value 17 bnd= 32 totsize= 20.1669
+H__4_8 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_8: replacing with value 2 bnd= 12 totsize= 22.6518
+H__12_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__12_9: replacing with value 1 bnd= 5 totsize= 24.2613
+H__13_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__13_9: replacing with value 3 bnd= 5 totsize= 25.8707
+H__14_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__14_9: replacing with value 1 bnd= 5 totsize= 27.4802
+H__7_9 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__7_9: replacing with value 1 bnd= 32 totsize= 30.9459
+H__10_9 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__10_9: replacing with value 6 bnd= 12 totsize= 33.4308
+H__20 odds = 1/0.263158 0.956237 (19, 19)  try to replace
+H__20: replacing with value 1 bnd= 2 totsize= 34.1239
+H__15_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__15_9: replacing with value 3 bnd= 5 totsize= 35.7334
+H__5 odds = 1/0.0641026 1 (78, 78)  try to replace
+H__5: replacing with value 19 bnd= 32 totsize= 39.1991
+H__9_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__9_9: replacing with value 16 bnd= 32 totsize= 42.6649
+H__1_8 odds = 1/0.208333 0.983675 (24, 24)  try to replace
+H__1_8: replacing with value 11 bnd= 32 totsize= 46.1306
+* Final Problem size: Problem nodes = 515
+Assert at main_double_0.sk:55 (8384633159460943249)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
 ******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0 ms 
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
- *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 8 : 17.2244 Round time:  0.009 ms 
+**ROUND 8 : 46.1306 Round time:  0.032 ms 
 RNDDEG = 5
-SUMMRY , 143, 155, 165, 181, 581, 751, 1147, 119, 713
+SUMMRY , 159, 191, 219, 251, 825, 857, 921, 1035, 1451, 1517, 1563, 1597, 1623, 1865, 2231, 3, 1657, 111, 2155, 1179
  charness = 0
-POST-SUMMRY , 119, 143, 155, 165, 181, 581, 713, 751, 1147
+POST-SUMMRY , 3, 111, 159, 191, 219, 251, 825, 857, 921, 1035, 1179, 1451, 1517, 1563, 1597, 1623, 1657, 1865, 2155, 2231
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 9
 Nothing read
-cur=5 next=10 scorecur=14 scorenext=16
+cur=5 next=10 scorecur=39 scorenext=39
  Switch by luck
-Averages 16.1651, 14.6297
-Climbing to 5, 10
-H__12_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__12_7: replacing with value 2 bnd= 3 totsize= 1.09861
-H__14_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__14_7: replacing with value 1 bnd= 3 totsize= 2.19722
-H__15_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__15_7: replacing with value 2 bnd= 3 totsize= 3.29584
-H__2_7 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__2_7: replacing with value 0 bnd= 36 totsize= 6.87936
-H__6_8 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__6_8: replacing with value 15 bnd= 36 totsize= 10.4629
-H__3 odds = 1/0.47619 0.781806 (21, 21)  try to replace
-H__3: replacing with value 18 bnd= 32 totsize= 13.9286
-H__8_8 odds = 1/0.4 0.848284 (25, 25)  try to replace
-H__8_8: replacing with value 2 bnd= 3 totsize= 15.0272
-H__9_8 odds = 1/0.4 0.848284 (25, 25)  try to replace
-H__9_8: replacing with value 2 bnd= 3 totsize= 16.1258
-H__10_8 odds = 1/0.4 0.848284 (25, 25)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 17.2244
-H__11_8 odds = 1/0.4 0.848284 (25, 25)  try to replace
-H__11_8: replacing with value 2 bnd= 3 totsize= 18.3231
-* Final Problem size: Problem nodes = 217
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  1	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.8= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+Averages 39.2677, 39.3826
+H__16_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_7: replacing with value 0 bnd= 6 totsize= 1.79176
+H__17_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_7: replacing with value 4 bnd= 6 totsize= 3.58352
+H__18_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_7: replacing with value 3 bnd= 6 totsize= 5.37528
+H__2_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__2_7: replacing with value 21 bnd= 32 totsize= 8.84101
+H__3_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__3_7: replacing with value 12 bnd= 32 totsize= 12.3068
+H__4_7 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_7: replacing with value 10 bnd= 12 totsize= 14.7917
+H__16_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_8: replacing with value 2 bnd= 6 totsize= 16.5834
+H__17_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_8: replacing with value 4 bnd= 6 totsize= 18.3752
+H__19_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_8: replacing with value 2 bnd= 6 totsize= 20.1669
+H__0_8 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__0_8: replacing with value 0 bnd= 32 totsize= 23.6327
+H__4_8 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_8: replacing with value 1 bnd= 12 totsize= 26.1176
+H__12_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__12_9: replacing with value 2 bnd= 5 totsize= 27.727
+H__13_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__13_9: replacing with value 3 bnd= 5 totsize= 29.3365
+H__15_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__15_9: replacing with value 1 bnd= 5 totsize= 30.9459
+H__6_9 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__6_9: replacing with value 26 bnd= 32 totsize= 34.4116
+H__10_9 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__10_9: replacing with value 7 bnd= 12 totsize= 36.8965
+H__20 odds = 1/0.277778 0.946806 (18, 18)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 37.5897
+H__5 odds = 1/0.0641026 1 (78, 78)  try to replace
+H__5: replacing with value 9 bnd= 32 totsize= 41.0554
+* Final Problem size: Problem nodes = 447
+Assert at main_double_0.sk:181 (511591761868268358)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.12= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
 * FIND TIME:  0 ms 
 * CHECK TIME:  0.001 ms 
- *FAILED IN 2 iterations.
+ *FAILED IN 1 iterations.
  *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 9 : 18.3231 Round time:  0.011 ms 
-RNDDEG = 10
-SUMMRY , 145, 167, 181, 577, 1177, 109, 715, 727, 739, 751
+**ROUND 9 : 41.0554 Round time:  0.021 ms 
+RNDDEG = 5
+SUMMRY , 151, 189, 217, 625, 737, 829, 859, 893, 949, 1027, 1515, 1565, 1597, 1653, 1785, 2233, 2, 91
  charness = 0
-POST-SUMMRY , 109, 145, 167, 181, 577, 715, 727, 739, 751, 1177
+POST-SUMMRY , 2, 91, 151, 189, 217, 625, 737, 829, 859, 893, 949, 1027, 1515, 1565, 1597, 1653, 1785, 2233
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 10
-H__12_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__12_7: replacing with value 0 bnd= 3 totsize= 1.09861
-H__13_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__13_7: replacing with value 0 bnd= 3 totsize= 2.19722
-H__14_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__14_7: replacing with value 0 bnd= 3 totsize= 3.29584
-H__2_7 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__2_7: replacing with value 6 bnd= 36 totsize= 6.87936
-H__11_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__11_8: replacing with value 1 bnd= 3 totsize= 7.97797
-H__6_8 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__6_8: replacing with value 2 bnd= 36 totsize= 11.5615
-H__15_7 odds = 1/0.277778 0.946806 (18, 18)  try to replace
-H__15_7: replacing with value 0 bnd= 3 totsize= 12.6601
-H__3 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__3: replacing with value 20 bnd= 32 totsize= 16.1258
-H__8_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__8_8: replacing with value 1 bnd= 3 totsize= 17.2244
-H__9_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__9_8: replacing with value 2 bnd= 3 totsize= 18.3231
-H__10_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__10_8: replacing with value 1 bnd= 3 totsize= 19.4217
-* Final Problem size: Problem nodes = 194
-Assert at main_double_0.sk:203 (-2014022263682476150)
+H__18_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__18_7: replacing with value 4 bnd= 6 totsize= 1.79176
+H__4_7 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_7: replacing with value 6 bnd= 12 totsize= 4.27667
+H__16_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_8: replacing with value 4 bnd= 6 totsize= 6.06843
+H__17_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__17_8: replacing with value 0 bnd= 6 totsize= 7.86019
+H__18_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__18_8: replacing with value 1 bnd= 6 totsize= 9.65194
+H__19_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__19_8: replacing with value 1 bnd= 6 totsize= 11.4437
+H__4_8 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_8: replacing with value 5 bnd= 12 totsize= 13.9286
+H__13_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__13_9: replacing with value 3 bnd= 5 totsize= 15.538
+H__14_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__14_9: replacing with value 3 bnd= 5 totsize= 17.1475
+H__9_9 odds = 1/5 0.099668 (2, 2)  try to replace
+H__9_9: replacing with value 18 bnd= 32 totsize= 20.6132
+H__10_9 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__10_9: replacing with value 10 bnd= 12 totsize= 23.0981
+H__20 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 23.7913
+H__12_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__12_9: replacing with value 3 bnd= 5 totsize= 25.4007
+H__15_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__15_9: replacing with value 1 bnd= 5 totsize= 27.0102
+H__5 odds = 1/0.128205 0.999181 (78, 78)  try to replace
+H__5: replacing with value 20 bnd= 32 totsize= 30.4759
+H__3_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__3_7: replacing with value 7 bnd= 32 totsize= 33.9416
+H__1_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_7: replacing with value 27 bnd= 32 totsize= 37.4074
+H__0_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__0_7: replacing with value 18 bnd= 32 totsize= 40.8731
+H__6_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__6_9: replacing with value 22 bnd= 32 totsize= 44.3388
+* Final Problem size: Problem nodes = 606
+Assert at main_double_0.sk:181 (511591761868268358)
 ********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.3= ASSERT H__16 : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.11= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
 * FIND TIME:  0.001 ms 
 * CHECK TIME:  0 ms 
  *FAILED IN 1 iterations.
  *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 10 : 19.4217 Round time:  0.01 ms 
-RNDDEG = 5
-SUMMRY , 141, 153, 165, 589, 749, 1151, 177, 113, 713, 727, 737
+**ROUND 10 : 44.3388 Round time:  0.024 ms 
+RNDDEG = 10
+SUMMRY , 219, 821, 863, 885, 917, 947, 1523, 1597, 1627, 2159, 2239, 2, 1567, 1653, 113, 727, 507, 359, 1777
  charness = 0
-POST-SUMMRY , 113, 141, 153, 165, 177, 589, 713, 727, 737, 749, 1151
+POST-SUMMRY , 2, 113, 219, 359, 507, 727, 821, 863, 885, 917, 947, 1523, 1567, 1597, 1627, 1653, 1777, 2159, 2239
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 11
-H__12_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__12_7: replacing with value 1 bnd= 3 totsize= 1.09861
-H__2_7 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__2_7: replacing with value 13 bnd= 36 totsize= 4.68213
-H__10_8 odds = 1/2.5 0.197375 (4, 4)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 5.78074
-H__6_8 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__6_8: replacing with value 12 bnd= 36 totsize= 9.36426
-H__13_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__13_7: replacing with value 2 bnd= 3 totsize= 10.4629
-H__14_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
-H__14_7: replacing with value 2 bnd= 3 totsize= 11.5615
-H__9_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__9_8: replacing with value 0 bnd= 3 totsize= 12.6601
-* Final Problem size: Problem nodes = 366
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.30= ASSERT 29 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
+H__17_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_7: replacing with value 0 bnd= 6 totsize= 1.79176
+H__18_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_7: replacing with value 5 bnd= 6 totsize= 3.58352
+H__19_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_7: replacing with value 4 bnd= 6 totsize= 5.37528
+H__2_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__2_7: replacing with value 29 bnd= 32 totsize= 8.84101
+H__4_7 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_7: replacing with value 8 bnd= 12 totsize= 11.3259
+H__18_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_8: replacing with value 4 bnd= 6 totsize= 13.1177
+H__1_8 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__1_8: replacing with value 16 bnd= 32 totsize= 16.5834
+H__2_8 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__2_8: replacing with value 5 bnd= 32 totsize= 20.0492
+H__4_8 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_8: replacing with value 3 bnd= 12 totsize= 22.5341
+H__15_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__15_9: replacing with value 0 bnd= 5 totsize= 24.1435
+H__7_9 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__7_9: replacing with value 6 bnd= 32 totsize= 27.6092
+H__8_9 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__8_9: replacing with value 18 bnd= 32 totsize= 31.075
+H__10_9 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__10_9: replacing with value 11 bnd= 12 totsize= 33.5599
+H__20 odds = 1/0.227273 0.975743 (22, 22)  try to replace
+H__20: replacing with value 1 bnd= 2 totsize= 34.253
+H__12_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__12_9: replacing with value 0 bnd= 5 totsize= 35.8625
+H__13_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__13_9: replacing with value 3 bnd= 5 totsize= 37.4719
+H__14_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__14_9: replacing with value 2 bnd= 5 totsize= 39.0813
+H__5 odds = 1/0.0641026 1 (78, 78)  try to replace
+H__5: replacing with value 24 bnd= 32 totsize= 42.5471
+H__0_7 odds = 1/0.208333 0.983675 (24, 24)  try to replace
+H__0_7: replacing with value 1 bnd= 32 totsize= 46.0128
+H__0_8 odds = 1/0.208333 0.983675 (24, 24)  try to replace
+H__0_8: replacing with value 30 bnd= 32 totsize= 49.4785
+H__6_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__6_9: replacing with value 14 bnd= 32 totsize= 52.9443
+* Final Problem size: Problem nodes = 739
+Assert at main_double_0.sk:55 (8384633159460943249)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
 ******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0 ms 
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
- *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 11 : 12.6601 Round time:  0.011 ms 
-RNDDEG = 10
-SUMMRY , 143, 603, 735, 1171, 157, 169, 723
+**ROUND 11 : 52.9443 Round time:  999.027 ms 
+RNDDEG = 5
+SUMMRY , 181, 221, 249, 641, 825, 923, 1189, 1297, 1519, 1651, 1875, 2029, 2241, 3, 1561, 1597, 1625, 121, 325, 1087, 1761
  charness = 0
-POST-SUMMRY , 143, 157, 169, 603, 723, 735, 1171
+POST-SUMMRY , 3, 121, 181, 221, 249, 325, 641, 825, 923, 1087, 1189, 1297, 1519, 1561, 1597, 1625, 1651, 1761, 1875, 2029, 2241
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 12
-H__12_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__12_7: replacing with value 2 bnd= 3 totsize= 1.09861
-H__2_7 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__2_7: replacing with value 28 bnd= 36 totsize= 4.68213
-H__8_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__8_8: replacing with value 0 bnd= 3 totsize= 5.78074
-H__9_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__9_8: replacing with value 1 bnd= 3 totsize= 6.87936
-H__11_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__11_8: replacing with value 2 bnd= 3 totsize= 7.97797
-H__6_8 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__6_8: replacing with value 27 bnd= 36 totsize= 11.5615
-H__14_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
-H__14_7: replacing with value 2 bnd= 3 totsize= 12.6601
-H__15_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
-H__15_7: replacing with value 0 bnd= 3 totsize= 13.7587
-H__3 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__3: replacing with value 18 bnd= 32 totsize= 17.2244
-H__10_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 18.3231
-* Final Problem size: Problem nodes = 307
-Assert at main_double_0.sk:203 (-2014022263682476150)
+H__16_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_7: replacing with value 4 bnd= 6 totsize= 1.79176
+H__17_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__17_7: replacing with value 5 bnd= 6 totsize= 3.58352
+H__2_7 odds = 1/5 0.099668 (2, 2)  try to replace
+H__2_7: replacing with value 20 bnd= 32 totsize= 7.04925
+H__4_7 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_7: replacing with value 0 bnd= 12 totsize= 9.53416
+H__16_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_8: replacing with value 0 bnd= 6 totsize= 11.3259
+H__0_8 odds = 1/5 0.099668 (2, 2)  try to replace
+H__0_8: replacing with value 12 bnd= 32 totsize= 14.7917
+H__6_9 odds = 1/5 0.099668 (2, 2)  try to replace
+H__6_9: replacing with value 28 bnd= 32 totsize= 18.2574
+H__10_9 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__10_9: replacing with value 1 bnd= 12 totsize= 20.7423
+H__12_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__12_9: replacing with value 1 bnd= 5 totsize= 22.3517
+H__13_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__13_9: replacing with value 4 bnd= 5 totsize= 23.9612
+H__5 odds = 1/0.128205 0.999181 (78, 78)  try to replace
+H__5: replacing with value 1 bnd= 32 totsize= 27.4269
+H__7_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__7_9: replacing with value 22 bnd= 32 totsize= 30.8926
+H__4_8 odds = 1/0.0591716 1 (169, 169)  try to replace
+H__4_8: replacing with value 10 bnd= 12 totsize= 33.3776
+H__3_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__3_8: replacing with value 5 bnd= 32 totsize= 36.8433
+H__2_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__2_8: replacing with value 2 bnd= 32 totsize= 40.309
+H__1_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_8: replacing with value 7 bnd= 32 totsize= 43.7748
+* Final Problem size: Problem nodes = 1236
+Assert at main_double_0.sk:55 (8384633159460943249)
 ********  0	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.7= ASSERT H__16 : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  1	ftime= 0.002	ctime= 0.001
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  2	ftime= 0.002	ctime= 0.002
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  3	ftime= 0.001	ctime= 0.002
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  4	ftime= 0.001	ctime= 0.002
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:61 (-2475964863317551833)
+Problem became UNSAT.26= ASSERT H__20 : Assert at main_double_0.sk:61 (-2475964863317551833)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:61 (-2475964863317551833)
 ******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0.001 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
+* FIND TIME:  0.001 ms 0.007 ms
+* CHECK TIME:  0.002 ms 0.008 ms
+ *FAILED IN 5 iterations.
+ *FIND TIME 0.007 CHECK TIME 0.008 TOTAL TIME 0.015
 RESULT = 1  
-**ROUND 12 : 18.3231 Round time:  0.01 ms 
-RNDDEG = 5
-SUMMRY , 145, 633, 711, 725, 751, 1201, 169, 177, 109, 735
+**ROUND 12 : 43.7748 Round time:  0.049 ms 
+RNDDEG = 10
+SUMMRY , 159, 191, 623, 809, 855, 1051, 1789, 2221, 1563, 1599, 75, 1907, 1533, 1427, 1291, 1171
  charness = 0
-POST-SUMMRY , 109, 145, 169, 177, 633, 711, 725, 735, 751, 1201
+POST-SUMMRY , 75, 159, 191, 623, 809, 855, 1051, 1171, 1291, 1427, 1533, 1563, 1599, 1789, 1907, 2221
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 13
-H__12_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__12_7: replacing with value 2 bnd= 3 totsize= 1.09861
-H__13_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__13_7: replacing with value 0 bnd= 3 totsize= 2.19722
-H__2_7 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__2_7: replacing with value 11 bnd= 36 totsize= 5.78074
-H__11_8 odds = 1/2.5 0.197375 (4, 4)  try to replace
-H__11_8: replacing with value 0 bnd= 3 totsize= 6.87936
-H__6_8 odds = 1/0.133333 0.998894 (75, 75)  try to replace
-H__6_8: replacing with value 13 bnd= 36 totsize= 10.4629
-H__16 odds = 1/1.66667 0.291313 (6, 6)  try to replace
-H__16: replacing with value 1 bnd= 2 totsize= 11.156
-H__8_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__8_8: replacing with value 0 bnd= 3 totsize= 12.2546
-H__9_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__9_8: replacing with value 2 bnd= 3 totsize= 13.3532
-H__10_8 odds = 1/0.3125 0.921669 (32, 32)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 14.4519
-* Final Problem size: Problem nodes = 377
-Assert at main_double_0.sk:38 (8085420812314574818)
+H__17_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_7: replacing with value 4 bnd= 6 totsize= 1.79176
+H__19_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__19_7: replacing with value 3 bnd= 6 totsize= 3.58352
+H__4_7 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_7: replacing with value 7 bnd= 12 totsize= 6.06843
+H__16_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__16_8: replacing with value 4 bnd= 6 totsize= 7.86019
+H__17_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__17_8: replacing with value 3 bnd= 6 totsize= 9.65194
+H__18_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__18_8: replacing with value 3 bnd= 6 totsize= 11.4437
+H__0_8 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__0_8: replacing with value 4 bnd= 32 totsize= 14.9094
+H__1_8 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__1_8: replacing with value 30 bnd= 32 totsize= 18.3752
+H__4_8 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__4_8: replacing with value 0 bnd= 12 totsize= 20.8601
+H__13_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__13_9: replacing with value 4 bnd= 5 totsize= 22.4695
+H__6_9 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__6_9: replacing with value 18 bnd= 32 totsize= 25.9353
+H__10_9 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__10_9: replacing with value 11 bnd= 12 totsize= 28.4202
+H__20 odds = 1/0.238095 0.970452 (21, 21)  try to replace
+H__20: replacing with value 1 bnd= 2 totsize= 29.1133
+H__12_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__12_9: replacing with value 1 bnd= 5 totsize= 30.7227
+H__14_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__14_9: replacing with value 0 bnd= 5 totsize= 32.3322
+H__15_9 odds = 1/0.0675676 0.999999 (74, 74)  try to replace
+H__15_9: replacing with value 4 bnd= 5 totsize= 33.9416
+H__5 odds = 1/0.0641026 1 (78, 78)  try to replace
+H__5: replacing with value 2 bnd= 32 totsize= 37.4074
+H__0_7 odds = 1/0.208333 0.983675 (24, 24)  try to replace
+H__0_7: replacing with value 25 bnd= 32 totsize= 40.8731
+H__9_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__9_9: replacing with value 28 bnd= 32 totsize= 44.3388
+H__8_9 odds = 1/0.0342466 1 (146, 146)  try to replace
+H__8_9: replacing with value 8 bnd= 32 totsize= 47.8046
+H__7_9 odds = 1/0.0684932 0.999999 (73, 73)  try to replace
+H__7_9: replacing with value 0 bnd= 32 totsize= 51.2703
+* Final Problem size: Problem nodes = 579
+Assert at main_double_0.sk:55 (8384633159460943249)
 ********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
 ******** FAILED ********
 * FIND TIME:  0 ms 
 * CHECK TIME:  0 ms 
  *FAILED IN 1 iterations.
  *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0
 RESULT = 1  
-**ROUND 13 : 14.4519 Round time:  0.01 ms 
-RNDDEG = 10
-SUMMRY , 145, 153, 599, 747, 1173, 3, 711, 727, 735
+**ROUND 13 : 51.2703 Round time:  0.021 ms 
+RNDDEG = 5
+SUMMRY , 189, 247, 823, 863, 891, 921, 1035, 1217, 1513, 1599, 1769, 2241, 3, 1563, 1621, 1659, 77, 373, 2179, 2009, 1863
  charness = 0
-POST-SUMMRY , 3, 145, 153, 599, 711, 727, 735, 747, 1173
+POST-SUMMRY , 3, 77, 189, 247, 373, 823, 863, 891, 921, 1035, 1217, 1513, 1563, 1599, 1621, 1659, 1769, 1863, 2009, 2179, 2241
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 14
 Nothing read
-cur=5 next=20 scorecur=14 scorenext=0
+cur=10 next=20 scorecur=39 scorenext=0
 Switch because next is better
-Averages 0, 14.5262
-H__15_7 odds = 1/3.33333 0.148885 (6, 6)  try to replace
-H__15_7: replacing with value 1 bnd= 3 totsize= 1.09861
-H__2_7 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__2_7: replacing with value 8 bnd= 36 totsize= 4.68213
-H__6_8 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__6_8: replacing with value 11 bnd= 36 totsize= 8.26565
-H__12_7 odds = 1/1 0.462117 (20, 20)  try to replace
-H__12_7: replacing with value 2 bnd= 3 totsize= 9.36426
-H__13_7 odds = 1/1 0.462117 (20, 20)  try to replace
-H__13_7: replacing with value 1 bnd= 3 totsize= 10.4629
-H__8_8 odds = 1/0.625 0.664037 (32, 32)  try to replace
-H__8_8: replacing with value 2 bnd= 3 totsize= 11.5615
-* Final Problem size: Problem nodes = 398
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.32= ASSERT 31 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
+Averages 0, 39.7398
+H__17_7 odds = 1/2.22222 0.221278 (9, 9)  try to replace
+H__17_7: replacing with value 4 bnd= 6 totsize= 1.79176
+H__19_7 odds = 1/2.22222 0.221278 (9, 9)  try to replace
+H__19_7: replacing with value 2 bnd= 6 totsize= 3.58352
+H__4_7 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__4_7: replacing with value 9 bnd= 12 totsize= 6.06843
+H__12_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__12_9: replacing with value 2 bnd= 5 totsize= 7.67786
+H__13_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__13_9: replacing with value 1 bnd= 5 totsize= 9.2873
+H__14_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__14_9: replacing with value 2 bnd= 5 totsize= 10.8967
+H__15_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__15_9: replacing with value 1 bnd= 5 totsize= 12.5062
+H__5 odds = 1/0.25641 0.960319 (78, 78)  try to replace
+H__5: replacing with value 2 bnd= 32 totsize= 15.9719
+H__0_7 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__0_7: replacing with value 1 bnd= 32 totsize= 19.4376
+H__10_9 odds = 1/0.0193237 1 (1035, 1035)  try to replace
+H__10_9: replacing with value 8 bnd= 12 totsize= 21.9226
+H__6_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__6_9: replacing with value 13 bnd= 32 totsize= 25.3883
+H__4_8 odds = 1/0.110497 0.999765 (181, 181)  try to replace
+H__4_8: replacing with value 8 bnd= 12 totsize= 27.8732
+H__0_8 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__0_8: replacing with value 30 bnd= 32 totsize= 31.3389
+H__2_8 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__2_8: replacing with value 26 bnd= 32 totsize= 34.8047
+H__3_8 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__3_8: replacing with value 18 bnd= 32 totsize= 38.2704
+H__7_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__7_9: replacing with value 3 bnd= 32 totsize= 41.7361
+H__8_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__8_9: replacing with value 4 bnd= 32 totsize= 45.2019
+H__9_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__9_9: replacing with value 15 bnd= 32 totsize= 48.6676
+* Final Problem size: Problem nodes = 1051
+Assert at main_double_0.sk:55 (8384633159460943249)
+********  0	ftime= 0	ctime= 0.001
+Assert at main_double_0.sk:181 (511591761868268358)
+********  1	ftime= 0.001	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.23= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0.001 ms 
+* FIND TIME:  0.001 ms 0.002 ms
+* CHECK TIME:  0.001 ms 0.002 ms
  *FAILED IN 2 iterations.
- *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
+ *FIND TIME 0.002 CHECK TIME 0.002 TOTAL TIME 0.004
 RESULT = 1  
-**ROUND 14 : 11.5615 Round time:  0.011 ms 
+**ROUND 14 : 48.6676 Round time:  0.037 ms 
 RNDDEG = 20
-SUMMRY , 179, 593, 1169, 145, 155, 715
+SUMMRY , 189, 245, 827, 1565, 1593, 1625, 1653, 77, 325, 2235, 1759, 1529, 1087, 1339, 1453, 1869, 2001, 2153
  charness = 0
-POST-SUMMRY , 145, 155, 179, 593, 715, 1169
+POST-SUMMRY , 77, 189, 245, 325, 827, 1087, 1339, 1453, 1529, 1565, 1593, 1625, 1653, 1759, 1869, 2001, 2153, 2235
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 15
-H__12_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__12_7: replacing with value 2 bnd= 3 totsize= 1.09861
-H__13_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__13_7: replacing with value 0 bnd= 3 totsize= 2.19722
-H__15_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__15_7: replacing with value 2 bnd= 3 totsize= 3.29584
-H__2_7 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__2_7: replacing with value 18 bnd= 36 totsize= 6.87936
-H__8_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__8_8: replacing with value 0 bnd= 3 totsize= 7.97797
-H__11_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__11_8: replacing with value 0 bnd= 3 totsize= 9.07658
-H__6_8 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__6_8: replacing with value 2 bnd= 36 totsize= 12.6601
-H__16 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__16: replacing with value 1 bnd= 2 totsize= 13.3532
-H__14_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
-H__14_7: replacing with value 0 bnd= 3 totsize= 14.4519
-H__3 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__3: replacing with value 10 bnd= 32 totsize= 17.9176
-H__9_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__9_8: replacing with value 1 bnd= 3 totsize= 19.0162
-H__10_8 odds = 1/0.15625 0.996682 (32, 32)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 20.1148
-* Final Problem size: Problem nodes = 207
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
+H__16_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_7: replacing with value 2 bnd= 6 totsize= 1.79176
+H__18_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__18_7: replacing with value 2 bnd= 6 totsize= 3.58352
+H__4_7 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_7: replacing with value 6 bnd= 12 totsize= 6.06843
+H__16_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_8: replacing with value 4 bnd= 6 totsize= 7.86019
+H__17_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__17_8: replacing with value 2 bnd= 6 totsize= 9.65194
+H__4_8 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_8: replacing with value 5 bnd= 12 totsize= 12.1369
+H__13_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__13_9: replacing with value 2 bnd= 5 totsize= 13.7463
+H__14_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__14_9: replacing with value 4 bnd= 5 totsize= 15.3557
+H__10_9 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__10_9: replacing with value 3 bnd= 12 totsize= 17.8406
+H__12_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__12_9: replacing with value 4 bnd= 5 totsize= 19.4501
+H__5 odds = 1/0.128205 0.999181 (78, 78)  try to replace
+H__5: replacing with value 18 bnd= 32 totsize= 22.9158
+H__3_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__3_7: replacing with value 8 bnd= 32 totsize= 26.3815
+H__1_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_7: replacing with value 20 bnd= 32 totsize= 29.8473
+H__6_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__6_9: replacing with value 24 bnd= 32 totsize= 33.313
+H__2_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__2_8: replacing with value 0 bnd= 32 totsize= 36.7788
+* Final Problem size: Problem nodes = 696
+Assert at main_double_0.sk:55 (8384633159460943249)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.21= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
 * FIND TIME:  0 ms 
-* CHECK TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
- *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 15 : 20.1148 Round time:  0.011 ms 
-RNDDEG = 5
-SUMMRY , 145, 153, 181, 613, 711, 747, 1151, 3, 165, 93, 725, 735
+**ROUND 15 : 36.7788 Round time:  0.02 ms 
+RNDDEG = 10
+SUMMRY , 155, 215, 821, 863, 889, 1523, 1595, 1629, 2225, 1569, 109, 729, 493, 1781, 1287
  charness = 0
-POST-SUMMRY , 3, 93, 145, 153, 165, 181, 613, 711, 725, 735, 747, 1151
+POST-SUMMRY , 109, 155, 215, 493, 729, 821, 863, 889, 1287, 1523, 1569, 1595, 1629, 1781, 2225
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 16
-H__2_7 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__2_7: replacing with value 30 bnd= 36 totsize= 3.58352
-H__9_8 odds = 1/5 0.099668 (4, 4)  try to replace
-H__9_8: replacing with value 2 bnd= 3 totsize= 4.68213
-H__10_8 odds = 1/5 0.099668 (4, 4)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 5.78074
-H__6_8 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__6_8: replacing with value 26 bnd= 36 totsize= 9.36426
-H__3 odds = 1/0.952381 0.48155 (21, 21)  try to replace
-H__3: replacing with value 13 bnd= 32 totsize= 12.83
-H__8_8 odds = 1/0.625 0.664037 (32, 32)  try to replace
-H__8_8: replacing with value 0 bnd= 3 totsize= 13.9286
-H__11_8 odds = 1/0.625 0.664037 (32, 32)  try to replace
-H__11_8: replacing with value 0 bnd= 3 totsize= 15.0272
-* Final Problem size: Problem nodes = 353
-regen H__15
+H__4_7 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__4_7: replacing with value 5 bnd= 12 totsize= 2.48491
+H__19_8 odds = 1/2.22222 0.221278 (9, 9)  try to replace
+H__19_8: replacing with value 3 bnd= 6 totsize= 4.27667
+H__10_9 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__10_9: replacing with value 6 bnd= 12 totsize= 6.76157
+H__20 odds = 1/0.909091 0.50052 (22, 22)  try to replace
+H__20: replacing with value 1 bnd= 2 totsize= 7.45472
+H__12_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__12_9: replacing with value 2 bnd= 5 totsize= 9.06416
+H__13_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__13_9: replacing with value 2 bnd= 5 totsize= 10.6736
+H__14_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__14_9: replacing with value 0 bnd= 5 totsize= 12.283
+H__15_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__15_9: replacing with value 2 bnd= 5 totsize= 13.8925
+H__5 odds = 1/0.25641 0.960319 (78, 78)  try to replace
+H__5: replacing with value 21 bnd= 32 totsize= 17.3582
+H__3_7 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__3_7: replacing with value 23 bnd= 32 totsize= 20.8239
+H__1_7 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__1_7: replacing with value 1 bnd= 32 totsize= 24.2897
+H__9_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__9_9: replacing with value 19 bnd= 32 totsize= 27.7554
+H__4_8 odds = 1/0.110497 0.999765 (181, 181)  try to replace
+H__4_8: replacing with value 3 bnd= 12 totsize= 30.2403
+H__0_8 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__0_8: replacing with value 8 bnd= 32 totsize= 33.7061
+H__8_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__8_9: replacing with value 14 bnd= 32 totsize= 37.1718
+H__7_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__7_9: replacing with value 10 bnd= 32 totsize= 40.6375
+H__6_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__6_9: replacing with value 12 bnd= 32 totsize= 44.1033
+* Final Problem size: Problem nodes = 1089
+Assert at main_double_0.sk:55 (8384633159460943249)
 ********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  1	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.17= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
+Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:55 (8384633159460943249)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:55 (8384633159460943249)
 ******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0.001 ms 
- *FAILED IN 2 iterations.
- *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 16 : 15.0272 Round time:  0.015 ms 
+**ROUND 16 : 44.1033 Round time:  0.025 ms 
 RNDDEG = 20
-SUMMRY , 637, 727, 739, 1199, 99, 711, 747
+SUMMRY , 819, 951, 2231, 3, 1565, 1595, 1621, 1655, 115, 759, 455, 2161, 1519, 1043, 2021, 1883, 1757
  charness = 0
-POST-SUMMRY , 99, 637, 711, 727, 739, 747, 1199
+POST-SUMMRY , 3, 115, 455, 759, 819, 951, 1043, 1519, 1565, 1595, 1621, 1655, 1757, 1883, 2021, 2161, 2231
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 17
-H__7 odds = 1/5 0.099668 (1, 1)  try to replace
-H__7: replacing with value 0 bnd= 2 totsize= 0.693147
-H__12_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__12_7: replacing with value 0 bnd= 3 totsize= 1.79176
-H__13_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__13_7: replacing with value 0 bnd= 3 totsize= 2.89037
-H__14_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__14_7: replacing with value 1 bnd= 3 totsize= 3.98898
-H__15_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
-H__15_7: replacing with value 1 bnd= 3 totsize= 5.0876
-H__2_7 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__2_7: replacing with value 33 bnd= 36 totsize= 8.67112
-H__8_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__8_8: replacing with value 0 bnd= 3 totsize= 9.76973
-H__9_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__9_8: replacing with value 0 bnd= 3 totsize= 10.8683
-H__10_8 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 11.967
-H__6_8 odds = 1/0.0666667 0.999999 (75, 75)  try to replace
-H__6_8: replacing with value 3 bnd= 36 totsize= 15.5505
-H__3 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__3: replacing with value 20 bnd= 32 totsize= 19.0162
-* Final Problem size: Problem nodes = 206
-regen H__11
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.7= ASSERT H__16 : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+H__16_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_7: replacing with value 1 bnd= 6 totsize= 1.79176
+H__4_7 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_7: replacing with value 6 bnd= 12 totsize= 4.27667
+H__16_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__16_8: replacing with value 4 bnd= 6 totsize= 6.06843
+H__18_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__18_8: replacing with value 1 bnd= 6 totsize= 7.86019
+H__4_8 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__4_8: replacing with value 2 bnd= 12 totsize= 10.3451
+H__14_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__14_9: replacing with value 3 bnd= 5 totsize= 11.9545
+H__7_9 odds = 1/5 0.099668 (2, 2)  try to replace
+H__7_9: replacing with value 3 bnd= 32 totsize= 15.4203
+H__10_9 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__10_9: replacing with value 11 bnd= 12 totsize= 17.9052
+H__20 odds = 1/0.47619 0.781806 (21, 21)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 18.5983
+H__12_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__12_9: replacing with value 1 bnd= 5 totsize= 20.2078
+H__13_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__13_9: replacing with value 0 bnd= 5 totsize= 21.8172
+H__15_9 odds = 1/0.135135 0.998778 (74, 74)  try to replace
+H__15_9: replacing with value 4 bnd= 5 totsize= 23.4266
+H__5 odds = 1/0.128205 0.999181 (78, 78)  try to replace
+H__5: replacing with value 10 bnd= 32 totsize= 26.8924
+H__3_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__3_7: replacing with value 15 bnd= 32 totsize= 30.3581
+H__2_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__2_7: replacing with value 15 bnd= 32 totsize= 33.8238
+H__1_7 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_7: replacing with value 3 bnd= 32 totsize= 37.2896
+H__9_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__9_9: replacing with value 5 bnd= 32 totsize= 40.7553
+H__1_8 odds = 1/0.416667 0.833655 (24, 24)  try to replace
+H__1_8: replacing with value 1 bnd= 32 totsize= 44.221
+H__6_9 odds = 1/0.0684932 0.999999 (146, 146)  try to replace
+H__6_9: replacing with value 31 bnd= 32 totsize= 47.6868
+* Final Problem size: Problem nodes = 887
+Assert at main_double_0.sk:181 (511591761868268358)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.17= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
-* FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 
+* FIND TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 17 : 19.0162 Round time:  0.01 ms 
-RNDDEG = 5
-SUMMRY , 704, 141, 153, 167, 179, 643, 711, 723, 739, 1153, 113
+**ROUND 17 : 47.6868 Round time:  0.021 ms 
+RNDDEG = 10
+SUMMRY , 153, 821, 863, 917, 1517, 1627, 1869, 2241, 2, 1563, 1591, 1659, 93, 743, 613, 459, 2133, 1159, 1795
  charness = 0
-POST-SUMMRY , 113, 141, 153, 167, 179, 643, 704, 711, 723, 739, 1153
+POST-SUMMRY , 2, 93, 153, 459, 613, 743, 821, 863, 917, 1159, 1517, 1563, 1591, 1627, 1659, 1795, 1869, 2133, 2241
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 18
-H__2_7 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__2_7: replacing with value 15 bnd= 36 totsize= 3.58352
-H__6_8 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__6_8: replacing with value 21 bnd= 36 totsize= 7.16704
-H__12_7 odds = 1/1 0.462117 (20, 20)  try to replace
-H__12_7: replacing with value 1 bnd= 3 totsize= 8.26565
-H__13_7 odds = 1/1 0.462117 (20, 20)  try to replace
-H__13_7: replacing with value 2 bnd= 3 totsize= 9.36426
-H__14_7 odds = 1/1 0.462117 (20, 20)  try to replace
-H__14_7: replacing with value 1 bnd= 3 totsize= 10.4629
-H__3 odds = 1/0.952381 0.48155 (21, 21)  try to replace
-H__3: replacing with value 30 bnd= 32 totsize= 13.9286
-H__8_8 odds = 1/0.625 0.664037 (32, 32)  try to replace
-H__8_8: replacing with value 2 bnd= 3 totsize= 15.0272
-H__9_8 odds = 1/0.625 0.664037 (32, 32)  try to replace
-H__9_8: replacing with value 1 bnd= 3 totsize= 16.1258
-* Final Problem size: Problem nodes = 278
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.8= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+H__19_7 odds = 1/2.22222 0.221278 (9, 9)  try to replace
+H__19_7: replacing with value 2 bnd= 6 totsize= 1.79176
+H__4_7 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__4_7: replacing with value 0 bnd= 12 totsize= 4.27667
+H__6_9 odds = 1/10 0.0499584 (2, 2)  try to replace
+H__6_9: replacing with value 17 bnd= 32 totsize= 7.7424
+H__12_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__12_9: replacing with value 2 bnd= 5 totsize= 9.35184
+H__13_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__13_9: replacing with value 0 bnd= 5 totsize= 10.9613
+H__14_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__14_9: replacing with value 0 bnd= 5 totsize= 12.5707
+H__15_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__15_9: replacing with value 4 bnd= 5 totsize= 14.1802
+H__5 odds = 1/0.25641 0.960319 (78, 78)  try to replace
+H__5: replacing with value 10 bnd= 32 totsize= 17.6459
+H__10_9 odds = 1/0.0193237 1 (1035, 1035)  try to replace
+H__10_9: replacing with value 1 bnd= 12 totsize= 20.1308
+H__4_8 odds = 1/0.110497 0.999765 (181, 181)  try to replace
+H__4_8: replacing with value 0 bnd= 12 totsize= 22.6157
+H__0_8 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__0_8: replacing with value 10 bnd= 32 totsize= 26.0814
+H__7_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__7_9: replacing with value 1 bnd= 32 totsize= 29.5472
+H__8_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__8_9: replacing with value 20 bnd= 32 totsize= 33.0129
+H__9_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__9_9: replacing with value 10 bnd= 32 totsize= 36.4786
+* Final Problem size: Problem nodes = 1072
+Assert at main_double_0.sk:181 (511591761868268358)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.26= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
 * FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 18 : 16.1258 Round time:  0.017 ms 
+**ROUND 18 : 36.4786 Round time:  0.035 ms 
 RNDDEG = 20
-SUMMRY , 607, 1189, 143, 157, 167, 133, 715, 725
+SUMMRY , 245, 809, 1767, 1565, 1591, 1621, 1659, 93, 2221, 1513, 1047, 1865, 2033, 2143
  charness = 0
-POST-SUMMRY , 133, 143, 157, 167, 607, 715, 725, 1189
+POST-SUMMRY , 93, 245, 809, 1047, 1513, 1565, 1591, 1621, 1659, 1767, 1865, 2033, 2143, 2221
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 19
 Nothing read
-cur=20 next=40 scorecur=9 scorenext=0
+cur=20 next=80 scorecur=39 scorenext=0
 Switch because next is better
-Averages 0, 9.97681
-H__13_7 odds = 1/3.33333 0.148885 (6, 6)  try to replace
-H__13_7: replacing with value 0 bnd= 3 totsize= 1.09861
-H__2_7 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__2_7: replacing with value 34 bnd= 36 totsize= 4.68213
-H__6_8 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__6_8: replacing with value 26 bnd= 36 totsize= 8.26565
-H__16 odds = 1/2.85714 0.173235 (7, 7)  try to replace
-H__16: replacing with value 1 bnd= 2 totsize= 8.9588
-H__12_7 odds = 1/1 0.462117 (20, 20)  try to replace
-H__12_7: replacing with value 0 bnd= 3 totsize= 10.0574
-H__8_8 odds = 1/0.625 0.664037 (32, 32)  try to replace
-H__8_8: replacing with value 2 bnd= 3 totsize= 11.156
-H__10_8 odds = 1/0.625 0.664037 (32, 32)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 12.2546
-* Final Problem size: Problem nodes = 528
-Assert at main_double_0.sk:38 (8085420812314574818)
+Averages 0, 39.6371
+H__19_7 odds = 1/2.22222 0.221278 (9, 9)  try to replace
+H__19_7: replacing with value 0 bnd= 6 totsize= 1.79176
+H__4_7 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__4_7: replacing with value 0 bnd= 12 totsize= 4.27667
+H__19_8 odds = 1/2.22222 0.221278 (9, 9)  try to replace
+H__19_8: replacing with value 0 bnd= 6 totsize= 6.06843
+H__4_8 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__4_8: replacing with value 9 bnd= 12 totsize= 8.55333
+H__10_9 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__10_9: replacing with value 1 bnd= 12 totsize= 11.0382
+H__12_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__12_9: replacing with value 0 bnd= 5 totsize= 12.6477
+H__13_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__13_9: replacing with value 4 bnd= 5 totsize= 14.2571
+H__5 odds = 1/0.25641 0.960319 (78, 78)  try to replace
+H__5: replacing with value 22 bnd= 32 totsize= 17.7229
+H__0_7 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__0_7: replacing with value 19 bnd= 32 totsize= 21.1886
+H__7_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__7_9: replacing with value 21 bnd= 32 totsize= 24.6543
+H__1_8 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__1_8: replacing with value 0 bnd= 32 totsize= 28.1201
+H__6_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__6_9: replacing with value 9 bnd= 32 totsize= 31.5858
+* Final Problem size: Problem nodes = 956
+Assert at main_double_0.sk:181 (511591761868268358)
 ********  0	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
-Problem became UNSAT.1= ASSERT (0) : Assert at main_double_0.sk:38 (8085420812314574818)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:38 (8085420812314574818)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.30= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
 * FIND TIME:  0.001 ms 
 * CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
  *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 19 : 12.2546 Round time:  0.02 ms 
+**ROUND 19 : 31.5858 Round time:  0.023 ms 
 RNDDEG = 20
-SUMMRY , 153, 645, 1199, 3, 141, 715, 739
+SUMMRY , 241, 809, 945, 1531, 2221, 1561, 1599, 117, 361, 1905, 1157, 1751
  charness = 0
-POST-SUMMRY , 3, 141, 153, 645, 715, 739, 1199
+POST-SUMMRY , 117, 241, 361, 809, 945, 1157, 1531, 1561, 1599, 1751, 1905, 2221
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 20
-H__2_7 odds = 1/0.533333 0.734072 (75, 75)  try to replace
-H__2_7: replacing with value 8 bnd= 36 totsize= 3.58352
-H__6_8 odds = 1/0.533333 0.734072 (75, 75)  try to replace
-H__6_8: replacing with value 20 bnd= 36 totsize= 7.16704
-H__12_7 odds = 1/2 0.244919 (20, 20)  try to replace
-H__12_7: replacing with value 1 bnd= 3 totsize= 8.26565
-H__14_7 odds = 1/2 0.244919 (20, 20)  try to replace
-H__14_7: replacing with value 1 bnd= 3 totsize= 9.36426
-H__10_8 odds = 1/1.25 0.379949 (32, 32)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 10.4629
-* Final Problem size: Problem nodes = 595
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  1	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.016	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  4	ftime= 0.002	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.49= ASSERT 48 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
+H__13_9 odds = 1/1.08108 0.43212 (74, 74)  try to replace
+H__13_9: replacing with value 0 bnd= 5 totsize= 1.60944
+H__4_7 odds = 1/0.441989 0.811447 (181, 181)  try to replace
+H__4_7: replacing with value 0 bnd= 12 totsize= 4.09434
+H__10_9 odds = 1/0.0772947 0.999995 (1035, 1035)  try to replace
+H__10_9: replacing with value 8 bnd= 12 totsize= 6.57925
+H__4_8 odds = 1/0.441989 0.811447 (181, 181)  try to replace
+H__4_8: replacing with value 9 bnd= 12 totsize= 9.06416
+H__8_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__8_9: replacing with value 28 bnd= 32 totsize= 12.5299
+H__9_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__9_9: replacing with value 12 bnd= 32 totsize= 15.9956
+* Final Problem size: Problem nodes = 2252
+Assert at main_double_0.sk:181 (511591761868268358)
+********  0	ftime= 0	ctime= 0.002
+After all optim
+********  1	ftime= 0.048	ctime= 0.011
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  2	ftime= 0.009	ctime= 0.003
+After all optim
+********  3	ftime= 0.009	ctime= 0.006
+After all optim
+********  4	ftime= 0.009	ctime= 0.007
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:61 (-2475964863317551833)
+Problem became UNSAT.102= ASSERT 101 : Assert at main_double_0.sk:61 (-2475964863317551833)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:61 (-2475964863317551833)
 ******** FAILED ********
-* FIND TIME:  0.001 ms 0.021 ms
-* CHECK TIME:  0 ms 0.003 ms
+* FIND TIME:  0.003 ms 0.078 ms
+* CHECK TIME:  0.007 ms 0.029 ms
  *FAILED IN 5 iterations.
- *FIND TIME 0.021 CHECK TIME 0.003 TOTAL TIME 0.024
+ *FIND TIME 0.078 CHECK TIME 0.029 TOTAL TIME 0.107
 RESULT = 1  
-**ROUND 20 : 10.4629 Round time:  0.043 ms 
-RNDDEG = 40
-SUMMRY , 593, 1187, 143, 167, 735
+**ROUND 20 : 15.9956 Round time:  0.137 ms 
+RNDDEG = 80
+SUMMRY , 1591, 809, 2235, 1531, 2049, 2147
  charness = 0
-POST-SUMMRY , 143, 167, 593, 735, 1187
+POST-SUMMRY , 809, 1531, 1591, 2049, 2147, 2235
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 21
-H__2_7 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__2_7: replacing with value 27 bnd= 36 totsize= 3.58352
-H__9_8 odds = 1/5 0.099668 (4, 4)  try to replace
-H__9_8: replacing with value 0 bnd= 3 totsize= 4.68213
-H__6_8 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__6_8: replacing with value 14 bnd= 36 totsize= 8.26565
-H__15_7 odds = 1/1 0.462117 (20, 20)  try to replace
-H__15_7: replacing with value 0 bnd= 3 totsize= 9.36426
-H__10_8 odds = 1/0.625 0.664037 (32, 32)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 10.4629
-* Final Problem size: Problem nodes = 510
-Assert at main_double_0.sk:203 (-2014022263682476150)
+H__18_7 odds = 1/2.22222 0.221278 (9, 9)  try to replace
+H__18_7: replacing with value 2 bnd= 6 totsize= 1.79176
+H__4_7 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__4_7: replacing with value 9 bnd= 12 totsize= 4.27667
+H__19_8 odds = 1/2.22222 0.221278 (9, 9)  try to replace
+H__19_8: replacing with value 5 bnd= 6 totsize= 6.06843
+H__4_8 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__4_8: replacing with value 10 bnd= 12 totsize= 8.55333
+H__20 odds = 1/0.909091 0.50052 (22, 22)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 9.24648
+H__12_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__12_9: replacing with value 1 bnd= 5 totsize= 10.8559
+H__13_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__13_9: replacing with value 2 bnd= 5 totsize= 12.4654
+H__14_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__14_9: replacing with value 3 bnd= 5 totsize= 14.0748
+H__15_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__15_9: replacing with value 3 bnd= 5 totsize= 15.6842
+H__1_7 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__1_7: replacing with value 2 bnd= 32 totsize= 19.15
+H__10_9 odds = 1/0.0193237 1 (1035, 1035)  try to replace
+H__10_9: replacing with value 3 bnd= 12 totsize= 21.6349
+H__6_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__6_9: replacing with value 9 bnd= 32 totsize= 25.1006
+H__2_8 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__2_8: replacing with value 20 bnd= 32 totsize= 28.5663
+H__1_8 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__1_8: replacing with value 20 bnd= 32 totsize= 32.0321
+H__7_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__7_9: replacing with value 25 bnd= 32 totsize= 35.4978
+H__8_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__8_9: replacing with value 0 bnd= 32 totsize= 38.9636
+H__9_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__9_9: replacing with value 10 bnd= 32 totsize= 42.4293
+* Final Problem size: Problem nodes = 1627
+regen H__16
 ********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.43= ASSERT 42 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  1	ftime= 0.002	ctime= 0.001
+Assert at main_double_0.sk:181 (511591761868268358)
+********  2	ftime= 0.005	ctime= 0.002
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  3	ftime= 0.002	ctime= 0.001
+Assert at main_double_0.sk:181 (511591761868268358)
+********  4	ftime= 0.004	ctime= 0.002
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  5	ftime= 0.002	ctime= 0.001
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  6	ftime= 0.004	ctime= 0.001
+Assert at main_double_0.sk:181 (511591761868268358)
+********  7	ftime= 0.003	ctime= 0.001
+Assert at main_double_0.sk:181 (511591761868268358)
+********  8	ftime= 0.002	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.36= ASSERT 35 : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0.001 ms 0.002 ms
- *FAILED IN 2 iterations.
- *FIND TIME 0 CHECK TIME 0.002 TOTAL TIME 0.002
+* FIND TIME:  0.002 ms 0.026 ms
+* CHECK TIME:  0.001 ms 0.011 ms
+ *FAILED IN 9 iterations.
+ *FIND TIME 0.026 CHECK TIME 0.011 TOTAL TIME 0.037
 RESULT = 1  
-**ROUND 21 : 10.4629 Round time:  0.013 ms 
+**ROUND 21 : 42.4293 Round time:  0.071 ms 
 RNDDEG = 20
-SUMMRY , 631, 723, 1175, 177, 735
+SUMMRY , 215, 827, 955, 1533, 2, 1563, 1595, 1627, 1657, 457, 2225, 1751, 1327, 1197, 1913, 1993, 2143
  charness = 0
-POST-SUMMRY , 177, 631, 723, 735, 1175
+POST-SUMMRY , 2, 215, 457, 827, 955, 1197, 1327, 1533, 1563, 1595, 1627, 1657, 1751, 1913, 1993, 2143, 2225
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 22
-H__2_7 odds = 1/0.533333 0.734072 (75, 75)  try to replace
-H__2_7: replacing with value 21 bnd= 36 totsize= 3.58352
-H__11_8 odds = 1/10 0.0499584 (4, 4)  try to replace
-H__11_8: replacing with value 2 bnd= 3 totsize= 4.68213
-H__6_8 odds = 1/0.533333 0.734072 (75, 75)  try to replace
-H__6_8: replacing with value 6 bnd= 36 totsize= 8.26565
-H__13_7 odds = 1/2 0.244919 (20, 20)  try to replace
-H__13_7: replacing with value 1 bnd= 3 totsize= 9.36426
-H__9_8 odds = 1/1.25 0.379949 (32, 32)  try to replace
-H__9_8: replacing with value 2 bnd= 3 totsize= 10.4629
-* Final Problem size: Problem nodes = 530
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.27= ASSERT H__16 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
+H__4_7 odds = 1/0.441989 0.811447 (181, 181)  try to replace
+H__4_7: replacing with value 4 bnd= 12 totsize= 2.48491
+H__10_9 odds = 1/0.0772947 0.999995 (1035, 1035)  try to replace
+H__10_9: replacing with value 1 bnd= 12 totsize= 4.96981
+H__6_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__6_9: replacing with value 15 bnd= 32 totsize= 8.43555
+H__4_8 odds = 1/0.441989 0.811447 (181, 181)  try to replace
+H__4_8: replacing with value 0 bnd= 12 totsize= 10.9205
+H__2_8 odds = 1/3.33333 0.148885 (24, 24)  try to replace
+H__2_8: replacing with value 11 bnd= 32 totsize= 14.3862
+H__7_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__7_9: replacing with value 12 bnd= 32 totsize= 17.8519
+H__8_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__8_9: replacing with value 10 bnd= 32 totsize= 21.3177
+H__9_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__9_9: replacing with value 4 bnd= 32 totsize= 24.7834
+* Final Problem size: Problem nodes = 2216
+regen H__17
+********  0	ftime= 0	ctime= 0.002
+Assert at main_double_0.sk:181 (511591761868268358)
+********  1	ftime= 0.013	ctime= 0.003
+Assert at main_double_0.sk:181 (511591761868268358)
+********  2	ftime= 0.013	ctime= 0.003
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  3	ftime= 0.011	ctime= 0.002
+Assert at main_double_0.sk:181 (511591761868268358)
+********  4	ftime= 0.01	ctime= 0.003
+Assert at main_double_0.sk:181 (511591761868268358)
+********  5	ftime= 0.014	ctime= 0.003
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  6	ftime= 0.026	ctime= 0.003
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:61 (-2475964863317551833)
+Problem became UNSAT.108= ASSERT 107 : Assert at main_double_0.sk:61 (-2475964863317551833)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:61 (-2475964863317551833)
 ******** FAILED ********
-* FIND TIME:  0 ms 0.001 ms
-* CHECK TIME:  0.001 ms 
- *FAILED IN 2 iterations.
- *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
+* FIND TIME:  0.008 ms 0.095 ms
+* CHECK TIME:  0.003 ms 0.019 ms
+ *FAILED IN 7 iterations.
+ *FIND TIME 0.095 CHECK TIME 0.019 TOTAL TIME 0.114
 RESULT = 1  
-**ROUND 22 : 10.4629 Round time:  0.013 ms 
-RNDDEG = 40
-SUMMRY , 619, 751, 1159, 155, 727
+**ROUND 22 : 24.7834 Round time:  0.145 ms 
+RNDDEG = 80
+SUMMRY , 817, 2221, 1763, 1513, 1309, 1887, 2013, 2131
  charness = 0
-POST-SUMMRY , 155, 619, 727, 751, 1159
+POST-SUMMRY , 817, 1309, 1513, 1763, 1887, 2013, 2131, 2221
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 23
-H__13_7 odds = 1/3.33333 0.148885 (6, 6)  try to replace
-H__13_7: replacing with value 0 bnd= 3 totsize= 1.09861
-H__14_7 odds = 1/3.33333 0.148885 (6, 6)  try to replace
-H__14_7: replacing with value 2 bnd= 3 totsize= 2.19722
-H__2_7 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__2_7: replacing with value 25 bnd= 36 totsize= 5.78074
-H__6_8 odds = 1/0.266667 0.954045 (75, 75)  try to replace
-H__6_8: replacing with value 30 bnd= 36 totsize= 9.36426
-H__10_8 odds = 1/0.625 0.664037 (32, 32)  try to replace
-H__10_8: replacing with value 1 bnd= 3 totsize= 10.4629
-* Final Problem size: Problem nodes = 550
-regen H__11
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.41= ASSERT 40 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
+H__3_7 odds = 1/10 0.0499584 (2, 2)  try to replace
+H__3_7: replacing with value 9 bnd= 32 totsize= 3.46574
+H__1_8 odds = 1/10 0.0499584 (2, 2)  try to replace
+H__1_8: replacing with value 8 bnd= 32 totsize= 6.93147
+H__4_8 odds = 1/0.740741 0.588259 (27, 27)  try to replace
+H__4_8: replacing with value 9 bnd= 12 totsize= 9.41638
+H__12_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__12_9: replacing with value 0 bnd= 5 totsize= 11.0258
+H__13_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__13_9: replacing with value 2 bnd= 5 totsize= 12.6353
+H__14_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__14_9: replacing with value 3 bnd= 5 totsize= 14.2447
+H__15_9 odds = 1/0.27027 0.951746 (74, 74)  try to replace
+H__15_9: replacing with value 1 bnd= 5 totsize= 15.8541
+H__5 odds = 1/0.25641 0.960319 (78, 78)  try to replace
+H__5: replacing with value 12 bnd= 32 totsize= 19.3199
+H__4_7 odds = 1/0.110497 0.999765 (181, 181)  try to replace
+H__4_7: replacing with value 6 bnd= 12 totsize= 21.8048
+H__0_7 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__0_7: replacing with value 12 bnd= 32 totsize= 25.2705
+H__1_7 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__1_7: replacing with value 15 bnd= 32 totsize= 28.7362
+H__10_9 odds = 1/0.0193237 1 (1035, 1035)  try to replace
+H__10_9: replacing with value 6 bnd= 12 totsize= 31.2212
+H__6_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__6_9: replacing with value 27 bnd= 32 totsize= 34.6869
+H__2_8 odds = 1/0.833333 0.53705 (24, 24)  try to replace
+H__2_8: replacing with value 1 bnd= 32 totsize= 38.1526
+H__7_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__7_9: replacing with value 10 bnd= 32 totsize= 41.6184
+H__8_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__8_9: replacing with value 0 bnd= 32 totsize= 45.0841
+H__9_9 odds = 1/0.136986 0.99865 (146, 146)  try to replace
+H__9_9: replacing with value 10 bnd= 32 totsize= 48.5498
+* Final Problem size: Problem nodes = 1318
+Assert at main_double_0.sk:181 (511591761868268358)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.29= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
-* FIND TIME:  0.001 ms 0.002 ms
-* CHECK TIME:  0 ms 
- *FAILED IN 2 iterations.
- *FIND TIME 0.002 CHECK TIME 0 TOTAL TIME 0.002
+* FIND TIME:  0.002 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.002 CHECK TIME 0.001 TOTAL TIME 0.003
 RESULT = 1  
-**ROUND 23 : 10.4629 Round time:  0.012 ms 
+**ROUND 23 : 48.5498 Round time:  0.042 ms 
 RNDDEG = 20
-SUMMRY , 153, 169, 627, 1207, 737
+SUMMRY , 731, 1173, 1531, 1561, 1595, 1627, 1653, 97, 821, 347, 483, 2231, 1787, 1289, 1883, 1993, 2143
  charness = 0
-POST-SUMMRY , 153, 169, 627, 737, 1207
+POST-SUMMRY , 97, 347, 483, 731, 821, 1173, 1289, 1531, 1561, 1595, 1627, 1653, 1787, 1883, 1993, 2143, 2231
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 24
 Nothing read
-cur=40 next=20 scorecur=6 scorenext=8
+cur=80 next=20 scorecur=18 scorenext=38
  Switch by luck
-Averages 8.40552, 6.71819
-Climbing to 40, 80
-H__10_8 odds = 1/10 0.0499584 (4, 4)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 1.09861
-H__6_8 odds = 1/0.533333 0.734072 (75, 75)  try to replace
-H__6_8: replacing with value 24 bnd= 36 totsize= 4.68213
-H__3 odds = 1/1.90476 0.256632 (21, 21)  try to replace
-H__3: replacing with value 20 bnd= 32 totsize= 8.14787
-H__2_7 odds = 1/0.0811359 0.999991 (493, 493)  try to replace
-H__2_7: replacing with value 3 bnd= 36 totsize= 11.7314
-* Final Problem size: Problem nodes = 575
-Assert at main_double_0.sk:38 (8085420812314574818)
+Averages 38.6481, 18.4301
+Climbing to 80, 160
+H__10_9 odds = 1/2.96296 0.167166 (27, 27)  try to replace
+H__10_9: replacing with value 9 bnd= 12 totsize= 2.48491
+H__14_9 odds = 1/1.08108 0.43212 (74, 74)  try to replace
+H__14_9: replacing with value 4 bnd= 5 totsize= 4.09434
+H__0_7 odds = 1/3.33333 0.148885 (24, 24)  try to replace
+H__0_7: replacing with value 8 bnd= 32 totsize= 7.56008
+H__8_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__8_9: replacing with value 16 bnd= 32 totsize= 11.0258
+H__4_8 odds = 1/0.441989 0.811447 (181, 181)  try to replace
+H__4_8: replacing with value 5 bnd= 12 totsize= 13.5107
+H__7_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__7_9: replacing with value 11 bnd= 32 totsize= 16.9765
+H__6_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__6_9: replacing with value 29 bnd= 32 totsize= 20.4422
+* Final Problem size: Problem nodes = 2876
+regen H__18
+********  0	ftime= 0	ctime= 0.003
+Assert at main_double_0.sk:181 (511591761868268358)
+********  1	ftime= 0.003	ctime= 0.004
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:61 (-2475964863317551833)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:61 (-2475964863317551833)
+Problem became UNSAT.181= ASSERT 180 : Assert at main_double_0.sk:61 (-2475964863317551833)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:61 (-2475964863317551833)
+******** FAILED ********
+* FIND TIME:  0.02 ms 0.023 ms
+* CHECK TIME:  0.004 ms 0.007 ms
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.023 CHECK TIME 0.007 TOTAL TIME 0.03
+RESULT = 1  
+**ROUND 24 : 20.4422 Round time:  0.063 ms 
+RNDDEG = 80
+SUMMRY , 2237, 1629, 339, 2025, 1523, 1885, 1791
+ charness = 0
+POST-SUMMRY , 339, 1523, 1629, 1791, 1885, 2025, 2237
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 25
+H__14_9 odds = 1/2.16216 0.227214 (74, 74)  try to replace
+H__14_9: replacing with value 0 bnd= 5 totsize= 1.60944
+H__5 odds = 1/2.05128 0.239035 (78, 78)  try to replace
+H__5: replacing with value 5 bnd= 32 totsize= 5.07517
+H__10_9 odds = 1/0.154589 0.996902 (1035, 1035)  try to replace
+H__10_9: replacing with value 8 bnd= 12 totsize= 7.56008
+H__4_8 odds = 1/0.883978 0.512139 (181, 181)  try to replace
+H__4_8: replacing with value 6 bnd= 12 totsize= 10.045
+H__7_9 odds = 1/1.09589 0.427023 (146, 146)  try to replace
+H__7_9: replacing with value 9 bnd= 32 totsize= 13.5107
+H__9_9 odds = 1/1.09589 0.427023 (146, 146)  try to replace
+H__9_9: replacing with value 3 bnd= 32 totsize= 16.9765
+* Final Problem size: Problem nodes = 1436
+Assert at main_double_0.sk:55 (8384633159460943249)
 ********  0	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.17= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
+Assert at main_double_0.sk:181 (511591761868268358)
+********  1	ftime= 0.002	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.39= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+******** FAILED ********
+* FIND TIME:  0.001 ms 0.003 ms
+* CHECK TIME:  0.001 ms 0.002 ms
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.003 CHECK TIME 0.002 TOTAL TIME 0.005
+RESULT = 1  
+**ROUND 25 : 16.9765 Round time:  0.036 ms 
+RNDDEG = 160
+SUMMRY , 1621, 83, 2235, 1525, 1881, 2129
+ charness = 0
+POST-SUMMRY , 83, 1525, 1621, 1881, 2129, 2235
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 26
+H__4_8 odds = 1/2.96296 0.167166 (27, 27)  try to replace
+H__4_8: replacing with value 9 bnd= 12 totsize= 2.48491
+H__10_9 odds = 1/2.96296 0.167166 (27, 27)  try to replace
+H__10_9: replacing with value 10 bnd= 12 totsize= 4.96981
+H__14_9 odds = 1/1.08108 0.43212 (74, 74)  try to replace
+H__14_9: replacing with value 2 bnd= 5 totsize= 6.57925
+H__15_9 odds = 1/1.08108 0.43212 (74, 74)  try to replace
+H__15_9: replacing with value 1 bnd= 5 totsize= 8.18869
+H__5 odds = 1/1.02564 0.45223 (78, 78)  try to replace
+H__5: replacing with value 18 bnd= 32 totsize= 11.6544
+H__4_7 odds = 1/0.441989 0.811447 (181, 181)  try to replace
+H__4_7: replacing with value 3 bnd= 12 totsize= 14.1393
+H__9_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__9_9: replacing with value 3 bnd= 32 totsize= 17.6051
+H__8_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__8_9: replacing with value 9 bnd= 32 totsize= 21.0708
+H__7_9 odds = 1/0.547945 0.72233 (146, 146)  try to replace
+H__7_9: replacing with value 3 bnd= 32 totsize= 24.5365
+* Final Problem size: Problem nodes = 1406
+Assert at main_double_0.sk:181 (511591761868268358)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
+Problem became UNSAT.36= ASSERT (0) : Assert at main_double_0.sk:181 (511591761868268358)
+  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:181 (511591761868268358)
 ******** FAILED ********
 * FIND TIME:  0.001 ms 
 * CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
  *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 24 : 11.7314 Round time:  0.014 ms 
-RNDDEG = 40
-SUMMRY , 735, 1195, 113, 583
- charness = 0
-POST-SUMMRY , 113, 583, 735, 1195
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 25
-H__6_8 odds = 1/1.06667 0.437189 (75, 75)  try to replace
-H__6_8: replacing with value 4 bnd= 36 totsize= 3.58352
-H__2_7 odds = 1/0.162272 0.995795 (493, 493)  try to replace
-H__2_7: replacing with value 29 bnd= 36 totsize= 7.16704
-* Final Problem size: Problem nodes = 671
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.002	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  4	ftime= 0.002	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.001 ms 0.007 ms
-* CHECK TIME:  0.001 ms 0.004 ms
- *FAILED IN 5 iterations.
- *FIND TIME 0.007 CHECK TIME 0.004 TOTAL TIME 0.011
-RESULT = 1  
-**ROUND 25 : 7.16704 Round time:  0.023 ms 
+**ROUND 26 : 24.5365 Round time:  0.028 ms 
 RNDDEG = 80
-SUMMRY , 1155, 635
+SUMMRY , 1531, 2239, 1625, 1653, 109, 815, 2129, 2011, 1869
  charness = 0
-POST-SUMMRY , 635, 1155
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 26
-H__2_7 odds = 1/0.533333 0.734072 (75, 75)  try to replace
-H__2_7: replacing with value 35 bnd= 36 totsize= 3.58352
-H__6_8 odds = 1/0.533333 0.734072 (75, 75)  try to replace
-H__6_8: replacing with value 7 bnd= 36 totsize= 7.16704
-H__3 odds = 1/1.90476 0.256632 (21, 21)  try to replace
-H__3: replacing with value 14 bnd= 32 totsize= 10.6328
-H__11_8 odds = 1/1.25 0.379949 (32, 32)  try to replace
-H__11_8: replacing with value 0 bnd= 3 totsize= 11.7314
-* Final Problem size: Problem nodes = 659
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.25= ASSERT H__16 : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-******** FAILED ********
-* FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
-RESULT = 1  
-**ROUND 26 : 11.7314 Round time:  0.012 ms 
-RNDDEG = 40
-SUMMRY , 647, 1161, 101, 747
- charness = 0
-POST-SUMMRY , 101, 647, 747, 1161
+POST-SUMMRY , 109, 815, 1531, 1625, 1653, 1869, 2011, 2129, 2239
 TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 27
-H__13_7 odds = 1/13.3333 0.0374824 (6, 6)  try to replace
-H__13_7: replacing with value 0 bnd= 3 totsize= 1.09861
-H__6_8 odds = 1/1.06667 0.437189 (75, 75)  try to replace
-H__6_8: replacing with value 12 bnd= 36 totsize= 4.68213
-H__2_7 odds = 1/0.162272 0.995795 (493, 493)  try to replace
-H__2_7: replacing with value 2 bnd= 36 totsize= 8.26565
-* Final Problem size: Problem nodes = 569
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.41= ASSERT 40 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-******** FAILED ********
-* FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
-RESULT = 1  
-**ROUND 27 : 8.26565 Round time:  0.019 ms 
-RNDDEG = 80
-SUMMRY , 153, 1171, 581
- charness = 0
-POST-SUMMRY , 153, 581, 1171
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 28
-H__15_7 odds = 1/6.66667 0.0748597 (6, 6)  try to replace
-H__15_7: replacing with value 1 bnd= 3 totsize= 1.09861
-H__2_7 odds = 1/0.533333 0.734072 (75, 75)  try to replace
-H__2_7: replacing with value 19 bnd= 36 totsize= 4.68213
-H__6_8 odds = 1/0.533333 0.734072 (75, 75)  try to replace
-H__6_8: replacing with value 10 bnd= 36 totsize= 8.26565
-H__9_8 odds = 1/1.25 0.379949 (32, 32)  try to replace
-H__9_8: replacing with value 0 bnd= 3 totsize= 9.36426
-* Final Problem size: Problem nodes = 659
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.009	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.002	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.001	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.62= ASSERT 61 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-******** FAILED ********
-* FIND TIME:  0 ms 0.012 ms
-* CHECK TIME:  0.001 ms 0.003 ms
- *FAILED IN 4 iterations.
- *FIND TIME 0.012 CHECK TIME 0.003 TOTAL TIME 0.015
-RESULT = 1  
-**ROUND 28 : 9.36426 Round time:  0.027 ms 
-RNDDEG = 40
-SUMMRY , 179, 615, 1167, 723
- charness = 0
-POST-SUMMRY , 179, 615, 723, 1167
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 29
-Received: , 0, 1, 579, 1161, 1741
-Sending: 
-, 0, 2, 579, 1161, 635, 1155, 3532
-cur=40 next=20 scorecur=6 scorenext=8
- Stay with what we had 40, 80
-Averages 6.79199, 3.84856
-Climbing to 80, 160
-H__10_8 odds = 1/5 0.099668 (32, 32)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 1.09861
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 28 bnd= 36 totsize= 4.68213
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 13 bnd= 36 totsize= 8.26565
-* Final Problem size: Problem nodes = 694
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.002	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.003	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  4	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  5	ftime= 0.001	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.003 ms 0.011 ms
-* CHECK TIME:  0.001 ms 0.006 ms
- *FAILED IN 6 iterations.
- *FIND TIME 0.011 CHECK TIME 0.006 TOTAL TIME 0.017
-RESULT = 1  
-**ROUND 29 : 8.26565 Round time:  0.032 ms 
-RNDDEG = 160
-SUMMRY , 739, 1203, 603
- charness = 0
-POST-SUMMRY , 603, 739, 1203
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 30
-H__6_8 odds = 1/1.06667 0.437189 (75, 75)  try to replace
-H__6_8: replacing with value 20 bnd= 36 totsize= 3.58352
-H__11_8 odds = 1/2.5 0.197375 (32, 32)  try to replace
-H__11_8: replacing with value 0 bnd= 3 totsize= 4.68213
-H__2_7 odds = 1/0.162272 0.995795 (493, 493)  try to replace
-H__2_7: replacing with value 29 bnd= 36 totsize= 8.26565
-* Final Problem size: Problem nodes = 705
-regen H__14
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  1	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.007	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.008	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  4	ftime= 0.004	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  5	ftime= 0.004	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  6	ftime= 0.002	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.002 ms 0.027 ms
-* CHECK TIME:  0.001 ms 0.005 ms
- *FAILED IN 7 iterations.
- *FIND TIME 0.027 CHECK TIME 0.005 TOTAL TIME 0.032
-RESULT = 1  
-**ROUND 30 : 8.26565 Round time:  0.045 ms 
-RNDDEG = 80
-SUMMRY , 1187, 747, 635
- charness = 0
-POST-SUMMRY , 635, 747, 1187
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 31
-H__2_7 odds = 1/2.13333 0.230176 (75, 75)  try to replace
-H__2_7: replacing with value 34 bnd= 36 totsize= 3.58352
-H__13_7 odds = 1/8 0.0624187 (20, 20)  try to replace
-H__13_7: replacing with value 2 bnd= 3 totsize= 4.68213
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 9 bnd= 36 totsize= 8.26565
-* Final Problem size: Problem nodes = 694
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.003	ctime= 0
+H__10_9 odds = 1/5.92593 0.0841753 (27, 27)  try to replace
+H__10_9: replacing with value 7 bnd= 12 totsize= 2.48491
+H__4_7 odds = 1/0.883978 0.512139 (181, 181)  try to replace
+H__4_7: replacing with value 7 bnd= 12 totsize= 4.96981
+H__2_7 odds = 1/6.66667 0.0748597 (24, 24)  try to replace
+H__2_7: replacing with value 14 bnd= 32 totsize= 8.43555
+H__4_8 odds = 1/0.883978 0.512139 (181, 181)  try to replace
+H__4_8: replacing with value 1 bnd= 12 totsize= 10.9205
+* Final Problem size: Problem nodes = 2182
+regen H__16
+********  0	ftime= 0	ctime= 0.002
+Assert at main_double_0.sk:181 (511591761868268358)
+********  1	ftime= 0.002	ctime= 0.002
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  2	ftime= 0.017	ctime= 0.002
+Assert at main_double_0.sk:181 (511591761868268358)
+********  3	ftime= 0.012	ctime= 0.002
 After all optim
-********  4	ftime= 0.002	ctime= 0.044
-******** FAILED ********
-* FIND TIME:  0.003 ms 0.01 ms
-* CHECK TIME:  0.044 ms 0.045 ms
- *FAILED IN 5 iterations.
- *FIND TIME 0.01 CHECK TIME 0.045 TOTAL TIME 0.055
-RESULT = 1  
-**ROUND 31 : 8.26565 Round time:  0.069 ms 
-RNDDEG = 160
-SUMMRY , 645, 157, 1165
- charness = 0
-POST-SUMMRY , 157, 645, 1165
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 32
-H__8_8 odds = 1/2.5 0.197375 (32, 32)  try to replace
-H__8_8: replacing with value 2 bnd= 3 totsize= 1.09861
-H__10_8 odds = 1/2.5 0.197375 (32, 32)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 2.19722
-H__6_8 odds = 1/0.105402 0.999848 (759, 759)  try to replace
-H__6_8: replacing with value 35 bnd= 36 totsize= 5.78074
-H__2_7 odds = 1/0.162272 0.995795 (493, 493)  try to replace
-H__2_7: replacing with value 11 bnd= 36 totsize= 9.36426
-* Final Problem size: Problem nodes = 631
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.002	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.47= ASSERT 46 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-******** FAILED ********
-* FIND TIME:  0 ms 0.003 ms
-* CHECK TIME:  0.001 ms 
- *FAILED IN 3 iterations.
- *FIND TIME 0.003 CHECK TIME 0.001 TOTAL TIME 0.004
-RESULT = 1  
-**ROUND 32 : 9.36426 Round time:  0.027 ms 
-RNDDEG = 80
-SUMMRY , 715, 739, 1217, 599
- charness = 0
-POST-SUMMRY , 599, 715, 739, 1217
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 33
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 0 bnd= 36 totsize= 3.58352
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 29 bnd= 36 totsize= 7.16704
-* Final Problem size: Problem nodes = 552
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.001	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  4	ftime= 0.001	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.50= ASSERT 49 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-******** FAILED ********
-* FIND TIME:  0 ms 0.004 ms
-* CHECK TIME:  0.001 ms 0.002 ms
- *FAILED IN 5 iterations.
- *FIND TIME 0.004 CHECK TIME 0.002 TOTAL TIME 0.006
-RESULT = 1  
-**ROUND 33 : 7.16704 Round time:  0.022 ms 
-RNDDEG = 160
-SUMMRY , 1147, 635
- charness = 0
-POST-SUMMRY , 635, 1147
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 34
-Received: , 0, 5, 579, 1161, 581, 1185, 611, 1197, 635, 1155, 635, 1175, 8919
-Sending: 
-, 0, 6, 579, 1161, 581, 1185, 611, 1197, 635, 1147, 635, 1155, 635, 1175, 10702
-cur=80 next=160 scorecur=4 scorenext=4
- Switch by luck
-Averages 4.58865, 4.6535
-H__2_7 odds = 1/2.13333 0.230176 (75, 75)  try to replace
-H__2_7: replacing with value 13 bnd= 36 totsize= 3.58352
-H__10_8 odds = 1/5 0.099668 (32, 32)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 4.68213
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 18 bnd= 36 totsize= 8.26565
-* Final Problem size: Problem nodes = 656
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  1	ftime= 0.001	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.001 ms 0.003 ms
-* CHECK TIME:  0.001 ms 0.002 ms
- *FAILED IN 3 iterations.
- *FIND TIME 0.003 CHECK TIME 0.002 TOTAL TIME 0.005
-RESULT = 1  
-**ROUND 34 : 8.26565 Round time:  0.021 ms 
-RNDDEG = 160
-SUMMRY , 603, 735, 1183
- charness = 0
-POST-SUMMRY , 603, 735, 1183
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 35
-H__6_8 odds = 1/1.06667 0.437189 (75, 75)  try to replace
-H__6_8: replacing with value 12 bnd= 36 totsize= 3.58352
-H__13_7 odds = 1/4 0.124353 (20, 20)  try to replace
-H__13_7: replacing with value 2 bnd= 3 totsize= 4.68213
-H__9_8 odds = 1/2.5 0.197375 (32, 32)  try to replace
-H__9_8: replacing with value 2 bnd= 3 totsize= 5.78074
-H__2_7 odds = 1/0.162272 0.995795 (493, 493)  try to replace
-H__2_7: replacing with value 19 bnd= 36 totsize= 9.36426
-* Final Problem size: Problem nodes = 588
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.004	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0 ms 0.005 ms
-* CHECK TIME:  0.001 ms 
- *FAILED IN 3 iterations.
- *FIND TIME 0.005 CHECK TIME 0.001 TOTAL TIME 0.006
-RESULT = 1  
-**ROUND 35 : 9.36426 Round time:  0.02 ms 
-RNDDEG = 80
-SUMMRY , 1171, 157, 727, 615
- charness = 0
-POST-SUMMRY , 157, 615, 727, 1171
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 36
-H__6_8 odds = 1/2.13333 0.230176 (75, 75)  try to replace
-H__6_8: replacing with value 1 bnd= 36 totsize= 3.58352
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 7 bnd= 36 totsize= 7.16704
-* Final Problem size: Problem nodes = 631
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.002 ms 0.003 ms
-* CHECK TIME:  0.001 ms 0.002 ms
- *FAILED IN 2 iterations.
- *FIND TIME 0.003 CHECK TIME 0.002 TOTAL TIME 0.005
-RESULT = 1  
-**ROUND 36 : 7.16704 Round time:  0.025 ms 
-RNDDEG = 160
-SUMMRY , 1149, 591
- charness = 0
-POST-SUMMRY , 591, 1149
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 37
-H__2_7 odds = 1/1.06667 0.437189 (75, 75)  try to replace
-H__2_7: replacing with value 9 bnd= 36 totsize= 3.58352
-H__6_8 odds = 1/1.06667 0.437189 (75, 75)  try to replace
-H__6_8: replacing with value 1 bnd= 36 totsize= 7.16704
-H__13_7 odds = 1/4 0.124353 (20, 20)  try to replace
-H__13_7: replacing with value 1 bnd= 3 totsize= 8.26565
-H__3 odds = 1/3.80952 0.130501 (21, 21)  try to replace
-H__3: replacing with value 26 bnd= 32 totsize= 11.7314
-H__8_8 odds = 1/2.5 0.197375 (32, 32)  try to replace
-H__8_8: replacing with value 2 bnd= 3 totsize= 12.83
-* Final Problem size: Problem nodes = 465
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-Problem became UNSAT.14= ASSERT (0) : Assert at main_double_0.sk:203 (-2014022263682476150)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:203 (-2014022263682476150)
-******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0.001 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
-RESULT = 1  
-**ROUND 37 : 12.83 Round time:  0.022 ms 
-RNDDEG = 80
-SUMMRY , 595, 1149, 155, 125, 715
- charness = 0
-POST-SUMMRY , 125, 155, 595, 715, 1149
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 38
-H__6_8 odds = 1/2.13333 0.230176 (75, 75)  try to replace
-H__6_8: replacing with value 32 bnd= 36 totsize= 3.58352
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 32 bnd= 36 totsize= 7.16704
-* Final Problem size: Problem nodes = 781
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.002	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.003	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.003 ms 0.009 ms
-* CHECK TIME:  0.001 ms 0.004 ms
- *FAILED IN 4 iterations.
- *FIND TIME 0.009 CHECK TIME 0.004 TOTAL TIME 0.013
-RESULT = 1  
-**ROUND 38 : 7.16704 Round time:  0.037 ms 
-RNDDEG = 160
-SUMMRY , 1211, 641
- charness = 0
-POST-SUMMRY , 641, 1211
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 39
-Received: , 0, 6, 579, 1161, 581, 1185, 611, 1197, 635, 1147, 635, 1155, 635, 1175, 10702
-Sending: 
-, 0, 8, 579, 1161, 581, 1185, 591, 1149, 611, 1197, 635, 1147, 635, 1155, 635, 1175, 641, 1211, 14296
-cur=160 next=320 scorecur=4 scorenext=0
-Switch because next is better
-Averages 0, 4.25279
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 30 bnd= 36 totsize= 3.58352
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 21 bnd= 36 totsize= 7.16704
-* Final Problem size: Problem nodes = 692
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.001 ms 0.003 ms
-* CHECK TIME:  0.001 ms 0.003 ms
- *FAILED IN 3 iterations.
- *FIND TIME 0.003 CHECK TIME 0.003 TOTAL TIME 0.006
-RESULT = 1  
-**ROUND 39 : 7.16704 Round time:  0.037 ms 
-RNDDEG = 160
-SUMMRY , 1207, 619
- charness = 0
-POST-SUMMRY , 619, 1207
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 40
-H__10_8 odds = 1/10 0.0499584 (32, 32)  try to replace
-H__10_8: replacing with value 1 bnd= 3 totsize= 1.09861
-H__6_8 odds = 1/0.421607 0.829315 (759, 759)  try to replace
-H__6_8: replacing with value 12 bnd= 36 totsize= 4.68213
-H__2_7 odds = 1/0.649087 0.647111 (493, 493)  try to replace
-H__2_7: replacing with value 15 bnd= 36 totsize= 8.26565
-* Final Problem size: Problem nodes = 635
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.002	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.54= ASSERT 53 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-******** FAILED ********
-* FIND TIME:  0 ms 0.003 ms
-* CHECK TIME:  0.001 ms 
- *FAILED IN 3 iterations.
- *FIND TIME 0.003 CHECK TIME 0.001 TOTAL TIME 0.004
-RESULT = 1  
-**ROUND 40 : 8.26565 Round time:  0.028 ms 
-RNDDEG = 320
-SUMMRY , 737, 1171, 607
- charness = 0
-POST-SUMMRY , 607, 737, 1171
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 41
-H__11_8 odds = 1/40 0.0124993 (4, 4)  try to replace
-H__11_8: replacing with value 0 bnd= 3 totsize= 1.09861
-H__15_7 odds = 1/8 0.0624187 (20, 20)  try to replace
-H__15_7: replacing with value 0 bnd= 3 totsize= 2.19722
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 5 bnd= 36 totsize= 5.78074
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 18 bnd= 36 totsize= 9.36426
-* Final Problem size: Problem nodes = 620
-regen H__10
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  1	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.002	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.93= ASSERT 92 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-******** FAILED ********
-* FIND TIME:  0.002 ms 0.005 ms
-* CHECK TIME:  0 ms 0.002 ms
- *FAILED IN 3 iterations.
- *FIND TIME 0.005 CHECK TIME 0.002 TOTAL TIME 0.007
-RESULT = 1  
-**ROUND 41 : 9.36426 Round time:  0.034 ms 
-RNDDEG = 160
-SUMMRY , 747, 177, 1157, 613
- charness = 0
-POST-SUMMRY , 177, 613, 747, 1157
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 42
-H__13_7 odds = 1/16 0.0312398 (20, 20)  try to replace
-H__13_7: replacing with value 1 bnd= 3 totsize= 1.09861
-H__11_8 odds = 1/10 0.0499584 (32, 32)  try to replace
-H__11_8: replacing with value 2 bnd= 3 totsize= 2.19722
-H__6_8 odds = 1/0.421607 0.829315 (759, 759)  try to replace
-H__6_8: replacing with value 34 bnd= 36 totsize= 5.78074
-H__2_7 odds = 1/0.649087 0.647111 (493, 493)  try to replace
-H__2_7: replacing with value 34 bnd= 36 totsize= 9.36426
-* Final Problem size: Problem nodes = 672
-regen H__12
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.001 ms 0.002 ms
-* CHECK TIME:  0.001 ms 0.002 ms
- *FAILED IN 2 iterations.
- *FIND TIME 0.002 CHECK TIME 0.002 TOTAL TIME 0.005
-RESULT = 1  
-**ROUND 42 : 9.36426 Round time:  0.03 ms 
-RNDDEG = 320
-SUMMRY , 155, 751, 1215, 645
- charness = 0
-POST-SUMMRY , 155, 645, 751, 1215
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 43
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 25 bnd= 36 totsize= 3.58352
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 13 bnd= 36 totsize= 7.16704
-* Final Problem size: Problem nodes = 659
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.01	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.002	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.002	ctime= 0
-******** FAILED ********
-* FIND TIME:  0.002 ms 0.016 ms
-* CHECK TIME:  0 ms 0.002 ms
- *FAILED IN 4 iterations.
- *FIND TIME 0.016 CHECK TIME 0.002 TOTAL TIME 0.018
-RESULT = 1  
-**ROUND 43 : 7.16704 Round time:  0.043 ms 
-RNDDEG = 160
-SUMMRY , 1197, 603
- charness = 0
-POST-SUMMRY , 603, 1197
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 44
-Received: , 0, 8, 579, 1161, 581, 1185, 591, 1149, 611, 1197, 635, 1147, 635, 1155, 635, 1175, 641, 1211, 14296
-Sending: 
-, 0, 10, 579, 1161, 581, 1185, 591, 1149, 603, 1197, 611, 1197, 619, 1207, 635, 1147, 635, 1155, 635, 1175, 641, 1211, 17924
-cur=320 next=160 scorecur=5 scorenext=4
-Switch because next is better
-Averages 4.3767, 5.2739
-H__14_7 odds = 1/26.6667 0.0187478 (6, 6)  try to replace
-H__14_7: replacing with value 0 bnd= 3 totsize= 1.09861
-H__11_8 odds = 1/5 0.099668 (32, 32)  try to replace
-H__11_8: replacing with value 1 bnd= 3 totsize= 2.19722
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 3 bnd= 36 totsize= 5.78074
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 5 bnd= 36 totsize= 9.36426
-* Final Problem size: Problem nodes = 592
-regen H__15
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.001	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.39= ASSERT 38 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-******** FAILED ********
-* FIND TIME:  0.001 ms 0.004 ms
-* CHECK TIME:  0.001 ms 0.004 ms
- *FAILED IN 4 iterations.
- *FIND TIME 0.004 CHECK TIME 0.004 TOTAL TIME 0.008
-RESULT = 1  
-**ROUND 44 : 9.36426 Round time:  0.031 ms 
-RNDDEG = 160
-SUMMRY , 165, 749, 1153, 587
- charness = 0
-POST-SUMMRY , 165, 587, 749, 1153
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 45
-H__6_8 odds = 1/0.421607 0.829315 (759, 759)  try to replace
-H__6_8: replacing with value 34 bnd= 36 totsize= 3.58352
-* Final Problem size: Problem nodes = 2281
-regen H__13
-********  0	ftime= 0	ctime= 0.003
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  1	ftime= 0.003	ctime= 0.003
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 999.058	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.008	ctime= 0.002
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  4	ftime= 0.009	ctime= 0.002
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  5	ftime= 0.013	ctime= 0.002
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  6	ftime= 0.064	ctime= 0.002
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  7	ftime= 0.114	ctime= 0.005
-******** FAILED ********
-* FIND TIME:  0.183 ms 999.452 ms
-* CHECK TIME:  0.005 ms 0.02 ms
- *FAILED IN 8 iterations.
- *FIND TIME 999.452 CHECK TIME 0.02 TOTAL TIME 999.472
-RESULT = 1  
-**ROUND 45 : 3.58352 Round time:  999.501 ms 
-RNDDEG = 320
-SUMMRY , 1215
- charness = 0
-POST-SUMMRY , 1215
-TRAIL: , 1215
-ALLOK
-ALLRESET
-ATTEMPT 46
-H__6_8 odds = 1/2.13333 0.230176 (75, 75)  try to replace
-H__6_8: replacing with value 3 bnd= 36 totsize= 3.58352
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 31 bnd= 36 totsize= 7.16704
-* Final Problem size: Problem nodes = 681
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.008	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.002	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  4	ftime= 0.001	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.007 ms 0.019 ms
-* CHECK TIME:  0.001 ms 0.005 ms
- *FAILED IN 5 iterations.
- *FIND TIME 0.019 CHECK TIME 0.005 TOTAL TIME 0.024
-RESULT = 1  
-**ROUND 46 : 7.16704 Round time:  0.045 ms 
-RNDDEG = 160
-SUMMRY , 1153, 639
- charness = 0
-POST-SUMMRY , 639, 1153
-TRAIL: , 1215
-ALLOK
-ALLRESET
-ATTEMPT 47
-H__10_8 odds = 1/80 0.00624992 (4, 4)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 1.09861
-H__6_8 odds = 1/0.421607 0.829315 (759, 759)  try to replace
-H__6_8: replacing with value 25 bnd= 36 totsize= 4.68213
-H__2_7 odds = 1/0.649087 0.647111 (493, 493)  try to replace
-H__2_7: replacing with value 35 bnd= 36 totsize= 8.26565
-* Final Problem size: Problem nodes = 660
-regen H__12
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  1	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.56= ASSERT 55 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-******** FAILED ********
-* FIND TIME:  0.001 ms 0.003 ms
-* CHECK TIME:  0.001 ms 0.003 ms
- *FAILED IN 3 iterations.
- *FIND TIME 0.003 CHECK TIME 0.003 TOTAL TIME 0.006
-RESULT = 1  
-**ROUND 47 : 8.26565 Round time:  0.033 ms 
-RNDDEG = 320
-SUMMRY , 739, 1197, 647
- charness = 0
-POST-SUMMRY , 647, 739, 1197
-TRAIL: , 1215
-ALLOK
-ALLRESET
-ATTEMPT 48
-H__2_7 odds = 1/2.13333 0.230176 (75, 75)  try to replace
-H__2_7: replacing with value 27 bnd= 36 totsize= 3.58352
-H__10_8 odds = 1/5 0.099668 (32, 32)  try to replace
-H__10_8: replacing with value 2 bnd= 3 totsize= 4.68213
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 29 bnd= 36 totsize= 8.26565
-* Final Problem size: Problem nodes = 648
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  0	ftime= 0	ctime= 0
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.001	ctime= 0.001
-******** FAILED ********
-* FIND TIME:  0.001 ms 0.002 ms
-* CHECK TIME:  0.001 ms 
- *FAILED IN 2 iterations.
- *FIND TIME 0.002 CHECK TIME 0.001 TOTAL TIME 0.003
-RESULT = 1  
-**ROUND 48 : 8.26565 Round time:  0.02 ms 
-RNDDEG = 160
-SUMMRY , 631, 739, 1205
- charness = 0
-POST-SUMMRY , 631, 739, 1205
-TRAIL: , 1215
-ALLOK
-ALLRESET
-ATTEMPT 49
-Received: , 1, 13, 1205, 579, 1161, 581, 1185, 591, 1149, 603, 1197, 605, 1185, 611, 1197, 619, 1207, 621, 1213, 635, 1147, 635, 1155, 635, 1175, 641, 1187, 641, 1211, 24585
-Sending: 
-, 2, 14, 1205, 1215, 579, 1161, 581, 1185, 591, 1149, 603, 1197, 605, 1185, 611, 1197, 619, 1207, 621, 1213, 635, 1147, 635, 1155, 635, 1175, 639, 1153, 641, 1187, 641, 1211, 27594
-cur=160 next=80 scorecur=4 scorenext=5
- Switch by luck
-Averages 5.51326, 4.47503
-Climbing to 160, 320
-H__11_8 odds = 1/10 0.0499584 (32, 32)  try to replace
-H__11_8: replacing with value 1 bnd= 3 totsize= 1.09861
-H__6_8 odds = 1/0.421607 0.829315 (759, 759)  try to replace
-H__6_8: replacing with value 25 bnd= 36 totsize= 4.68213
-H__2_7 odds = 1/0.649087 0.647111 (493, 493)  try to replace
-H__2_7: replacing with value 10 bnd= 36 totsize= 8.26565
-* Final Problem size: Problem nodes = 709
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.003	ctime= 0.001
+********  4	ftime= 0.017	ctime= 0.003
+Assert at main_double_0.sk:61 (-2475964863317551833)
+********  5	ftime= 0.006	ctime= 0.001
 After all optim
-********  2	ftime= 0.006	ctime= 0.007
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  3	ftime= 0.007	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  4	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  5	ftime= 0.001	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  6	ftime= 0.003	ctime= 0.001
+********  6	ftime= 0.006	ctime= 0.003
 After all optim
-********  7	ftime= 0.003	ctime= 0.026
-******** FAILED ********
-* FIND TIME:  0.01 ms 0.034 ms
-* CHECK TIME:  0.026 ms 0.039 ms
- *FAILED IN 8 iterations.
- *FIND TIME 0.034 CHECK TIME 0.039 TOTAL TIME 0.073
-RESULT = 1  
-**ROUND 49 : 8.26565 Round time:  0.092 ms 
-RNDDEG = 320
-SUMMRY , 749, 1197, 597
- charness = 0
-POST-SUMMRY , 597, 749, 1197
-TRAIL: , 1215, 1205
-ALLOK
-ALLRESET
-ATTEMPT 50
-H__12_7 odds = 1/8 0.0624187 (20, 20)  try to replace
-H__12_7: replacing with value 1 bnd= 3 totsize= 1.09861
-H__10_8 odds = 1/5 0.099668 (32, 32)  try to replace
-H__10_8: replacing with value 0 bnd= 3 totsize= 2.19722
-H__6_8 odds = 1/0.210804 0.982738 (759, 759)  try to replace
-H__6_8: replacing with value 9 bnd= 36 totsize= 5.78074
-H__2_7 odds = 1/0.324544 0.912225 (493, 493)  try to replace
-H__2_7: replacing with value 9 bnd= 36 totsize= 9.36426
-* Final Problem size: Problem nodes = 652
-Assert at main_double_0.sk:38 (8085420812314574818)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.015	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.007	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-Problem became UNSAT.54= ASSERT 53 : Assert at main_double_0.sk:44 (-8239572142119078492)
-  UNSATISFIABLE ASSERTION Assert at main_double_0.sk:44 (-8239572142119078492)
-******** FAILED ********
-* FIND TIME:  0.001 ms 0.023 ms
-* CHECK TIME:  0.001 ms 0.003 ms
- *FAILED IN 3 iterations.
- *FIND TIME 0.023 CHECK TIME 0.003 TOTAL TIME 0.026
-RESULT = 1  
-**ROUND 50 : 9.36426 Round time:  0.045 ms 
-RNDDEG = 160
-SUMMRY , 143, 735, 1165, 595
- charness = 0
-POST-SUMMRY , 143, 595, 735, 1165
-TRAIL: , 1215, 1205
-ALLOK
-ALLRESET
-ATTEMPT 51
-H__6_8 odds = 1/0.421607 0.829315 (759, 759)  try to replace
-H__6_8: replacing with value 12 bnd= 36 totsize= 3.58352
-H__2_7 odds = 1/0.649087 0.647111 (493, 493)  try to replace
-H__2_7: replacing with value 21 bnd= 36 totsize= 7.16704
-* Final Problem size: Problem nodes = 623
-Assert at main_double_0.sk:203 (-2014022263682476150)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  1	ftime= 0.003	ctime= 0.001
-Assert at main_double_0.sk:44 (-8239572142119078492)
-********  2	ftime= 0.001	ctime= 0.002
-After all optim
-********  3	ftime= 0.001	ctime= 0.015
- *GOT THE CORRECT ANSWER IN 4 iterations.
- *FIND TIME 0.005 CHECK TIME 0.019 TOTAL TIME 0.024
+********  7	ftime= 0.008	ctime= 0.007
+ *GOT THE CORRECT ANSWER IN 8 iterations.
+ *FIND TIME 0.068 CHECK TIME 0.022 TOTAL TIME 0.09
 RESULT = 0  
-**ROUND 51 : 7.16704 Round time:  0.05 ms 
-RNDDEG = 320
+**ROUND 27 : 10.9205 Round time:  0.125 ms 
+RNDDEG = 160
 return 0
 
 ----- Statistics -----
-Total elapsed time (ms):  1999.83
-Model building time (ms): 0.006
-Solution time (ms):       1999.83
-Max virtual mem (bytes):  105324544
-Max resident mem (bytes): 13557760
-Max private mem (bytes):  101089280
+Total elapsed time (ms):  1000.31
+Model building time (ms): 0.012
+Solution time (ms):       1000.29
+Max virtual mem (bytes):  107880448
+Max resident mem (bytes): 15712256
+Max private mem (bytes):  103665664
 ALL CORRECT
 
-[SATBackend] === parallel trial w/ degree -1 (0) solved ===
+[SATBackend] === parallel trial w/ degree -1 (2) solved ===
 [SATBackend] === resolved within 1 complete parallel trial(s)
-[SATBackend] destroying java.lang.UNIXProcess@6f1e6003
-[SATBackend] destroying java.lang.UNIXProcess@33319df3
-[SATBackend] === parallel trial w/ degree -1 (2) done, but aborted ===
+[SATBackend] destroying java.lang.UNIXProcess@7df65afa
+[SATBackend] destroying java.lang.UNIXProcess@38cf13b1
+[SATBackend] === parallel trial w/ degree -1 (1) done, but aborted ===
 /* BEGIN PACKAGE ANONYMOUS*/
 struct StatsUtilList {
     int period;
 }
-/*main_double_0.sk:18*/
+struct Point {
+    int y;
+    int x;
+}
+/*main_double_0.sk:20*/
 
-void _main (int[6] intSet, ref global bit loop0__ANONYMOUS_s69, ref global int yMean__ANONYMOUS_s70)/*main_double_0.sk:18*/
+void _main (int[13] intSet, ref global int gradient__ANONYMOUS_s89, ref global bit loop0__ANONYMOUS_s90, ref global int offset__ANONYMOUS_s91)/*main_double_0.sk:20*/
 {
-  int[3] fit = {0,0,0};
-  fit[0] = intSet[3];
-  fit[1] = intSet[2];
-  fit[2] = intSet[1];
-  yMean__ANONYMOUS_s70 = intSet[4];
-  loop0__ANONYMOUS_s69 = 0;
+  int[4] fit = {0,0,0,0};
+  fit[0] = intSet[12];
+  fit[1] = intSet[11];
+  fit[2] = intSet[10];
+  fit[3] = intSet[9];
+  Point[3] data = {null,null,null};
+  data[0] = new Point();
+  data[0].y = intSet[6];
+  data[0].x = intSet[5];
+  data[1] = new Point();
+  data[1].y = intSet[4];
+  data[1].x = intSet[3];
+  data[2] = new Point();
+  data[2].y = intSet[2];
+  data[2].x = intSet[1];
+  offset__ANONYMOUS_s91 = intSet[8];
+  gradient__ANONYMOUS_s89 = intSet[7];
+  loop0__ANONYMOUS_s90 = 0;
   int i;
   i = intSet[0];
   bit _out_s43 = 0;
-  loopInvariant(fit, 0, 0, 0, 0, _out_s43, yMean__ANONYMOUS_s70);
-  assert (_out_s43); //Assert at main_double_0.sk:38 (8085420812314574818)
+  loopInvariant(data, 0, 0, 0, 0, _out_s43, gradient__ANONYMOUS_s89, offset__ANONYMOUS_s91);
+  assert (_out_s43); //Assert at main_double_0.sk:55 (8384633159460943249)
   bit _pac_sc_s44_s46 = 0;
-  loopInvariant(fit, intSet[5], 0, i, 0, _pac_sc_s44_s46, yMean__ANONYMOUS_s70);
+  loopInvariant(data, fit, 0, i, 0, _pac_sc_s44_s46, gradient__ANONYMOUS_s89, offset__ANONYMOUS_s91);
   bit _pac_sc_s44;
   _pac_sc_s44 = _pac_sc_s44_s46;
-  if(_pac_sc_s44_s46)/*main_double_0.sk:39*/
+  if(_pac_sc_s44_s46)/*main_double_0.sk:56*/
   {
     _pac_sc_s44 = i < 3;
   }
-  if(_pac_sc_s44)/*main_double_0.sk:39*/
+  if(_pac_sc_s44)/*main_double_0.sk:56*/
   {
-    int ind_ssr = (intSet[5]) + (((fit[i]) - yMean__ANONYMOUS_s70) * ((fit[i]) - yMean__ANONYMOUS_s70));
+    int[4] ind_fit = fit;
+    ind_fit[i] = (gradient__ANONYMOUS_s89 * (data[i].x)) + offset__ANONYMOUS_s91;
     bit _out_s48 = 0;
-    loopInvariant(fit, ind_ssr, 0, i + 1, 0, _out_s48, yMean__ANONYMOUS_s70);
-    assert (_out_s48); //Assert at main_double_0.sk:44 (-8239572142119078492)
+    loopInvariant(data, ind_fit, 0, i + 1, 0, _out_s48, gradient__ANONYMOUS_s89, offset__ANONYMOUS_s91);
+    assert (_out_s48); //Assert at main_double_0.sk:61 (-2475964863317551833)
   }
   bit _pac_sc_s49_s51 = 0;
-  loopInvariant(fit, intSet[5], 0, i, 0, _pac_sc_s49_s51, yMean__ANONYMOUS_s70);
+  loopInvariant(data, fit, 0, i, 0, _pac_sc_s49_s51, gradient__ANONYMOUS_s89, offset__ANONYMOUS_s91);
   bit _pac_sc_s49;
   _pac_sc_s49 = _pac_sc_s49_s51;
-  if(_pac_sc_s49_s51)/*main_double_0.sk:46*/
+  if(_pac_sc_s49_s51)/*main_double_0.sk:63*/
   {
     _pac_sc_s49 = !(i < 3);
   }
-  if(_pac_sc_s49)/*main_double_0.sk:46*/
+  if(_pac_sc_s49)/*main_double_0.sk:63*/
   {
     bit _out_s53 = 0;
-    postCondition(fit, intSet[5], 0, i, 0, _out_s53, yMean__ANONYMOUS_s70);
-    assert (_out_s53); //Assert at main_double_0.sk:47 (-7218215065914121942)
+    postCondition(data, fit, 0, i, 0, _out_s53, gradient__ANONYMOUS_s89, offset__ANONYMOUS_s91);
+    assert (_out_s53); //Assert at main_double_0.sk:64 (6958355037083815225)
   }
 }
-/*main_double_0.sk:172*/
+/*main_double_0.sk:144*/
 
-void init_ssr (ref int _out)/*main_double_0.sk:172*/
+void init_fit (ref int _out)/*main_double_0.sk:144*/
 {
   _out = 0;
   _out = 0;
   return;
 }
-/*main_double_0.sk:60*/
+/*main_double_0.sk:80*/
 
-void loopInvariant (int[3] fit, int ssr, int ssr0, int i, int i0, ref bit _out, ref global int yMean__ANONYMOUS_s75)/*main_double_0.sk:60*/
+void loopInvariant (Point[3] data, int[4] fit, int[4] fit0, int i, int i0, ref bit _out, ref global int gradient__ANONYMOUS_s98, ref global int offset__ANONYMOUS_s99)/*main_double_0.sk:80*/
 {
   _out = 0;
-  int[1] casper_r = {0};
-  casper_r[0] = ssr;
-  bit _pac_sc_s66 = (0 <= i) && (i <= 3);
-  if(_pac_sc_s66)/*main_double_0.sk:63*/
+  int[4] casper_r = {0,0,0,0};
+  casper_r[0] = fit[0];
+  casper_r[1] = fit[1];
+  casper_r[2] = fit[2];
+  casper_r[3] = fit[3];
+  bit _pac_sc_s86 = (0 <= i) && (i <= 3);
+  if(_pac_sc_s86)/*main_double_0.sk:86*/
   {
-    int[1] _pac_sc_s66_s68 = {0};
-    reduce(fit, ssr, ssr0, i, i0, _pac_sc_s66_s68, yMean__ANONYMOUS_s75);
-    _pac_sc_s66 = _pac_sc_s66_s68 == casper_r;
+    int[4] _pac_sc_s86_s88 = {0,0,0,0};
+    reduce(data, fit, fit0, i, i0, _pac_sc_s86_s88, gradient__ANONYMOUS_s98, offset__ANONYMOUS_s99);
+    _pac_sc_s86 = _pac_sc_s86_s88 == casper_r;
   }
-  _out = _pac_sc_s66;
+  _out = _pac_sc_s86;
   return;
 }
-/*main_double_0.sk:18*/
+/*main_double_0.sk:20*/
 
-void main__Wrapper (int[6] intSet)  implements main__WrapperNospec/*main_double_0.sk:18*/
+void main__Wrapper (int[13] intSet)  implements main__WrapperNospec/*main_double_0.sk:20*/
 {
-  global int yMean__ANONYMOUS_s73 = 0;
-  global bit loop0__ANONYMOUS_s76 = 0;
-  _main(intSet, loop0__ANONYMOUS_s76, yMean__ANONYMOUS_s73);
+  global bit loop0__ANONYMOUS_s106 = 0;
+  global int gradient__ANONYMOUS_s100 = 0;
+  global int offset__ANONYMOUS_s101 = 0;
+  _main(intSet, gradient__ANONYMOUS_s100, loop0__ANONYMOUS_s106, offset__ANONYMOUS_s101);
 }
-/*main_double_0.sk:18*/
+/*main_double_0.sk:20*/
 
-void main__WrapperNospec (int[6] intSet)/*main_double_0.sk:18*/
+void main__WrapperNospec (int[13] intSet)/*main_double_0.sk:20*/
 { }
-/*main_double_0.sk:117*/
+/*main_double_0.sk:114*/
 
-void map (int[3] fit, int i, ref int[1] keys0, ref int[1] values0, ref global int yMean__ANONYMOUS_s78)/*main_double_0.sk:117*/
+void map (Point[3] data, int i, ref int[1] keys0, ref int[1] keys1, ref int[1] values0, ref global int gradient__ANONYMOUS_s104, ref global int offset__ANONYMOUS_s105)/*main_double_0.sk:114*/
 {
   keys0[0] = 1;
-  int _int_terminal0 = fit[i];
-  values0[0] = _int_terminal0 - yMean__ANONYMOUS_s78;
+  keys1[0] = i;
+  int _int_terminal1 = data[i].x;
+  values0[0] = gradient__ANONYMOUS_s104 * _int_terminal1;
 }
-/*main_double_0.sk:180*/
+/*main_double_0.sk:152*/
 
-void merge_ssr (int val1, int val2, ref int _out)/*main_double_0.sk:180*/
+void merge_fit (int val1, int val2, ref int _out)/*main_double_0.sk:152*/
 {
   _out = 0;
   _out = val1;
   return;
 }
-/*main_double_0.sk:54*/
+/*main_double_0.sk:71*/
 
-void postCondition (int[3] fit, int ssr, int ssr0, int i, int i0, ref bit _out, ref global int yMean__ANONYMOUS_s74)/*main_double_0.sk:54*/
+void postCondition (Point[3] data, int[4] fit, int[4] fit0, int i, int i0, ref bit _out, ref global int gradient__ANONYMOUS_s96, ref global int offset__ANONYMOUS_s97)/*main_double_0.sk:71*/
 {
   _out = 0;
-  int[1] casper_r = {0};
-  casper_r[0] = ssr;
-  int[1] _out_s55 = {0};
-  reduce(fit, ssr, ssr0, i, i0, _out_s55, yMean__ANONYMOUS_s74);
+  int[4] casper_r = {0,0,0,0};
+  casper_r[0] = fit[0];
+  casper_r[1] = fit[1];
+  casper_r[2] = fit[2];
+  casper_r[3] = fit[3];
+  int[4] _out_s55 = {0,0,0,0};
+  reduce(data, fit, fit0, i, i0, _out_s55, gradient__ANONYMOUS_s96, offset__ANONYMOUS_s97);
   _out = _out_s55 == casper_r;
   return;
 }
-/*main_double_0.sk:185*/
+/*main_double_0.sk:157*/
 
-void reduce (int[3] fit, int ssr, int ssr0, int i, int i0, ref int[1] _out, ref global int yMean__ANONYMOUS_s77)/*main_double_0.sk:185*/
+void reduce (Point[3] data, int[4] fit, int[4] fit0, int i, int i0, ref int[4] _out, ref global int gradient__ANONYMOUS_s102, ref global int offset__ANONYMOUS_s103)/*main_double_0.sk:157*/
 {
-  _out = ((int[1])0);
+  _out = ((int[4])0);
   int _out_s57 = 0;
-  init_ssr(_out_s57);
+  init_fit(_out_s57);
   _out[0] = _out_s57;
+  int _out_s59 = 0;
+  init_fit(_out_s59);
+  _out[1] = _out_s59;
+  int _out_s61 = 0;
+  init_fit(_out_s61);
+  _out[2] = _out_s61;
+  int _out_s63 = 0;
+  init_fit(_out_s63);
+  _out[3] = _out_s63;
   for(int casper_i = i0; casper_i < i; casper_i = casper_i + 1)/*Canonical*/
   {
     int[1] values0 = {0};
     int[1] keys0 = {0};
-    map(fit, casper_i, keys0, values0, yMean__ANONYMOUS_s77);
+    int[1] keys1 = {0};
+    map(data, casper_i, keys0, keys1, values0, gradient__ANONYMOUS_s102, offset__ANONYMOUS_s103);
     for(int casper_j = 0; casper_j < 1; casper_j = casper_j + 1)/*Canonical*/
     {
       int key0 = keys0[casper_j];
-      if(key0 == 0)/*main_double_0.sk:202*/
+      int key1 = keys1[casper_j];
+      if(key0 == 0)/*main_double_0.sk:180*/
         { }
       else
       {
-        assert (key0 == 1); //Assert at main_double_0.sk:203 (-2014022263682476150)
-        int _out_s59 = 0;
-        reduce_ssr(_out[0], values0[casper_j], _out_s59, yMean__ANONYMOUS_s77);
-        _out[0] = _out_s59;
+        if((key0 == 1) && (key1 == 0))/*main_double_0.sk:181*/
+        {
+          int _out_s65 = 0;
+          reduce_fit(_out[0], values0[casper_j], _out_s65, gradient__ANONYMOUS_s102, offset__ANONYMOUS_s103);
+          _out[0] = _out_s65;
+        }
+        else
+        {
+          if((key0 == 1) && (key1 == 1))/*main_double_0.sk:181*/
+          {
+            int _out_s67 = 0;
+            reduce_fit(_out[1], values0[casper_j], _out_s67, gradient__ANONYMOUS_s102, offset__ANONYMOUS_s103);
+            _out[1] = _out_s67;
+          }
+          else
+          {
+            if((key0 == 1) && (key1 == 2))/*main_double_0.sk:181*/
+            {
+              int _out_s69 = 0;
+              reduce_fit(_out[2], values0[casper_j], _out_s69, gradient__ANONYMOUS_s102, offset__ANONYMOUS_s103);
+              _out[2] = _out_s69;
+            }
+            else
+            {
+              assert ((key0 == 1) && (key1 == 3)); //Assert at main_double_0.sk:181 (511591761868268358)
+              int _out_s71 = 0;
+              reduce_fit(_out[3], values0[casper_j], _out_s71, gradient__ANONYMOUS_s102, offset__ANONYMOUS_s103);
+              _out[3] = _out_s71;
+            }
+          }
+        }
       }
     }
   }
-  int _out_s61 = 0;
-  merge_ssr(_out[0], ssr0, _out_s61);
-  _out[0] = _out_s61;
+  int _out_s73 = 0;
+  merge_fit(_out[0], fit0[0], _out_s73);
+  _out[0] = _out_s73;
+  int _out_s75 = 0;
+  merge_fit(_out[1], fit0[1], _out_s75);
+  _out[1] = _out_s75;
+  int _out_s77 = 0;
+  merge_fit(_out[2], fit0[2], _out_s77);
+  _out[2] = _out_s77;
+  int _out_s79 = 0;
+  merge_fit(_out[3], fit0[3], _out_s79);
+  _out[3] = _out_s79;
   return;
 }
-/*main_double_0.sk:176*/
+/*main_double_0.sk:148*/
 
-void reduce_ssr (int val1, int val2, ref int _out, ref global int yMean__ANONYMOUS_s79)/*main_double_0.sk:176*/
+void reduce_fit (int val1, int val2, ref int _out, ref global int gradient__ANONYMOUS_s107, ref global int offset__ANONYMOUS_s108)/*main_double_0.sk:148*/
 {
   _out = 0;
-  _out = val1 + (val2 * val2);
+  _out = offset__ANONYMOUS_s108 + val2;
   return;
 }
 /* END PACKAGE ANONYMOUS*/
 [SKETCH] DONE
-Total time = 2800
+Total time = 2473
