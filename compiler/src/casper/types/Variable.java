@@ -100,7 +100,7 @@ public class Variable{
         				case "java.lang.Byte":
         				case "java.lang.BigInteger":
         					this.category = Variable.ARRAY_ACCESS;
-        					return casper.Util.getSketchTypeFromRaw(this.getSketchType(subTypes[1]))+"[]";
+        					return casper.Util.getSketchTypeFromRaw(this.getSketchType(subTypes[1]))+"["+Configuration.arraySizeBound+"]";
         				default:
         					templateType = translateToSketchType(templateType);
         					return templateType + "Map";
@@ -131,7 +131,7 @@ public class Variable{
 				case "java.util.ArrayList":
 					templateType = templateType.substring(end+1,templateType.length()-1);
 					this.category = Variable.ARRAY_ACCESS;
-					return casper.Util.getPrimitiveTypeFromRaw(this.getSketchType(templateType))+"[]";
+					return casper.Util.getPrimitiveTypeFromRaw(this.getReduceType(templateType))+"[]";
 				case "java.util.Map":
 					templateType = templateType.substring(end+1,templateType.length()-1);
     				String[] subTypes = templateType.split(",");
@@ -145,7 +145,7 @@ public class Variable{
         				case "java.lang.Byte":
         				case "java.lang.BigInteger":
         					this.category = Variable.ARRAY_ACCESS;
-        					return casper.Util.getPrimitiveTypeFromRaw(this.getSketchType(subTypes[1]))+"[]";
+        					return casper.Util.getPrimitiveTypeFromRaw(this.getReduceType(subTypes[1]))+"[]";
         				default:
         					templateType = translateToSketchType(templateType);
         					return templateType + "Map";

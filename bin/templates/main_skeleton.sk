@@ -54,11 +54,9 @@ void map (<map-args-decl>)
 
 <init-functions>
 
-<reduce-functions>
+<reduce-functions><merge-functions>
 
-<merge-functions>
-
-<output-type> [<r-size>] reduce (<loop-inv-args-decl>) {
+<output-type> [<r-size>] reduce (<reduce-args-decl>) {
 	<output-type> [<r-size>] casper_r;
 	<casper-r-init>
 	for (int casper_i = <lc>0; casper_i < <lc>; ++casper_i)

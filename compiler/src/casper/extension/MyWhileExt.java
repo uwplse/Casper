@@ -18,12 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import casper.Configuration;
 import casper.JavaLibModel.SketchCall;
+import casper.SketchParser.KvPair;
 import casper.types.CustomASTNode;
 import casper.types.Expression;
 import casper.types.Variable;
-import polyglot.ast.FieldDecl;
 import polyglot.ast.Node;
 
 public class MyWhileExt extends MyStmtExt {
@@ -123,25 +122,6 @@ public class MyWhileExt extends MyStmtExt {
     // need to be able to capture this effect.
     // Note: Not used anywhere currently
     public Map<Variable, Set<Variable>> aliases = new HashMap<Variable, Set<Variable>>();
-	
-
-    
-    
-    
-    
-    
-    
-    // Map Emits
-	//public Map<String,List<KvPair>> mapEmits = null;
-	
-	// Reduce Expression
-	public String reduceExp = null;
-
-	public String mapKeyType = "";
-	
-		
-	
-   	
     
     // Save an loop counter variable.
     public void saveLoopCounterVariable(String varName, String varType, int category){
@@ -230,7 +210,9 @@ public class MyWhileExt extends MyStmtExt {
     
     // Save a local variable.
     public void saveLocalVariable(String varName, String varType){
-    	localVars.add(new Variable(varName,varType,"",Variable.VAR));
+    	Variable var = new Variable(varName,varType,"",Variable.VAR);
+    	localVars.add(var);
+    	loopCounters.remove(var);
     }
     
     // Save an output variable which is a field of a class.

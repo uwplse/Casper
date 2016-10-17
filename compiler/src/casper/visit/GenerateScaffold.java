@@ -14,8 +14,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
+
 import casper.Configuration;
+import casper.DafnyCodeGenerator;
 import casper.SketchCodeGenerator;
+import casper.SketchParser;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
 import casper.types.Variable;
@@ -82,10 +85,12 @@ public class GenerateScaffold extends NodeVisitor{
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
 							
 							/* Run synthesizer to generate summary */
-							int synthesizerExitCode = runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, sketchReduceType);
+							int synthesizerExitCode = 0;//runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, sketchReduceType);
 							
 							if(synthesizerExitCode == 0){
 								/* Run theorem prover to verify summary */
+								SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", ext, sketchFilteredOutputVars.size());
+								
 								//DafnyCodeGenerator.generateSummary(id, ext, sketchFilteredOutputVars, sketchReduceType);
 								
 								int verifierExitCode = 0;//verifySummary("output/main_"+reduceType+id+".dfy", sketchReduceType);
@@ -163,9 +168,9 @@ public class GenerateScaffold extends NodeVisitor{
 		Runtime rt = Runtime.getRuntime();
 		
 		if(debug || true)
-			System.err.println("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 200 -bnd-inbits "+Configuration.inbits+" "+ filename);
+			System.err.println("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 20 -bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
 		
-		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 200 -bnd-inbits "+Configuration.inbits+" "+ filename);
+		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 20 -bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
 
 		PrintWriter writer = new PrintWriter(filename.replace(".sk", ".txt"), "UTF-8");
 		
@@ -185,7 +190,7 @@ public class GenerateScaffold extends NodeVisitor{
         	System.err.println("Synthesizer exited with error code "+exitVal);
         	writer.close();
         	
-        	// TODO: Add machinery for incrementally adding options (something more sophisticated / less ad hoc)
+        	// TODO: Add machinery for incrementally adding options (something more sophisticated and thought out)
         	
         	if(ext.useConditionals && !Configuration.useConditionals){
         		System.err.println("Incrementing grammar...");
