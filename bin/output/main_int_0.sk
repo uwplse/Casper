@@ -1,0 +1,225 @@
+/******************************************************************************/
+/* Include necessory packages                                                 */
+
+include "output/utils.sk";
+include "output/EqualFrequency.sk";
+
+/******************************************************************************/
+/* Global Control Variables                                                   */
+int CASPER_NUM_OUTVARS = 2;
+
+// Input variables decl
+bit loop0;
+int casperConst0;
+int casperConst1;
+
+/******************************************************************************/
+/* Main function to verify the two results generated are equal                */
+
+harness void main(int[8] intSet){
+	// Initialize output variables.
+	int first0 = 0;
+	int first = intSet[7];
+	int second0 = 0;
+	int second = intSet[6];
+
+	// Initialize input data and variables
+    int[3] data;
+	data[0] = intSet[3];
+	data[1] = intSet[2];
+	data[2] = intSet[1];
+	
+    // Initialize input broadcast variables
+    loop0 = false;
+	casperConst0 = intSet[5];
+	casperConst1 = intSet[4];
+	
+    // Initialize loop counters
+    int i0 = 0;
+	int i = intSet[0];
+
+	// Verification code
+	assert loopInvariant(data,0,0,0,0,0,0);
+	if(loopInvariant(data,second,0,first,0,i,0) && (i<3)) {
+		int ind_second = second;
+		if((data[i]==casperConst0)){
+			ind_second = (second+1);
+		} else {
+			ind_second = second;
+		}
+		int ind_first = first;
+		if((data[i]==casperConst1)){
+			ind_first = (first+1);
+		} else {
+			ind_first = first;
+		}
+		int ind_i = i;
+		ind_i = (i+1);
+		assert loopInvariant(data,ind_second,0,ind_first,0,ind_i,0);
+	}
+	if(loopInvariant(data,second,0,first,0,i,0) && !(i<3)) {
+		assert postCondition(data,second,0,first,0,i,0);
+	}
+}
+
+/******************************************************************************/
+/* Verification functions                                                     */
+
+bit postCondition(int[3] data, int second, int second0, int first, int first0, int i, int i0){
+	int [2] casper_r;
+	casper_r[0] = second;
+	casper_r[1] = first;
+	return reduce(data, second, second0, first, first0, i, i0) == casper_r;
+}
+
+bit loopInvariant(int[3] data, int second, int second0, int first, int first0, int i, int i0){
+	int [2] casper_r;
+	casper_r[0] = second;
+	casper_r[1] = first;
+	return 0 <= i && i <= 3 && reduce(data, second, second0, first, first0, i, i0) == casper_r;
+}
+
+/******************************************************************************/
+/* MapReduce Implementation                                                   */
+
+generator int intMapGenerator(int[3] data, int i){
+	int _int_terminal0 = i;
+	int _int_terminal1 = data[i];
+	int _int_terminal2 = casperConst0;
+	int _int_terminal3 = casperConst1;
+	int _int_terminal4 = ??;
+	int c = ??(5);
+	if(c==0){ return _int_terminal0; }
+	if(c==1){ return _int_terminal1; }
+	if(c==2){ return _int_terminal2; }
+	if(c==3){ return _int_terminal3; }
+	if(c==4){ return _int_terminal4; }
+	if(c==5){ return (_int_terminal0 + _int_terminal0); }
+	if(c==6){ return (_int_terminal0 + _int_terminal1); }
+	if(c==7){ return (_int_terminal0 + _int_terminal2); }
+	if(c==8){ return (_int_terminal0 + _int_terminal3); }
+	if(c==9){ return (_int_terminal0 + _int_terminal4); }
+	if(c==10){ return (_int_terminal1 + _int_terminal1); }
+	if(c==11){ return (_int_terminal1 + _int_terminal2); }
+	if(c==12){ return (_int_terminal1 + _int_terminal3); }
+	if(c==13){ return (_int_terminal1 + _int_terminal4); }
+	if(c==14){ return (_int_terminal2 + _int_terminal2); }
+	if(c==15){ return (_int_terminal2 + _int_terminal3); }
+	if(c==16){ return (_int_terminal2 + _int_terminal4); }
+	if(c==17){ return (_int_terminal3 + _int_terminal3); }
+	if(c==18){ return (_int_terminal3 + _int_terminal4); }
+	
+}
+
+generator bit bitMapGenerator(int[3] data, int i){
+	bit _bit_terminal0 = loop0;
+	int _int_terminal0 = i;
+	int _int_terminal1 = data[i];
+	int _int_terminal2 = casperConst0;
+	int _int_terminal3 = casperConst1;
+	bit _bit_terminal4 = {| true | false |};
+	int _int_terminal5 = ??;
+	int c = ??(3);
+	if(c==0){ return _bit_terminal0; }
+	if(c==1){ return _bit_terminal4; }
+	if(c==2){ return (_int_terminal0 == _int_terminal1); }
+	if(c==3){ return (_int_terminal0 == _int_terminal2); }
+	if(c==4){ return (_int_terminal0 == _int_terminal3); }
+	if(c==5){ return (_int_terminal1 == _int_terminal2); }
+	if(c==6){ return (_int_terminal1 == _int_terminal3); }
+	if(c==7){ return (_int_terminal2 == _int_terminal3); }
+	
+}
+
+void map (int[3] data, int i, ref int[CASPER_NUM_OUTVARS] keys0, ref int[CASPER_NUM_OUTVARS] values0)
+{
+  	if(bitMapGenerator(data, i)){
+		keys0[0] = ??;
+		values0[0] = intMapGenerator(data, i);
+	}if(bitMapGenerator(data, i)){
+		keys0[1] = ??;
+		values0[1] = intMapGenerator(data, i);
+	}
+}
+
+generator int intReduceGenerator(int val1, int val2){
+	int _int_terminal0 = val1;
+	int _int_terminal1 = val2;
+	int _int_terminal2 = casperConst0;
+	int _int_terminal3 = casperConst1;
+	int _int_terminal4 = ??;
+	int c = ??(5);
+	if(c==0){ return _int_terminal0; }
+	if(c==1){ return _int_terminal1; }
+	if(c==2){ return _int_terminal2; }
+	if(c==3){ return _int_terminal3; }
+	if(c==4){ return _int_terminal4; }
+	if(c==5){ return (_int_terminal0 + _int_terminal0); }
+	if(c==6){ return (_int_terminal0 + _int_terminal1); }
+	if(c==7){ return (_int_terminal0 + _int_terminal2); }
+	if(c==8){ return (_int_terminal0 + _int_terminal3); }
+	if(c==9){ return (_int_terminal0 + _int_terminal4); }
+	if(c==10){ return (_int_terminal1 + _int_terminal1); }
+	if(c==11){ return (_int_terminal1 + _int_terminal2); }
+	if(c==12){ return (_int_terminal1 + _int_terminal3); }
+	if(c==13){ return (_int_terminal1 + _int_terminal4); }
+	if(c==14){ return (_int_terminal2 + _int_terminal2); }
+	if(c==15){ return (_int_terminal2 + _int_terminal3); }
+	if(c==16){ return (_int_terminal2 + _int_terminal4); }
+	if(c==17){ return (_int_terminal3 + _int_terminal3); }
+	if(c==18){ return (_int_terminal3 + _int_terminal4); }
+	
+}
+
+int init_first(){
+	return {| 0 | 1 |};
+}
+
+int init_second(){
+	return {| 0 | 1 |};
+}
+
+int reduce_first(int val1, int val2){
+	return intReduceGenerator(val1, val2);
+}int reduce_second(int val1, int val2){
+	return intReduceGenerator(val1, val2);
+}
+
+int merge_first(int val1, int val2){
+	return {| val1 | val1+val2 |};
+}
+int merge_second(int val1, int val2){
+	return {| val1 | val1+val2 |};
+}
+
+
+int [2] reduce (int[3] data, int second, int second0, int first, int first0, int i, int i0) {
+	int [2] casper_r;
+	casper_r[0] = init_first();
+	casper_r[1] = init_second();
+	
+	for (int casper_i = i0; casper_i < i; ++casper_i)
+	{
+		int[CASPER_NUM_OUTVARS] keys0;
+		int[CASPER_NUM_OUTVARS] values0;
+		
+		int num_pairs = CASPER_NUM_OUTVARS;
+
+		map(data, casper_i, keys0, values0);
+
+		for (int casper_j = 0; casper_j < num_pairs; ++casper_j)
+		{ 
+	  		int key0 = keys0[casper_j];
+	
+	  		if(key0 == 0) {	}
+	  		else if (key0 == 1){ casper_r[0] = reduce_first(casper_r[0], values0[casper_j]); }else if (key0 == 2){ casper_r[1] = reduce_second(casper_r[1], values0[casper_j]); }
+	  		else{ assert 0; }
+		} 
+	}
+
+	casper_r[0] = merge_first(casper_r[0],first0);
+	casper_r[1] = merge_second(casper_r[1],second0);
+	
+
+	return casper_r;
+}

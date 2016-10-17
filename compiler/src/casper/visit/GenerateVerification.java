@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import casper.Configuration;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
@@ -73,10 +72,10 @@ public class GenerateVerification extends NodeVisitor {
 					handledTypes.add(reduceType);
 					
 					// Add post condition args order for this type
-					ext.postConditionArgsOrder.put(reduceType,generatePostConditionArgsOrder(reduceType,ext.outputVars,ext.loopCounters));
+					ext.postConditionArgsOrder.put(reduceType,generatePostConditionArgsOrder(casper.Util.reducerType(var.getSketchType()),ext.outputVars,ext.loopCounters));
 					
 					// Add loop invariant args order for this type
-					ext.loopInvariantArgsOrder.put(reduceType,generateLoopInvariantArgsOrder(reduceType,ext.outputVars,ext.loopCounters));
+					ext.loopInvariantArgsOrder.put(reduceType,generateLoopInvariantArgsOrder(casper.Util.reducerType(var.getSketchType()),ext.outputVars,ext.loopCounters));
 					
 					// Construct post condition statement
 					CustomASTNode postCond = generatePostCondition(reduceType,ext.postConditionArgsOrder,ext.initVals);
@@ -203,7 +202,7 @@ public class GenerateVerification extends NodeVisitor {
 		// Add output variables
 		for(Variable var : outputVars){
 			// If desired type, add as option
-			if(var.getSketchType().equals(outputType) || var.getSketchType().equals(outputType.replace("["+Configuration.arraySizeBound+"]", ""))){
+			if(casper.Util.reducerType(var.getSketchType()).equals(outputType)){
 				order.add(var.varName);
 				order.add(var.varName+"0");
 			}
@@ -225,7 +224,7 @@ public class GenerateVerification extends NodeVisitor {
 		// Add output variables
 		for(Variable var : outputVars){
 			// If desired type, add as option
-			if(var.getSketchType().equals(outputType) || var.getSketchType().equals(outputType.replace("["+Configuration.arraySizeBound+"]", ""))){
+			if(casper.Util.reducerType(var.getSketchType()).equals(outputType)){
 				String varname = var.varName;
 				order.add(varname);
 				order.add(varname+"0");

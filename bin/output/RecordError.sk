@@ -1,0 +1,4 @@
+struct RecordError{
+	int fit;
+	int y;
+	}

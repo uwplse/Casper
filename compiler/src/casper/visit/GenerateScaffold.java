@@ -162,10 +162,10 @@ public class GenerateScaffold extends NodeVisitor{
 	private int runSynthesizer(String filename, MyWhileExt ext, String type) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
 		
-		if(debug)
-			System.err.println("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 9 "+ filename);
+		if(debug || true)
+			System.err.println("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" "+ filename);
 		
-		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 9 "+ filename);
+		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20  -bnd-inbits "+Configuration.inbits+" "+ filename);
 
 		PrintWriter writer = new PrintWriter(filename.replace(".sk", ".txt"), "UTF-8");
 		
@@ -186,6 +186,7 @@ public class GenerateScaffold extends NodeVisitor{
         	writer.close();
         	
         	// TODO: Add machinery for incrementally adding options (something more sophisticated / less ad hoc)
+        	
         	if(ext.useConditionals && !Configuration.useConditionals){
         		System.err.println("Incrementing grammar...");
         		Configuration.useConditionals = true;

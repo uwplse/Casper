@@ -293,7 +293,7 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "equals":
 						res.target = "first-arg";
-						res.name = "str_equal";
+						res.name = "casper_str_equal";
 						res.nameOrig = "equals";
 						res.args.add(targetType);
 						for(Expr arg : exp.arguments()){
@@ -325,7 +325,7 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "pow":
 						res.target = "Math";
-						res.name = "math_pow";
+						res.name = "casper_math_pow";
 						res.nameOrig = "pow";
 						for(Expr arg : exp.arguments()){
 							res.args.add(arg.type().toString());
@@ -408,7 +408,7 @@ public class JavaLibModel {
 						ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
 						args.add(new IdentifierNode(target));
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
-						return new CallNode("str_equal",args);
+						return new CallNode("casper_str_equal",args);
 					default:
 						if(debug){
 							System.err.println("Method " + id + " of java.lang.String not currently supported. Please extend the JavaLibModel.");

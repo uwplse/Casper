@@ -150,8 +150,9 @@ public class SelectLoopsForTranslation extends NodeVisitor{
 		else if(n instanceof Block){
 			// If statement
 			MyStmtExt stmtext = (MyStmtExt)JavaExt.ext(n);
+			
 			if(stmtext.process)
-				this.ignore.push(true);
+				this.ignore.push(false);
 		}
    		// If the node is a conditional
 		else if(n instanceof If && !this.ignore.peek()){

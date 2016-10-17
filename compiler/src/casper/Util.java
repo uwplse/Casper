@@ -264,6 +264,7 @@ public class Util {
 	public static final int VEC_INT = 3;
 	public static final int VEC_ONLY = 4;
 	public static final int ALL_TYPES = 5;
+	public static final int NONE = 6;
 	
 	public static int operandTypes(String op) {
 		switch(op){
@@ -275,8 +276,6 @@ public class Util {
 		case ">":
 		case "<=":
 		case ">=":
-		case "==":
-		case "!=":
 			return INT_ONLY;
 		case ">>":
 		case ">>>":
@@ -286,8 +285,11 @@ public class Util {
 		case "^":
 		case "|":
 			return VEC_ONLY;
-		default:
+		case "==":
+		case "!=":
 			return ALL_TYPES;
+		default:
+			return NONE;
 		}
 	}
 	
@@ -347,34 +349,72 @@ public class Util {
 	public static int compatibleTypes(String type, String type2) {
 		switch(type){
 			case "int":
-				switch(type2){
-					case "short":
-					case "byte":
-					case "int":
-					case "long":
-					case "float":
-					case "double":
-					case "Integer":
-					case "Double":
-					case "Float":
-						return 1;
-					case "short[]":
-					case "byte[]":
-					case "int[]":
-					case "long[]":
-					case "float[]":
-					case "double[]":
-					case "Integer[]":
-					case "Double[]":
-					case "Float[]":
-						return 2;
-					default:
-						return 0;
+				if(type2.equals("short")){
+					return 1;
+				}
+				else if(type2.equals("byte")){
+					return 1;
+				}
+				else if(type2.equals("int")){
+					return 1;
+				}
+				else if(type2.equals("long")){
+					return 1;
+				}
+				else if(type2.equals("float")){
+					return 1;
+				}
+				else if(type2.equals("double")){
+					return 1;
+				}
+				else if(type2.equals("Integer")){
+					return 1;
+				}
+				else if(type2.equals("Double")){
+					return 1;
+				}
+				else if(type2.equals("Float")){
+					return 1;
+				}
+				else if(type2.equals("short[]")){
+					return 2;
+				}
+				else if(type2.equals("byte[]")){
+					return 2;
+				}
+				else if(type2.equals("int[]")){
+					return 2;
+				}
+				else if(type2.equals("long[]")){
+					return 2;
+				}
+				else if(type2.equals("float[]")){
+					return 2;
+				}
+				else if(type2.equals("double[]")){
+					return 2;
+				}
+				else if(type2.equals("Integer[]")){
+					return 2;
+				}
+				else if(type2.equals("Double[]")){
+					return 2;
+				}
+				else if(type2.equals("Float[]")){
+					return 2;
+				}
+				else{
+					return 0;
 				}
 			case "bit":
-				switch(type2){
-					default:
-						return 0; // TODO: Implement this.
+				if(type2.equals("bit[32]")){
+					return 0;
+				}
+				if(type2.endsWith("[]")){
+					return 2;
+				}
+				else{
+					return 1;
 				}
 			case "String":
 				switch(type2){
