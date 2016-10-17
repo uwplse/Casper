@@ -163,9 +163,9 @@ public class GenerateScaffold extends NodeVisitor{
 		Runtime rt = Runtime.getRuntime();
 		
 		if(debug || true)
-			System.err.println("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" "+ filename);
+			System.err.println("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 200 -bnd-inbits "+Configuration.inbits+" "+ filename);
 		
-		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20  -bnd-inbits "+Configuration.inbits+" "+ filename);
+		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 200 -bnd-inbits "+Configuration.inbits+" "+ filename);
 
 		PrintWriter writer = new PrintWriter(filename.replace(".sk", ".txt"), "UTF-8");
 		

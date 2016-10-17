@@ -1,396 +1,661 @@
 SKETCH version 1.7.2
 Benchmark = output/main_boolean_0.sk
 [SATBackend] === parallel trial w/ degree -1 (2) start ===
-Overriding inputs with 2
+Overriding inputs with 1
 boundmode = CALLNAME
 assuming  bounds checks
 BND W RAND = 20
-SOLVER RAND SEED = 844069862
+SOLVER RAND SEED = 799533339
 Reading SKETCH Program in File /home/Maaz/.sketch/tmp/main_boolean_0.sk/input0.tmp
 End of File
 ATTEMPT 0
-H__7_7 odds = 1/5 0.099668 (0, 0)  try to replace
-H__7_7: replacing with value 1 bnd= 2 totsize= 0.693147
-H__1_7 odds = 1/0.454545 0.800499 (11, 11)  try to replace
-H__1_7: replacing with value 2 bnd= 4 totsize= 2.07944
-H__4_9 odds = 1/0.333333 0.905148 (15, 15)  try to replace
-H__4_9: replacing with value 4 bnd= 6 totsize= 3.8712
-H__2 odds = 1/0.357143 0.885352 (14, 14)  try to replace
-H__2: replacing with value 27 bnd= 32 totsize= 7.33694
-H__1_8 odds = 1/0.102041 0.999889 (49, 49)  try to replace
-H__1_8: replacing with value 1 bnd= 4 totsize= 8.72323
-* Final Problem size: Problem nodes = 403
-Assert at main_boolean_0.sk:145 (-2724601275939082019)
+H__10_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__10_7: replacing with value 2 bnd= 3 totsize= 1.09861
+H__6_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__6_9: replacing with value 2 bnd= 3 totsize= 2.19722
+H__7_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__7_9: replacing with value 1 bnd= 3 totsize= 3.29584
+H__4_9 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__4_9: replacing with value 2 bnd= 3 totsize= 4.39445
+H__9_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
+H__9_7: replacing with value 1 bnd= 3 totsize= 5.49306
+H__9_8 odds = 1/0.25 0.964028 (20, 20)  try to replace
+H__9_8: replacing with value 1 bnd= 3 totsize= 6.59167
+H__10_8 odds = 1/0.25 0.964028 (20, 20)  try to replace
+H__10_8: replacing with value 2 bnd= 3 totsize= 7.69029
+H__2 odds = 1/0.416667 0.833655 (12, 12)  try to replace
+H__2: replacing with value 19 bnd= 32 totsize= 11.156
+* Final Problem size: Problem nodes = 329
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
 ********  0	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:145 (-2724601275939082019)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:145 (-2724601275939082019)
-Problem became UNSAT.13= ASSERT (0) : Assert at main_boolean_0.sk:145 (-2724601275939082019)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:145 (-2724601275939082019)
-******** FAILED ********
-* FIND TIME:  0.001 ms 
-* CHECK TIME:  0.001 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
-RESULT = 1  
-**ROUND 0 : 8.72323 Round time:  0.009 ms 
-RNDDEG = 5
-SUMMRY , 7, 157, 627, 289, 447
- charness = 0
-POST-SUMMRY , 7, 157, 289, 447, 627
-TRAIL: 
-ALLOK
-ALLRESET
-ATTEMPT 1
-H__1_7 odds = 1/0.909091 0.50052 (11, 11)  try to replace
-H__1_7: replacing with value 0 bnd= 4 totsize= 1.38629
-* Final Problem size: Problem nodes = 132
-Assert at main_boolean_0.sk:48 (-5501914913550639779)
-********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-Problem became UNSAT.16= ASSERT 15 : Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-******** FAILED ********
-* FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
-RESULT = 1  
-**ROUND 1 : 1.38629 Round time:  0.006 ms 
-RNDDEG = 10
-SUMMRY , 153
- charness = 0
-POST-SUMMRY , 153
-TRAIL: , 153
-ALLOK
-ALLRESET
-ATTEMPT 2
-H__1_7 odds = 1/0.454545 0.800499 (11, 11)  try to replace
-H__1_7: replacing with value 3 bnd= 4 totsize= 1.38629
-H__7_8 odds = 1/5 0.099668 (0, 0)  try to replace
-H__7_8: replacing with value 1 bnd= 2 totsize= 2.07944
-H__1_8 odds = 1/0.454545 0.800499 (11, 11)  try to replace
-H__1_8: replacing with value 0 bnd= 4 totsize= 3.46574
-H__4_9 odds = 1/0.333333 0.905148 (15, 15)  try to replace
-H__4_9: replacing with value 1 bnd= 6 totsize= 5.2575
-H__2 odds = 1/0.238095 0.970452 (21, 21)  try to replace
-H__2: replacing with value 10 bnd= 32 totsize= 8.72323
-* Final Problem size: Problem nodes = 213
-regen H__5
-********  0	ftime= 0	ctime= 0
-Assert at main_boolean_0.sk:145 (-2724601275939082019)
-********  1	ftime= 0.001	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:145 (-2724601275939082019)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:145 (-2724601275939082019)
-Problem became UNSAT.13= ASSERT (0) : Assert at main_boolean_0.sk:145 (-2724601275939082019)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:145 (-2724601275939082019)
-******** FAILED ********
-* FIND TIME:  0.001 ms 0.002 ms
-* CHECK TIME:  0 ms 
- *FAILED IN 2 iterations.
- *FIND TIME 0.002 CHECK TIME 0 TOTAL TIME 0.002
-RESULT = 1  
-**ROUND 2 : 8.72323 Round time:  0.008 ms 
-RNDDEG = 5
-SUMMRY , 159, 299, 445, 621, 255
- charness = 0
-POST-SUMMRY , 159, 255, 299, 445, 621
-TRAIL: , 153
-ALLOK
-ALLRESET
-ATTEMPT 3
-H__1_8 odds = 1/0.909091 0.50052 (11, 11)  try to replace
-H__1_8: replacing with value 0 bnd= 4 totsize= 1.38629
-H__4_9 odds = 1/0.666667 0.635149 (15, 15)  try to replace
-H__4_9: replacing with value 5 bnd= 6 totsize= 3.17805
-H__1_7 odds = 1/0.204082 0.985217 (49, 49)  try to replace
-H__1_7: replacing with value 2 bnd= 4 totsize= 4.56435
-* Final Problem size: Problem nodes = 422
-Assert at main_boolean_0.sk:48 (-5501914913550639779)
-********  0	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-Problem became UNSAT.33= ASSERT 32 : Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.60= ASSERT 59 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
 ******** FAILED ********
 * FIND TIME:  0 ms 
 * CHECK TIME:  0.001 ms 
  *FAILED IN 1 iterations.
  *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 3 : 4.56435 Round time:  0.009 ms 
-RNDDEG = 10
-SUMMRY , 445, 629, 157
+**ROUND 0 : 11.156 Round time:  0.011 ms 
+RNDDEG = 5
+SUMMRY , 27, 493, 503, 649, 13, 311, 325, 279
  charness = 0
-POST-SUMMRY , 157, 445, 629
-TRAIL: , 153
+POST-SUMMRY , 13, 27, 279, 311, 325, 493, 503, 649
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 1
+H__1_7 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__1_7: replacing with value 0 bnd= 3 totsize= 1.09861
+H__9_8 odds = 1/1.66667 0.291313 (6, 6)  try to replace
+H__9_8: replacing with value 1 bnd= 3 totsize= 2.19722
+H__11_8 odds = 1/10 0.0499584 (0, 0)  try to replace
+H__11_8: replacing with value 1 bnd= 2 totsize= 2.89037
+* Final Problem size: Problem nodes = 203
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.25= ASSERT 24 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+******** FAILED ********
+* FIND TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 1 : 2.89037 Round time:  0.007 ms 
+RNDDEG = 10
+SUMMRY , 167, 311, 329
+ charness = 0
+POST-SUMMRY , 167, 311, 329
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 2
+H__10_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__10_7: replacing with value 0 bnd= 3 totsize= 1.09861
+H__1_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__1_7: replacing with value 0 bnd= 3 totsize= 2.19722
+H__9_8 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__9_8: replacing with value 1 bnd= 3 totsize= 3.29584
+H__10_8 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__10_8: replacing with value 2 bnd= 3 totsize= 4.39445
+H__1_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__1_8: replacing with value 1 bnd= 3 totsize= 5.49306
+* Final Problem size: Problem nodes = 153
+Assert at main_boolean_0.sk:38 (1287796111229064025)
+********  0	ftime= 0	ctime= 0
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  1	ftime= 0	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.19= ASSERT 18 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+******** FAILED ********
+* FIND TIME:  0 ms 
+* CHECK TIME:  0 ms 
+ *FAILED IN 2 iterations.
+ *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 2 : 5.49306 Round time:  0.008 ms 
+RNDDEG = 5
+SUMMRY , 23, 167, 311, 325, 467
+ charness = 0
+POST-SUMMRY , 23, 167, 311, 325, 467
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 3
+H__10_8 odds = 1/1.66667 0.291313 (6, 6)  try to replace
+H__10_8: replacing with value 1 bnd= 3 totsize= 1.09861
+H__4_9 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__4_9: replacing with value 1 bnd= 3 totsize= 2.19722
+H__9_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__9_7: replacing with value 1 bnd= 3 totsize= 3.29584
+H__10_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__10_7: replacing with value 1 bnd= 3 totsize= 4.39445
+H__2 odds = 1/0.833333 0.53705 (12, 12)  try to replace
+H__2: replacing with value 3 bnd= 32 totsize= 7.86019
+* Final Problem size: Problem nodes = 252
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  0	ftime= 0	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.53= ASSERT 52 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+******** FAILED ********
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 3 : 7.86019 Round time:  0.009 ms 
+RNDDEG = 10
+SUMMRY , 323, 647, 13, 25, 247
+ charness = 0
+POST-SUMMRY , 13, 25, 247, 323, 647
+TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 4
 Nothing read
-Sending: 
-, 1, 0, 153, 154
-cur=5 next=10 scorecur=3 scorenext=-1
+cur=5 next=10 scorecur=3 scorenext=0
 Switch because next is better
-Averages -1.93794, 3.95381
-H__1_7 odds = 1/0.909091 0.50052 (11, 11)  try to replace
-H__1_7: replacing with value 2 bnd= 4 totsize= 1.38629
-H__1_8 odds = 1/0.909091 0.50052 (11, 11)  try to replace
-H__1_8: replacing with value 1 bnd= 4 totsize= 2.77259
-H__2 odds = 1/0.714286 0.604368 (14, 14)  try to replace
-H__2: replacing with value 16 bnd= 32 totsize= 6.23832
-H__4_9 odds = 1/0.0549451 1 (182, 182)  try to replace
-H__4_9: replacing with value 4 bnd= 6 totsize= 8.03008
-* Final Problem size: Problem nodes = 404
-Assert at main_boolean_0.sk:145 (-2724601275939082019)
+Averages 0.53909, 3.65545
+H__10_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
+H__10_7: replacing with value 2 bnd= 3 totsize= 1.09861
+H__10_8 odds = 1/1.66667 0.291313 (6, 6)  try to replace
+H__10_8: replacing with value 1 bnd= 3 totsize= 2.19722
+H__6_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__6_9: replacing with value 2 bnd= 3 totsize= 3.29584
+H__7_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__7_9: replacing with value 2 bnd= 3 totsize= 4.39445
+H__9_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__9_7: replacing with value 2 bnd= 3 totsize= 5.49306
+* Final Problem size: Problem nodes = 363
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
 ********  0	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:145 (-2724601275939082019)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:145 (-2724601275939082019)
-Problem became UNSAT.13= ASSERT (0) : Assert at main_boolean_0.sk:145 (-2724601275939082019)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:145 (-2724601275939082019)
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  1	ftime= 0.001	ctime= 0.001
 ******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0 ms 
- *FAILED IN 1 iterations.
- *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0.001
+* FIND TIME:  0 ms 0.001 ms
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 4 : 8.03008 Round time:  0.01 ms 
+**ROUND 4 : 5.49306 Round time:  0.012 ms 
 RNDDEG = 10
-SUMMRY , 157, 447, 267, 627
+SUMMRY , 27, 323, 493, 505, 15
  charness = 0
-POST-SUMMRY , 157, 267, 447, 627
-TRAIL: , 153
+POST-SUMMRY , 15, 27, 323, 493, 505
+TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 5
 H__5 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__5: replacing with value 1 bnd= 3 totsize= 1.09861
-H__1_7 odds = 1/0.454545 0.800499 (11, 11)  try to replace
-H__1_7: replacing with value 1 bnd= 4 totsize= 2.48491
-H__2 odds = 1/5 0.099668 (1, 1)  try to replace
-H__2: replacing with value 27 bnd= 32 totsize= 5.95064
-H__1_8 odds = 1/0.454545 0.800499 (11, 11)  try to replace
-H__1_8: replacing with value 1 bnd= 4 totsize= 7.33694
-H__4_9 odds = 1/0.333333 0.905148 (15, 15)  try to replace
-H__4_9: replacing with value 2 bnd= 6 totsize= 9.1287
-* Final Problem size: Problem nodes = 193
-Assert at main_boolean_0.sk:145 (-2724601275939082019)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_boolean_0.sk:48 (-5501914913550639779)
-********  1	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-Problem became UNSAT.6= ASSERT (0) : Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
+H__5: replacing with value 2 bnd= 3 totsize= 1.09861
+H__9_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__9_7: replacing with value 2 bnd= 3 totsize= 2.19722
+H__1_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__1_7: replacing with value 1 bnd= 3 totsize= 3.29584
+H__9_8 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__9_8: replacing with value 2 bnd= 3 totsize= 4.39445
+H__11_8 odds = 1/5 0.099668 (0, 0)  try to replace
+H__11_8: replacing with value 0 bnd= 2 totsize= 5.0876
+H__1_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__1_8: replacing with value 2 bnd= 3 totsize= 6.18621
+H__6_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__6_9: replacing with value 2 bnd= 3 totsize= 7.28482
+H__4_9 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__4_9: replacing with value 1 bnd= 3 totsize= 8.38343
+* Final Problem size: Problem nodes = 390
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  0	ftime= 0	ctime= 0
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  1	ftime= 0.001	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.31= ASSERT 30 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
 ******** FAILED ********
-* FIND TIME:  0 ms 
-* CHECK TIME:  0 ms 0.001 ms
+* FIND TIME:  0.001 ms 0.002 ms
+* CHECK TIME:  0 ms 
  *FAILED IN 2 iterations.
- *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.002
+ *FIND TIME 0.002 CHECK TIME 0 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 5 : 9.1287 Round time:  0.008 ms 
+**ROUND 5 : 8.38343 Round time:  0.01 ms 
 RNDDEG = 5
-SUMMRY , 467, 155, 289, 447, 623
+SUMMRY , 481, 15, 169, 313, 328, 469, 493, 647
  charness = 0
-POST-SUMMRY , 155, 289, 447, 467, 623
-TRAIL: , 153
+POST-SUMMRY , 15, 169, 313, 328, 469, 481, 493, 647
+TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 6
-H__1_8 odds = 1/0.909091 0.50052 (11, 11)  try to replace
-H__1_8: replacing with value 3 bnd= 4 totsize= 1.38629
-H__1_7 odds = 1/0.204082 0.985217 (49, 49)  try to replace
-H__1_7: replacing with value 1 bnd= 4 totsize= 2.77259
-H__2 odds = 1/0.714286 0.604368 (14, 14)  try to replace
-H__2: replacing with value 26 bnd= 32 totsize= 6.23832
-H__4_9 odds = 1/0.0549451 1 (182, 182)  try to replace
-H__4_9: replacing with value 4 bnd= 6 totsize= 8.03008
-* Final Problem size: Problem nodes = 284
-regen H__5
-********  0	ftime= 0	ctime= 0
-Assert at main_boolean_0.sk:145 (-2724601275939082019)
-********  1	ftime= 0.001	ctime= 0
-Assert at main_boolean_0.sk:48 (-5501914913550639779)
-********  2	ftime= 0	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-Problem became UNSAT.35= ASSERT 34 : Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
+H__12 odds = 1/10 0.0499584 (0, 0)  try to replace
+H__12: replacing with value 0 bnd= 2 totsize= 0.693147
+H__9_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__9_7: replacing with value 2 bnd= 3 totsize= 1.79176
+H__10_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__10_7: replacing with value 2 bnd= 3 totsize= 2.89037
+H__9_8 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__9_8: replacing with value 1 bnd= 3 totsize= 3.98898
+H__2 odds = 1/0.833333 0.53705 (12, 12)  try to replace
+H__2: replacing with value 23 bnd= 32 totsize= 7.45472
+H__6_9 odds = 1/0.3125 0.921669 (32, 32)  try to replace
+H__6_9: replacing with value 0 bnd= 3 totsize= 8.55333
+H__7_9 odds = 1/0.3125 0.921669 (32, 32)  try to replace
+H__7_9: replacing with value 1 bnd= 3 totsize= 9.65194
+H__4_9 odds = 1/0.10101 0.9999 (99, 99)  try to replace
+H__4_9: replacing with value 0 bnd= 3 totsize= 10.7506
+* Final Problem size: Problem nodes = 221
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.27= ASSERT (0) : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
 ******** FAILED ********
-* FIND TIME:  0 ms 0.001 ms
+* FIND TIME:  0 ms 
 * CHECK TIME:  0.001 ms 
- *FAILED IN 3 iterations.
- *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
+ *FAILED IN 1 iterations.
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 6 : 8.03008 Round time:  0.011 ms 
+**ROUND 6 : 10.7506 Round time:  0.017 ms 
 RNDDEG = 10
-SUMMRY , 451, 155, 287, 627
+SUMMRY , 2, 15, 27, 311, 287, 489, 503, 645
  charness = 0
-POST-SUMMRY , 155, 287, 451, 627
-TRAIL: , 153
+POST-SUMMRY , 2, 15, 27, 287, 311, 489, 503, 645
+TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 7
+H__12 odds = 1/5 0.099668 (0, 0)  try to replace
+H__12: replacing with value 0 bnd= 2 totsize= 0.693147
 H__5 odds = 1/1.25 0.379949 (4, 4)  try to replace
-H__5: replacing with value 2 bnd= 3 totsize= 1.09861
-H__1_7 odds = 1/0.454545 0.800499 (11, 11)  try to replace
-H__1_7: replacing with value 1 bnd= 4 totsize= 2.48491
-H__1_8 odds = 1/0.454545 0.800499 (11, 11)  try to replace
-H__1_8: replacing with value 0 bnd= 4 totsize= 3.8712
-H__4_9 odds = 1/0.333333 0.905148 (15, 15)  try to replace
-H__4_9: replacing with value 1 bnd= 6 totsize= 5.66296
-* Final Problem size: Problem nodes = 328
-Assert at main_boolean_0.sk:48 (-5501914913550639779)
-********  0	ftime= 0	ctime= 0
-Assert at main_boolean_0.sk:48 (-5501914913550639779)
-********  1	ftime= 0.001	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-Problem became UNSAT.19= ASSERT 18 : Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
+H__5: replacing with value 0 bnd= 3 totsize= 1.79176
+H__9_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__9_7: replacing with value 1 bnd= 3 totsize= 2.89037
+H__10_8 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__10_8: replacing with value 2 bnd= 3 totsize= 3.98898
+H__1_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__1_8: replacing with value 2 bnd= 3 totsize= 5.0876
+H__10_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
+H__10_7: replacing with value 0 bnd= 3 totsize= 6.18621
+H__2 odds = 1/0.416667 0.833655 (12, 12)  try to replace
+H__2: replacing with value 5 bnd= 32 totsize= 9.65194
+H__6_9 odds = 1/0.263158 0.956237 (19, 19)  try to replace
+H__6_9: replacing with value 0 bnd= 3 totsize= 10.7506
+H__7_9 odds = 1/0.263158 0.956237 (19, 19)  try to replace
+H__7_9: replacing with value 0 bnd= 3 totsize= 11.8492
+H__4_9 odds = 1/0.0531915 1 (94, 94)  try to replace
+H__4_9: replacing with value 2 bnd= 3 totsize= 12.9478
+* Final Problem size: Problem nodes = 377
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.31= ASSERT 30 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
 ******** FAILED ********
-* FIND TIME:  0.001 ms 0.002 ms
-* CHECK TIME:  0 ms 
- *FAILED IN 2 iterations.
- *FIND TIME 0.002 CHECK TIME 0 TOTAL TIME 0.002
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 7 : 5.66296 Round time:  0.009 ms 
+**ROUND 7 : 12.9478 Round time:  0.01 ms 
 RNDDEG = 5
-SUMMRY , 469, 155, 445, 621
+SUMMRY , 2, 477, 13, 325, 469, 23, 251, 489, 501, 649
  charness = 0
-POST-SUMMRY , 155, 445, 469, 621
-TRAIL: , 153
+POST-SUMMRY , 2, 13, 23, 251, 325, 469, 477, 489, 501, 649
+TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 8
-H__1_7 odds = 1/0.204082 0.985217 (49, 49)  try to replace
-H__1_7: replacing with value 1 bnd= 4 totsize= 1.38629
-H__2 odds = 1/0.714286 0.604368 (14, 14)  try to replace
-H__2: replacing with value 10 bnd= 32 totsize= 4.85203
-H__4_9 odds = 1/0.0549451 1 (182, 182)  try to replace
-H__4_9: replacing with value 4 bnd= 6 totsize= 6.64379
-H__1_8 odds = 1/0.204082 0.985217 (49, 49)  try to replace
-H__1_8: replacing with value 1 bnd= 4 totsize= 8.03008
-* Final Problem size: Problem nodes = 277
-Assert at main_boolean_0.sk:145 (-2724601275939082019)
-********  0	ftime= 0	ctime= 0.001
-Assert at main_boolean_0.sk:48 (-5501914913550639779)
-********  1	ftime= 0	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-Problem became UNSAT.30= ASSERT 29 : Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
+H__9_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
+H__9_7: replacing with value 0 bnd= 3 totsize= 1.09861
+H__2 odds = 1/10 0.0499584 (1, 1)  try to replace
+H__2: replacing with value 6 bnd= 32 totsize= 4.56435
+H__10_8 odds = 1/1.66667 0.291313 (6, 6)  try to replace
+H__10_8: replacing with value 0 bnd= 3 totsize= 5.66296
+H__1_8 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__1_8: replacing with value 1 bnd= 3 totsize= 6.76157
+H__4_9 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__4_9: replacing with value 1 bnd= 3 totsize= 7.86019
+* Final Problem size: Problem nodes = 451
+Assert at main_boolean_0.sk:38 (1287796111229064025)
+********  0	ftime= 0	ctime= 0
+Assert at main_boolean_0.sk:142 (-2394977345945081360)
+********  1	ftime= 0.001	ctime= 0.001
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  2	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.56= ASSERT 55 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
 ******** FAILED ********
-* FIND TIME:  0.001 ms 
-* CHECK TIME:  0 ms 0.001 ms
- *FAILED IN 2 iterations.
- *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
+* FIND TIME:  0 ms 0.001 ms
+* CHECK TIME:  0.001 ms 0.002 ms
+ *FAILED IN 3 iterations.
+ *FIND TIME 0.001 CHECK TIME 0.002 TOTAL TIME 0.003
 RESULT = 1  
-**ROUND 8 : 8.03008 Round time:  0.01 ms 
+**ROUND 8 : 7.86019 Round time:  0.014 ms 
 RNDDEG = 10
-SUMMRY , 155, 255, 627, 447
+SUMMRY , 11, 253, 321, 467, 647
  charness = 0
-POST-SUMMRY , 155, 255, 447, 627
-TRAIL: , 153
+POST-SUMMRY , 11, 253, 321, 467, 647
+TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 9
-Received: , 1, 0, 153, 154
-Sending: 
-, 1, 0, 153, 154
-cur=10 next=40 scorecur=1 scorenext=0
-Switch because next is better
-Averages 0, 1.29883
-H__1_7 odds = 1/0.204082 0.985217 (49, 49)  try to replace
-H__1_7: replacing with value 1 bnd= 4 totsize= 1.38629
-H__4_9 odds = 1/0.0549451 1 (182, 182)  try to replace
-H__4_9: replacing with value 1 bnd= 6 totsize= 3.17805
-H__1_8 odds = 1/0.204082 0.985217 (49, 49)  try to replace
-H__1_8: replacing with value 0 bnd= 4 totsize= 4.56435
-* Final Problem size: Problem nodes = 339
-Assert at main_boolean_0.sk:145 (-2724601275939082019)
+Nothing read
+cur=10 next=5 scorecur=2 scorenext=4
+ Stay with what we had 10, 5
+Averages 2.48318, 4.85795
+H__5 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__5: replacing with value 0 bnd= 3 totsize= 1.09861
+H__9_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__9_7: replacing with value 2 bnd= 3 totsize= 2.19722
+H__10_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__10_7: replacing with value 0 bnd= 3 totsize= 3.29584
+H__1_7 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__1_7: replacing with value 0 bnd= 3 totsize= 4.39445
+H__9_8 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__9_8: replacing with value 2 bnd= 3 totsize= 5.49306
+* Final Problem size: Problem nodes = 119
+Assert at main_boolean_0.sk:38 (1287796111229064025)
 ********  0	ftime= 0	ctime= 0
-Assert at main_boolean_0.sk:48 (-5501914913550639779)
-********  1	ftime= 0.001	ctime= 0
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
-Problem became UNSAT.27= ASSERT 26 : Assert at main_boolean_0.sk:48 (-5501914913550639779)
-  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-5501914913550639779)
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  1	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.14= ASSERT 13 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
 ******** FAILED ********
-* FIND TIME:  0.001 ms 0.002 ms
-* CHECK TIME:  0 ms 
+* FIND TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
  *FAILED IN 2 iterations.
- *FIND TIME 0.002 CHECK TIME 0 TOTAL TIME 0.002
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
 RESULT = 1  
-**ROUND 9 : 4.56435 Round time:  0.01 ms 
-RNDDEG = 10
-SUMMRY , 155, 621, 445
+**ROUND 9 : 5.49306 Round time:  0.006 ms 
+RNDDEG = 5
+SUMMRY , 477, 15, 23, 167, 313
  charness = 0
-POST-SUMMRY , 155, 445, 621
-TRAIL: , 153
+POST-SUMMRY , 15, 23, 167, 313, 477
+TRAIL: 
 ALLOK
 ALLRESET
 ATTEMPT 10
-H__4_9 odds = 1/0.21978 0.979087 (182, 182)  try to replace
-H__4_9: replacing with value 3 bnd= 6 totsize= 1.79176
-H__1_8 odds = 1/0.816327 0.545885 (49, 49)  try to replace
-H__1_8: replacing with value 3 bnd= 4 totsize= 3.17805
-* Final Problem size: Problem nodes = 517
-Assert at main_boolean_0.sk:48 (-5501914913550639779)
+H__10_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
+H__10_7: replacing with value 1 bnd= 3 totsize= 1.09861
+H__6_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__6_9: replacing with value 0 bnd= 3 totsize= 2.19722
+H__4_9 odds = 1/1.11111 0.421899 (9, 9)  try to replace
+H__4_9: replacing with value 1 bnd= 3 totsize= 3.29584
+H__9_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__9_7: replacing with value 0 bnd= 3 totsize= 4.39445
+H__2 odds = 1/0.833333 0.53705 (12, 12)  try to replace
+H__2: replacing with value 22 bnd= 32 totsize= 7.86019
+* Final Problem size: Problem nodes = 433
+Assert at main_boolean_0.sk:38 (1287796111229064025)
+********  0	ftime= 0	ctime= 0
+Assert at main_boolean_0.sk:142 (-2394977345945081360)
+********  1	ftime= 0.001	ctime= 0
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  2	ftime= 0.001	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.49= ASSERT 48 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+******** FAILED ********
+* FIND TIME:  0.001 ms 0.003 ms
+* CHECK TIME:  0 ms 
+ *FAILED IN 3 iterations.
+ *FIND TIME 0.003 CHECK TIME 0 TOTAL TIME 0.003
+RESULT = 1  
+**ROUND 10 : 7.86019 Round time:  0.031 ms 
+RNDDEG = 10
+SUMMRY , 25, 489, 647, 11, 285
+ charness = 0
+POST-SUMMRY , 11, 25, 285, 489, 647
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 11
+H__5 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__5: replacing with value 1 bnd= 3 totsize= 1.09861
+H__10_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__10_7: replacing with value 1 bnd= 3 totsize= 2.19722
+H__9_8 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__9_8: replacing with value 2 bnd= 3 totsize= 3.29584
+H__1_8 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__1_8: replacing with value 0 bnd= 3 totsize= 4.39445
+H__6_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__6_9: replacing with value 1 bnd= 3 totsize= 5.49306
+H__7_9 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__7_9: replacing with value 1 bnd= 3 totsize= 6.59167
+H__4_9 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__4_9: replacing with value 0 bnd= 3 totsize= 7.69029
+H__9_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
+H__9_7: replacing with value 2 bnd= 3 totsize= 8.7889
+H__2 odds = 1/0.416667 0.833655 (12, 12)  try to replace
+H__2: replacing with value 20 bnd= 32 totsize= 12.2546
+* Final Problem size: Problem nodes = 290
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  0	ftime= 0	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.24= ASSERT (0) : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+******** FAILED ********
+* FIND TIME:  0 ms 
+* CHECK TIME:  0 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0
+RESULT = 1  
+**ROUND 11 : 12.2546 Round time:  0.009 ms 
+RNDDEG = 5
+SUMMRY , 479, 25, 313, 465, 491, 503, 645, 15, 281
+ charness = 0
+POST-SUMMRY , 15, 25, 281, 313, 465, 479, 491, 503, 645
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 12
+H__5 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__5: replacing with value 0 bnd= 3 totsize= 1.09861
+H__9_7 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__9_7: replacing with value 0 bnd= 3 totsize= 2.19722
+H__9_8 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__9_8: replacing with value 2 bnd= 3 totsize= 3.29584
+H__10_8 odds = 1/0.5 0.761594 (20, 20)  try to replace
+H__10_8: replacing with value 1 bnd= 3 totsize= 4.39445
+H__6_9 odds = 1/0.3125 0.921669 (32, 32)  try to replace
+H__6_9: replacing with value 0 bnd= 3 totsize= 5.49306
+H__7_9 odds = 1/0.3125 0.921669 (32, 32)  try to replace
+H__7_9: replacing with value 1 bnd= 3 totsize= 6.59167
+H__4_9 odds = 1/0.10101 0.9999 (99, 99)  try to replace
+H__4_9: replacing with value 2 bnd= 3 totsize= 7.69029
+* Final Problem size: Problem nodes = 498
+Assert at main_boolean_0.sk:38 (1287796111229064025)
+********  0	ftime= 0	ctime= 0
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  1	ftime= 0.001	ctime= 0.001
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  2	ftime= 0.001	ctime= 0.001
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  3	ftime= 0.001	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.75= ASSERT 74 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+******** FAILED ********
+* FIND TIME:  0.001 ms 0.004 ms
+* CHECK TIME:  0 ms 0.002 ms
+ *FAILED IN 4 iterations.
+ *FIND TIME 0.004 CHECK TIME 0.002 TOTAL TIME 0.006
+RESULT = 1  
+**ROUND 12 : 7.69029 Round time:  0.015 ms 
+RNDDEG = 10
+SUMMRY , 477, 11, 313, 323, 489, 503, 649
+ charness = 0
+POST-SUMMRY , 11, 313, 323, 477, 489, 503, 649
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 13
+H__10_7 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__10_7: replacing with value 2 bnd= 3 totsize= 1.09861
+H__9_8 odds = 1/0.833333 0.53705 (6, 6)  try to replace
+H__9_8: replacing with value 2 bnd= 3 totsize= 2.19722
+H__4_9 odds = 1/0.555556 0.716298 (9, 9)  try to replace
+H__4_9: replacing with value 0 bnd= 3 totsize= 3.29584
+H__9_7 odds = 1/0.25 0.964028 (20, 20)  try to replace
+H__9_7: replacing with value 2 bnd= 3 totsize= 4.39445
+H__10_8 odds = 1/0.25 0.964028 (20, 20)  try to replace
+H__10_8: replacing with value 0 bnd= 3 totsize= 5.49306
+H__2 odds = 1/0.416667 0.833655 (12, 12)  try to replace
+H__2: replacing with value 25 bnd= 32 totsize= 8.9588
+H__6_9 odds = 1/0.15625 0.996682 (32, 32)  try to replace
+H__6_9: replacing with value 1 bnd= 3 totsize= 10.0574
+* Final Problem size: Problem nodes = 272
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  0	ftime= 0	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.56= ASSERT 55 : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+******** FAILED ********
+* FIND TIME:  0 ms 
+* CHECK TIME:  0 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0 CHECK TIME 0 TOTAL TIME 0
+RESULT = 1  
+**ROUND 13 : 10.0574 Round time:  0.006 ms 
+RNDDEG = 5
+SUMMRY , 27, 313, 645, 15, 321, 291, 491
+ charness = 0
+POST-SUMMRY , 15, 27, 291, 313, 321, 491, 645
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 14
+Nothing read
+cur=10 next=20 scorecur=2 scorenext=0
+Switch because next is better
+Averages 0, 2.89898
+H__10_7 odds = 1/1 0.462117 (20, 20)  try to replace
+H__10_7: replacing with value 0 bnd= 3 totsize= 1.09861
+H__9_8 odds = 1/1 0.462117 (20, 20)  try to replace
+H__9_8: replacing with value 2 bnd= 3 totsize= 2.19722
+H__4_9 odds = 1/0.20202 0.985933 (99, 99)  try to replace
+H__4_9: replacing with value 0 bnd= 3 totsize= 3.29584
+* Final Problem size: Problem nodes = 619
+regen H__6
+********  0	ftime= 0	ctime= 0
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  1	ftime= 0.001	ctime= 0.001
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  2	ftime= 0	ctime= 0.001
+After all optim
+********  3	ftime= 0.001	ctime= 0.001
+******** FAILED ********
+* FIND TIME:  0 ms 0.002 ms
+* CHECK TIME:  0.001 ms 0.003 ms
+ *FAILED IN 4 iterations.
+ *FIND TIME 0.002 CHECK TIME 0.003 TOTAL TIME 0.005
+RESULT = 1  
+**ROUND 14 : 3.29584 Round time:  0.011 ms 
+RNDDEG = 20
+SUMMRY , 23, 313, 645
+ charness = 0
+POST-SUMMRY , 23, 313, 645
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 15
+H__12 odds = 1/10 0.0499584 (0, 0)  try to replace
+H__12: replacing with value 1 bnd= 2 totsize= 0.693147
+H__5 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__5: replacing with value 1 bnd= 3 totsize= 1.79176
+H__9_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
+H__9_7: replacing with value 1 bnd= 3 totsize= 2.89037
+H__10_7 odds = 1/1.66667 0.291313 (6, 6)  try to replace
+H__10_7: replacing with value 0 bnd= 3 totsize= 3.98898
+H__7_9 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__7_9: replacing with value 0 bnd= 3 totsize= 5.0876
+* Final Problem size: Problem nodes = 412
+regen H__10
+********  0	ftime= 0	ctime= 0
+Assert at main_boolean_0.sk:48 (-2379164929690885937)
+********  1	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+Problem became UNSAT.32= ASSERT (0) : Assert at main_boolean_0.sk:48 (-2379164929690885937)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:48 (-2379164929690885937)
+******** FAILED ********
+* FIND TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 2 iterations.
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 15 : 5.0876 Round time:  0.006 ms 
+RNDDEG = 10
+SUMMRY , 3, 479, 13, 23, 501
+ charness = 0
+POST-SUMMRY , 3, 13, 23, 479, 501
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 16
+H__9_8 odds = 1/1 0.462117 (20, 20)  try to replace
+H__9_8: replacing with value 2 bnd= 3 totsize= 1.09861
+H__10_8 odds = 1/1 0.462117 (20, 20)  try to replace
+H__10_8: replacing with value 0 bnd= 3 totsize= 2.19722
+H__6_9 odds = 1/0.625 0.664037 (32, 32)  try to replace
+H__6_9: replacing with value 1 bnd= 3 totsize= 3.29584
+H__7_9 odds = 1/0.625 0.664037 (32, 32)  try to replace
+H__7_9: replacing with value 1 bnd= 3 totsize= 4.39445
+H__4_9 odds = 1/0.20202 0.985933 (99, 99)  try to replace
+H__4_9: replacing with value 1 bnd= 3 totsize= 5.49306
+* Final Problem size: Problem nodes = 513
+Assert at main_boolean_0.sk:38 (1287796111229064025)
 ********  0	ftime= 0	ctime= 0.001
 After all optim
-********  1	ftime= 0.001	ctime= 0.002
+********  1	ftime= 0	ctime= 0.002
  *GOT THE CORRECT ANSWER IN 2 iterations.
- *FIND TIME 0.001 CHECK TIME 0.003 TOTAL TIME 0.004
+ *FIND TIME 0 CHECK TIME 0.003 TOTAL TIME 0.003
 RESULT = 0  
-**ROUND 10 : 3.17805 Round time:  0.013 ms 
-RNDDEG = 40
+**ROUND 16 : 5.49306 Round time:  0.008 ms 
+RNDDEG = 20
 return 0
 
 ----- Statistics -----
-Total elapsed time (ms):  0.111
-Model building time (ms): 0.003
-Solution time (ms):       0.106
-Max virtual mem (bytes):  97116160
-Max resident mem (bytes): 4599808
-Max private mem (bytes):  93503488
+Total elapsed time (ms):  0.2
+Model building time (ms): 0.004
+Solution time (ms):       0.195
+Max virtual mem (bytes):  96813056
+Max resident mem (bytes): 4329472
+Max private mem (bytes):  93200384
 ALL CORRECT
 
 [SATBackend] === parallel trial w/ degree -1 (2) solved ===
 [SATBackend] === resolved within 1 complete parallel trial(s)
-[SATBackend] destroying java.lang.UNIXProcess@6cecf7fa
+[SATBackend] destroying java.lang.UNIXProcess@398c75f4
+[SATBackend] destroying java.lang.UNIXProcess@349403b0
 [SATBackend] === parallel trial w/ degree -1 (0) done, but aborted ===
-[SATBackend] === parallel trial w/ degree -1 (1) done, but aborted ===
 /* BEGIN PACKAGE ANONYMOUS*/
 struct Equal {
 }
 /*main_boolean_0.sk:18*/
 
-void _main (bit[1] bitSet, int[5] intSet, ref global bit loop0__ANONYMOUS_s68, ref global int val__ANONYMOUS_s69)/*main_boolean_0.sk:18*/
+void _main (bit[1] bitSet, int[5] intSet, ref global bit loop0__ANONYMOUS_s69, ref global int val__ANONYMOUS_s70)/*main_boolean_0.sk:18*/
 {
   int[3] data = {0,0,0};
   data[0] = intSet[3];
   data[1] = intSet[2];
   data[2] = intSet[1];
-  val__ANONYMOUS_s69 = intSet[4];
-  loop0__ANONYMOUS_s68 = 0;
+  val__ANONYMOUS_s70 = intSet[4];
+  loop0__ANONYMOUS_s69 = 0;
   int i;
   i = intSet[0];
-  bit _out_s37 = 0;
-  loopInvariant(data, 1, 1, 0, 0, _out_s37, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
-  assert (_out_s37); //Assert at main_boolean_0.sk:38 (-5126369005253637979)
-  bit _pac_sc_s38_s40 = 0;
-  loopInvariant(data, bitSet[0], 1, i, 0, _pac_sc_s38_s40, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
-  bit _pac_sc_s38;
-  _pac_sc_s38 = _pac_sc_s38_s40;
-  if(_pac_sc_s38_s40)/*main_boolean_0.sk:39*/
+  bit _out_s41 = 0;
+  loopInvariant(data, 1, 1, 0, 0, _out_s41, loop0__ANONYMOUS_s69, val__ANONYMOUS_s70);
+  assert (_out_s41); //Assert at main_boolean_0.sk:38 (1287796111229064025)
+  bit _pac_sc_s42_s44 = 0;
+  loopInvariant(data, bitSet[0], 1, i, 0, _pac_sc_s42_s44, loop0__ANONYMOUS_s69, val__ANONYMOUS_s70);
+  bit _pac_sc_s42;
+  _pac_sc_s42 = _pac_sc_s42_s44;
+  if(_pac_sc_s42_s44)/*main_boolean_0.sk:39*/
   {
-    _pac_sc_s38 = i < 3;
+    _pac_sc_s42 = i < 3;
   }
-  if(_pac_sc_s38)/*main_boolean_0.sk:39*/
+  if(_pac_sc_s42)/*main_boolean_0.sk:39*/
   {
     bit ind_equal = 0;
-    if(val__ANONYMOUS_s69 != (data[i]))/*main_boolean_0.sk:41*/
+    if(val__ANONYMOUS_s70 != (data[i]))/*main_boolean_0.sk:41*/
     {
       ind_equal = 0;
     }
@@ -398,28 +663,28 @@ void _main (bit[1] bitSet, int[5] intSet, ref global bit loop0__ANONYMOUS_s68, r
     {
       ind_equal = bitSet[0];
     }
-    bit _out_s42 = 0;
-    loopInvariant(data, ind_equal, 1, i + 1, 0, _out_s42, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
-    assert (_out_s42); //Assert at main_boolean_0.sk:48 (-5501914913550639779)
+    bit _out_s46 = 0;
+    loopInvariant(data, ind_equal, 1, i + 1, 0, _out_s46, loop0__ANONYMOUS_s69, val__ANONYMOUS_s70);
+    assert (_out_s46); //Assert at main_boolean_0.sk:48 (-2379164929690885937)
   }
-  bit _pac_sc_s43_s45 = 0;
-  loopInvariant(data, bitSet[0], 1, i, 0, _pac_sc_s43_s45, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
-  bit _pac_sc_s43;
-  _pac_sc_s43 = _pac_sc_s43_s45;
-  if(_pac_sc_s43_s45)/*main_boolean_0.sk:50*/
+  bit _pac_sc_s47_s49 = 0;
+  loopInvariant(data, bitSet[0], 1, i, 0, _pac_sc_s47_s49, loop0__ANONYMOUS_s69, val__ANONYMOUS_s70);
+  bit _pac_sc_s47;
+  _pac_sc_s47 = _pac_sc_s47_s49;
+  if(_pac_sc_s47_s49)/*main_boolean_0.sk:50*/
   {
-    _pac_sc_s43 = !(i < 3);
+    _pac_sc_s47 = !(i < 3);
   }
-  if(_pac_sc_s43)/*main_boolean_0.sk:50*/
+  if(_pac_sc_s47)/*main_boolean_0.sk:50*/
   {
-    bit _out_s47 = 0;
-    postCondition(data, bitSet[0], 1, i, 0, _out_s47, loop0__ANONYMOUS_s68, val__ANONYMOUS_s69);
-    assert (_out_s47); //Assert at main_boolean_0.sk:51 (203304409361884937)
+    bit _out_s51 = 0;
+    postCondition(data, bitSet[0], 1, i, 0, _out_s51, loop0__ANONYMOUS_s69, val__ANONYMOUS_s70);
+    assert (_out_s51); //Assert at main_boolean_0.sk:51 (7940057736324222537)
   }
 }
-/*main_boolean_0.sk:114*/
+/*main_boolean_0.sk:111*/
 
-void init_equal (ref bit _out)/*main_boolean_0.sk:114*/
+void init_equal (ref bit _out)/*main_boolean_0.sk:111*/
 {
   _out = 0;
   _out = 1;
@@ -427,48 +692,47 @@ void init_equal (ref bit _out)/*main_boolean_0.sk:114*/
 }
 /*main_boolean_0.sk:64*/
 
-void loopInvariant (int[3] data, bit equal, bit equal0, int i, int i0, ref bit _out, ref global bit loop0__ANONYMOUS_s78, ref global int val__ANONYMOUS_s79)/*main_boolean_0.sk:64*/
+void loopInvariant (int[3] data, bit equal, bit equal0, int i, int i0, ref bit _out, ref global bit loop0__ANONYMOUS_s77, ref global int val__ANONYMOUS_s78)/*main_boolean_0.sk:64*/
 {
   _out = 0;
   bit[1] casper_r = {0};
   casper_r[0] = equal;
-  bit _pac_sc_s62 = (0 <= i) && (i <= 3);
-  if(_pac_sc_s62)/*main_boolean_0.sk:67*/
+  bit _pac_sc_s66 = (0 <= i) && (i <= 3);
+  if(_pac_sc_s66)/*main_boolean_0.sk:67*/
   {
-    bit[1] _pac_sc_s62_s64 = {0};
-    reduce(data, equal, equal0, i, i0, _pac_sc_s62_s64, loop0__ANONYMOUS_s78, val__ANONYMOUS_s79);
-    _pac_sc_s62 = _pac_sc_s62_s64 == casper_r;
+    bit[1] _pac_sc_s66_s68 = {0};
+    reduce(data, equal, equal0, i, i0, _pac_sc_s66_s68, loop0__ANONYMOUS_s77, val__ANONYMOUS_s78);
+    _pac_sc_s66 = _pac_sc_s66_s68 == casper_r;
   }
-  _out = _pac_sc_s62;
+  _out = _pac_sc_s66;
   return;
 }
 /*main_boolean_0.sk:18*/
 
 void main__Wrapper (bit[1] bitSet, int[5] intSet)  implements main__WrapperNospec/*main_boolean_0.sk:18*/
 {
-  global int val__ANONYMOUS_s73 = 0;
-  global bit loop0__ANONYMOUS_s72 = 0;
-  _main(bitSet, intSet, loop0__ANONYMOUS_s72, val__ANONYMOUS_s73);
+  global int val__ANONYMOUS_s76 = 0;
+  global bit loop0__ANONYMOUS_s75 = 0;
+  _main(bitSet, intSet, loop0__ANONYMOUS_s75, val__ANONYMOUS_s76);
 }
 /*main_boolean_0.sk:18*/
 
 void main__WrapperNospec (bit[1] bitSet, int[5] intSet)/*main_boolean_0.sk:18*/
 { }
-/*main_boolean_0.sk:89*/
+/*main_boolean_0.sk:88*/
 
-void map (int[3] data, int i, ref int[1] keys0, ref int[1] values0, ref global bit loop0__ANONYMOUS_s70, ref global int val__ANONYMOUS_s71)/*main_boolean_0.sk:89*/
+void map (int[3] data, int i, ref int[1] keys0, ref int[1] values0, ref global bit loop0__ANONYMOUS_s83, ref global int val__ANONYMOUS_s84)/*main_boolean_0.sk:88*/
 {
-  int _int_terminal2 = data[i];
-  if(val__ANONYMOUS_s71 != _int_terminal2)/*main_boolean_0.sk:91*/
+  int _int_terminal0 = data[i];
+  if(_int_terminal0 != val__ANONYMOUS_s84)/*main_boolean_0.sk:90*/
   {
     keys0[0] = 1;
-    int _int_terminal2_0 = data[i];
-    values0[0] = i != _int_terminal2_0;
+    values0[0] = loop0__ANONYMOUS_s83;
   }
 }
-/*main_boolean_0.sk:122*/
+/*main_boolean_0.sk:119*/
 
-void merge_equal (bit val1, bit val2, ref bit _out)/*main_boolean_0.sk:122*/
+void merge_equal (bit val1, bit val2, ref bit _out)/*main_boolean_0.sk:119*/
 {
   _out = 0;
   _out = val1 && val2;
@@ -476,51 +740,51 @@ void merge_equal (bit val1, bit val2, ref bit _out)/*main_boolean_0.sk:122*/
 }
 /*main_boolean_0.sk:58*/
 
-void postCondition (int[3] data, bit equal, bit equal0, int i, int i0, ref bit _out, ref global bit loop0__ANONYMOUS_s75, ref global int val__ANONYMOUS_s80)/*main_boolean_0.sk:58*/
+void postCondition (int[3] data, bit equal, bit equal0, int i, int i0, ref bit _out, ref global bit loop0__ANONYMOUS_s79, ref global int val__ANONYMOUS_s80)/*main_boolean_0.sk:58*/
 {
   _out = 0;
   bit[1] casper_r = {0};
   casper_r[0] = equal;
-  bit[1] _out_s49 = {0};
-  reduce(data, equal, equal0, i, i0, _out_s49, loop0__ANONYMOUS_s75, val__ANONYMOUS_s80);
-  _out = _out_s49 == casper_r;
+  bit[1] _out_s53 = {0};
+  reduce(data, equal, equal0, i, i0, _out_s53, loop0__ANONYMOUS_s79, val__ANONYMOUS_s80);
+  _out = _out_s53 == casper_r;
   return;
 }
-/*main_boolean_0.sk:127*/
+/*main_boolean_0.sk:124*/
 
-void reduce (int[3] data, bit equal, bit equal0, int i, int i0, ref bit[1] _out, ref global bit loop0__ANONYMOUS_s76, ref global int val__ANONYMOUS_s77)/*main_boolean_0.sk:127*/
+void reduce (int[3] data, bit equal, bit equal0, int i, int i0, ref bit[1] _out, ref global bit loop0__ANONYMOUS_s81, ref global int val__ANONYMOUS_s82)/*main_boolean_0.sk:124*/
 {
   _out = ((bit[1])0);
-  bit _out_s51 = 0;
-  init_equal(_out_s51);
-  _out[0] = _out_s51;
+  bit _out_s55 = 0;
+  init_equal(_out_s55);
+  _out[0] = _out_s55;
   for(int casper_i = i0; casper_i < i; casper_i = casper_i + 1)/*Canonical*/
   {
     bit[1] values0 = {0};
     int[1] keys0 = {0};
-    map(data, casper_i, keys0, values0, loop0__ANONYMOUS_s76, val__ANONYMOUS_s77);
+    map(data, casper_i, keys0, values0, loop0__ANONYMOUS_s81, val__ANONYMOUS_s82);
     for(int casper_j = 0; casper_j < 1; casper_j = casper_j + 1)/*Canonical*/
     {
       int key0 = keys0[casper_j];
-      if(key0 == 0)/*main_boolean_0.sk:144*/
+      if(key0 == 0)/*main_boolean_0.sk:141*/
         { }
       else
       {
-        assert (key0 == 1); //Assert at main_boolean_0.sk:145 (-2724601275939082019)
-        bit _out_s53 = 0;
-        reduce_equal(_out[0], values0[casper_j], _out_s53, loop0__ANONYMOUS_s76);
-        _out[0] = _out_s53;
+        assert (key0 == 1); //Assert at main_boolean_0.sk:142 (-2394977345945081360)
+        bit _out_s57 = 0;
+        reduce_equal(_out[0], values0[casper_j], _out_s57, loop0__ANONYMOUS_s81, val__ANONYMOUS_s82);
+        _out[0] = _out_s57;
       }
     }
   }
-  bit _out_s55 = 0;
-  merge_equal(_out[0], equal0, _out_s55);
-  _out[0] = _out_s55;
+  bit _out_s59 = 0;
+  merge_equal(_out[0], equal0, _out_s59);
+  _out[0] = _out_s59;
   return;
 }
-/*main_boolean_0.sk:118*/
+/*main_boolean_0.sk:115*/
 
-void reduce_equal (bit val1, bit val2, ref bit _out, ref global bit loop0__ANONYMOUS_s74)/*main_boolean_0.sk:118*/
+void reduce_equal (bit val1, bit val2, ref bit _out, ref global bit loop0__ANONYMOUS_s85, ref global int val__ANONYMOUS_s86)/*main_boolean_0.sk:115*/
 {
   _out = 0;
   _out = 0;
@@ -528,4 +792,4 @@ void reduce_equal (bit val1, bit val2, ref bit _out, ref global bit loop0__ANONY
 }
 /* END PACKAGE ANONYMOUS*/
 [SKETCH] DONE
-Total time = 915
+Total time = 1068

@@ -1,0 +1,4 @@
+struct RecordResidual{
+	int fit;
+	int y;
+	}

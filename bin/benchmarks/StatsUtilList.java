@@ -176,7 +176,7 @@ public class StatsUtilList {
      *                  Standard error in mean i.e. residual sum of squares
      *                  as a double
      */
-    /*class RecordError {
+   /* class RecordError {
     	public double y;
     	public double fit;
     }
@@ -213,14 +213,14 @@ public class StatsUtilList {
      * @return
      *                  Array of doubles holding the data's residual points
      */
-     /*public static double[] residuals(List<Double> y, List<Double> fit){
+ 	/*public static double[] residuals(List<Double> y, List<Double> fit){
         double[] residuals=new double[y.size()];
         for (int i = 0; i < y.size(); i++)
             residuals[i] = y.get(i) - fit.get(i);
         return residuals;
-    }
+	}*/
     
-   /* class RecordResidual {
+   /*class RecordResidual {
     	public double y;
     	public double fit;
     }
@@ -230,113 +230,5 @@ public class StatsUtilList {
             residuals[i] = data.get(i).y - data.get(i).fit;
         return residuals;
     }
-
-    /**
-     * linearCorrelationCoefficient
-     *                              Linear correlation coefficient found when we calculate the regression sum of
-     *                              squares over the variance given in y
-     * @param regressionSumOfSquares
-     *                              Standard error of mean from having calculated the regression sum of squares
-     * @param yVariance
-     *                              Variance in y as an array of double values
-
-     * @return
-     *                              Linear correlation coefficient of data as a double
-     */
-/*
-    public static double linearCorrelationCoefficient(double regressionSumOfSquares, double yVariance){
-        return regressionSumOfSquares / yVariance;
-    }
-
-    /**
-     * errorOffset
-     *              Gives the error in the offset
-     * @param n
-     *              Integer length of the array of data doubles
-     * @param xVariance
-     *              Variance in x as an array of double values
-     * @param xMean
-     *              Array of doubles holding the mean x values
-     * @param rss
-     *              The regression sum of squares as a double
-     * @return
-     *              Error in the y offset constant value of the line of best fit as a double
-     */
-  /*  public static double errorOffset(double n, double xVariance, double xMean, double rss) {
-        double degreesFreedom = n - 2;  //Assumes that data has only 2 degrees of freedom.
-        double sigma = rss / degreesFreedom;
-        double sVariance = (sigma / xVariance);
-        return Math.sqrt( sigma / n + Math.pow(xMean,2) * sVariance);
-    }
-
-    /**
-     * errorGradient
-     *                  Gives the error in the gradient
-     * @param xVariance
-     *                  Double holding the value of the variance in x
-     * @param rss
-     *                  Standard error in the mean of x
-     * @return
-     *                  Error in the line of best fit's gradient calculation as a double
-     */
-  /*  public static double errorGradient(double xVariance, double rss, int n){
-        double degreesFreedom = n - 2;
-        double stdVariance = rss / degreesFreedom;
-        return Math.sqrt(stdVariance/ xVariance);
-    }
-
-    public static double errorFit(double stdFit){ // TODO Check: forgotten what this is about!?!
-        return Math.sqrt(stdFit);
-    }
-
-   /**
-    * gaussian
-    *                         a normalised gaussian to reflect the distribution of the data 
-    * @param numberOfSamples
-    *                         sample number appropriate to size of original data array
-    * @param variance                    
-    *                         variance of data
-    * @param mean
-    *                         mean of data
-    * @return
-    *                         normalised gaussian in the form of 1D array of doubles for y axis
-    */
-    /*public static double[] gaussian(int numberOfSamples, double variance, double mean){
-        double[] gaussian = new double[numberOfSamples];
-        double tempGaussian= 0.0;
-
-        for (int i=0; i<numberOfSamples; i++){
-            gaussian[i] = Math.sqrt(1/(period)* variance)*(Math.exp(-(i-mean)*(i-mean)/(2 * variance)));
-            tempGaussian += gaussian[i];
-        }
-        
-        for (int i=0; i< numberOfSamples; i++){ //normalise
-            gaussian[i] /= tempGaussian;
-        }
-        return gaussian;
-    }
-
-    /**
-     * convolve
-     *                        convolve data with a normalised gaussian in order to smooth the output after
-     *                        reducing sample rate
-     * @param data
-     *                         2D data array to be smoothed
-     * @param gaussian
-     *                         normalised gaussian in the form of 1D array of doubles for y axis
-     * @param numberOfSamples
-     *                         sample number appropriate to size of original data array
-     * @return
-     *                        Smoothed data as array of doubles 
-     */ 
-    /*public static double[] convolve(List<Integer> data, List<Double> gaussian, int numberOfSamples){
-        double convolved[] = new double[data.size() - (numberOfSamples + 1)];
-        for (int i=0; i<convolved.length; i++){
-            convolved[i] = 0.0;  // Set all doubles to 0.
-            for (int j=i, k=0; j<i + numberOfSamples; j++, k++){
-                convolved[i] +=  data.get(j) * gaussian.get(k);
-            }
-        }
-        return convolved;
-    }*/
+*/
 }
