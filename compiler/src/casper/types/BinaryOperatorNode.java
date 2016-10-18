@@ -35,8 +35,6 @@ public class BinaryOperatorNode extends CustomASTNode{
 		operandLeft.getIndexes(arrname, indexes);
 		operandRight.getIndexes(arrname, indexes);
 	}
-	
-	
 
 	@Override
 	public int convertConstToIDs(Map<String,String> constMapping, int constID){
@@ -61,6 +59,13 @@ public class BinaryOperatorNode extends CustomASTNode{
 			}
 		}
 		return constID;
+	}
+
+	@Override
+	public CustomASTNode fixArrays() {
+		operandLeft = operandLeft.fixArrays();
+		operandRight = operandRight.fixArrays();
+		return this;
 	}
 	
 }

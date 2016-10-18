@@ -228,6 +228,10 @@ public class Variable{
 		return varType;
 	}
 	
+	public String getDafnyType(){
+		return casper.Util.getDafnyType(this.getSketchType());
+	}
+	
 	@Override
 	public String toString(){
 		return "{[" + category + "] " + varName + " : " + containerType + " -> " + varType + "}";

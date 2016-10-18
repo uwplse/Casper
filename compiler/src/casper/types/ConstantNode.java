@@ -37,5 +37,10 @@ public class ConstantNode extends CustomASTNode {
 	@Override
 	public void getIndexes(String arrname, Map<String, List<CustomASTNode>> indexes) {
 	}
+
+	@Override
+	public CustomASTNode fixArrays() {
+		return this;
+	}
 	
 }

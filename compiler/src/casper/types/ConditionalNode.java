@@ -83,4 +83,12 @@ public class ConditionalNode extends CustomASTNode{
 		alt.getIndexes(arrname, indexes);		
 	}
 
+	@Override
+	public CustomASTNode fixArrays() {
+		cond = cond.fixArrays();
+		cons = cons.fixArrays();
+		alt = alt.fixArrays();
+		return this;
+	}
+
 }

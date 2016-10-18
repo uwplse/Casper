@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import casper.Configuration;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
@@ -101,6 +102,10 @@ public class GenerateVerification extends NodeVisitor {
 					blockExt.preConditions.put(reduceType, preCondBlock);
 					ext.wpcValues = generateWPCValues(reduceType,wpcValues,loopBody,ext);
 					
+					if(ext.inputDataCollections.size()>1){
+						fixArrayAccesses(ext.wpcValues);
+					}
+					
 					if(debug){
 						System.err.println(ext.preConditions);
 						System.err.println(ext.invariants);
@@ -114,7 +119,7 @@ public class GenerateVerification extends NodeVisitor {
 		
 		return this;
 	}
-	
+
 	// Extract Initial Values of all input output variables
 	private void extractInitialValues(Node n, MyWhileExt ext) {
 		List<Stmt> filteredStmts = new ArrayList<Stmt>();
@@ -407,6 +412,14 @@ public class GenerateVerification extends NodeVisitor {
 			}
 		}
 		return wpcValues;
+	}
+	
+	private void fixArrayAccesses(Map<String, CustomASTNode> wpcValues) {
+		for(String var : wpcValues.keySet()){
+			CustomASTNode node = wpcValues.get(var);
+			node = node.fixArrays();
+			wpcValues.put(var, node);
+		}
 	}
 	
 	@Override

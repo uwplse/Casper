@@ -150,5 +150,7 @@ abstract public class CustomASTNode {
 		
 		return node;
 	}
+
+	abstract public CustomASTNode fixArrays();
 	
 }

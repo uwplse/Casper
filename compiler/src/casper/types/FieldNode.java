@@ -38,5 +38,11 @@ public class FieldNode extends CustomASTNode{
 	public void getIndexes(String arrname, Map<String, List<CustomASTNode>> indexes) {
 		container.getIndexes(arrname, indexes);
 	}
+
+	@Override
+	public CustomASTNode fixArrays() {
+		container = container.fixArrays();
+		return this;
+	}
 	
 }

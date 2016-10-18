@@ -162,6 +162,15 @@ public class Util {
 					return OBJECT_ARRAY;
 				}
 			}
+			else if(type.endsWith("[]")){
+				if(getTypeClass(type.substring(0, type.lastIndexOf("[]"))) == PRIMITIVE ||
+				   getTypeClass(type.substring(0, type.lastIndexOf("[]"))) == ARRAY	){
+					return ARRAY;
+				}
+				else {
+					return OBJECT_ARRAY;
+				}
+			}
 			else{
 				return OBJECT;
 			}
@@ -294,7 +303,6 @@ public class Util {
 	}
 	
 	public static String getDafnyType(String original){
-		final int arrBnd = Configuration.arraySizeBound;
 		if(original.equals("bit")){
 			return "bool";
 		}
@@ -313,6 +321,9 @@ public class Util {
 		else if(original.equals("double")){
 			return "real";
 		}
+		else if(original.equals("int["+Configuration.arraySizeBound+"]")){
+			return "seq<int>";
+		}
 		else if(original.equals("bit["+Configuration.arraySizeBound+"]")){
 			return "seq<bool>";
 		}
@@ -329,7 +340,12 @@ public class Util {
 			return "seq<int>";
 		}
 		else{
-			return original;
+			if(original.endsWith("["+Configuration.arraySizeBound+"]")){
+				return "seq<"+original.replace("["+Configuration.arraySizeBound+"]", "")+">";
+			}
+			else{
+				return original;
+			}
 		}
 	}
 

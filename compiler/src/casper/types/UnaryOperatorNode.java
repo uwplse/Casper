@@ -33,5 +33,11 @@ public class UnaryOperatorNode extends CustomASTNode{
 	public void getIndexes(String arrname, Map<String, List<CustomASTNode>> indexes) {
 		operand.getIndexes(arrname, indexes);
 	}
+
+	@Override
+	public CustomASTNode fixArrays() {
+		operand = operand.fixArrays();
+		return this;
+	}
 	
 }

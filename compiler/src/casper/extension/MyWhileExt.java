@@ -116,6 +116,12 @@ public class MyWhileExt extends MyStmtExt {
 	
 	// Flags to enable disable code generation pass
 	public Map<String,Boolean> generateCode = new HashMap<String,Boolean>();
+	
+	// Generated Solution
+	public Map<String,List<KvPair>> mapEmits = null;
+	public Map<String,String> reduceExps = null;
+	public Map<String,String> initExps = null;
+	public Map<String,String> mergeExps = null;
     
     // We perform an alias analysis. If two variables are aliases, then
     // modifying one should change the other too. Our generated programs

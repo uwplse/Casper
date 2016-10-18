@@ -50,5 +50,12 @@ public class ArrayUpdateNode  extends CustomASTNode{
 		index.getIndexes(arrname, indexes);
 		value.getIndexes(arrname, indexes);
 	}
+
+	@Override
+	public CustomASTNode fixArrays() {
+		index = index.fixArrays();
+		value = value.fixArrays();
+		return this;
+	}
 	
 }

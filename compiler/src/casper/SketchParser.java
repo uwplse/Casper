@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import casper.JavaLibModel.SketchCall;
 import casper.extension.MyWhileExt;
+import casper.types.Variable;
 
 public class SketchParser {
 	
@@ -21,8 +23,32 @@ public class SketchParser {
 		int index  = -1;
 		public Map<Integer,String> keys;
 		public Map<Integer,String> values;
-		KvPair(Map<Integer,String> k, Map<Integer,String> v, int i) { keys = k; values = v; index = i; }
-		public String toString(){ return "["+keys+","+values+"]"; }
+		
+		KvPair(Map<Integer,String> k, Map<Integer,String> v, int i) 
+		{ 
+			keys = k; 
+			values = v; 
+			index = i; 
+		}
+		
+		public String toString(){ 
+			return "["+keys+","+values+"]"; 
+		}
+		
+		@Override
+		public boolean equals(Object obj){
+			if(obj != null && obj instanceof KvPair){
+				KvPair inp = (KvPair)obj;
+				return this.index == inp.index;
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public int hashCode(){
+			return 0;
+		}
 	}
 	
 	private static String resolve(String exp, List<String> mapLines, int i, MyWhileExt ext) {
@@ -258,7 +284,9 @@ public class SketchParser {
 			while(m.find()){
 				values.put(Integer.parseInt(m.group(1)), m.group(2));
 			}
-			emits.add(new KvPair(keys,values,i));
+			KvPair kvp = new KvPair(keys,values,i);
+			if(!emits.contains(kvp))
+				emits.add(kvp);
 		}
 		
 		List<String> mapLines = new ArrayList<String>();
@@ -266,8 +294,6 @@ public class SketchParser {
 			if(!line.trim().equals(""))
 				mapLines.add(line.trim());
 		}
-		
-		System.err.println(emits);
 
 		// Resolve emits
 		for(KvPair kvp : emits){
@@ -300,12 +326,10 @@ public class SketchParser {
 			}
 		}
 		
-		System.err.println(emits);
-		
 		return emits;
 	}
 	
-	public static void parseSolution(String filename, MyWhileExt ext, int emitCount) throws IOException {
+	public static void parseSolution(String filename, Set<Variable> outputVars, MyWhileExt ext, int emitCount) throws IOException {
 		// Read sketch output
 		BufferedReader br = new BufferedReader(new FileReader(filename));
 		
@@ -356,103 +380,132 @@ public class SketchParser {
 		}
 		
 		// Remaining emits
-		mapEmits.put("noCondition",extractMapEmits(map,ext,emitCount));
-	}
-	
-	
-}
-		
-		
-		
-		
-		
-		/** Extract reduce emits **//*
-		r = Pattern.compile("void do_reduce(.*?)\\{(.*?)return;\n\\}",Pattern.DOTALL);
-		m = r.matcher(text);
-		m.find();
-		String reduce = m.group(0);
-		
-		List<String> reduceLines = new ArrayList<String>();
-		for(String line : reduce.split("\n")){
-			reduceLines.add(line.trim());
-		}
-		
-		r = Pattern.compile("while\\(values != \\(null\\)\\)\\s*\\{(.*?)\\}",Pattern.DOTALL);
-		m = r.matcher(text);
-		m.find();
-		String agg = m.group(0);
-		
-		List<String> aggLines = new ArrayList<String>();
-		for(String line : agg.split("\n")){
-			aggLines.add(line.trim());
-		}
-		
-		String reduceInitValue = "";
-		for(int i=0; i<reduceLines.size(); i++){
-			r = Pattern.compile("_out.(.*?)value = (.*);");
-			m = r.matcher(reduceLines.get(i));
-			if(m.find()){
-				reduceInitValue = m.group(2).trim();
-				if(outputType.equals("bit")){
-					switch(reduceInitValue){
-						case "0":
-							reduceInitValue = "false";
-							break;
-						case "1":
-							reduceInitValue = "true";
-							break;
-					}
+		List<KvPair> allEmits = extractMapEmits(map,ext,emitCount);
+		List<KvPair> filteredEmits = new ArrayList<KvPair>();
+		for(KvPair emit : allEmits){
+			boolean keep = true;
+			for(String conditional : mapEmits.keySet()){
+				if(mapEmits.get(conditional).contains(emit)){
+					keep = false;
+					break;
 				}
-				break;
 			}
-		}
-		String reduceValue = "";
-		for(int i=0; i<aggLines.size(); i++){
-			r = Pattern.compile("_out.(.*?)value = (.*)");
-			m = r.matcher(aggLines.get(i));
-			if(m.find()){
-				reduceValue = m.group(2).trim();
-				reduceValue = resolve(reduceValue,aggLines,i,ext);
-				if(outputType.equals("bit")){
-					switch(reduceValue){
-						case "0":
-							reduceValue = "false";
-							break;
-						case "1":
-							reduceValue = "true";
-							break;
-					}
-				}
-				break;
-			}
+			if(keep)
+				filteredEmits.add(emit);
 		}
 		
-		if(debug)
-			System.err.println(reduceInitValue + ", " + reduceValue);
+		mapEmits.put("noCondition",filteredEmits);
 		
 		
-		/** Extract merge operator **//*
-		r = Pattern.compile("void int_get (.*?)\\{(.*?)\\}",Pattern.DOTALL);
-		m = r.matcher(text);
-		String mergeOp = "";
-		if(!m.find()){
-			r = Pattern.compile("void string_get (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+		// Extract reduce functions
+		Map<String,String> reduceExps = new HashMap<String,String>();
+		
+		for(Variable var : outputVars){
+			r = Pattern.compile("void "+Pattern.quote("reduce_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
 			m = r.matcher(text);
-			if(!m.find()){
-				r = Pattern.compile("void int_get_tuple (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
-				m = r.matcher(text);
-				if(!m.find()){
-					r = Pattern.compile("void string_get_tuple (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
-					m = r.matcher(text);
-					m.find();
+			if(m.find()){
+				// Get reduce function for this output variable
+				String reduce = m.group(2);
+				
+				// Split code to lines
+				List<String> reduceLines = new ArrayList<String>();
+				for(String reduceLine : reduce.split("\n")){
+					if(!reduceLine.trim().equals(""))
+						reduceLines.add(reduceLine.trim());
+				}
+				
+				for(int i=reduceLines.size()-1; i>=0; i--){
+					r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
+					m = r.matcher(reduceLines.get(i));
+					if(m.find()){
+						reduceExps.put(var.varName, resolve(m.group(1),reduceLines,i,ext));
+						break;
+					}
 				}
 			}
+			else {
+				if(debug)
+					System.err.println("Something unexpected happened in the parser.");
+			}
+			 
 		}
-		mergeOp = m.group(2);
-		r = Pattern.compile(outputType.replace("["+Configuration.arraySizeBound+"]", "") + " option(.*?) = (.*?);",Pattern.DOTALL);
-		m = r.matcher(mergeOp);
-		m.find();
-		mergeOp = casper.Util.getOperatorFromExp(m.group(2));
-	}
-	
-}*/
+		
+		// Extract init functions
+		Map<String,String> initExps = new HashMap<String,String>();
+		
+		for(Variable var : outputVars){
+			r = Pattern.compile("void "+Pattern.quote("init_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+			m = r.matcher(text);
+			if(m.find()){
+				// Get init function for this output variable
+				String init = m.group(2);
+				
+				// Split code to lines
+				List<String> initLines = new ArrayList<String>();
+				for(String initLine : init.split("\n")){
+					if(!initLine.trim().equals(""))
+						initLines.add(initLine.trim());
+				}
+				
+				for(int i=initLines.size()-1; i>=0; i--){
+					r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
+					m = r.matcher(initLines.get(i));
+					if(m.find()){
+						initExps.put(var.varName, resolve(m.group(1),initLines,i,ext));
+						break;
+					}
+				}
+			}
+			else {
+				if(debug)
+					System.err.println("Something unexpected happened in the parser.");
+			}
+			 
+		}
+		
+		// Extract merge functions
+		Map<String,String> mergeExps = new HashMap<String,String>();
+		
+		for(Variable var : outputVars){
+			r = Pattern.compile("void "+Pattern.quote("merge_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+			m = r.matcher(text);
+			if(m.find()){
+				// Get init function for this output variable
+				String merge = m.group(2);
+				
+				// Split code to lines
+				List<String> mergeLines = new ArrayList<String>();
+				for(String mergeLine : merge.split("\n")){
+					if(!mergeLine.trim().equals(""))
+						mergeLines.add(mergeLine.trim());
+				}
+				
+				for(int i=mergeLines.size()-1; i>=0; i--){
+					r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
+					m = r.matcher(mergeLines.get(i));
+					if(m.find()){
+						mergeExps.put(var.varName, resolve(m.group(1),mergeLines,i,ext));
+						break;
+					}
+				}
+			}
+			else {
+				if(debug)
+					System.err.println("Something unexpected happened in the parser.");
+			}
+			 
+		}
+		
+		ext.mapEmits = mapEmits;
+		ext.initExps = initExps;
+		ext.reduceExps = reduceExps;
+		ext.mergeExps = mergeExps;
+		
+		if(debug){
+			System.err.println(mapEmits);
+			System.err.println(initExps);
+			System.err.println(reduceExps);
+			System.err.println(mergeExps);
+		}
+	}	
+}

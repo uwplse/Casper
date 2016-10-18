@@ -54,5 +54,14 @@ public class CallNode extends CustomASTNode {
 			arg.getIndexes(arrname, indexes);
 		}
 	}
+
+	@Override
+	public CustomASTNode fixArrays() {
+		ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
+		for(CustomASTNode arg : arguments){
+			args.add(arg.fixArrays());
+		}
+		return new CallNode(name,args);
+	}
 	
 }

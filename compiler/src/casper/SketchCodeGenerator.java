@@ -715,7 +715,7 @@ public class SketchCodeGenerator {
 		/******** Generate terminal options *******/
 		Map<String,List<String>> terminals = new HashMap<String,List<String>>();
 		
-		for(Variable var : ext.loopCounters){
+		/*for(Variable var : ext.loopCounters){
 			if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 1){
 				String keyType = "String";
 				if(!var.getOriginalType().replace("[]", "").equals("String"))
@@ -723,7 +723,7 @@ public class SketchCodeGenerator {
 				if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
 				terminals.get(keyType).add(var.varName);
 			}
-		}
+		}*/
 		for(Variable var : ext.inputVars){
 			if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 1){
 				String keyType = "String";
@@ -1050,7 +1050,7 @@ public class SketchCodeGenerator {
 		String mapArgs = inputDataSet.getSketchType().replace(""+Configuration.arraySizeBound, ""+(Configuration.arraySizeBound-1)) + " " + inputDataSet.varName;
 		
 		for(Variable var : sketchLoopCounters){
-			mapArgs += ", int casper_i";
+			mapArgs += ", int " + var.varName; break;
 		}
 		for(int i=0; i<keyCount; i++){
 			mapArgs += ", ref int[CASPER_NUM_OUTVARS] keys"+i;
@@ -1066,7 +1066,13 @@ public class SketchCodeGenerator {
 		String emits = "";
 		
 		// Generate args for generator functions
-		String args = inputDataSet.varName + ", casper_i";
+		
+		String lcName = "";
+		for(Variable var : sketchLoopCounters){
+			lcName = var.varName;
+			break;
+		}
+		String args = inputDataSet.varName + ", " + lcName;
 		
 		String sketchType = type;
 		if(type == "String")
@@ -1087,10 +1093,10 @@ public class SketchCodeGenerator {
 					if(j==0)
 						emits += "keys"+j+"["+i+"] = ??;\n\t\t";
 					else
-						emits += "keys"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", casper_i);\n\t\t";
+						emits += "keys"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
 				for(int j=0; j<valCount; j++){
-					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", casper_i);\n\t\t";
+					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
 				emits = emits.substring(0,emits.length()-1);
 				emits += "}";
@@ -1103,10 +1109,10 @@ public class SketchCodeGenerator {
 					if(j==0)
 						emits += "keys"+j+"["+i+"] = ??;\n\t";
 					else
-						emits += "keys"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", casper_i);\n\t";
+						emits += "keys"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t";
 				}
 				for(int j=0; j<valCount; j++){
-					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", casper_i);\n\t";
+					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t";
 				}
 			}
 		}

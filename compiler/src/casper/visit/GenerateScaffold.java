@@ -89,14 +89,16 @@ public class GenerateScaffold extends NodeVisitor{
 							
 							if(synthesizerExitCode == 0){
 								/* Run theorem prover to verify summary */
-								SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", ext, sketchFilteredOutputVars.size());
+								SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, sketchFilteredOutputVars.size());
 								
-								//DafnyCodeGenerator.generateSummary(id, ext, sketchFilteredOutputVars, sketchReduceType);
+								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType);
 								
-								int verifierExitCode = 0;//verifySummary("output/main_"+reduceType+id+".dfy", sketchReduceType);
+								int verifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
 								
 								if(verifierExitCode == 0)
 									ext.generateCode.put(reduceType, true);
+								else
+									System.exit(1);
 								
 								break;
 							}
@@ -108,7 +110,7 @@ public class GenerateScaffold extends NodeVisitor{
 								System.err.println("Casper failed to synthesize a summary for this code fragment.\nPlease submit your code example at our"
 													+ " GitHub Issues tracker (https://github.com/uwplse/Casper/issues)");
 								ext.generateCode.put(reduceType, false);
-								break;
+								System.exit(1);
 							}
 						}
 					}
@@ -167,7 +169,7 @@ public class GenerateScaffold extends NodeVisitor{
 	private int runSynthesizer(String filename, MyWhileExt ext, String type) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
 		
-		if(debug || true)
+		if(debug)
 			System.err.println("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 20 -bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
 		
 		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 20 -bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
@@ -217,7 +219,7 @@ public class GenerateScaffold extends NodeVisitor{
 	private int verifySummary(String filename, String outputType) throws IOException, InterruptedException {
 		/****** Run dafny ******/
 		Runtime rt = Runtime.getRuntime();
-		Process pr = rt.exec("dafny "+ filename);
+		Process pr = rt.exec("dafny " + filename);
 
 		PrintWriter writer = new PrintWriter("output/outputTempDafny.txt", "UTF-8");
 		
