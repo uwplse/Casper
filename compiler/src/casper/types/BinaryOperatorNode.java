@@ -68,4 +68,14 @@ public class BinaryOperatorNode extends CustomASTNode{
 		return this;
 	}
 	
+	@Override
+	public void replaceIndexesWith(String k) {
+		operandLeft.replaceIndexesWith(k);
+		operandRight.replaceIndexesWith(k);
+	}
+
+	@Override
+	public boolean containsArrayAccess() {
+		return operandLeft.containsArrayAccess() || operandRight.containsArrayAccess();
+	}
 }

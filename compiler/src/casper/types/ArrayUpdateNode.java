@@ -58,4 +58,19 @@ public class ArrayUpdateNode  extends CustomASTNode{
 		return this;
 	}
 	
+	@Override
+	public void replaceIndexesWith(String k) {
+		if(index instanceof IdentifierNode)
+			index = new IdentifierNode(k);
+		else
+			index.replaceIndexesWith(k);
+		array.replaceIndexesWith(k);
+		value.replaceIndexesWith(k);
+	}
+
+	@Override
+	public boolean containsArrayAccess() {
+		return index.containsArrayAccess() || array.containsArrayAccess() || value.containsArrayAccess() || index instanceof IdentifierNode;
+	}
+	
 }

@@ -1,6 +1,7 @@
 package casper;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
@@ -177,6 +178,33 @@ public class Util {
 		}
 	}
 	
+	public static int getDafnyTypeClass(String type) {
+		switch(type){
+			case "bool":
+			case "char":
+			case "int":
+			case "real":
+				return PRIMITIVE;
+			case "seq<bool>":
+			case "seq<char>":
+			case "seq<int>":
+			case "seq<real>":
+				return ARRAY;
+			default:
+				if(type.matches(Pattern.quote("seq<")+"(.*?)"+Pattern.quote(">"))){
+					if(getDafnyTypeClass(type.substring(4,type.length()-1))==PRIMITIVE || getDafnyTypeClass(type.substring(4,type.length()-1))==ARRAY){
+						return ARRAY;
+					}
+					else{
+						return OBJECT_ARRAY;
+					}
+				}
+				else{
+					return OBJECT;
+				}
+		}
+	}
+	
 	// Convert abbreviation to proper sketch type
 	public static String convertAbbrToType(String abbr) {
 		switch(abbr){
@@ -338,6 +366,23 @@ public class Util {
 		}
 		else if(original.equals("String["+Configuration.arraySizeBound+"]")){
 			return "seq<int>";
+		}
+		else{
+			if(original.endsWith("["+Configuration.arraySizeBound+"]")){
+				return "seq<"+original.replace("["+Configuration.arraySizeBound+"]", "")+">";
+			}
+			else{
+				return original;
+			}
+		}
+	}
+	
+	public static String getDafnyTypeFromRaw(String original){
+		if(original.equals("boolean")){
+			return "bool";
+		}
+		else if(original.equals("int")){
+			return "int";
 		}
 		else{
 			if(original.endsWith("["+Configuration.arraySizeBound+"]")){

@@ -150,7 +150,11 @@ abstract public class CustomASTNode {
 		
 		return node;
 	}
-
+	
+	abstract public boolean containsArrayAccess();
+	
+	abstract public void replaceIndexesWith(String k);
+	
 	abstract public CustomASTNode fixArrays();
 	
 }

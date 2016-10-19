@@ -1,5 +1,5 @@
 /***************************** UTIL Functions *******************************/
-function str_equal(val1: int, val2: int) : bool
+function casper_str_equal(val1: int, val2: int) : bool
 {
   val1 == val2
 }

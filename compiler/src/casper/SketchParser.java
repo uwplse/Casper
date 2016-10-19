@@ -284,6 +284,8 @@ public class SketchParser {
 			while(m.find()){
 				values.put(Integer.parseInt(m.group(1)), m.group(2));
 			}
+			if(keys.size()==0 && values.size() == 0)
+				continue;
 			KvPair kvp = new KvPair(keys,values,i);
 			if(!emits.contains(kvp))
 				emits.add(kvp);
@@ -325,7 +327,6 @@ public class SketchParser {
 				kvp.values.put(i, new_value);
 			}
 		}
-		
 		return emits;
 	}
 	

@@ -7,7 +7,7 @@ import polyglot.ast.Expr;
 
 public class FieldNode extends CustomASTNode{
 
-	CustomASTNode container;
+	public CustomASTNode container;
 	
 	public FieldNode(String n, CustomASTNode c) {
 		super(n);
@@ -43,6 +43,16 @@ public class FieldNode extends CustomASTNode{
 	public CustomASTNode fixArrays() {
 		container = container.fixArrays();
 		return this;
+	}
+
+	@Override
+	public void replaceIndexesWith(String k) {
+		container.replaceIndexesWith(k);
+	}
+
+	@Override
+	public boolean containsArrayAccess() {
+		return container.containsArrayAccess();
 	}
 	
 }

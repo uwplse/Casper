@@ -49,5 +49,19 @@ public class ArrayAccessNode extends CustomASTNode{
 	public CustomASTNode fixArrays() {
 		return new FieldNode("casper_data_set["+index.name+"]."+array.toString(),new ArrayAccessNode("casper_data_set["+index.name+"]",new IdentifierNode("casper_data_set"),index));
 	}
+	
+	@Override
+	public void replaceIndexesWith(String k) {
+		if(index instanceof IdentifierNode)
+			index = new IdentifierNode(k);
+		else
+			index.replaceIndexesWith(k);
+		array.replaceIndexesWith(k);
+	}
+
+	@Override
+	public boolean containsArrayAccess() {
+		return index.containsArrayAccess() || array.containsArrayAccess() || index instanceof IdentifierNode;
+	}
 
 }

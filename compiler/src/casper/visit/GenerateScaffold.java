@@ -85,7 +85,7 @@ public class GenerateScaffold extends NodeVisitor{
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
 							
 							/* Run synthesizer to generate summary */
-							int synthesizerExitCode = 0;//runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, sketchReduceType);
+							int synthesizerExitCode = runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, sketchReduceType);
 							
 							if(synthesizerExitCode == 0){
 								/* Run theorem prover to verify summary */
@@ -103,8 +103,7 @@ public class GenerateScaffold extends NodeVisitor{
 								break;
 							}
 							else if(synthesizerExitCode == 1){
-								// Clear data structures before next run
-								ext.inputDataCollections.clear();
+								// Nothing
 							}
 							else if(synthesizerExitCode == 2){
 								System.err.println("Casper failed to synthesize a summary for this code fragment.\nPlease submit your code example at our"

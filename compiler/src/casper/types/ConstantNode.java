@@ -43,4 +43,14 @@ public class ConstantNode extends CustomASTNode {
 		return this;
 	}
 	
+	@Override
+	public void replaceIndexesWith(String k) {
+		return;
+	}
+
+	@Override
+	public boolean containsArrayAccess() {
+		return false;
+	}
+	
 }

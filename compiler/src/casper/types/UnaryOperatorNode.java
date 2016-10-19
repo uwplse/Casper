@@ -39,5 +39,15 @@ public class UnaryOperatorNode extends CustomASTNode{
 		operand = operand.fixArrays();
 		return this;
 	}
+
+	@Override
+	public void replaceIndexesWith(String k) {
+		operand.replaceIndexesWith(k);
+	}
+
+	@Override
+	public boolean containsArrayAccess() {
+		return operand.containsArrayAccess();
+	}
 	
 }

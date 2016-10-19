@@ -64,4 +64,19 @@ public class CallNode extends CustomASTNode {
 		return new CallNode(name,args);
 	}
 	
+	@Override
+	public void replaceIndexesWith(String k) {
+		for(CustomASTNode arg : arguments)
+			arg.replaceIndexesWith(k);
+	}
+
+	@Override
+	public boolean containsArrayAccess() {
+		boolean res = false;
+		for(CustomASTNode arg : arguments)
+			if(arg.containsArrayAccess())
+				res = true;
+		return res;
+	}
+	
 }

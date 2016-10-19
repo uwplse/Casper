@@ -90,5 +90,17 @@ public class ConditionalNode extends CustomASTNode{
 		alt = alt.fixArrays();
 		return this;
 	}
+	
+	@Override
+	public void replaceIndexesWith(String k) {
+		cond.replaceIndexesWith(k);
+		cons.replaceIndexesWith(k);
+		alt.replaceIndexesWith(k);
+	}
+
+	@Override
+	public boolean containsArrayAccess() {
+		return cond.containsArrayAccess() || cons.containsArrayAccess() ||  alt.containsArrayAccess();
+	}
 
 }
