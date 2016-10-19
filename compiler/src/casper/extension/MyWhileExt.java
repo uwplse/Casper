@@ -35,7 +35,7 @@ public class MyWhileExt extends MyStmtExt {
 	public Node parent = null;
 	
 	// Does the loop contain conditionals
-	public boolean useConditionals = false;
+	public boolean foundConditionals = false;
 	
     // All variables that are used as indexes when accessing large
 	// data structures like arrays and collections. Must change with
@@ -122,6 +122,14 @@ public class MyWhileExt extends MyStmtExt {
 	public Map<String,String> reduceExps = null;
 	public Map<String,String> initExps = null;
 	public Map<String,String> mergeExps = null;
+	
+	// Grammar incrementing flags
+	public int valCount = 1;
+	public int recursionDepth = 2;
+	public boolean useConditionals = false;
+	public List<String> candidateKeyTypes = new ArrayList<String>();
+	public int keyIndex = 0;
+
     
     // We perform an alias analysis. If two variables are aliases, then
     // modifying one should change the other too. Our generated programs

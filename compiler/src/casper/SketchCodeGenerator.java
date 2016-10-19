@@ -138,13 +138,14 @@ public class SketchCodeGenerator {
 	
 		// Generate int expression generator for map
 		String mapGenerators = generateMapGrammarInlined(sketchReducerType, ext);
-		if(!sketchReducerType.equals("bit") && (ext.useConditionals || Configuration.useConditionals)) mapGenerators += "\n\n" + generateMapGrammarInlined("bit", ext);;
+		if(!sketchReducerType.equals("bit") && ext.useConditionals) mapGenerators += "\n\n" + generateMapGrammarInlined("bit", ext);
+		if(!sketchReducerType.equals(ext.candidateKeyTypes.get(ext.keyIndex))) mapGenerators += "\n\n" + generateMapGrammarInlined(ext.candidateKeyTypes.get(ext.keyIndex), ext);
 		
 		// Generate map function args declaration
 		String mapArgsDecl = generateMapArgsDecl(ext.inputDataSet, ext.loopCounters, ext.postConditionArgsOrder.get(reducerType), keyCount, 1);
 		
 		// Generate map function emit code
-		String mapEmits = generateDomapEmits(sketchReducerType, ext.inputDataSet, ext.loopCounters, sketchFilteredOutputVars.size(), keyCount, 1);
+		String mapEmits = generateDomapEmits(sketchReducerType, ext, ext.inputDataSet, ext.loopCounters, sketchFilteredOutputVars.size(), ext.useConditionals, keyCount, 1);
 		
 		// Generate reduce/fold expression generator
 		String reduceGenerator = generateReduceGrammarInlined(sketchReducerType, ext);
@@ -155,16 +156,16 @@ public class SketchCodeGenerator {
 		String casperRInit = generateCasperRInit(sketchFilteredOutputVars);
 		
 		// Declare key-value arrays in reduce
-		String declKeysVals = generateDeclKeysVals(sketchReducerType,keyCount, 1);
+		String declKeysVals = generateDeclKeysVals(sketchReducerType,keyCount, ext.valCount);
 		
 		// Generate map function call args
-		String mapArgsCall = generateMapArgsCall(ext.inputDataSet, keyCount, 1);
+		String mapArgsCall = generateMapArgsCall(ext.inputDataSet, keyCount, ext.valCount);
 		
 		// Initialize key variables
 		String initKeys = generateInitKeys(sketchReducerType, keyCount);
 		
 		// Generate code to fold values by key
-		String reduceByKey = generateReduceByKey(sketchFilteredOutputVars, keyCount, 1);
+		String reduceByKey = generateReduceByKey(sketchFilteredOutputVars, keyCount, ext.valCount);
 		
 		// Generate reduce functions
 		String reduceFunctions = generateReduceFunctions(sketchReducerType, sketchFilteredOutputVars, keyCount, 1);
@@ -1062,7 +1063,7 @@ public class SketchCodeGenerator {
 		return mapArgs;
 	}
 	
-	public static String generateDomapEmits(String type, Variable inputDataSet, Set<Variable> sketchLoopCounters, int emitCount, int keyCount, int valCount) {
+	public static String generateDomapEmits(String type, MyWhileExt ext, Variable inputDataSet, Set<Variable> sketchLoopCounters, int emitCount, boolean useConditionals, int keyCount, int valCount) {
 		String emits = "";
 		
 		// Generate args for generator functions
@@ -1085,7 +1086,7 @@ public class SketchCodeGenerator {
 		
 		
 		// Include conditionals?
-		if(Configuration.useConditionals){
+		if(useConditionals){
 			// Generate emit code
 			for(int i=0; i<emitCount; i++){
 				emits += 	"if(bitMapGenerator("+args+")){\n\t\t";
@@ -1093,7 +1094,7 @@ public class SketchCodeGenerator {
 					if(j==0)
 						emits += "keys"+j+"["+i+"] = ??;\n\t\t";
 					else
-						emits += "keys"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t\t";
+						emits += "keys"+j+"["+i+"] = "+ext.candidateKeyTypes.get(ext.keyIndex).toLowerCase()+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
 				for(int j=0; j<valCount; j++){
 					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t\t";

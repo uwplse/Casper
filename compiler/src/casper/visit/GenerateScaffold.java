@@ -71,13 +71,27 @@ public class GenerateScaffold extends NodeVisitor{
 						System.err.println("Output type: " + var.varType);
 						
 						// Get output variables handled under this type
-						Configuration.emitCount = 0;
 						Set<Variable> sketchFilteredOutputVars = new HashSet<Variable>();
 						for(Variable v : ext.outputVars){
 							if(v.getReduceType().equals(reduceType)){
 								sketchFilteredOutputVars.add(v);
-								Configuration.emitCount++;
 							}
+						}
+						
+						// Number of keys to be used
+						int keyCount = 1;
+						for(Variable v : sketchFilteredOutputVars){
+							String type = v.getSketchType();
+							if(type.endsWith("["+Configuration.arraySizeBound+"]")){
+								keyCount = 2;
+							}
+						}
+						
+						// Data type options
+						ext.candidateKeyTypes.add(sketchReduceType);
+						for(Variable v : ext.inputVars){
+							if(v.getReduceType().equals("String") || v.getReduceType().equals("String[]"))
+								ext.candidateKeyTypes.add(v.getReduceType().replace("[]", ""));
 						}
 						
 						while(true){
@@ -85,7 +99,8 @@ public class GenerateScaffold extends NodeVisitor{
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
 							
 							/* Run synthesizer to generate summary */
-							int synthesizerExitCode = runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, sketchReduceType);
+							System.err.println("Attempting to synthesize solution...");
+							int synthesizerExitCode = runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, keyCount, sketchReduceType);
 							
 							if(synthesizerExitCode == 0){
 								/* Run theorem prover to verify summary */
@@ -119,8 +134,6 @@ public class GenerateScaffold extends NodeVisitor{
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				Configuration.useConditionals = false;
 			}
 		}		
 		
@@ -165,7 +178,7 @@ public class GenerateScaffold extends NodeVisitor{
 	    }
 	}
 
-	private int runSynthesizer(String filename, MyWhileExt ext, String type) throws IOException, InterruptedException {		
+	private int runSynthesizer(String filename, MyWhileExt ext, int keyCount, String type) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
 		
 		if(debug)
@@ -191,27 +204,67 @@ public class GenerateScaffold extends NodeVisitor{
         	System.err.println("Synthesizer exited with error code "+exitVal);
         	writer.close();
         	
-        	// TODO: Add machinery for incrementally adding options (something more sophisticated and thought out)
+        	// Increment grammar
         	
-        	if(ext.useConditionals && !Configuration.useConditionals){
-        		System.err.println("Incrementing grammar...");
-        		Configuration.useConditionals = true;
+        	// 1. If we have multiple keys, try other key2 types
+        	if(keyCount > 1){
+        		if(ext.keyIndex < ext.candidateKeyTypes.size()-1){
+        			ext.keyIndex++;
+        			return 1;
+        		}
+        	}
+        	// 2. Increase recursive bound until we are at 3.
+        	if(ext.recursionDepth < Configuration.recursionDepth){
+        		ext.recursionDepth++;
+        		ext.keyIndex = 0;
+        		System.err.println("Building new grammar...");
         		return 1;
         	}
-        	else{
-        		switch(type){
-	            	case "bit":
-	            		ext.unaryOperators.add("!");
-	            		ext.binaryOperators.add("&&");
-	            		ext.binaryOperators.add("||");
-	            		ext.binaryOperators.add("==");
-	            		System.err.println("Incrementing grammar...");
-	            		return 1;
-	        		default:
-	        			// TODO: Add more cases
-	        			return 2; // Give up after first try - break the loop.
-            	}
+        	// 3. Turn conditionals on if they were seen in code
+        	if(ext.foundConditionals && !ext.useConditionals){
+        		System.err.println("Building new grammar...");
+        		ext.useConditionals = true;
+        		ext.recursionDepth = 2;
+        		ext.keyIndex = 0;
+        		return 1;
         	}
+        	// 4. Increase number of values until 2.
+        	if(ext.valCount < Configuration.maxValuesTupleSize){
+        		System.err.println("Building new grammar...");
+        		ext.valCount++;
+        		ext.recursionDepth = 2;
+        		ext.useConditionals = false;
+        		ext.keyIndex = 0;
+        		return 1;
+        	}
+        	// 5. Turn on conditionals even if they were not found in code. 
+        	if(!ext.useConditionals && !ext.useConditionals){
+        		System.err.println("Building new grammar...");
+        		ext.useConditionals = true;
+        		ext.recursionDepth = 2;
+        		ext.valCount = 1;
+        		ext.keyIndex = 0;
+        		return 1;
+        	}
+        	// 6. Add new operators
+        	switch(type){
+            	case "bit":
+            		ext.unaryOperators.add("!");
+            		ext.binaryOperators.add("&&");
+            		ext.binaryOperators.add("||");
+            		ext.binaryOperators.add("==");
+            		ext.useConditionals = false;
+            		ext.recursionDepth = 2;
+            		ext.valCount = 1;
+            		ext.keyIndex = 0;
+            		System.err.println("Building new grammar...");
+            		return 1;
+            	case "int":
+            		// Add min max functions
+        		default:
+        			// We're done.
+        			return 2;
+            }
         }
 	}
 	

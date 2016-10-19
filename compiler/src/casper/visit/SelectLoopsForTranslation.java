@@ -157,7 +157,7 @@ public class SelectLoopsForTranslation extends NodeVisitor{
    		// If the node is a conditional
 		else if(n instanceof If && !this.ignore.peek()){
 			for(MyWhileExt ext : this.extensions)
-				ext.useConditionals = true;
+				ext.foundConditionals = true;
 		}
    		// If the node is a branching statement
 		else if(n instanceof Branch){
