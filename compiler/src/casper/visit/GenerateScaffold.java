@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,7 +41,6 @@ public class GenerateScaffold extends NodeVisitor{
 		this.nf = nf;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public NodeVisitor enter(Node parent, Node n){
 		// If the node is a loop
 		if(n instanceof While || n instanceof ExtendedFor){
@@ -49,7 +49,7 @@ public class GenerateScaffold extends NodeVisitor{
 			if(ext.interesting){	
 				if(debug){
 					System.err.println("Attempting to translate code fragment:-");
-					n.prettyPrint(System.err);
+					//n.prettyPrint(System.err);
 					System.err.println("");
 				}
 				else{
@@ -95,8 +95,16 @@ public class GenerateScaffold extends NodeVisitor{
 						}
 						
 						while(true){
+							if(debug){
+								System.err.println(ext.blockExprs);
+							}
+							
 							/* Generate main scaffold */
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
+							
+							if(debug){
+								System.err.println(ext.blocks);
+							}
 							
 							/* Run synthesizer to generate summary */
 							System.err.println("Attempting to synthesize solution...");
@@ -106,26 +114,42 @@ public class GenerateScaffold extends NodeVisitor{
 								/* Run theorem prover to verify summary */
 								SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, sketchFilteredOutputVars.size());
 								
-								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType);
+								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType, sketchReduceType);
 								
 								int verifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
 								
-								if(verifierExitCode == 0)
-									ext.generateCode.put(reduceType, true);
-								else
-									System.exit(1);
+								if(verifierExitCode == 0){
+									ext.verifiedMapEmits.add(ext.mapEmits);
+									ext.verifiedInitExps.add(ext.initExps);
+									ext.verifiedReduceExps.add(ext.reduceExps);
+									ext.verifiedMergeExps.add(ext.mergeExps);
+									ext.blocks.add(new ArrayList<String>());
+								}
+								else{
+									// Solution failed. Register terminal values in blockedExprs.
+									
+								}
 								
-								break;
 							}
 							else if(synthesizerExitCode == 1){
-								// Nothing
+								break;
 							}
 							else if(synthesizerExitCode == 2){
-								System.err.println("Casper failed to synthesize a summary for this code fragment.\nPlease submit your code example at our"
-													+ " GitHub Issues tracker (https://github.com/uwplse/Casper/issues)");
-								ext.generateCode.put(reduceType, false);
-								System.exit(1);
+								if(ext.verifiedMapEmits.size()==0){
+									System.err.println("Casper failed to synthesize a summary for this code fragment.\nPlease submit your code example at our"
+														+ " GitHub Issues tracker (https://github.com/uwplse/Casper/issues)");
+									ext.generateCode.put(reduceType, false);
+									System.exit(1);
+								}
+								else{
+									ext.generateCode.put(reduceType, true);
+									System.err.println(ext.verifiedMapEmits.size() + " solutions synthesized.");
+									System.err.println(ext.blockExprs);
+									break;
+								}	
 							}
+							if(debug)
+								System.in.read();
 						}
 					}
 					
@@ -209,16 +233,21 @@ public class GenerateScaffold extends NodeVisitor{
         	// 1. If we have multiple keys, try other key2 types
         	if(keyCount > 1){
         		if(ext.keyIndex < ext.candidateKeyTypes.size()-1){
+        			System.err.println("Building new grammar...");
+        			if(debug)
+        				System.err.println("Keytype changed from " + ext.candidateKeyTypes.get(ext.keyIndex) + " to " + ext.candidateKeyTypes.get(ext.keyIndex+1));
         			ext.keyIndex++;
-        			return 1;
+        			return 3;
         		}
         	}
         	// 2. Increase recursive bound until we are at 3.
         	if(ext.recursionDepth < Configuration.recursionDepth){
         		ext.recursionDepth++;
         		ext.keyIndex = 0;
+        		if(debug)
+    				System.err.println("Recursion depth changed from " + (ext.recursionDepth-1) + " to " + ext.recursionDepth);
         		System.err.println("Building new grammar...");
-        		return 1;
+        		return 3;
         	}
         	// 3. Turn conditionals on if they were seen in code
         	if(ext.foundConditionals && !ext.useConditionals){
@@ -226,25 +255,31 @@ public class GenerateScaffold extends NodeVisitor{
         		ext.useConditionals = true;
         		ext.recursionDepth = 2;
         		ext.keyIndex = 0;
-        		return 1;
+        		if(debug)
+    				System.err.println("Conditionals turned on");
+        		return 3;
         	}
         	// 4. Increase number of values until 2.
         	if(ext.valCount < Configuration.maxValuesTupleSize){
         		System.err.println("Building new grammar...");
         		ext.valCount++;
         		ext.recursionDepth = 2;
-        		ext.useConditionals = false;
+        		if(ext.foundConditionals) ext.useConditionals = false;
         		ext.keyIndex = 0;
-        		return 1;
+        		if(debug)
+    				System.err.println("Val count changed from " + (ext.valCount-1) + " to " + ext.valCount);
+        		return 3;
         	}
         	// 5. Turn on conditionals even if they were not found in code. 
-        	if(!ext.useConditionals && !ext.useConditionals){
+        	if(!ext.foundConditionals && !ext.useConditionals){
         		System.err.println("Building new grammar...");
         		ext.useConditionals = true;
         		ext.recursionDepth = 2;
         		ext.valCount = 1;
         		ext.keyIndex = 0;
-        		return 1;
+        		if(debug)
+    				System.err.println("Conditionals turned on second phase");
+        		return 3;
         	}
         	// 6. Add new operators
         	switch(type){
@@ -258,7 +293,7 @@ public class GenerateScaffold extends NodeVisitor{
             		ext.valCount = 1;
             		ext.keyIndex = 0;
             		System.err.println("Building new grammar...");
-            		return 1;
+            		return 3;
             	case "int":
             		// Add min max functions
         		default:

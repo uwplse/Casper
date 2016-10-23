@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import casper.JavaLibModel.SketchCall;
+import casper.SketchParser.KvPair;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
@@ -65,6 +66,10 @@ public class SketchCodeGenerator {
 			}
 		}
 		String r_size_str = Integer.toString(r_size);
+		
+		// Clear block arrays
+		for(int i=0; i<ext.blocks.size(); i++)
+			ext.blocks.get(i).clear();
 		
 		// Declare input / broadcast variables
 		String broadcastVarsDecl = declBroadcastVars(ext.constCount, ext.inputVars);
@@ -119,7 +124,7 @@ public class SketchCodeGenerator {
 		
 		// 2. Assert loop invariant is preserved if the loop continues: I && loop condition is true --> wp(c, I), 
 		//    where wp(c, I) is the weakest precondition of the body of the loop with I as the post-condition
-		verifCode += "if(" + invariant + " && " + loopCond + ") {\n\t\t"+wpcValuesInit+"assert " + wpc + ";\n\t}\n\t";
+		verifCode += "if(" + invariant + " && " + loopCond + ") {\n\t\t"+wpcValuesInit+"assert " + wpc + ";\n\t\t\n\t\t<block-solutions>\n\t}\n\t";
 		
 		// 2. Assert loop invariant implies the post condition if the loop terminates: I && loop condition is false --> POST
 		verifCode += "if(" + invariant + " && " + loopCondFalse + ") {\n\t\tassert " + postC + ";\n\t}";
@@ -135,20 +140,19 @@ public class SketchCodeGenerator {
 		
 		// Generate loop invariant body
 		String loopInvariant = generateLoopInvariant(ext.inputDataSet, sketchFilteredOutputVars,ext.loopCounters);
-	
+		
 		// Generate int expression generator for map
-		String mapGenerators = generateMapGrammarInlined(sketchReducerType, ext);
-		if(!sketchReducerType.equals("bit") && ext.useConditionals) mapGenerators += "\n\n" + generateMapGrammarInlined("bit", ext);
-		if(!sketchReducerType.equals(ext.candidateKeyTypes.get(ext.keyIndex))) mapGenerators += "\n\n" + generateMapGrammarInlined(ext.candidateKeyTypes.get(ext.keyIndex), ext);
+		Map<String, String> blockArrays = new HashMap<String,String>();
+		String mapGenerators = generateMapGenerators(sketchReducerType, keyCount, blockArrays, sketchFilteredOutputVars, ext);
 		
 		// Generate map function args declaration
-		String mapArgsDecl = generateMapArgsDecl(ext.inputDataSet, ext.loopCounters, ext.postConditionArgsOrder.get(reducerType), keyCount, 1);
+		String mapArgsDecl = generateMapArgsDecl(ext.inputDataSet, ext.loopCounters, ext.postConditionArgsOrder.get(reducerType), keyCount, ext.valCount);
 		
 		// Generate map function emit code
-		String mapEmits = generateDomapEmits(sketchReducerType, ext, ext.inputDataSet, ext.loopCounters, sketchFilteredOutputVars.size(), ext.useConditionals, keyCount, 1);
+		String mapEmits = generateDomapEmits(sketchReducerType, ext, ext.inputDataSet, ext.loopCounters, sketchFilteredOutputVars.size(), ext.useConditionals, keyCount, ext.valCount);
 		
 		// Generate reduce/fold expression generator
-		String reduceGenerator = generateReduceGrammarInlined(sketchReducerType, ext);
+		String reduceGenerator = generateReduceGenerators(sketchReducerType, blockArrays, sketchFilteredOutputVars, ext);
 			
 		// Generate functions to init values in reducer
 		String initFunctions = generateInitFunctions(sketchReducerType, sketchFilteredOutputVars);
@@ -168,7 +172,7 @@ public class SketchCodeGenerator {
 		String reduceByKey = generateReduceByKey(sketchFilteredOutputVars, keyCount, ext.valCount);
 		
 		// Generate reduce functions
-		String reduceFunctions = generateReduceFunctions(sketchReducerType, sketchFilteredOutputVars, keyCount, 1);
+		String reduceFunctions = generateReduceFunctions(sketchReducerType, sketchFilteredOutputVars, keyCount, ext.valCount);
 		
 		// Generate merge functions
 		String mergeFunctions = generateMergeFunctions(sketchReducerType, sketchFilteredOutputVars);
@@ -179,7 +183,14 @@ public class SketchCodeGenerator {
 		// Generate reduce args declaration
 		String reduceArgsDecl = generateReduceArgsDecl(ext.inputDataSet, sketchFilteredOutputVars,ext.loopCounters);
 		
+		// Generate block bit arrays declaration
+		String declBlockArrays = generateDeclBlockArrays(blockArrays);
+		
+		// Generate code to block generated solutions
+		String blockGenerated = generateBlockGenerated(ext);
+		
 		// Modify template
+		text = text.replace("<decl-block-arrays>", declBlockArrays);
 		text = text.replace("<output-type>", sketchReducerType);
 		text = text.replace("<include-libs>",includeList);
 		text = text.replace("<num-out-vars>",numOutVars);
@@ -210,6 +221,7 @@ public class SketchCodeGenerator {
 		text = text.replace("<merge-functions>", mergeFunctions);
 		text = text.replace("<merge-r>", mergeOutput);
 		text = text.replace("<reduce-args-decl>", reduceArgsDecl);
+		text = text.replace("<block-solutions>", blockGenerated);
 		
 		// Save
 		writer.print(text);
@@ -710,7 +722,7 @@ public class SketchCodeGenerator {
 	}
 	
 	// Generate do map grammars
-	public static String generateMapGrammarInlined(String type, MyWhileExt ext) {
+	public static String generateMapGrammarInlined(MyWhileExt ext, String type, String index, Map<String, String> blockArrays) {
 		String generator = "";
 			
 		/******** Generate terminal options *******/
@@ -790,12 +802,17 @@ public class SketchCodeGenerator {
 		
 		/********** Generate type expressions ********/
 		String sketchType = type;
-		if(type == "String")
+		if(type.equals("String"))
 			sketchType = "int";
 		
 		String typeName = type.toLowerCase();
-		if(sketchType == "bit[32]")
+		if(sketchType.equals("bit[32]"))
 			typeName = "bitInt";
+		
+		for(String ptype : ext.candidateKeyTypes){
+			if(!terminals.containsKey(ptype))
+				terminals.put(ptype, new ArrayList<String>());
+		}
 		
 		// Terminal names
 		Map<String,List<String>> terminalNames = new HashMap<String,List<String>>();
@@ -805,7 +822,7 @@ public class SketchCodeGenerator {
 				ttypeName = "bitInt";
 			
 			terminalNames.put(ttype, new ArrayList<String>());
-			for(int i=0; i<Math.pow(2.0, Configuration.recursionDepth-1); i++){
+			for(int i=0; i<Math.pow(2.0, ext.recursionDepth-1); i++){
 				terminalNames.get(ttype).add("_"+ttypeName+"_terminal"+(i));
 			}
 		}
@@ -818,7 +835,7 @@ public class SketchCodeGenerator {
 							ext.methodOperators,
 							terminalNames,
 							exprs,
-							Configuration.recursionDepth
+							ext.recursionDepth
 						);
 		
 		/******** Generate args decl code *******/
@@ -829,28 +846,29 @@ public class SketchCodeGenerator {
 		}
 		
 		/******** Generate terminals code *******/
-		Map<String,String> terminalOptions = new HashMap<String,String>();
+		Map<String,List<String>> terminalOptions = new HashMap<String,List<String>>();
 		for(String ttype : terminals.keySet()){
-			terminalOptions.put(ttype, "");
+			terminalOptions.put(ttype, new ArrayList<String>());
 			for(int i=0; i<terminals.get(ttype).size(); i++){
-				terminalOptions.put(ttype, terminalOptions.get(ttype) + terminals.get(ttype).get(i) + " | ");
+				terminalOptions.get(ttype).add(terminals.get(ttype).get(i));
 			}	
 			switch(ttype){
 				case "int":
-					terminalOptions.put(ttype, terminalOptions.get(ttype) + "?? | ");
+					terminalOptions.get(ttype).add("??");
 					break;
 				case "bit":
-					terminalOptions.put(ttype, terminalOptions.get(ttype) + "true  | false | ");
+					terminalOptions.get(ttype).add("true");
+					terminalOptions.get(ttype).add("false");
 					break;
 				case "bit[32]":
-					terminalOptions.put(ttype, terminalOptions.get(ttype) + "casper_genRandBitVec()" + " | ");
+					terminalOptions.get(ttype).add("casper_genRandBitVec()");
 					break;
 				case "String":
-					terminalOptions.put(ttype, terminalOptions.get(ttype) + "?? | ");
+					terminalOptions.get(ttype).add("??");
 					break;
 			}
-			terminalOptions.put(ttype,terminalOptions.get(ttype).substring(0,terminalOptions.get(ttype).length()-3));
 		}
+		
 		String terminalsCode = "";
 		Map<String,Integer> termIndex = new HashMap<String,Integer>();
 		for(String ttype : terminals.keySet()){
@@ -859,15 +877,27 @@ public class SketchCodeGenerator {
 				ttypeName = "bitInt";
 			String ttype2 = ttype;
 			if(ttype2.equals("String")) ttype2 = "int";
-			termIndex.put(ttype, (int) Math.pow(2.0, Configuration.recursionDepth-1));
-			for(int i=0; i<Math.pow(2.0, Configuration.recursionDepth-1); i++){
-				terminalsCode += ttype2+" _"+ttypeName+"_terminal"+(i)+" = {| "+terminalOptions.get(ttype)+" |};\n\t";
+			termIndex.put(ttype, (int) Math.pow(2.0, ext.recursionDepth-1));
+			for(int i=0; i<Math.pow(2.0, ext.recursionDepth-1); i++){
+				terminalsCode += ttype2+" _"+ttypeName+"_terminal"+(i)+";\n\t";
+				terminalsCode += "int  _"+ttypeName+"_terminal"+(i)+"c = ??;\n\t";
+				int optIndex = 0;
+				for(String opt : terminalOptions.get(ttype)){
+					String prefix = "else if";
+					if(optIndex == 0) prefix = "if";
+					if(!ttypeName.equals("string") && opt.equals("??"))
+						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+++") { _"+ttypeName+"_terminal"+(i)+" = " + opt + "; assert _"+ttypeName+"_terminal"+(i)+" != 0; }\n\t";
+					else
+						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+++") { _"+ttypeName+"_terminal"+(i)+" = " + opt + "; }\n\t";
+				}
+				terminalsCode += "else { assert false; }\n\t";
 			}
 		}
 		
 		/******** Generate expressions code *******/
 		String expressions = "int c = ??("+(int)Math.ceil(Math.log(exprs.size())/Math.log(2))+");\n\t";
 		int c = 0;
+		ext.grammarExps.put("mapExp"+index, new ArrayList<String>());
 		for(String expr : exprs){
 			for(String ttype : terminals.keySet()){
 				String ttypeName = ttype.toLowerCase();
@@ -875,17 +905,28 @@ public class SketchCodeGenerator {
 					ttypeName = "bitInt";			
 					
 				int i=0;
-				while(expr.contains("<"+ttype+"-term>")){
-					int st_ind = expr.indexOf("<"+ttype+"-term>");
-					expr = expr.substring(0,st_ind) + terminalNames.get(ttype).get(i++) + expr.substring(st_ind+("<"+ttype+"-term>").length(),expr.length());
+				while(expr.contains("<casper-"+ttype+"-term>")){
+					int st_ind = expr.indexOf("<casper-"+ttype+"-term>");
+					expr = expr.substring(0,st_ind) + terminalNames.get(ttype).get(i++) + expr.substring(st_ind+("<casper-"+ttype+"-term>").length(),expr.length());
 				}
 			}
-			expressions += "if(c=="+c+++"){ return " + expr + "; }\n\t";
+			
+			ext.grammarExps.get("mapExp"+index).add(expr);
+			int solID = 0;
+			for(Map<String,String> sol : ext.blockExprs){
+				if(expr.equals(sol.get("mapExp"+index))){
+					ext.blocks.get(solID).add("mapExp"+index+"["+c+"]");
+				}
+				solID++;
+			}
+			expressions += "if(c=="+c+"){ mapExp"+index+"["+c+"]=true; return " + expr + "; }\n\t";
+			c++;
 		}
 		
 		/****** Generate final output code ******/
-		generator += "generator "+sketchType+" " +typeName+"MapGenerator("+argsDecl+"){\n\t" + terminalsCode + expressions + "\n}";
+		generator += "generator "+sketchType+" " +typeName+"MapGenerator"+index+"("+argsDecl+"){\n\t" + terminalsCode + expressions + "\n}";
 		
+		blockArrays.put("mapExp"+index, Integer.toString(exprs.size()));
 		return generator;
 	}
 	
@@ -894,27 +935,25 @@ public class SketchCodeGenerator {
 			return;
 		}
 		if(depth == 1){
-			exprs.add("<"+type+"-term>");
+			exprs.add("(<casper-"+type+"-term>)");
 			return;
 		}
 		else{
-			exprs.add("<"+type+"-term>");
+			exprs.add("(<casper-"+type+"-term>)");
 			
 			for(String op : binaryOps){
 				if(casper.Util.operatorType(op) == casper.Util.getOpClassForType(type)){
 					if(type.equals("bit")){
 						if(casper.Util.operandTypes(op) == casper.Util.BIT_ONLY){
-							if(casper.Util.isAssociative(op)){
-								List<String> subExprs = new ArrayList<String>();
-								getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,depth-1);
-								for(String exprLeft : subExprs){
-									for(String exprRight : subExprs){
-										if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
-											continue;
-										if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
-											continue;
-										exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
-									}
+							List<String> subExprs = new ArrayList<String>();
+							getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,depth-1);
+							for(String exprLeft : subExprs){
+								for(String exprRight : subExprs){
+									if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+										continue;
+									if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
+										continue;
+									exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 								}
 							}
 						}
@@ -947,17 +986,15 @@ public class SketchCodeGenerator {
 					}
 					else if(type.equals("bit[32]")){
 						if(casper.Util.operandTypes(op) == casper.Util.VEC_ONLY){
-							if(casper.Util.isAssociative(op)){
-								List<String> subExprs = new ArrayList<String>();
-								getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,depth-1);
-								for(String exprLeft : subExprs){
-									for(String exprRight : subExprs){
-										if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
-											continue;
-										if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
-											continue;
-										exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
-									}
+							List<String> subExprs = new ArrayList<String>();
+							getMapExpressions(type,binaryOps,unaryOps,methodOps,terminals,subExprs,depth-1);
+							for(String exprLeft : subExprs){
+								for(String exprRight : subExprs){
+									if(exprs.contains("("+exprLeft + " " + op + " " + exprRight + ")"))
+										continue;
+									if(exprs.contains("("+exprRight + " " + op + " " + exprLeft + ")"))
+										continue;
+									exprs.add("("+exprLeft + " " + op + " " + exprRight + ")");
 								}
 							}
 						}
@@ -1082,38 +1119,41 @@ public class SketchCodeGenerator {
 		String typeName = type.toLowerCase();
 		if(sketchType == "bit[32]")
 			typeName = "bitInt";
-
-		
 		
 		// Include conditionals?
 		if(useConditionals){
+			int indexC = 0;
+			int indexK = 0;
+			int indexV = 0;
 			// Generate emit code
 			for(int i=0; i<emitCount; i++){
-				emits += 	"if(bitMapGenerator("+args+")){\n\t\t";
+				emits += 	"if(bitMapGenerator_c"+indexC+++"("+args+")){\n\t\t";
 				for(int j=0; j<keyCount; j++){
 					if(j==0)
 						emits += "keys"+j+"["+i+"] = ??;\n\t\t";
 					else
-						emits += "keys"+j+"["+i+"] = "+ext.candidateKeyTypes.get(ext.keyIndex).toLowerCase()+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t\t";
+						emits += "keys"+j+"["+i+"] = "+ext.candidateKeyTypes.get(ext.keyIndex).toLowerCase()+"MapGenerator_k"+indexK+++"("+inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
 				for(int j=0; j<valCount; j++){
-					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t\t";
+					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator_v"+indexV+++"("+inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
 				emits = emits.substring(0,emits.length()-1);
 				emits += "}";
 			}
 		}
 		else{
+			int indexK = 0;
+			int indexV = 0;
 			// Generate emit code
 			for(int i=0; i<emitCount; i++){
 				for(int j=0; j<keyCount; j++){
 					if(j==0)
 						emits += "keys"+j+"["+i+"] = ??;\n\t";
 					else
-						emits += "keys"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t";
+						emits += "keys"+j+"["+i+"] = "+ext.candidateKeyTypes.get(ext.keyIndex).toLowerCase()+"MapGenerator_k"+indexK+++"("+inputDataSet.varName+", "+lcName+");\n\t";
 				}
 				for(int j=0; j<valCount; j++){
-					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator("+inputDataSet.varName+", "+lcName+");\n\t";
+					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator_v"+indexV+++"("+inputDataSet.varName+", "+lcName+");\n\t";
 				}
 			}
 		}
@@ -1121,7 +1161,7 @@ public class SketchCodeGenerator {
 		return emits;
 	}
 	
-	public static String generateReduceGrammarInlined(String type, MyWhileExt ext) {
+	public static String generateReduceGrammarInlined(String type, MyWhileExt ext, int index, Map<String, String> blockArrays) {
 		String generator = "";
 			
 		/******** Generate terminal options *******/
@@ -1129,7 +1169,8 @@ public class SketchCodeGenerator {
 		terminals.put(type, new ArrayList());
 		
 		terminals.get(type).add("val1");
-		terminals.get(type).add("val2");
+		for(int i=2; i<ext.valCount+2; i++)
+			terminals.get(type).add("val"+i);
 		
 		
 		for(Variable var : ext.inputVars){
@@ -1182,7 +1223,7 @@ public class SketchCodeGenerator {
 				ttypeName = "bitInt";
 			
 			terminalNames.put(ttype, new ArrayList<String>());
-			for(int i=0; i<Math.pow(2.0, Configuration.recursionDepth-1); i++){
+			for(int i=0; i<Math.pow(2.0, ext.recursionDepth-1); i++){
 				terminalNames.get(ttype).add("_"+ttypeName+"_terminal"+(i));
 			}
 		}
@@ -1195,36 +1236,39 @@ public class SketchCodeGenerator {
 							ext.methodOperators,
 							terminalNames,
 							exprs,
-							Configuration.recursionDepth
+							ext.recursionDepth
 						);
 		
 		/******** Generate args decl code *******/
 		
-		String argsDecl = type+" val1, "+type+" val2";
+		String argsDecl = type+" val1";
+		for(int i=2; i<ext.valCount+2; i++)
+			argsDecl += ", "+type+" val"+i;
 		
 		/******** Generate terminals code *******/
-		Map<String,String> terminalOptions = new HashMap<String,String>();
+		Map<String,List<String>> terminalOptions = new HashMap<String,List<String>>();
 		for(String ttype : terminals.keySet()){
-			terminalOptions.put(ttype, "");
+			terminalOptions.put(ttype, new ArrayList<String>());
 			for(int i=0; i<terminals.get(ttype).size(); i++){
-				terminalOptions.put(ttype, terminalOptions.get(ttype) + terminals.get(ttype).get(i) + " | ");
+				terminalOptions.get(ttype).add(terminals.get(ttype).get(i));
 			}	
 			switch(ttype){
 				case "int":
-					terminalOptions.put(ttype, terminalOptions.get(ttype) + "?? | ");
+					terminalOptions.get(ttype).add("??");
 					break;
 				case "bit":
-					terminalOptions.put(ttype, terminalOptions.get(ttype) + "true  | false | ");
+					terminalOptions.get(ttype).add("true");
+					terminalOptions.get(ttype).add("false");
 					break;
 				case "bit[32]":
-					terminalOptions.put(ttype, terminalOptions.get(ttype) + "casper_genRandBitVec()" + " | ");
+					terminalOptions.get(ttype).add("casper_genRandBitVec()");
 					break;
 				case "String":
-					terminalOptions.put(ttype, terminalOptions.get(ttype) + "?? | ");
+					terminalOptions.get(ttype).add("??");
 					break;
 			}
-			terminalOptions.put(ttype,terminalOptions.get(ttype).substring(0,terminalOptions.get(ttype).length()-3));
 		}
+		
 		String terminalsCode = "";
 		Map<String,Integer> termIndex = new HashMap<String,Integer>();
 		for(String ttype : terminals.keySet()){
@@ -1233,15 +1277,27 @@ public class SketchCodeGenerator {
 				ttypeName = "bitInt";
 			String ttype2 = ttype;
 			if(ttype2.equals("String")) ttype2 = "int";
-			termIndex.put(ttype, (int) Math.pow(2.0, Configuration.recursionDepth-1));
-			for(int i=0; i<Math.pow(2.0, Configuration.recursionDepth-1); i++){
-				terminalsCode += ttype2+" _"+ttypeName+"_terminal"+(i)+" = {| "+terminalOptions.get(ttype)+" |};\n\t";
+			termIndex.put(ttype, (int) Math.pow(2.0, ext.recursionDepth-1));
+			for(int i=0; i<Math.pow(2.0, ext.recursionDepth-1); i++){
+				terminalsCode += ttype2+" _"+ttypeName+"_terminal"+(i)+";\n\t";
+				terminalsCode += "int  _"+ttypeName+"_terminal"+(i)+"c = ??;\n\t";
+				int optIndex = 0;
+				for(String opt : terminalOptions.get(ttype)){
+					String prefix = "else if";
+					if(optIndex == 0) prefix = "if";
+					if(!ttypeName.equals("string") && opt.equals("??"))
+						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+++") { _"+ttypeName+"_terminal"+(i)+" = " + opt + "; assert _"+ttypeName+"_terminal"+(i)+" != 0; }\n\t";
+					else
+						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+++") { _"+ttypeName+"_terminal"+(i)+" = " + opt + "; }\n\t";
+				}
+				terminalsCode += "else { assert false; }\n\t";
 			}
 		}
 		
 		/******** Generate expressions code *******/
 		String expressions = "int c = ??("+(int)Math.ceil(Math.log(exprs.size())/Math.log(2))+");\n\t";
 		int c = 0;
+		ext.grammarExps.put("reduceExp"+index, new ArrayList<String>());
 		for(String expr : exprs){
 			for(String ttype : terminals.keySet()){
 				String ttypeName = ttype.toLowerCase();
@@ -1249,19 +1305,28 @@ public class SketchCodeGenerator {
 					ttypeName = "bitInt";			
 					
 				int i=0;
-				while(expr.contains("<"+ttype+"-term>")){
-					int st_ind = expr.indexOf("<"+ttype+"-term>");
-					expr = expr.substring(0,st_ind) + terminalNames.get(ttype).get(i++) + expr.substring(st_ind+("<"+ttype+"-term>").length(),expr.length());
+				while(expr.contains("<casper-"+ttype+"-term>")){
+					int st_ind = expr.indexOf("<casper-"+ttype+"-term>");
+					expr = expr.substring(0,st_ind) + terminalNames.get(ttype).get(i++) + expr.substring(st_ind+("<casper-"+ttype+"-term>").length(),expr.length());
 				}
 			}
 			
-			
-			expressions += "if(c=="+c+++"){ return " + expr + "; }\n\t";
+			ext.grammarExps.get("reduceExp"+index).add(expr);
+			int solID = 0;
+			for(Map<String,String> sol : ext.blockExprs){
+				if(expr.equals(sol.get("reduceExp"+index))){
+					ext.blocks.get(solID).add("reduceExp"+index+"["+c+"]");
+				}
+				solID++;
+			}
+			expressions += "if(c=="+c+"){ reduceExp"+index+"["+c+"]=true; return " + expr + "; }\n\t";
+			c++;
 		}
 		
 		/****** Generate final output code ******/
-		generator += "generator "+sketchType+" " +typeName+"ReduceGenerator("+argsDecl+"){\n\t" + terminalsCode + expressions + "\n}";
+		generator += "generator "+sketchType+" " +typeName+"ReduceGenerator"+index+"("+argsDecl+"){\n\t" + terminalsCode + expressions + "\n}";
 		
+		blockArrays.put("reduceExp"+index, Integer.toString(exprs.size()));
 		return generator;
 	}
 
@@ -1358,14 +1423,14 @@ public class SketchCodeGenerator {
 			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]")){
 				for(int i=0; i<Configuration.arraySizeBound; i++){
 					String valargs = "";
-					for(int j=0; j<valCount; j++) valargs += "values"+j+"[casper_j]";
+					for(int j=0; j<valCount; j++) valargs += "values"+j+"[casper_j],"; valargs = valargs.substring(0,valargs.length()-1);
 					code += "else if (key0 == "+varID+" && key1 == "+i+"){ casper_r["+index+"] = reduce_"+var.varName+"(casper_r["+index+"], "+valargs+"); }\n\t\t\t";
 					index++;
 				}
 			}
 			else{
 				String valargs = "";
-				for(int j=0; j<valCount; j++) valargs += "values"+j+"[casper_j]";
+				for(int j=0; j<valCount; j++) valargs += "values"+j+"[casper_j],"; valargs = valargs.substring(0,valargs.length()-1);
 				if(keyCount == 1)
 					code += "else if (key0 == "+varID+"){ casper_r["+index+"] = reduce_"+var.varName+"(casper_r["+index+"], "+valargs+"); }\n\t\t\t";
 				else
@@ -1382,11 +1447,12 @@ public class SketchCodeGenerator {
 	private static String generateReduceFunctions(String type, Set<Variable> sketchOutputVars, int keyCount, int valCount) {
 		String code = "";
 		
+		int index = 0;
 		for(Variable var : sketchOutputVars){
 			String valargs = type + " val1";
 			String valargs2 = "val1";
 			for(int j=2; j<valCount+2; j++) { valargs += ", " + type + " val"+j; valargs2 += ", val"+j; }
-			code += type + " reduce_"+var.varName+"("+valargs+"){\n\treturn "+type+"ReduceGenerator("+valargs2+");\n}\n\n";
+			code += type + " reduce_"+var.varName+"("+valargs+"){\n\treturn "+type+"ReduceGenerator"+index+++"("+valargs2+");\n}\n\n";
 		}
 		
 		return code;
@@ -1446,5 +1512,57 @@ public class SketchCodeGenerator {
 		}
 		
 		return reduce_args;
+	}
+	
+	private static String generateBlockGenerated(MyWhileExt ext) {
+		String code = "";
+		
+		for(List<String> solution : ext.blocks){
+			code += "if(";
+			for(String bit : solution){
+				code += bit + " && ";
+			}
+			code = code.substring(0,code.length()-4) + ") assert false;\n\t\t";
+		}
+		
+		return code;
+	}
+	
+	private static String generateMapGenerators(String sketchReducerType, int keyCount, Map<String, String> blockArrays, Set<Variable> sketchFilteredOutputVars, MyWhileExt ext) {
+		String mapGenerators = "";
+		int indexC = 0;
+		int indexK = 0;
+		int indexV = 0;
+		for(int i=0; i<sketchFilteredOutputVars.size(); i++){
+			if(ext.useConditionals){ 
+				mapGenerators += generateMapGrammarInlined(ext, "bit", "_c"+indexC++, blockArrays) + "\n\n";
+			}
+			for(int j=1; j<keyCount; j++){
+				mapGenerators += generateMapGrammarInlined(ext, ext.candidateKeyTypes.get(ext.keyIndex), "_k"+indexK++, blockArrays) + "\n\n";
+			}
+			for(int j=0; j<ext.valCount; j++){
+				mapGenerators += generateMapGrammarInlined(ext, sketchReducerType, "_v"+indexV++, blockArrays) + "\n\n";
+			}
+		}
+		return mapGenerators;
+	}
+	
+	private static String generateReduceGenerators(String sketchReducerType, Map<String, String> blockArrays, Set<Variable> sketchFilteredOutputVars, MyWhileExt ext) {
+		String reduceGenerators = "";
+		int index = 0;
+		for(int i=0; i<sketchFilteredOutputVars.size(); i++){
+			reduceGenerators += generateReduceGrammarInlined(sketchReducerType, ext, index++, blockArrays) + "\n\n";
+		}
+		return reduceGenerators;
+	}
+
+	private static String generateDeclBlockArrays(Map<String, String> blockArrays) {
+		String code = "";
+		
+		for(String arrName : blockArrays.keySet()){
+			code += "bit["+blockArrays.get(arrName)+"] "+arrName+" = {false};\n";
+		}
+		
+		return code;
 	}
 }

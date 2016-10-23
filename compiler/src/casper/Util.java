@@ -1,6 +1,8 @@
 package casper;
 
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import casper.ast.JavaExt;
@@ -388,6 +390,9 @@ public class Util {
 			if(original.endsWith("["+Configuration.arraySizeBound+"]")){
 				return "seq<"+original.replace("["+Configuration.arraySizeBound+"]", "")+">";
 			}
+			else if(original.endsWith("[]")){
+				return "seq<"+original.replace("[]", "")+">";
+			}
 			else{
 				return original;
 			}
@@ -721,5 +726,59 @@ public class Util {
 
 	public static String reducerType(String outputType) {
 		return outputType.replace("["+Configuration.arraySizeBound+"]", "");
+	}
+
+	public static boolean exprMatch(String format, String exp) {
+		Pattern r = Pattern.compile("\\(\\((.*?)\\) (\\+|-|\\*|\\|%|<|>|&|^|\\||!|=|==|!=|<=|>=|&&|\\|\\||>>|<<|>>>) \\((.*?)\\)\\)");
+		Matcher m = r.matcher(format);
+		if(m.matches()){
+			Matcher m2 = r.matcher(exp);
+			if(m2.matches()){
+				return  exprMatch(m.group(1).trim(),m2.group(1).trim()) && m.group(2).trim().equals(m2.group(2).trim()) && exprMatch(m.group(3).trim(),m2.group(3).trim());}
+			else
+				return false;
+		}
+		else {
+			Matcher m2 = r.matcher(exp);
+			
+			if(!m2.matches())
+				return termMatch(format,exp);
+			else
+				return false;
+		}
+	}
+
+	private static boolean termMatch(String format, String exp) {
+		Pattern r = Pattern.compile("casper_(.*?)\\((.*?)\\)");
+		Matcher m = r.matcher(format);
+		if(m.matches()){
+			Matcher m2 = r.matcher(exp);
+			if(m2.matches()){
+				if(m2.group(1).equals(m.group(1))){
+					String args_f = m.group(2);
+					String args_e = m2.group(2);
+					return argsMatch(args_f,args_e);
+				}
+				else{
+					return false;
+				}
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			Matcher m2 = r.matcher(exp);
+			if(!m2.matches()){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+	}
+
+	private static boolean argsMatch(String args_f, String args_e) {
+		return true;
 	}
 }

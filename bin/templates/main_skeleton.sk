@@ -7,6 +7,8 @@ include "output/utils.sk";
 /* Global Control Variables                                                   */
 int CASPER_NUM_OUTVARS = <num-out-vars>;
 
+<decl-block-arrays>
+
 // Input variables decl
 <decl-broadcast-vars>
 /******************************************************************************/

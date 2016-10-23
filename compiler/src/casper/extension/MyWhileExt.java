@@ -117,11 +117,22 @@ public class MyWhileExt extends MyStmtExt {
 	// Flags to enable disable code generation pass
 	public Map<String,Boolean> generateCode = new HashMap<String,Boolean>();
 	
-	// Generated Solution
+	// Current generated Solution
 	public Map<String,List<KvPair>> mapEmits = null;
 	public Map<String,String> reduceExps = null;
 	public Map<String,String> initExps = null;
 	public Map<String,String> mergeExps = null;
+	
+	// List of verified solutions
+	public List<Map<String,List<KvPair>>> verifiedMapEmits = new ArrayList<Map<String,List<KvPair>>>();
+	public List<Map<String,String>> verifiedReduceExps = new ArrayList<Map<String,String>>();
+	public List<Map<String,String>> verifiedInitExps = new ArrayList<Map<String,String>>();
+	public List<Map<String,String>> verifiedMergeExps = new ArrayList<Map<String,String>>();
+	
+	// Bits to block
+	public Map<String,List<String>> grammarExps = new HashMap<String,List<String>>();
+	public List<Map<String,String>> blockExprs = new ArrayList<Map<String,String>>();
+	public List<List<String>> blocks = new ArrayList<List<String>>();
 	
 	// Grammar incrementing flags
 	public int valCount = 1;
@@ -129,7 +140,6 @@ public class MyWhileExt extends MyStmtExt {
 	public boolean useConditionals = false;
 	public List<String> candidateKeyTypes = new ArrayList<String>();
 	public int keyIndex = 0;
-
     
     // We perform an alias analysis. If two variables are aliases, then
     // modifying one should change the other too. Our generated programs

@@ -28,7 +28,7 @@ import casper.types.Variable;
 
 public class DafnyCodeGenerator {
 	
-	public static void generateSummary(int id, Node n, Set<Variable> outputVars, String reducerType) throws IOException {
+	public static void generateSummary(int id, Node n, Set<Variable> outputVars, String reducerType, String sketchReduceType) throws IOException {
 		// Get node extension
 		MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 		
@@ -110,7 +110,7 @@ public class DafnyCodeGenerator {
 		String tCond = generateMapTerminateCondition(ext.loopCounters);
 		
 		// Generate map outputType
-		String domapEmitType = generateDomapEmitType(ext.mapEmits,reducerType);
+		String domapEmitType = generateDomapEmitType(ext.mapEmits,sketchReduceType);
 		
 		// Do reduce args declaration
 		String reducerArgsDecl = generatedReducerArgsDecl(ext, ext.loopCounters, ext.inputVars, outputVars);
@@ -119,13 +119,13 @@ public class DafnyCodeGenerator {
 		String reducerArgsCall = generatedReducerArgsCall(ext, ext.loopCounters, ext.inputVars, outputVars);
 		
 		// Generate do reduce key type
-		String doreduceKeyType = generateDoreduceKeyType(ext.mapEmits,reducerType);
+		String doreduceKeyType = generateDoreduceKeyType(ext.mapEmits,sketchReduceType);
 		
 		// Generate reduce init values
 		String reduceInitValues = generateReduceInitValues(ext.mapEmits,ext.initExps,outputVars,reducerType);
 		
 		// Generate reduce expression
-		String reduceExp = generateReduceExp(ext.mapEmits,ext.reduceExps,outputVars,reducerType);
+		String reduceExp = generateReduceExp(ext.mapEmits,ext.reduceExps,ext.valCount, outputVars,reducerType);
 		
 		// Generate invariant pre-condition
 		String invRequires = generateInvPreCond(ext, outputVars);
@@ -137,7 +137,7 @@ public class DafnyCodeGenerator {
 		String mapperRequires = generateMapperPreCond(ext, ext.loopCounters);
 		
 		// Generate CSG Lemmas
-		String csgLemmas = generateReduceLemmas(ext.mapEmits,ext.reduceExps,outputVars);
+		String csgLemmas = generateReduceLemmas(ext.mapEmits,ext.reduceExps,ext.valCount,outputVars);
 		
 		// Generate User Defined Data Typess
 		String UDTs = generateUDTs(ext);
@@ -162,7 +162,7 @@ public class DafnyCodeGenerator {
 		template = template.replace("<reducer-args-decl>", reducerArgsDecl);
 		template = template.replace("<reducer-args-call>", reducerArgsCall);
 		template = template.replace("<doreduce-key-type>", doreduceKeyType);
-		template = template.replace("<output-type>", casper.Util.getDafnyTypeFromRaw(reducerType));
+		template = template.replace("<output-type>", casper.Util.getDafnyTypeFromRaw(sketchReduceType));
 		template = template.replace("<reduce-init-value>", reduceInitValues);
 		template = template.replace("<inv-requires>", invRequires);
 		template = template.replace("<emit-requires>", emitRequires);
@@ -245,7 +245,7 @@ public class DafnyCodeGenerator {
 						if(index instanceof ArrayAccessNode){
 							code += "requires forall k :: 0 <= k < |" + ((ArrayAccessNode)index).array + "| ==> 0 <= " + ((ArrayAccessNode)index).array + "[k] < |" + var.varName + "|\n\t";
 						}
-						if(index instanceof FieldNode){
+						else if(index instanceof FieldNode){
 							code += "requires forall k :: 0 <= k < |" + ((ArrayAccessNode)((FieldNode)index).container).array + "| ==> 0 <= " + ((ArrayAccessNode)((FieldNode)index).container).array + "[k]."+index.toString().substring(index.toString().lastIndexOf(".")+1, index.toString().length())+" < |" + var.varName + "|\n\t";
 						}
 						else{
@@ -779,7 +779,7 @@ public class DafnyCodeGenerator {
 		return code;
 	}
 	
-	public static String generateReduceExp(Map<String, List<KvPair>> mapEmits, Map<String, String> reduceExps, Set<Variable> outputVars, String reducerType) { 
+	public static String generateReduceExp(Map<String, List<KvPair>> mapEmits, Map<String, String> reduceExps, int valCount, Set<Variable> outputVars, String reducerType) { 
 		boolean keyIsTuple = false;
 		for(String conditional : mapEmits.keySet()){
 			if(mapEmits.get(conditional).size() > 0){
@@ -799,7 +799,13 @@ public class DafnyCodeGenerator {
 				reduceExp = reduceExp.replaceAll("(^|\\s)1($|\\s)", "false").replaceAll("(^|\\s)1($|\\s)", "true");
 			reduceExp = reduceExps.get(var.varName);
 			reduceExp = reduceExp.replace("val1", "doreduce(input[1..], key<reducer-args-call>)");
-			reduceExp = reduceExp.replace("val2", "input[0].1");
+			if(valCount == 1){
+				reduceExp = reduceExp.replace("val2", "input[0].1");
+			}
+			else{
+				for(int i=2; i<valCount+2; i++)
+					reduceExp = reduceExp.replace("val"+i, "input[0].1."+(i-2));
+			}
 			code += "if " + key + " == " + index + " then (" + reduceExp + ") else "; 
 			index++;
 		}
@@ -847,7 +853,7 @@ public class DafnyCodeGenerator {
 		return code;
 	}
 	
-	public static String generateReduceLemmas(Map<String, List<KvPair>> mapEmits, Map<String, String> reduceExps, Set<Variable> outputVars) {
+	public static String generateReduceLemmas(Map<String, List<KvPair>> mapEmits, Map<String, String> reduceExps, int valCount, Set<Variable> outputVars) {
 		String code = "";
 		
 		boolean keyIsTuple = false;
@@ -866,7 +872,13 @@ public class DafnyCodeGenerator {
 		for(Variable var : outputVars){
 			reduceExp = reduceExps.get(var.varName);
 			if(reduceExp.contains("val1")){
-				reduceExp = reduceExp.replace("val1", "doreduce(a, key<reducer-args-call>)");
+				if(valCount == 1){
+					reduceExp = reduceExp.replace("val1", "doreduce(a, key<reducer-args-call>)");
+					reduceExp = reduceExp.replace("val2", "doreduce(b, key<reducer-args-call>)");
+				}
+				else{
+					reduceExp = "doreduce(a, key<reducer-args-call>) + doreduce(b, key<reducer-args-call>)";
+				}
 				reduceExp = reduceExp.replaceAll("val2", "doreduce(b, key<reducer-args-call>)");
 				 
 				code += "lemma LemmaCSG_"+var.varName+" (a: <domap-emit-type>, b: <domap-emit-type>, key: <doreduce-key-type><reducer-args-decl>)\n\t" +

@@ -74,14 +74,14 @@ public class SketchParser {
 			String op = op_esc.replace("\\", "");
 			if(exp.contains(op)){
 				String[] expComponents = exp.split(op_esc,2);
-				return resolve(expComponents[0].trim(),mapLines,i,ext) + " " + op + " " + resolve(expComponents[1].trim(),mapLines,i,ext);
+				return "(" + resolve(expComponents[0].trim(),mapLines,i,ext) + ") " + op + " (" + resolve(expComponents[1].trim(),mapLines,i,ext) + ")";
 			}
 		}
 		// If unary expression
 		for(String op : unaryOps){
 			if(exp.contains(op)){
 				String[] expComponents = exp.split(op);
-				return op + " " + resolve(expComponents[0].trim(),mapLines,i,ext);
+				return op + " (" + resolve(expComponents[0].trim(),mapLines,i,ext) + ")";
 			}
 		}
 		// If generated variable
@@ -111,10 +111,10 @@ public class SketchParser {
 					List<String> argsR = new ArrayList<String>();
 					for(String arg : args){
 						if(!arg.equals(exp)){
-							argsR.add(resolve(arg,mapLines,i,ext));
+							argsR.add("(" + resolve(arg,mapLines,i,ext) + ")");
 						}
 						else {
-							argsR.add(exp);
+							argsR.add("(" + exp + ")");
 						}
 					}
 					for(SketchCall op : ext.methodOperators){
@@ -397,10 +397,17 @@ public class SketchParser {
 		
 		mapEmits.put("noCondition",filteredEmits);
 		
+		// Extract map flags
+		r = Pattern.compile("mapExp(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
+		m = r.matcher(map);
+		ext.blockExprs.add(new HashMap<String,String>());
+		while(m.find()){
+			ext.blockExprs.get(ext.blockExprs.size()-1).put("mapExp"+m.group(1), ext.grammarExps.get("mapExp"+m.group(1)).get(Integer.parseInt(m.group(3))));
+		}
 		
 		// Extract reduce functions
 		Map<String,String> reduceExps = new HashMap<String,String>();
-		
+		int index = 1;
 		for(Variable var : outputVars){
 			r = Pattern.compile("void "+Pattern.quote("reduce_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
 			m = r.matcher(text);
@@ -419,8 +426,26 @@ public class SketchParser {
 					r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
 					m = r.matcher(reduceLines.get(i));
 					if(m.find()){
-						reduceExps.put(var.varName, resolve(m.group(1),reduceLines,i,ext));
+						reduceExps.put(var.varName, "("+resolve(m.group(1),reduceLines,i,ext)+")");
 						break;
+					}
+				}
+				
+				// Extract reduce flags
+				r = Pattern.compile("reduceExp(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
+				m = r.matcher(reduce);
+				while(m.find()){
+					ext.blockExprs.get(ext.blockExprs.size()-1).put("reduceExp"+m.group(1), ext.grammarExps.get("reduceExp"+m.group(1)).get(Integer.parseInt(m.group(3))));
+					for(int i=2; i<ext.valCount+2; i++){
+						if(!reduceExps.get(var.varName).contains("val"+i)){
+							for(String conditional : mapEmits.keySet()){
+								for(KvPair kvp : mapEmits.get(conditional)){
+									if(kvp.keys.get(0).equals(Integer.toString(index))){
+										ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -428,7 +453,7 @@ public class SketchParser {
 				if(debug)
 					System.err.println("Something unexpected happened in the parser.");
 			}
-			 
+			index++;
 		}
 		
 		// Extract init functions
@@ -471,7 +496,7 @@ public class SketchParser {
 			r = Pattern.compile("void "+Pattern.quote("merge_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
 			m = r.matcher(text);
 			if(m.find()){
-				// Get init function for this output variable
+				// Get merge function for this output variable
 				String merge = m.group(2);
 				
 				// Split code to lines
@@ -494,7 +519,6 @@ public class SketchParser {
 				if(debug)
 					System.err.println("Something unexpected happened in the parser.");
 			}
-			 
 		}
 		
 		ext.mapEmits = mapEmits;
