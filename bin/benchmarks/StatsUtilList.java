@@ -34,7 +34,7 @@ public class StatsUtilList {
      * @return
      *                  The covariance as a double giving the fit difference of least squares
      */
-    public static double mean(List<Double> data){
+    /*public static double mean(List<Double> data){
         double sum = 0.0;
         for(int i=0;i< data.size(); i++) sum += data.get(i);
         return sum / (double) data.size() - 1;
@@ -88,7 +88,7 @@ public class StatsUtilList {
      * @return
      *                  The the least squares fit as an array of doubles
      */
-    class Point{
+    /*class Point{
     	double x;
     	double y;
     }
@@ -111,7 +111,7 @@ public class StatsUtilList {
      * @return
      *                  The the least squares fit as an array of doubles
      */
-    public static double[] fit(double gradient, double offset, List<Double> x){
+   /* public static double[] fit(double gradient, double offset, List<Double> x){
         double[] fit=new double[x.size()];
         for(int i = 0; i < x.size(); i++) fit[i] = gradient*x.get(i) + offset;
         return fit;
@@ -129,7 +129,7 @@ public class StatsUtilList {
      *                  Standard error in mean i.e. residual sum of squares
      *                  as a double
      */
-    class RecordError {
+    /*class RecordError {
     	public double y;
     	public double fit;
     }
@@ -166,7 +166,7 @@ public class StatsUtilList {
      * @return
      *                  Array of doubles holding the data's residual points
      */
- 	public static double[] residuals(List<Double> y, List<Double> fit){
+ 	/*public static double[] residuals(List<Double> y, List<Double> fit){
         double[] residuals=new double[y.size()];
         for (int i = 0; i < y.size(); i++)
             residuals[i] = y.get(i) - fit.get(i);
@@ -182,5 +182,5 @@ public class StatsUtilList {
         for (int i = 0; i < data.size(); i++)
             residuals[i] = data.get(i).y - data.get(i).fit;
         return residuals;
-    }
+    }*/
 }

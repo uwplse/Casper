@@ -63,3 +63,6 @@ int casper_math_pow(int casper_a, int casper_b){
 	if(casper_b == 10)
 		return casper_a*casper_a*casper_a*casper_a*casper_a*casper_a*casper_a*casper_a*casper_a*casper_a;
 }
+
+bit CASPER_TRUE;
+bit CASPER_FALSE;

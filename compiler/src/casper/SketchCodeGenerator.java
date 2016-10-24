@@ -838,6 +838,11 @@ public class SketchCodeGenerator {
 							ext.recursionDepth
 						);
 		
+		if(sketchType.equals("bit")){
+			exprs.add("CASPER_TRUE");
+			exprs.add("CASPER_FALSE");
+		}
+		
 		/******** Generate args decl code *******/
 		
 		String argsDecl = ext.inputDataSet.getSketchType().replace(""+Configuration.arraySizeBound, ""+(Configuration.arraySizeBound-1)) + " " + ext.inputDataSet.varName;
@@ -855,10 +860,6 @@ public class SketchCodeGenerator {
 			switch(ttype){
 				case "int":
 					terminalOptions.get(ttype).add("??");
-					break;
-				case "bit":
-					terminalOptions.get(ttype).add("true");
-					terminalOptions.get(ttype).add("false");
 					break;
 				case "bit[32]":
 					terminalOptions.get(ttype).add("casper_genRandBitVec()");
@@ -880,17 +881,22 @@ public class SketchCodeGenerator {
 			termIndex.put(ttype, (int) Math.pow(2.0, ext.recursionDepth-1));
 			for(int i=0; i<Math.pow(2.0, ext.recursionDepth-1); i++){
 				terminalsCode += ttype2+" _"+ttypeName+"_terminal"+(i)+";\n\t";
-				terminalsCode += "int  _"+ttypeName+"_terminal"+(i)+"c = ??;\n\t";
+				terminalsCode += "int  _"+ttypeName+"_terminal"+(i)+"c = ??("+(int)Math.ceil(Math.log(terminalOptions.get(ttype).size())/Math.log(2))+");\n\t";
 				int optIndex = 0;
 				for(String opt : terminalOptions.get(ttype)){
 					String prefix = "else if";
 					if(optIndex == 0) prefix = "if";
-					if(!ttypeName.equals("string") && opt.equals("??"))
-						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+++") { _"+ttypeName+"_terminal"+(i)+" = " + opt + "; assert _"+ttypeName+"_terminal"+(i)+" != 0; }\n\t";
-					else
-						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+++") { _"+ttypeName+"_terminal"+(i)+" = " + opt + "; }\n\t";
+					if(!ttypeName.equals("string") && opt.equals("??")){
+						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+") { _term_flag_"+ttypeName+"_terminal"+(i)+"_map"+index+"["+optIndex+"] =  true; _"+ttypeName+"_terminal"+(i)+" = " + opt + "; assert _"+ttypeName+"_terminal"+(i)+" != 0; }\n\t";
+						optIndex++;
+					}
+					else{
+						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+") { _term_flag_"+ttypeName+"_terminal"+(i)+"_map"+index+"["+optIndex+"] =  true; _"+ttypeName+"_terminal"+(i)+" = " + opt + "; }\n\t";
+						optIndex++;
+					}
 				}
 				terminalsCode += "else { assert false; }\n\t";
+				blockArrays.put("_term_flag_"+ttypeName+"_terminal"+(i)+"_map"+index, Integer.toString(terminalOptions.get(ttype).size()));
 			}
 		}
 		
@@ -919,9 +925,14 @@ public class SketchCodeGenerator {
 				}
 				solID++;
 			}
-			expressions += "if(c=="+c+"){ mapExp"+index+"["+c+"]=true; return " + expr + "; }\n\t";
+			
+			if(c==0)
+				expressions += "if(c=="+c+"){ mapExp"+index+"["+c+"]=true; return " + expr + "; }\n\t";
+			else
+				expressions += "else if(c=="+c+"){ mapExp"+index+"["+c+"]=true; return " + expr + "; }\n\t";
 			c++;
 		}
+		expressions += "else { assert false; }\n\t";
 		
 		/****** Generate final output code ******/
 		generator += "generator "+sketchType+" " +typeName+"MapGenerator"+index+"("+argsDecl+"){\n\t" + terminalsCode + expressions + "\n}";
@@ -1239,6 +1250,11 @@ public class SketchCodeGenerator {
 							ext.recursionDepth
 						);
 		
+		if(sketchType.equals("bit")){
+			exprs.add("CASPER_TRUE");
+			exprs.add("CASPER_FALSE");
+		}
+		
 		/******** Generate args decl code *******/
 		
 		String argsDecl = type+" val1";
@@ -1255,10 +1271,6 @@ public class SketchCodeGenerator {
 			switch(ttype){
 				case "int":
 					terminalOptions.get(ttype).add("??");
-					break;
-				case "bit":
-					terminalOptions.get(ttype).add("true");
-					terminalOptions.get(ttype).add("false");
 					break;
 				case "bit[32]":
 					terminalOptions.get(ttype).add("casper_genRandBitVec()");
@@ -1280,17 +1292,23 @@ public class SketchCodeGenerator {
 			termIndex.put(ttype, (int) Math.pow(2.0, ext.recursionDepth-1));
 			for(int i=0; i<Math.pow(2.0, ext.recursionDepth-1); i++){
 				terminalsCode += ttype2+" _"+ttypeName+"_terminal"+(i)+";\n\t";
-				terminalsCode += "int  _"+ttypeName+"_terminal"+(i)+"c = ??;\n\t";
+				terminalsCode += "int  _"+ttypeName+"_terminal"+(i)+"c = ??("+(int)Math.ceil(Math.log(terminalOptions.get(ttype).size())/Math.log(2))+");\n\t";
 				int optIndex = 0;
 				for(String opt : terminalOptions.get(ttype)){
 					String prefix = "else if";
 					if(optIndex == 0) prefix = "if";
-					if(!ttypeName.equals("string") && opt.equals("??"))
-						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+++") { _"+ttypeName+"_terminal"+(i)+" = " + opt + "; assert _"+ttypeName+"_terminal"+(i)+" != 0; }\n\t";
-					else
-						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+++") { _"+ttypeName+"_terminal"+(i)+" = " + opt + "; }\n\t";
+					if(!ttypeName.equals("string") && opt.equals("??")){
+						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+") { _term_flag_"+ttypeName+"_terminal"+(i)+"_reduce"+index+"["+optIndex+"] =  true; _"+ttypeName+"_terminal"+(i)+" = " + opt + "; assert _"+ttypeName+"_terminal"+(i)+" != 0; }\n\t";
+						optIndex++;
+					}
+					else{
+						terminalsCode += prefix+"(_"+ttypeName+"_terminal"+(i)+"c == "+optIndex+") { _term_flag_"+ttypeName+"_terminal"+(i)+"_reduce"+index+"["+optIndex+"] =  true; _"+ttypeName+"_terminal"+(i)+" = " + opt + "; }\n\t";
+						optIndex++;
+					}
+						
 				}
 				terminalsCode += "else { assert false; }\n\t";
+				blockArrays.put("_term_flag_"+ttypeName+"_terminal"+(i)+"_reduce"+index, Integer.toString(terminalOptions.get(ttype).size()));
 			}
 		}
 		
@@ -1319,9 +1337,13 @@ public class SketchCodeGenerator {
 				}
 				solID++;
 			}
-			expressions += "if(c=="+c+"){ reduceExp"+index+"["+c+"]=true; return " + expr + "; }\n\t";
+			if(c==0)
+				expressions += "if(c=="+c+"){ reduceExp"+index+"["+c+"]=true; return " + expr + "; }\n\t";
+			else
+				expressions += "else if(c=="+c+"){ reduceExp"+index+"["+c+"]=true; return " + expr + "; }\n\t";
 			c++;
 		}
+		expressions += "else { assert false; }\n\t";
 		
 		/****** Generate final output code ******/
 		generator += "generator "+sketchType+" " +typeName+"ReduceGenerator"+index+"("+argsDecl+"){\n\t" + terminalsCode + expressions + "\n}";
@@ -1339,7 +1361,7 @@ public class SketchCodeGenerator {
 					code += type + " init_" + var.varName + "(){\n\treturn {| 0 | 1 |};\n}";
 					break;
 				case "bit":
-					code += type + " init_" + var.varName + "(){\n\treturn {| true | false |};\n}";
+					code += type + " init_" + var.varName + "(){\n\treturn {| CASPER_TRUE | CASPER_FALSE |};\n}";
 					break;
 				case "bit[32]":
 					code += type + " init_" + var.varName + "(){\n\treturn genRandBitVec();\n}";
@@ -1516,6 +1538,16 @@ public class SketchCodeGenerator {
 	
 	private static String generateBlockGenerated(MyWhileExt ext) {
 		String code = "";
+		
+		int solID = 0;
+		for(Map<String,String> sol : ext.blockExprs){
+			for(String bitArrayName : sol.keySet()){
+				if(bitArrayName.startsWith("_term_flag")){
+					ext.blocks.get(solID).add(bitArrayName+"["+sol.get(bitArrayName)+"]");
+				}
+			}
+			solID++;
+		}
 		
 		for(List<String> solution : ext.blocks){
 			code += "if(";

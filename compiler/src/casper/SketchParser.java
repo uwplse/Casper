@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,10 +62,14 @@ public class SketchParser {
 		}
 		
 		// Remove brackets
+		String prefix = "";
+		String postfix = "";
 		if(exp.charAt(0) == '('){
+			prefix = "(";
 			exp = exp.substring(1,exp.length());
 		}
 		if(exp.charAt(exp.length()-1) == ')'){
+			postfix = ")";
 			exp = exp.substring(0,exp.length()-1);
 		}
 			
@@ -74,14 +79,14 @@ public class SketchParser {
 			String op = op_esc.replace("\\", "");
 			if(exp.contains(op)){
 				String[] expComponents = exp.split(op_esc,2);
-				return "(" + resolve(expComponents[0].trim(),mapLines,i,ext) + ") " + op + " (" + resolve(expComponents[1].trim(),mapLines,i,ext) + ")";
+				return prefix + resolve(expComponents[0].trim(),mapLines,i,ext) + op + resolve(expComponents[1].trim(),mapLines,i,ext) + postfix;
 			}
 		}
 		// If unary expression
 		for(String op : unaryOps){
 			if(exp.contains(op)){
 				String[] expComponents = exp.split(op);
-				return op + " (" + resolve(expComponents[0].trim(),mapLines,i,ext) + ")";
+				return prefix + op + resolve(expComponents[1].trim(),mapLines,i,ext) + postfix;
 			}
 		}
 		// If generated variable
@@ -96,7 +101,7 @@ public class SketchParser {
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i,ext);
+						return prefix + resolve(stmt[1].trim(),mapLines,i,ext) + postfix;
 					}
 				}
 				// Function call
@@ -111,17 +116,17 @@ public class SketchParser {
 					List<String> argsR = new ArrayList<String>();
 					for(String arg : args){
 						if(!arg.equals(exp)){
-							argsR.add("(" + resolve(arg,mapLines,i,ext) + ")");
+							argsR.add(resolve(arg,mapLines,i,ext));
 						}
 						else {
-							argsR.add("(" + exp + ")");
+							argsR.add(exp);
 						}
 					}
 					for(SketchCall op : ext.methodOperators){
 						if(funcName.equals(op.name)){
 							String expR = op.resolve(exp,argsR);
 							if(!expR.equals(exp)){
-								return expR;
+								return prefix + expR + postfix;
 							}
 							break;
 						}
@@ -139,7 +144,7 @@ public class SketchParser {
 			if(exp.contains("__ANONYMOUS")){
 				exp = exp.substring(0,exp.indexOf("__ANONYMOUS"));
 			}
-			return exp;
+			return prefix + exp + postfix;
 		}
 		// If object field, with generated container
 		r = Pattern.compile("^([_][a-zA-Z_$0-9]*).([a-zA-Z_$][a-zA-Z_$0-9]*)$");
@@ -157,13 +162,13 @@ public class SketchParser {
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i,ext);
+						return prefix + resolve(stmt[1].trim(),mapLines,i,ext) + postfix;
 					}
 					
 					r = Pattern.compile("\\b"+container+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim() + "." + field,mapLines,i,ext);
+						return prefix + resolve(stmt[1].trim() + "." + field,mapLines,i,ext) + postfix;
 					}
 				}
 				// Function call
@@ -183,7 +188,7 @@ public class SketchParser {
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i,ext);
+						return prefix + resolve(stmt[1].trim(),mapLines,i,ext) + postfix;
 					}
 				}
 				// Function call
@@ -207,19 +212,19 @@ public class SketchParser {
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i,ext);
+						return prefix + resolve(stmt[1].trim(),mapLines,i,ext) + postfix;
 					}
 					
 					r = Pattern.compile("\\b"+container+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim()+"["+index+"]",mapLines,i,ext);
+						return prefix + resolve(stmt[1].trim()+"["+index+"]",mapLines,i,ext) + postfix;
 					}
 					
 					r = Pattern.compile("\\b"+index+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(container+"["+stmt[1].trim()+"]",mapLines,i,ext);
+						return prefix + resolve(container+"["+stmt[1].trim()+"]",mapLines,i,ext) + postfix;
 					}
 				}
 				// Function call
@@ -243,19 +248,19 @@ public class SketchParser {
 					r = Pattern.compile("\\b"+exp+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim(),mapLines,i,ext);
+						return prefix + resolve(stmt[1].trim(),mapLines,i,ext) + postfix;
 					}
 					
 					r = Pattern.compile("\\b"+container+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(stmt[1].trim()+"["+index+"]",mapLines,i,ext);
+						return prefix + resolve(stmt[1].trim()+"["+index+"]",mapLines,i,ext) + postfix;
 					}
 					
 					r = Pattern.compile("\\b"+index+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						return resolve(container+"["+stmt[1].trim()+"]",mapLines,i,ext);
+						return prefix + resolve(container+"["+stmt[1].trim()+"]",mapLines,i,ext) + postfix;
 					}
 				}
 				// Function call
@@ -264,10 +269,10 @@ public class SketchParser {
 			}
 		}
 		
-		return exp;
+		return prefix + exp + postfix;
 	}
 	
-	private static List<KvPair> extractMapEmits(String body, MyWhileExt ext, int emitCount) {
+	private static List<KvPair> extractMapEmits(String body, List<String> allLines, MyWhileExt ext, int emitCount) {
 		List<KvPair> emits = new ArrayList<KvPair>();
 		
 		// Extract map emits
@@ -307,7 +312,12 @@ public class SketchParser {
 					Pattern r = Pattern.compile("keys"+i+"\\["+index+"\\] = "+Pattern.quote(raw_key)+";");
 					Matcher m = r.matcher(mapLines.get(j));
 					if(m.find()){
-						new_key = resolve(raw_key,mapLines,j,ext);
+						int k = 0;
+						for(k=0; k<allLines.size(); k++){
+							if(allLines.get(k).equals(mapLines.get(j)))
+								break;
+						}
+						new_key = resolve(raw_key,allLines,k,ext);
 						break;
 					}
 				}
@@ -320,7 +330,12 @@ public class SketchParser {
 					Pattern r = Pattern.compile("values"+i+"\\["+index+"\\] = "+Pattern.quote(raw_value)+";");
 					Matcher m = r.matcher(mapLines.get(j));
 					if(m.find()){
-						new_value = resolve(raw_value,mapLines,j,ext);
+						int k = 0;
+						for(k=0; k<allLines.size(); k++){
+							if(allLines.get(k).equals(mapLines.get(j)))
+								break;
+						}
+						new_value = resolve(raw_value,allLines,k,ext);
 						break;
 					}
 				}
@@ -377,11 +392,11 @@ public class SketchParser {
 					break;
 				}
 			}
-			mapEmits.put(conditional_res,extractMapEmits(conditionals.get(conditional),ext,emitCount));
+			mapEmits.put(conditional_res,extractMapEmits(conditionals.get(conditional),mapLines,ext,emitCount));
 		}
 		
 		// Remaining emits
-		List<KvPair> allEmits = extractMapEmits(map,ext,emitCount);
+		List<KvPair> allEmits = extractMapEmits(map,mapLines,ext,emitCount);
 		List<KvPair> filteredEmits = new ArrayList<KvPair>();
 		for(KvPair emit : allEmits){
 			boolean keep = true;
@@ -394,7 +409,7 @@ public class SketchParser {
 			if(keep)
 				filteredEmits.add(emit);
 		}
-		
+		System.err.println(filteredEmits);
 		mapEmits.put("noCondition",filteredEmits);
 		
 		// Extract map flags
@@ -403,6 +418,12 @@ public class SketchParser {
 		ext.blockExprs.add(new HashMap<String,String>());
 		while(m.find()){
 			ext.blockExprs.get(ext.blockExprs.size()-1).put("mapExp"+m.group(1), ext.grammarExps.get("mapExp"+m.group(1)).get(Integer.parseInt(m.group(3))));
+		}
+
+		r = Pattern.compile("_term_flag(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
+		m = r.matcher(map);
+		while(m.find()){
+			ext.termValuesTemp.put("_term_flag"+m.group(1), m.group(3));
 		}
 		
 		// Extract reduce functions
@@ -447,6 +468,12 @@ public class SketchParser {
 							}
 						}
 					}
+				}
+				
+				r = Pattern.compile("_term_flag(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
+				m = r.matcher(reduce);
+				while(m.find()){
+					ext.termValuesTemp.put("_term_flag"+m.group(1), m.group(3));
 				}
 			}
 			else {

@@ -132,6 +132,7 @@ public class MyWhileExt extends MyStmtExt {
 	// Bits to block
 	public Map<String,List<String>> grammarExps = new HashMap<String,List<String>>();
 	public List<Map<String,String>> blockExprs = new ArrayList<Map<String,String>>();
+	public Map<String,String> termValuesTemp = new HashMap<String,String>();
 	public List<List<String>> blocks = new ArrayList<List<String>>();
 	
 	// Grammar incrementing flags

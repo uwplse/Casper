@@ -21,6 +21,8 @@ harness void main(<main-args-decl>){
 	// Initialize input data and variables
     <input-data-initialize>
     // Initialize input broadcast variables
+    CASPER_TRUE = true;
+    CASPER_FALSE = false;
     <input-vars-initialize>
     // Initialize loop counters
     <loop-counters-initialize>

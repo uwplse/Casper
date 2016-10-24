@@ -33,12 +33,14 @@ public class GenerateScaffold extends NodeVisitor{
 	boolean debug;
 	int id;
 	NodeFactory nf;
+	boolean opsAdded = false;
 	
 	@SuppressWarnings("deprecation")
 	public GenerateScaffold(NodeFactory nf){
 		this.debug = false;
 		this.id = 0;
 		this.nf = nf;
+		this.opsAdded = false;
 	}
 	
 	public NodeVisitor enter(Node parent, Node n){
@@ -124,10 +126,13 @@ public class GenerateScaffold extends NodeVisitor{
 									ext.verifiedReduceExps.add(ext.reduceExps);
 									ext.verifiedMergeExps.add(ext.mergeExps);
 									ext.blocks.add(new ArrayList<String>());
+									ext.termValuesTemp.clear();
 								}
 								else{
 									// Solution failed. Register terminal values in blockedExprs.
-									
+									ext.blockExprs.get(ext.blockExprs.size()-1).putAll(ext.termValuesTemp);
+									ext.blocks.add(new ArrayList<String>());
+									ext.termValuesTemp.clear();
 								}
 								
 							}
@@ -144,7 +149,6 @@ public class GenerateScaffold extends NodeVisitor{
 								else{
 									ext.generateCode.put(reduceType, true);
 									System.err.println(ext.verifiedMapEmits.size() + " solutions synthesized.");
-									System.err.println(ext.blockExprs);
 									break;
 								}	
 							}
@@ -205,10 +209,10 @@ public class GenerateScaffold extends NodeVisitor{
 	private int runSynthesizer(String filename, MyWhileExt ext, int keyCount, String type) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
 		
-		if(debug)
-			System.err.println("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 20 -bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
+		if(debug || true)
+			System.err.println("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
 		
-		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --slv-simiters 20 -bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
+		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
 
 		PrintWriter writer = new PrintWriter(filename.replace(".sk", ".txt"), "UTF-8");
 		
@@ -233,9 +237,9 @@ public class GenerateScaffold extends NodeVisitor{
         	// 1. If we have multiple keys, try other key2 types
         	if(keyCount > 1){
         		if(ext.keyIndex < ext.candidateKeyTypes.size()-1){
-        			System.err.println("Building new grammar...");
-        			if(debug)
+        			if(debug || true)
         				System.err.println("Keytype changed from " + ext.candidateKeyTypes.get(ext.keyIndex) + " to " + ext.candidateKeyTypes.get(ext.keyIndex+1));
+        			System.err.println("Building new grammar...");
         			ext.keyIndex++;
         			return 3;
         		}
@@ -244,54 +248,54 @@ public class GenerateScaffold extends NodeVisitor{
         	if(ext.recursionDepth < Configuration.recursionDepth){
         		ext.recursionDepth++;
         		ext.keyIndex = 0;
-        		if(debug)
+        		if(debug || true)
     				System.err.println("Recursion depth changed from " + (ext.recursionDepth-1) + " to " + ext.recursionDepth);
         		System.err.println("Building new grammar...");
         		return 3;
         	}
         	// 3. Turn conditionals on if they were seen in code
         	if(ext.foundConditionals && !ext.useConditionals){
-        		System.err.println("Building new grammar...");
         		ext.useConditionals = true;
         		ext.recursionDepth = 2;
         		ext.keyIndex = 0;
-        		if(debug)
+        		if(debug || true)
     				System.err.println("Conditionals turned on");
+        		System.err.println("Building new grammar...");
         		return 3;
         	}
         	// 4. Increase number of values until 2.
         	if(ext.valCount < Configuration.maxValuesTupleSize){
-        		System.err.println("Building new grammar...");
         		ext.valCount++;
         		ext.recursionDepth = 2;
         		if(ext.foundConditionals) ext.useConditionals = false;
         		ext.keyIndex = 0;
-        		if(debug)
+        		if(debug || true)
     				System.err.println("Val count changed from " + (ext.valCount-1) + " to " + ext.valCount);
+        		System.err.println("Building new grammar...");
         		return 3;
         	}
         	// 5. Turn on conditionals even if they were not found in code. 
         	if(!ext.foundConditionals && !ext.useConditionals){
-        		System.err.println("Building new grammar...");
         		ext.useConditionals = true;
         		ext.recursionDepth = 2;
         		ext.valCount = 1;
         		ext.keyIndex = 0;
-        		if(debug)
+        		if(debug || true)
     				System.err.println("Conditionals turned on second phase");
+        		System.err.println("Building new grammar...");
         		return 3;
         	}
         	// 6. Add new operators
+        	this.opsAdded = true;
         	switch(type){
             	case "bit":
-            		ext.unaryOperators.add("!");
             		ext.binaryOperators.add("&&");
             		ext.binaryOperators.add("||");
-            		ext.binaryOperators.add("==");
             		ext.useConditionals = false;
             		ext.recursionDepth = 2;
             		ext.valCount = 1;
             		ext.keyIndex = 0;
+            		System.err.println("New operators added...");
             		System.err.println("Building new grammar...");
             		return 3;
             	case "int":
