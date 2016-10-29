@@ -38,9 +38,6 @@ function doreduce(input: <domap-emit-type>, key: <doreduce-key-type><reducer-arg
 
 /******************************* HARNESS ************************************/    
 
-<reduce-exp-lemma>
-<conditional-lemma>
-
 predicate loopInvariant (<inv-pc-args>)
     <inv-requires>
 {

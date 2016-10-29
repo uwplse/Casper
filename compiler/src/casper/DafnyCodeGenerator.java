@@ -167,8 +167,24 @@ public class DafnyCodeGenerator {
 		template = template.replace("<inv-requires>", invRequires);
 		template = template.replace("<emit-requires>", emitRequires);
 		template = template.replace("<mapper-requires>", mapperRequires);
-		template = template.replace("<conditional-lemma>", "");
 		template = template.replace("<udts>", UDTs);
+		
+		writer.print(template);
+		writer.close();
+		
+		// Generate CFG Proof
+		template = new String(Files.readAllBytes(Paths.get("templates/dafny_skeleton2.dfy")), StandardCharsets.UTF_8);
+		writer = new PrintWriter("output/main_"+reducerType+"_"+id+"_CSG.dfy", "UTF-8");
+		
+		// Plug in generated code into template
+		template = template.replace("<reduce-exp-lemma>", csgLemmas);
+		template = template.replace("<domap-emit-type>", domapEmitType);
+		template = template.replace("<reduce-exp>",reduceExp);
+		template = template.replace("<reducer-args-decl>", reducerArgsDecl);
+		template = template.replace("<reducer-args-call>", reducerArgsCall);
+		template = template.replace("<doreduce-key-type>", doreduceKeyType);
+		template = template.replace("<output-type>", casper.Util.getDafnyTypeFromRaw(reducerType));
+		template = template.replace("<reduce-init-value>", reduceInitValues);
 		
 		writer.print(template);
 		writer.close();

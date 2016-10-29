@@ -141,9 +141,17 @@ public class GenerateScaffold extends NodeVisitor{
 								int verifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
 								
 								if(verifierExitCode == 0){
+									boolean isCSG = false;
+									
+									int CSGVerifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
+									if(CSGVerifierExitCode == 0){
+										isCSG = true;
+									}
+									
 									if(log){
 										debugLog.print("Solution Mappers: "+ext.mapEmits + "\n");
 										debugLog.print("Solution Reducers: "+ext.reduceExps + "\n");
+										debugLog.print("CSG: "+ isCSG + "\n\n");
 										debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n");
 										debugLog.flush();
 									}
@@ -151,6 +159,7 @@ public class GenerateScaffold extends NodeVisitor{
 									ext.verifiedInitExps.add(ext.initExps);
 									ext.verifiedReduceExps.add(ext.reduceExps);
 									ext.verifiedMergeExps.add(ext.mergeExps);
+									ext.verifiedCSG.add(isCSG);
 									ext.blocks.add(new ArrayList<String>());
 									ext.termValuesTemp.clear();
 								}
@@ -159,7 +168,6 @@ public class GenerateScaffold extends NodeVisitor{
 									ext.blockExprs.get(ext.blockExprs.size()-1).putAll(ext.termValuesTemp);
 									ext.blocks.add(new ArrayList<String>());
 									ext.termValuesTemp.clear();
-									//System.in.read();
 								}
 							}
 							else if(synthesizerExitCode == 1){
@@ -368,7 +376,7 @@ public class GenerateScaffold extends NodeVisitor{
 
         // Timeout wait
         long now = System.currentTimeMillis();
-        long timeoutInMillis = 1000L * 180;
+        long timeoutInMillis = 1000L * 1;
         long finish = now + timeoutInMillis;
         while ( isAlive( pr ) && ( System.currentTimeMillis() < finish ) )
         {
@@ -382,8 +390,51 @@ public class GenerateScaffold extends NodeVisitor{
         }
         else{
         	exitVal = pr.exitValue();
-        	if(exitVal == 0)
+        	if(exitVal == 0){
             	System.err.println("Summary successfully verified");
+        	}
+        	else
+            	System.err.println("Verifier exited with error code "+exitVal);
+        }
+        
+		writer.close();
+		
+		return exitVal;
+	}
+	
+	private int verifySummaryCSG(String filename, String outputType) throws IOException, InterruptedException {
+		/****** Run dafny ******/
+		Runtime rt = Runtime.getRuntime();
+		Process pr = rt.exec("dafny " + filename);
+
+		PrintWriter writer = new PrintWriter("output/outputTempDafny.txt", "UTF-8");
+		
+		BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+			 
+        String line=null;
+        while((line=input.readLine()) != null) {
+        	writer.print(line+"\n");
+        }
+
+        // Timeout wait
+        long now = System.currentTimeMillis();
+        long timeoutInMillis = 1000L * 1;
+        long finish = now + timeoutInMillis;
+        while ( isAlive( pr ) && ( System.currentTimeMillis() < finish ) )
+        {
+            Thread.sleep( 10 );
+        }
+        int exitVal;
+        if ( isAlive( pr ) )
+        {
+            System.err.println("Dafny timed out out after " + 180 + " seconds" );
+            exitVal = 3;
+        }
+        else{
+        	exitVal = pr.exitValue();
+        	if(exitVal == 0){
+            	System.err.println("CSG successfully verified");
+        	}
         	else
             	System.err.println("Verifier exited with error code "+exitVal);
         }

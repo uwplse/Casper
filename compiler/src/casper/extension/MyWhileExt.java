@@ -128,6 +128,7 @@ public class MyWhileExt extends MyStmtExt {
 	public List<Map<String,String>> verifiedReduceExps = new ArrayList<Map<String,String>>();
 	public List<Map<String,String>> verifiedInitExps = new ArrayList<Map<String,String>>();
 	public List<Map<String,String>> verifiedMergeExps = new ArrayList<Map<String,String>>();
+	public List<Boolean> verifiedCSG = new ArrayList<Boolean>();
 	
 	// Bits to block
 	public Map<String,List<String>> grammarExps = new HashMap<String,List<String>>();
