@@ -155,11 +155,6 @@ public class GenerateScaffold extends NodeVisitor{
 										ext.termValuesTemp.clear();
 									}
 									else{
-										ext.verifiedMapEmits.add(ext.mapEmits);
-										ext.verifiedInitExps.add(ext.initExps);
-										ext.verifiedReduceExps.add(ext.reduceExps);
-										ext.verifiedMergeExps.add(ext.mergeExps);
-										ext.verifiedCSG.add(isCSG);
 										ext.blockExprs.get(ext.blockExprs.size()-1).putAll(ext.termValuesTemp);
 										ext.blocks.add(new ArrayList<String>());
 										ext.termValuesTemp.clear();
@@ -404,7 +399,7 @@ public class GenerateScaffold extends NodeVisitor{
             	System.err.println("Summary successfully verified");
         	}
         	else
-            	System.err.println("Verifier exited with error code "+exitVal);
+            	System.err.println("Verifier failed with error code "+exitVal);
         }
         
 		writer.close();
@@ -446,7 +441,7 @@ public class GenerateScaffold extends NodeVisitor{
             	System.err.println("CSG successfully verified");
         	}
         	else
-            	System.err.println("Verifier exited with error code "+exitVal);
+            	System.err.println("CFG Verifier failed with error code "+exitVal);
         }
         
 		writer.close();

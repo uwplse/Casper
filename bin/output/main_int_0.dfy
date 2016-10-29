@@ -2,7 +2,7 @@
 include "utils.dfy"
 
 /******************************* UDTS ***************************************/
-class Sum{
+class Count{
 }
 
 
@@ -36,51 +36,51 @@ function mapper (data: seq<int>, i0: int, i: int, loop0: bool) : seq<(int, (int,
 
 function doreduce(input: seq<(int, (int,int))>, key: int, loop0: bool) : int
     ensures (|input| > 0 && input[0].0 == key) ==> 
-        doreduce(input, key, loop0) == (if key == 1 then ((input[0].1.1+doreduce(input[1..], key, loop0))) else ((input[0].1.1+doreduce(input[1..], key, loop0))))
+        doreduce(input, key, loop0) == (if key == 1 then ((doreduce(input[1..], key, loop0)+1)) else ((doreduce(input[1..], key, loop0)+1)))
     ensures (|input| > 0 && input[0].0 != key) ==> 
         doreduce(input, key, loop0) == doreduce(input[1..], key, loop0)
 {
     if input == [] then (if key == 1 then 0 else 0 )
-    else if input[0].0 == key then (if key == 1 then ((input[0].1.1+doreduce(input[1..], key, loop0))) else ((input[0].1.1+doreduce(input[1..], key, loop0))))
+    else if input[0].0 == key then (if key == 1 then ((doreduce(input[1..], key, loop0)+1)) else ((doreduce(input[1..], key, loop0)+1)))
     else doreduce(input[1..], key, loop0)
 }
 
 /******************************* HARNESS ************************************/    
 
-predicate loopInvariant (data: seq<int>, sum: int, sum0: int, i: int, i0: int, loop0: bool)
+predicate loopInvariant (data: seq<int>, count: int, count0: int, i: int, i0: int, loop0: bool)
     
 {
     0 <= i <= |data| &&
-	(sum == (doreduce(mapper(data,i0,i,loop0),1, loop0)))
+	(count == (doreduce(mapper(data,i0,i,loop0),1, loop0)))
 }
 
-predicate postCondition (data: seq<int>, sum: int, sum0: int, i: int, i0: int, loop0: bool)
+predicate postCondition (data: seq<int>, count: int, count0: int, i: int, i0: int, loop0: bool)
     
 {
     i == |data| &&
-	(sum == (doreduce(mapper(data,i0,i,loop0),1, loop0)))
+	(count == (doreduce(mapper(data,i0,i,loop0),1, loop0)))
 }
 
-method harness (data: seq<int>, sum: int, i: int)
+method harness (data: seq<int>, count: int, i: int)
     
 {
-    var sum0 := 0;
+    var count0 := 0;
 	var loop0 := false;
 	var i0 := 0;
 	
     assert loopInvariant(data,0,0,0,0,loop0);
 
-	if(loopInvariant(data,sum,0,i,0,loop0) && (i<|data|))
+	if(loopInvariant(data,count,0,i,0,loop0) && (i<|data|))
 	{
-		var ind_sum := sum;
-		ind_sum := (sum+data[i]);
+		var ind_count := count;
+		ind_count := (count+1);
 		var ind_i := i;
 		ind_i := (i+1);
-		assert loopInvariant(data,ind_sum,0,ind_i,0,loop0);
+		assert loopInvariant(data,ind_count,0,ind_i,0,loop0);
 	}
 
-	if(loopInvariant(data,sum,0,i,0,loop0) && !(i<|data|))
+	if(loopInvariant(data,count,0,i,0,loop0) && !(i<|data|))
 	{
-		assert postCondition(data,sum,0,i,0,loop0);
+		assert postCondition(data,count,0,i,0,loop0);
 	}
 }

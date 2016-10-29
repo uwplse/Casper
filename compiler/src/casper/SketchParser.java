@@ -462,6 +462,15 @@ public class SketchParser {
 								for(KvPair kvp : mapEmits.get(conditional)){
 									if(kvp.keys.get(0).equals(Integer.toString(index))){
 										ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
+										Map<String,String> temp = new HashMap<String,String>();
+										temp.putAll(ext.termValuesTemp);
+										for(String key : ext.termValuesTemp.keySet()){
+											if(key.contains("_map_v"+((kvp.index*ext.valCount)+(i-2)))){
+												temp.remove(key);
+											}
+										}
+										ext.termValuesTemp = temp;
+										ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
 									}
 								}
 							}
