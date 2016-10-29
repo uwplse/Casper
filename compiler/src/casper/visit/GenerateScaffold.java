@@ -163,7 +163,7 @@ public class GenerateScaffold extends NodeVisitor{
 									if(log){
 										debugLog.print("Solution Mappers: "+ext.mapEmits + "\n");
 										debugLog.print("Solution Reducers: "+ext.reduceExps + "\n");
-										debugLog.print("CSG: "+ isCSG + "\n\n");
+										debugLog.print("CSG: "+ isCSG + "\n");
 										debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n");
 										debugLog.flush();
 									}
@@ -373,11 +373,6 @@ public class GenerateScaffold extends NodeVisitor{
 		PrintWriter writer = new PrintWriter("output/outputTempDafny.txt", "UTF-8");
 		
 		BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-			 
-        String line=null;
-        while((line=input.readLine()) != null) {
-        	writer.print(line+"\n");
-        }
 
         // Timeout wait
         long now = System.currentTimeMillis();
@@ -441,7 +436,7 @@ public class GenerateScaffold extends NodeVisitor{
             	System.err.println("CSG successfully verified");
         	}
         	else
-            	System.err.println("CFG Verifier failed with error code "+exitVal);
+            	System.err.println("CSG Verifier failed with error code "+exitVal);
         }
         
 		writer.close();
