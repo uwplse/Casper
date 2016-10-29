@@ -1,0 +1,8 @@
+Dafny program verifier version 1.9.7.30401, Copyright (c) 2003-2016, Microsoft.
+output/main_int_0.dfy(72,1): Error BP5003: A postcondition might not hold on this return path.
+output/main_int_0.dfy(70,34): Related location: This is the postcondition that might not hold.
+Execution trace:
+    (0,0): anon0
+    (0,0): anon3_Else
+
+Dafny program verifier finished with 12 verified, 1 error

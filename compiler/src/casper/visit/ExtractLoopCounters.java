@@ -167,9 +167,10 @@ public class ExtractLoopCounters extends NodeVisitor {
 						ext.loopCounters.remove(var);
 					}
 				}
-			
-				if(ext.loopCounters.size() == 0)
+
+				if(ext.loopCounters.size() == 0){
 					ext.interesting = false;
+				}
 				
 				if(debug){
 					System.err.println("Loop Counters:\n"+((MyWhileExt)JavaExt.ext(n)).loopCounters.toString());

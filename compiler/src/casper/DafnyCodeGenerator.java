@@ -881,7 +881,6 @@ public class DafnyCodeGenerator {
 						reduceExp = "doreduce(a, key<reducer-args-call>) + doreduce(b, key<reducer-args-call>)";
 					}
 				}
-				reduceExp = reduceExp.replaceAll("val2", "doreduce(b, key<reducer-args-call>)");
 				 
 				code += "lemma LemmaCSG_"+var.varName+" (a: <domap-emit-type>, b: <domap-emit-type>, key: <doreduce-key-type><reducer-args-decl>)\n\t" +
 						    "requires "+key+" == " + index + "\n" +

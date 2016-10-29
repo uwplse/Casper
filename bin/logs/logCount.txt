@@ -1,0 +1,89 @@
+Output type: int
+
+Key Index: 0
+Recursion Depth: 2
+Conditionals: false
+Num of Vals: 1
+Operators Added: false
+Number of solutions so far: 0
+Time stamp: 1477749927154
+
+
+Solution Mappers: {noCondition=[[{0=1},{0=1}]]}
+Solution Reducers: {count=(val2+val1)}
+Time stamp: 1477749940872
+
+Key Index: 0
+Recursion Depth: 3
+Conditionals: false
+Num of Vals: 1
+Operators Added: false
+Number of solutions so far: 1
+
+Time stamp: 1477749979766
+
+
+Key Index: 0
+Recursion Depth: 2
+Conditionals: false
+Num of Vals: 2
+Operators Added: false
+Number of solutions so far: 1
+
+Time stamp: 1477749981648
+
+
+Solution Mappers: {noCondition=[[{0=1},{0=data[i]+data[i], 1=8}]]}
+Solution Reducers: {count=(1+val1)}
+Time stamp: 1477749987463
+
+Key Index: 0
+Recursion Depth: 3
+Conditionals: false
+Num of Vals: 2
+Operators Added: false
+Number of solutions so far: 2
+
+Time stamp: 1477749990614
+
+
+Key Index: 0
+Recursion Depth: 2
+Conditionals: true
+Num of Vals: 1
+Operators Added: false
+Number of solutions so far: 2
+
+Time stamp: 1477749994873
+
+
+Key Index: 0
+Recursion Depth: 3
+Conditionals: true
+Num of Vals: 1
+Operators Added: false
+Number of solutions so far: 2
+
+Time stamp: 1477749997212
+
+
+Key Index: 0
+Recursion Depth: 2
+Conditionals: true
+Num of Vals: 2
+Operators Added: false
+Number of solutions so far: 2
+
+Time stamp: 1477750001233
+
+
+Key Index: 0
+Recursion Depth: 3
+Conditionals: true
+Num of Vals: 2
+Operators Added: false
+Number of solutions so far: 2
+
+Time stamp: 1477750004533
+
+

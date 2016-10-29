@@ -1,0 +1,25 @@
+Output type: int
+
+Key Index: 0
+Recursion Depth: 2
+Conditionals: false
+Num of Vals: 1
+Operators Added: false
+Number of solutions so far: 0
+Time stamp: 1477750968521
+
+
+Solution Mappers: {noCondition=[[{0=2},{0=1}], [{0=1},{0=data[i]}]]}
+Solution Reducers: {count=(val2+val1), sum=(val1+val2)}
+Time stamp: 1477751695849
+
+Key Index: 0
+Recursion Depth: 3
+Conditionals: false
+Num of Vals: 1
+Operators Added: false
+Number of solutions so far: 1
+
+Time stamp: 1477751988567
+
+
