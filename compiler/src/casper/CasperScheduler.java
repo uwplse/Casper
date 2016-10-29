@@ -278,7 +278,7 @@ public class CasperScheduler extends JL7Scheduler {
     /*
      * Generate the sketch specification document.
      */
-    public Goal ScaffoldGenerated (Job job)
+    public Goal ScaffoldGenerated (Job job) throws IOException
     {
 		Goal g = internGoal(new VisitorGoal(job, new GenerateScaffold(extInfo.nodeFactory())));
 		

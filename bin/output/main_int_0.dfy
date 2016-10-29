@@ -17,9 +17,9 @@ function emit0(data: seq<int>, i0: int, i: int, loop0: bool) : seq<(int, int)>
 
 function emit1(data: seq<int>, i0: int, i: int, loop0: bool) : seq<(int, int)>
 	requires 0 <= i < |data|
-	ensures emit1(data, i0, i, loop0) == [(2,4+(data[i]+21))]
+	ensures emit1(data, i0, i, loop0) == [(2,16)]
 {
-	[(2,4+(data[i]+21))]
+	[(2,16)]
 }
 
 
