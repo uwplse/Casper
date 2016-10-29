@@ -295,7 +295,7 @@ public class CasperScheduler extends JL7Scheduler {
     /*
      * Generate the output code
      */
-    public Goal SparkCodeGenerated (Job job)
+    public Goal SparkCodeGenerated (Job job) throws IOException
     {
 		Goal g = internGoal(new VisitorGoal(job, new GenerateSparkCode(extInfo.nodeFactory())));
 		
@@ -320,7 +320,12 @@ public class CasperScheduler extends JL7Scheduler {
 			{
 				List<Goal> l = new ArrayList<Goal>();
 				l.addAll(super.prerequisiteGoals(scheduler));
-				l.add(ScaffoldGenerated(job));
+				try {
+					l.add(ScaffoldGenerated(job));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return l;
 			}
 		});

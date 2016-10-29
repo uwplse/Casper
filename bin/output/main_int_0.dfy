@@ -10,16 +10,16 @@ class Average{
 
 function emit0(data: seq<int>, i0: int, i: int, loop0: bool) : seq<(int, int)>
 	requires 0 <= i < |data|
-	ensures emit0(data, i0, i, loop0) == [(1,data[i])]
+	ensures emit0(data, i0, i, loop0) == [(2,(data[i]+19)+(data[i]+2))]
 {
-	[(1,data[i])]
+	[(2,(data[i]+19)+(data[i]+2))]
 }
 
 function emit1(data: seq<int>, i0: int, i: int, loop0: bool) : seq<(int, int)>
 	requires 0 <= i < |data|
-	ensures emit1(data, i0, i, loop0) == [(2,16)]
+	ensures emit1(data, i0, i, loop0) == [(1,data[i])]
 {
-	[(2,16)]
+	[(1,data[i])]
 }
 
 
@@ -43,12 +43,12 @@ function mapper (data: seq<int>, i0: int, i: int, loop0: bool) : seq<(int, int)>
 
 function doreduce(input: seq<(int, int)>, key: int, loop0: bool) : int
     ensures (|input| > 0 && input[0].0 == key) ==> 
-        doreduce(input, key, loop0) == (if key == 1 then ((input[0].1+doreduce(input[1..], key, loop0))) else if key == 2 then ((doreduce(input[1..], key, loop0)+1)) else ((doreduce(input[1..], key, loop0)+1)))
+        doreduce(input, key, loop0) == (if key == 1 then ((doreduce(input[1..], key, loop0)+input[0].1)) else if key == 2 then ((doreduce(input[1..], key, loop0)+1)) else ((doreduce(input[1..], key, loop0)+1)))
     ensures (|input| > 0 && input[0].0 != key) ==> 
         doreduce(input, key, loop0) == doreduce(input[1..], key, loop0)
 {
     if input == [] then (if key == 1 then 0 else if key == 2 then 0 else 0 )
-    else if input[0].0 == key then (if key == 1 then ((input[0].1+doreduce(input[1..], key, loop0))) else if key == 2 then ((doreduce(input[1..], key, loop0)+1)) else ((doreduce(input[1..], key, loop0)+1)))
+    else if input[0].0 == key then (if key == 1 then ((doreduce(input[1..], key, loop0)+input[0].1)) else if key == 2 then ((doreduce(input[1..], key, loop0)+1)) else ((doreduce(input[1..], key, loop0)+1)))
     else doreduce(input[1..], key, loop0)
 }
 
@@ -56,7 +56,7 @@ function doreduce(input: seq<(int, int)>, key: int, loop0: bool) : int
 
 lemma LemmaCSG_sum (a: seq<(int, int)>, b: seq<(int, int)>, key: int, loop0: bool)
 	requires key == 1
-ensures doreduce(a+b, key, loop0) == ((doreduce(b, key, loop0)+doreduce(a, key, loop0)))
+ensures doreduce(a+b, key, loop0) == ((doreduce(a, key, loop0)+doreduce(b, key, loop0)))
 {
 	if a != []
 	{
