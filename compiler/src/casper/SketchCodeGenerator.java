@@ -76,7 +76,7 @@ public class SketchCodeGenerator {
 		
 		// Generate main function args
 		Map<String,Integer> argsList = new HashMap<String,Integer>();
-		String mainFuncArgsDecl = generateMainFuncArgs(ext, ext.inputVars, sketchFilteredOutputVars, ext.loopCounters, argsList);
+		String mainFuncArgsDecl = generateMainFuncArgs(ext, ext.inputVars, sketchFilteredOutputVars, ext.loopCounters, argsList, sketchReducerType);
 		
 		// Initialize output variables
 		String outputVarsInit = initMainOutput(ext,argsList, sketchFilteredOutputVars);
@@ -189,6 +189,11 @@ public class SketchCodeGenerator {
 		// Generate code to block generated solutions
 		String blockGenerated = generateBlockGenerated(ext);
 		
+		// Generate csg test code
+		String csgTest = "";
+		if(ext.valCount == 1)
+			csgTest = generateCSGTestCode(sketchFilteredOutputVars);
+		
 		// Modify template
 		text = text.replace("<decl-block-arrays>", declBlockArrays);
 		text = text.replace("<output-type>", sketchReducerType);
@@ -222,10 +227,19 @@ public class SketchCodeGenerator {
 		text = text.replace("<merge-r>", mergeOutput);
 		text = text.replace("<reduce-args-decl>", reduceArgsDecl);
 		text = text.replace("<block-solutions>", blockGenerated);
+		text = text.replace("<reduce-csg-test>", csgTest);
 		
 		// Save
 		writer.print(text);
 		writer.close();
+	}
+
+	private static String generateCSGTestCode(Set<Variable> sketchFilteredOutputVars) {
+		String code = "\n\n\t";
+		for(Variable var : sketchFilteredOutputVars){
+			code += "assert reduce_"+var.varName+"(csg_test_val1,csg_test_val2) == reduce_"+var.varName+"(csg_test_val2,csg_test_val1);\n\t";
+		}
+		return code;
 	}
 
 	// Generate code that includes all necessary files
@@ -244,7 +258,7 @@ public class SketchCodeGenerator {
 	
 	// Generate code that initializes main function args
 	
-	public static String generateMainFuncArgs(MyWhileExt ext, Set<Variable> sketchInputVars, Set<Variable> sketchOutputVars, Set<Variable> sketchLoopCounters, Map<String, Integer> argsList) {
+	public static String generateMainFuncArgs(MyWhileExt ext, Set<Variable> sketchInputVars, Set<Variable> sketchOutputVars, Set<Variable> sketchLoopCounters, Map<String, Integer> argsList, String sketchReducerType) {
 		String mainFuncArgs = "";
 		
 		for(Variable var : sketchInputVars){
@@ -277,6 +291,8 @@ public class SketchCodeGenerator {
 		}
 		if(mainFuncArgs.length() > 0)
 			mainFuncArgs = mainFuncArgs.substring(0, mainFuncArgs.length()-2);
+		
+		mainFuncArgs += ", "+sketchReducerType+" csg_test_val1, "+sketchReducerType+" csg_test_val2";
 		
 		return mainFuncArgs;
 	}

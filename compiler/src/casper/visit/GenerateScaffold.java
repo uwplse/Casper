@@ -138,34 +138,30 @@ public class GenerateScaffold extends NodeVisitor{
 								
 								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType, sketchReduceType);
 								
-								int verifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
+								int verifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
 								
 								if(verifierExitCode == 0){
-									boolean isCSG = false;
-									
-									int CSGVerifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
+									int CSGVerifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
 									if(CSGVerifierExitCode == 0){
-										isCSG = true;
 										ext.verifiedMapEmits.add(ext.mapEmits);
 										ext.verifiedInitExps.add(ext.initExps);
 										ext.verifiedReduceExps.add(ext.reduceExps);
 										ext.verifiedMergeExps.add(ext.mergeExps);
-										ext.verifiedCSG.add(isCSG);
+										ext.verifiedCSG.add(true);
 										ext.blocks.add(new ArrayList<String>());
 										ext.termValuesTemp.clear();
+										
+										if(log){
+											debugLog.print("Solution Mappers: "+ext.mapEmits + "\n");
+											debugLog.print("Solution Reducers: "+ext.reduceExps + "\n");
+											debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n");
+											debugLog.flush();
+										}
 									}
 									else{
 										ext.blockExprs.get(ext.blockExprs.size()-1).putAll(ext.termValuesTemp);
 										ext.blocks.add(new ArrayList<String>());
 										ext.termValuesTemp.clear();
-									}
-									
-									if(log){
-										debugLog.print("Solution Mappers: "+ext.mapEmits + "\n");
-										debugLog.print("Solution Reducers: "+ext.reduceExps + "\n");
-										debugLog.print("CSG: "+ isCSG + "\n");
-										debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n");
-										debugLog.flush();
 									}
 								}
 								else{
@@ -173,6 +169,7 @@ public class GenerateScaffold extends NodeVisitor{
 									ext.blockExprs.get(ext.blockExprs.size()-1).putAll(ext.termValuesTemp);
 									ext.blocks.add(new ArrayList<String>());
 									ext.termValuesTemp.clear();
+									System.in.read();
 								}
 							}
 							else if(synthesizerExitCode == 1){
@@ -280,7 +277,7 @@ public class GenerateScaffold extends NodeVisitor{
         	writer.close();
         	
         	// Increment grammar
-        	
+
         	// 1. If we have multiple keys, try other key2 types
         	if(keyCount > 1){
         		if(ext.keyIndex < ext.candidateKeyTypes.size()-1){
@@ -376,7 +373,7 @@ public class GenerateScaffold extends NodeVisitor{
 
         // Timeout wait
         long now = System.currentTimeMillis();
-        long timeoutInMillis = 1000L * 1;
+        long timeoutInMillis = 1000L * 120;
         long finish = now + timeoutInMillis;
         while ( isAlive( pr ) && ( System.currentTimeMillis() < finish ) )
         {
@@ -385,7 +382,7 @@ public class GenerateScaffold extends NodeVisitor{
         int exitVal;
         if ( isAlive( pr ) )
         {
-            System.err.println("Dafny timed out out after " + 180 + " seconds" );
+            System.err.println("Dafny timed out out after " + 120 + " seconds" );
             exitVal = 3;
         }
         else{
@@ -418,7 +415,7 @@ public class GenerateScaffold extends NodeVisitor{
 
         // Timeout wait
         long now = System.currentTimeMillis();
-        long timeoutInMillis = 1000L * 1;
+        long timeoutInMillis = 1000L * 30;
         long finish = now + timeoutInMillis;
         while ( isAlive( pr ) && ( System.currentTimeMillis() < finish ) )
         {
@@ -427,7 +424,7 @@ public class GenerateScaffold extends NodeVisitor{
         int exitVal;
         if ( isAlive( pr ) )
         {
-            System.err.println("Dafny timed out out after " + 180 + " seconds" );
+            System.err.println("Dafny timed out out after " + 30 + " seconds" );
             exitVal = 3;
         }
         else{

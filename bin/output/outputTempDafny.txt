@@ -1,4 +1,0 @@
-Dafny program verifier version 1.9.7.30401, Copyright (c) 2003-2016, Microsoft.
-
-Dafny program verifier finished with 3 verified, 0 errors
-Compiled assembly into main_int_0_CSG.dll

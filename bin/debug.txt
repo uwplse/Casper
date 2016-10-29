@@ -6,26 +6,12 @@ Conditionals: false
 Num of Vals: 1
 Operators Added: false
 Number of solutions so far: 0
-Time stamp: 1477765477773
+Time stamp: 1477771888884
 
 
-Solution Mappers: {noCondition=[[{0=1},{0=23}]]}
-Solution Reducers: {count=(1+val1)}
-CSG: false
-
-Time stamp: 1477765483218
-
-Solution Mappers: {noCondition=[[{0=1},{0=1}]]}
-Solution Reducers: {count=(val2+val1)}
-CSG: true
-
-Time stamp: 1477765489959
-
-Solution Mappers: {noCondition=[[{0=1},{0=21}]]}
-Solution Reducers: {count=(val1+1)}
-CSG: false
-
-Time stamp: 1477765496484
+Solution Mappers: {noCondition=[[{0=1},{0=data[i]}]]}
+Solution Reducers: {sum=(val1+val2)}
+Time stamp: 1477771894787
 
 Key Index: 0
 Recursion Depth: 2
@@ -34,14 +20,12 @@ Num of Vals: 2
 Operators Added: false
 Number of solutions so far: 1
 
-Time stamp: 1477765498149
+Time stamp: 1477771896198
 
 
-Solution Mappers: {noCondition=[[{0=1},{0=data[i]+data[i], 1=data[i]}]]}
-Solution Reducers: {count=(val1+1)}
-CSG: true
-
-Time stamp: 1477765505326
+Solution Mappers: {noCondition=[[{0=1},{0=21+data[i], 1=data[i]}]]}
+Solution Reducers: {sum=(val1+val3)}
+Time stamp: 1477771903108
 
 Key Index: 0
 Recursion Depth: 2
@@ -50,7 +34,7 @@ Num of Vals: 1
 Operators Added: false
 Number of solutions so far: 2
 
-Time stamp: 1477765507174
+Time stamp: 1477771904893
 
 
 Key Index: 0
@@ -60,6 +44,6 @@ Num of Vals: 2
 Operators Added: false
 Number of solutions so far: 2
 
-Time stamp: 1477765509553
+Time stamp: 1477771906347
 
 

@@ -28,7 +28,7 @@ harness void main(<main-args-decl>){
     <loop-counters-initialize>
 
 	// Verification code
-	<verif-conditions>
+	<verif-conditions><reduce-csg-test>
 }
 
 /******************************************************************************/
