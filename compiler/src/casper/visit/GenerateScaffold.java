@@ -146,6 +146,23 @@ public class GenerateScaffold extends NodeVisitor{
 									int CSGVerifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
 									if(CSGVerifierExitCode == 0){
 										isCSG = true;
+										ext.verifiedMapEmits.add(ext.mapEmits);
+										ext.verifiedInitExps.add(ext.initExps);
+										ext.verifiedReduceExps.add(ext.reduceExps);
+										ext.verifiedMergeExps.add(ext.mergeExps);
+										ext.verifiedCSG.add(isCSG);
+										ext.blocks.add(new ArrayList<String>());
+										ext.termValuesTemp.clear();
+									}
+									else{
+										ext.verifiedMapEmits.add(ext.mapEmits);
+										ext.verifiedInitExps.add(ext.initExps);
+										ext.verifiedReduceExps.add(ext.reduceExps);
+										ext.verifiedMergeExps.add(ext.mergeExps);
+										ext.verifiedCSG.add(isCSG);
+										ext.blockExprs.get(ext.blockExprs.size()-1).putAll(ext.termValuesTemp);
+										ext.blocks.add(new ArrayList<String>());
+										ext.termValuesTemp.clear();
 									}
 									
 									if(log){
@@ -155,13 +172,6 @@ public class GenerateScaffold extends NodeVisitor{
 										debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n");
 										debugLog.flush();
 									}
-									ext.verifiedMapEmits.add(ext.mapEmits);
-									ext.verifiedInitExps.add(ext.initExps);
-									ext.verifiedReduceExps.add(ext.reduceExps);
-									ext.verifiedMergeExps.add(ext.mergeExps);
-									ext.verifiedCSG.add(isCSG);
-									ext.blocks.add(new ArrayList<String>());
-									ext.termValuesTemp.clear();
 								}
 								else{
 									// Solution failed. Register terminal values in blockedExprs.
