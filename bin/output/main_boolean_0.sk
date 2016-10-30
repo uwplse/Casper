@@ -1,0 +1,393 @@
+/******************************************************************************/
+/* Include necessory packages                                                 */
+
+include "output/utils.sk";
+include "output/StringMatch.sk";
+
+/******************************************************************************/
+/* Global Control Variables                                                   */
+int CASPER_NUM_OUTVARS = 2;
+
+bit[3] _term_flag_bit_terminal1_reduce1 = {false};
+bit[3] _term_flag_string_terminal1_reduce1 = {false};
+bit[3] _term_flag_string_terminal0_reduce0 = {false};
+bit[3] _term_flag_string_terminal0_reduce1 = {false};
+bit[3] _term_flag_string_terminal1_reduce0 = {false};
+bit[1] _term_flag_bit_terminal0_map_c1 = {false};
+bit[1] _term_flag_bit_terminal0_map_c0 = {false};
+bit[3] _term_flag_bit_terminal1_reduce0 = {false};
+bit[4] _term_flag_string_terminal0_map_v1 = {false};
+bit[4] _term_flag_string_terminal0_map_v0 = {false};
+bit[4] _term_flag_string_terminal1_map_c0 = {false};
+bit[4] mapExp_c1 = {false};
+bit[4] _term_flag_string_terminal1_map_c1 = {false};
+bit[4] mapExp_c0 = {false};
+bit[4] reduceExp0 = {false};
+bit[4] reduceExp1 = {false};
+bit[4] mapExp_v1 = {false};
+bit[4] mapExp_v0 = {false};
+bit[4] _term_flag_string_terminal0_map_c1 = {false};
+bit[4] _term_flag_string_terminal0_map_c0 = {false};
+bit[1] _term_flag_bit_terminal0_map_v1 = {false};
+bit[1] _term_flag_bit_terminal0_map_v0 = {false};
+bit[4] _term_flag_string_terminal1_map_v1 = {false};
+bit[4] _term_flag_string_terminal1_map_v0 = {false};
+bit[3] _term_flag_bit_terminal0_reduce1 = {false};
+bit[3] _term_flag_bit_terminal0_reduce0 = {false};
+bit[1] _term_flag_bit_terminal1_map_c0 = {false};
+bit[1] _term_flag_bit_terminal1_map_c1 = {false};
+bit[1] _term_flag_bit_terminal1_map_v0 = {false};
+bit[1] _term_flag_bit_terminal1_map_v1 = {false};
+
+
+// Input variables decl
+int key1;
+int key2;
+bit loop0;
+
+/******************************************************************************/
+/* Main function to verify the two results generated are equal                */
+
+harness void main(bit[2] bitSet, int[6] intSet, bit csg_test_val1, bit csg_test_val2){
+	// Initialize output variables.
+	bit foundKey10 = false;
+	bit foundKey1 = bitSet[1];
+	bit foundKey20 = false;
+	bit foundKey2 = bitSet[0];
+
+	// Initialize input data and variables
+    int[3] words;
+	words[0] = intSet[3];
+	words[1] = intSet[2];
+	words[2] = intSet[1];
+	
+    // Initialize input broadcast variables
+    CASPER_TRUE = true;
+    CASPER_FALSE = false;
+    key1 = intSet[5];
+	key2 = intSet[4];
+	loop0 = false;
+	
+    // Initialize loop counters
+    int i0 = 0;
+	int i = intSet[0];
+
+	// Verification code
+	assert loopInvariant(words,false,false,false,false,0,0);
+	if(loopInvariant(words,foundKey2,false,foundKey1,false,i,0) && (i<3)) {
+		bit ind_foundKey2 = foundKey2;
+		if(casper_str_equal(key2,words[i])){
+			ind_foundKey2 = true;
+		} else {
+			ind_foundKey2 = foundKey2;
+		}
+		bit ind_foundKey1 = foundKey1;
+		if(casper_str_equal(key1,words[i])){
+			ind_foundKey1 = true;
+		} else {
+			ind_foundKey1 = foundKey1;
+		}
+		int ind_i = i;
+		ind_i = (i+1);
+		assert loopInvariant(words,ind_foundKey2,false,ind_foundKey1,false,ind_i,0);
+		
+		if(mapExp_c0[1] && mapExp_c1[1] && reduceExp0[1] && reduceExp1[2]) assert false;
+		if(mapExp_c0[1] && mapExp_c1[1] && reduceExp0[2] && reduceExp1[2]) assert false;
+		
+	}
+	if(loopInvariant(words,foundKey2,false,foundKey1,false,i,0) && !(i<3)) {
+		assert postCondition(words,foundKey2,false,foundKey1,false,i,0);
+	}
+
+	assert reduce_foundKey1(csg_test_val1,csg_test_val2) == reduce_foundKey1(csg_test_val2,csg_test_val1);
+	assert reduce_foundKey2(csg_test_val1,csg_test_val2) == reduce_foundKey2(csg_test_val2,csg_test_val1);
+	
+}
+
+/******************************************************************************/
+/* Verification functions                                                     */
+
+bit postCondition(int[3] words, bit foundKey2, bit foundKey20, bit foundKey1, bit foundKey10, int i, int i0){
+	bit [2] casper_r;
+	casper_r[0] = foundKey1;
+	casper_r[1] = foundKey2;
+	return reduce(words, foundKey1, foundKey10, foundKey2, foundKey20, i, i0) == casper_r;
+}
+
+bit loopInvariant(int[3] words, bit foundKey2, bit foundKey20, bit foundKey1, bit foundKey10, int i, int i0){
+	bit [2] casper_r;
+	casper_r[0] = foundKey1;
+	casper_r[1] = foundKey2;
+	return 0 <= i && i <= 3 && reduce(words, foundKey1, foundKey10, foundKey2, foundKey20, i, i0) == casper_r;
+}
+
+/******************************************************************************/
+/* MapReduce Implementation                                                   */
+
+generator bit bitMapGenerator_c0(int[3] words, int i){
+	bit _bit_terminal0;
+	int  _bit_terminal0c = ??(0);
+	if(_bit_terminal0c == 0) { _term_flag_bit_terminal0_map_c0[0] =  true; _bit_terminal0 = loop0; }
+	else { assert false; }
+	bit _bit_terminal1;
+	int  _bit_terminal1c = ??(0);
+	if(_bit_terminal1c == 0) { _term_flag_bit_terminal1_map_c0[0] =  true; _bit_terminal1 = loop0; }
+	else { assert false; }
+	int _string_terminal0;
+	int  _string_terminal0c = ??(2);
+	if(_string_terminal0c == 0) { _term_flag_string_terminal0_map_c0[0] =  true; _string_terminal0 = key1; }
+	else if(_string_terminal0c == 1) { _term_flag_string_terminal0_map_c0[1] =  true; _string_terminal0 = key2; }
+	else if(_string_terminal0c == 2) { _term_flag_string_terminal0_map_c0[2] =  true; _string_terminal0 = words[i]; }
+	else if(_string_terminal0c == 3) { _term_flag_string_terminal0_map_c0[3] =  true; _string_terminal0 = ??; }
+	else { assert false; }
+	int _string_terminal1;
+	int  _string_terminal1c = ??(2);
+	if(_string_terminal1c == 0) { _term_flag_string_terminal1_map_c0[0] =  true; _string_terminal1 = key1; }
+	else if(_string_terminal1c == 1) { _term_flag_string_terminal1_map_c0[1] =  true; _string_terminal1 = key2; }
+	else if(_string_terminal1c == 2) { _term_flag_string_terminal1_map_c0[2] =  true; _string_terminal1 = words[i]; }
+	else if(_string_terminal1c == 3) { _term_flag_string_terminal1_map_c0[3] =  true; _string_terminal1 = ??; }
+	else { assert false; }
+	int c = ??(2);
+	if(c==0){ mapExp_c0[0]=true; return (_bit_terminal0); }
+	else if(c==1){ mapExp_c0[1]=true; return casper_str_equal((_string_terminal0),(_string_terminal1)); }
+	else if(c==2){ mapExp_c0[2]=true; return CASPER_TRUE; }
+	else if(c==3){ mapExp_c0[3]=true; return CASPER_FALSE; }
+	else { assert false; }
+	
+}
+
+generator bit bitMapGenerator_v0(int[3] words, int i){
+	bit _bit_terminal0;
+	int  _bit_terminal0c = ??(0);
+	if(_bit_terminal0c == 0) { _term_flag_bit_terminal0_map_v0[0] =  true; _bit_terminal0 = loop0; }
+	else { assert false; }
+	bit _bit_terminal1;
+	int  _bit_terminal1c = ??(0);
+	if(_bit_terminal1c == 0) { _term_flag_bit_terminal1_map_v0[0] =  true; _bit_terminal1 = loop0; }
+	else { assert false; }
+	int _string_terminal0;
+	int  _string_terminal0c = ??(2);
+	if(_string_terminal0c == 0) { _term_flag_string_terminal0_map_v0[0] =  true; _string_terminal0 = key1; }
+	else if(_string_terminal0c == 1) { _term_flag_string_terminal0_map_v0[1] =  true; _string_terminal0 = key2; }
+	else if(_string_terminal0c == 2) { _term_flag_string_terminal0_map_v0[2] =  true; _string_terminal0 = words[i]; }
+	else if(_string_terminal0c == 3) { _term_flag_string_terminal0_map_v0[3] =  true; _string_terminal0 = ??; }
+	else { assert false; }
+	int _string_terminal1;
+	int  _string_terminal1c = ??(2);
+	if(_string_terminal1c == 0) { _term_flag_string_terminal1_map_v0[0] =  true; _string_terminal1 = key1; }
+	else if(_string_terminal1c == 1) { _term_flag_string_terminal1_map_v0[1] =  true; _string_terminal1 = key2; }
+	else if(_string_terminal1c == 2) { _term_flag_string_terminal1_map_v0[2] =  true; _string_terminal1 = words[i]; }
+	else if(_string_terminal1c == 3) { _term_flag_string_terminal1_map_v0[3] =  true; _string_terminal1 = ??; }
+	else { assert false; }
+	int c = ??(2);
+	if(c==0){ mapExp_v0[0]=true; return (_bit_terminal0); }
+	else if(c==1){ mapExp_v0[1]=true; return casper_str_equal((_string_terminal0),(_string_terminal1)); }
+	else if(c==2){ mapExp_v0[2]=true; return CASPER_TRUE; }
+	else if(c==3){ mapExp_v0[3]=true; return CASPER_FALSE; }
+	else { assert false; }
+	
+}
+
+generator bit bitMapGenerator_c1(int[3] words, int i){
+	bit _bit_terminal0;
+	int  _bit_terminal0c = ??(0);
+	if(_bit_terminal0c == 0) { _term_flag_bit_terminal0_map_c1[0] =  true; _bit_terminal0 = loop0; }
+	else { assert false; }
+	bit _bit_terminal1;
+	int  _bit_terminal1c = ??(0);
+	if(_bit_terminal1c == 0) { _term_flag_bit_terminal1_map_c1[0] =  true; _bit_terminal1 = loop0; }
+	else { assert false; }
+	int _string_terminal0;
+	int  _string_terminal0c = ??(2);
+	if(_string_terminal0c == 0) { _term_flag_string_terminal0_map_c1[0] =  true; _string_terminal0 = key1; }
+	else if(_string_terminal0c == 1) { _term_flag_string_terminal0_map_c1[1] =  true; _string_terminal0 = key2; }
+	else if(_string_terminal0c == 2) { _term_flag_string_terminal0_map_c1[2] =  true; _string_terminal0 = words[i]; }
+	else if(_string_terminal0c == 3) { _term_flag_string_terminal0_map_c1[3] =  true; _string_terminal0 = ??; }
+	else { assert false; }
+	int _string_terminal1;
+	int  _string_terminal1c = ??(2);
+	if(_string_terminal1c == 0) { _term_flag_string_terminal1_map_c1[0] =  true; _string_terminal1 = key1; }
+	else if(_string_terminal1c == 1) { _term_flag_string_terminal1_map_c1[1] =  true; _string_terminal1 = key2; }
+	else if(_string_terminal1c == 2) { _term_flag_string_terminal1_map_c1[2] =  true; _string_terminal1 = words[i]; }
+	else if(_string_terminal1c == 3) { _term_flag_string_terminal1_map_c1[3] =  true; _string_terminal1 = ??; }
+	else { assert false; }
+	int c = ??(2);
+	if(c==0){ mapExp_c1[0]=true; return (_bit_terminal0); }
+	else if(c==1){ mapExp_c1[1]=true; return casper_str_equal((_string_terminal0),(_string_terminal1)); }
+	else if(c==2){ mapExp_c1[2]=true; return CASPER_TRUE; }
+	else if(c==3){ mapExp_c1[3]=true; return CASPER_FALSE; }
+	else { assert false; }
+	
+}
+
+generator bit bitMapGenerator_v1(int[3] words, int i){
+	bit _bit_terminal0;
+	int  _bit_terminal0c = ??(0);
+	if(_bit_terminal0c == 0) { _term_flag_bit_terminal0_map_v1[0] =  true; _bit_terminal0 = loop0; }
+	else { assert false; }
+	bit _bit_terminal1;
+	int  _bit_terminal1c = ??(0);
+	if(_bit_terminal1c == 0) { _term_flag_bit_terminal1_map_v1[0] =  true; _bit_terminal1 = loop0; }
+	else { assert false; }
+	int _string_terminal0;
+	int  _string_terminal0c = ??(2);
+	if(_string_terminal0c == 0) { _term_flag_string_terminal0_map_v1[0] =  true; _string_terminal0 = key1; }
+	else if(_string_terminal0c == 1) { _term_flag_string_terminal0_map_v1[1] =  true; _string_terminal0 = key2; }
+	else if(_string_terminal0c == 2) { _term_flag_string_terminal0_map_v1[2] =  true; _string_terminal0 = words[i]; }
+	else if(_string_terminal0c == 3) { _term_flag_string_terminal0_map_v1[3] =  true; _string_terminal0 = ??; }
+	else { assert false; }
+	int _string_terminal1;
+	int  _string_terminal1c = ??(2);
+	if(_string_terminal1c == 0) { _term_flag_string_terminal1_map_v1[0] =  true; _string_terminal1 = key1; }
+	else if(_string_terminal1c == 1) { _term_flag_string_terminal1_map_v1[1] =  true; _string_terminal1 = key2; }
+	else if(_string_terminal1c == 2) { _term_flag_string_terminal1_map_v1[2] =  true; _string_terminal1 = words[i]; }
+	else if(_string_terminal1c == 3) { _term_flag_string_terminal1_map_v1[3] =  true; _string_terminal1 = ??; }
+	else { assert false; }
+	int c = ??(2);
+	if(c==0){ mapExp_v1[0]=true; return (_bit_terminal0); }
+	else if(c==1){ mapExp_v1[1]=true; return casper_str_equal((_string_terminal0),(_string_terminal1)); }
+	else if(c==2){ mapExp_v1[2]=true; return CASPER_TRUE; }
+	else if(c==3){ mapExp_v1[3]=true; return CASPER_FALSE; }
+	else { assert false; }
+	
+}
+
+
+
+void map (int[3] words, int i, ref int[CASPER_NUM_OUTVARS] keys0, ref int[CASPER_NUM_OUTVARS] values0)
+{
+  	if(bitMapGenerator_c0(words, i)){
+		keys0[0] = ??;
+		values0[0] = bitMapGenerator_v0(words, i);
+	}if(bitMapGenerator_c1(words, i)){
+		keys0[1] = ??;
+		values0[1] = bitMapGenerator_v1(words, i);
+	}
+}
+
+generator bit bitReduceGenerator0(bit val1, bit val2){
+	bit _bit_terminal0;
+	int  _bit_terminal0c = ??(2);
+	if(_bit_terminal0c == 0) { _term_flag_bit_terminal0_reduce0[0] =  true; _bit_terminal0 = val1; }
+	else if(_bit_terminal0c == 1) { _term_flag_bit_terminal0_reduce0[1] =  true; _bit_terminal0 = val2; }
+	else if(_bit_terminal0c == 2) { _term_flag_bit_terminal0_reduce0[2] =  true; _bit_terminal0 = loop0; }
+	else { assert false; }
+	bit _bit_terminal1;
+	int  _bit_terminal1c = ??(2);
+	if(_bit_terminal1c == 0) { _term_flag_bit_terminal1_reduce0[0] =  true; _bit_terminal1 = val1; }
+	else if(_bit_terminal1c == 1) { _term_flag_bit_terminal1_reduce0[1] =  true; _bit_terminal1 = val2; }
+	else if(_bit_terminal1c == 2) { _term_flag_bit_terminal1_reduce0[2] =  true; _bit_terminal1 = loop0; }
+	else { assert false; }
+	int _string_terminal0;
+	int  _string_terminal0c = ??(2);
+	if(_string_terminal0c == 0) { _term_flag_string_terminal0_reduce0[0] =  true; _string_terminal0 = key1; }
+	else if(_string_terminal0c == 1) { _term_flag_string_terminal0_reduce0[1] =  true; _string_terminal0 = key2; }
+	else if(_string_terminal0c == 2) { _term_flag_string_terminal0_reduce0[2] =  true; _string_terminal0 = ??; }
+	else { assert false; }
+	int _string_terminal1;
+	int  _string_terminal1c = ??(2);
+	if(_string_terminal1c == 0) { _term_flag_string_terminal1_reduce0[0] =  true; _string_terminal1 = key1; }
+	else if(_string_terminal1c == 1) { _term_flag_string_terminal1_reduce0[1] =  true; _string_terminal1 = key2; }
+	else if(_string_terminal1c == 2) { _term_flag_string_terminal1_reduce0[2] =  true; _string_terminal1 = ??; }
+	else { assert false; }
+	int c = ??(2);
+	if(c==0){ reduceExp0[0]=true; return (_bit_terminal0); }
+	else if(c==1){ reduceExp0[1]=true; return casper_str_equal((_string_terminal0),(_string_terminal1)); }
+	else if(c==2){ reduceExp0[2]=true; return CASPER_TRUE; }
+	else if(c==3){ reduceExp0[3]=true; return CASPER_FALSE; }
+	else { assert false; }
+	
+}
+
+generator bit bitReduceGenerator1(bit val1, bit val2){
+	bit _bit_terminal0;
+	int  _bit_terminal0c = ??(2);
+	if(_bit_terminal0c == 0) { _term_flag_bit_terminal0_reduce1[0] =  true; _bit_terminal0 = val1; }
+	else if(_bit_terminal0c == 1) { _term_flag_bit_terminal0_reduce1[1] =  true; _bit_terminal0 = val2; }
+	else if(_bit_terminal0c == 2) { _term_flag_bit_terminal0_reduce1[2] =  true; _bit_terminal0 = loop0; }
+	else { assert false; }
+	bit _bit_terminal1;
+	int  _bit_terminal1c = ??(2);
+	if(_bit_terminal1c == 0) { _term_flag_bit_terminal1_reduce1[0] =  true; _bit_terminal1 = val1; }
+	else if(_bit_terminal1c == 1) { _term_flag_bit_terminal1_reduce1[1] =  true; _bit_terminal1 = val2; }
+	else if(_bit_terminal1c == 2) { _term_flag_bit_terminal1_reduce1[2] =  true; _bit_terminal1 = loop0; }
+	else { assert false; }
+	int _string_terminal0;
+	int  _string_terminal0c = ??(2);
+	if(_string_terminal0c == 0) { _term_flag_string_terminal0_reduce1[0] =  true; _string_terminal0 = key1; }
+	else if(_string_terminal0c == 1) { _term_flag_string_terminal0_reduce1[1] =  true; _string_terminal0 = key2; }
+	else if(_string_terminal0c == 2) { _term_flag_string_terminal0_reduce1[2] =  true; _string_terminal0 = ??; }
+	else { assert false; }
+	int _string_terminal1;
+	int  _string_terminal1c = ??(2);
+	if(_string_terminal1c == 0) { _term_flag_string_terminal1_reduce1[0] =  true; _string_terminal1 = key1; }
+	else if(_string_terminal1c == 1) { _term_flag_string_terminal1_reduce1[1] =  true; _string_terminal1 = key2; }
+	else if(_string_terminal1c == 2) { _term_flag_string_terminal1_reduce1[2] =  true; _string_terminal1 = ??; }
+	else { assert false; }
+	int c = ??(2);
+	if(c==0){ reduceExp1[0]=true; return (_bit_terminal0); }
+	else if(c==1){ reduceExp1[1]=true; return casper_str_equal((_string_terminal0),(_string_terminal1)); }
+	else if(c==2){ reduceExp1[2]=true; return CASPER_TRUE; }
+	else if(c==3){ reduceExp1[3]=true; return CASPER_FALSE; }
+	else { assert false; }
+	
+}
+
+
+
+bit init_foundKey1(){
+	return {| CASPER_TRUE | CASPER_FALSE |};
+}
+
+bit init_foundKey2(){
+	return {| CASPER_TRUE | CASPER_FALSE |};
+}
+
+bit reduce_foundKey1(bit val1, bit val2){
+	return bitReduceGenerator0(val1, val2);
+}
+
+bit reduce_foundKey2(bit val1, bit val2){
+	return bitReduceGenerator1(val1, val2);
+}
+
+bit merge_foundKey1(bit val1, bit val2){
+	bit option1 = val1 || val2; bit option2 = val1 && val2; return {| val1 | option1 | option2 |};
+}
+bit merge_foundKey2(bit val1, bit val2){
+	bit option1 = val1 || val2; bit option2 = val1 && val2; return {| val1 | option1 | option2 |};
+}
+
+
+bit [2] reduce (int[3] words, bit foundKey1, bit foundKey10, bit foundKey2, bit foundKey20, int i, int i0) {
+	bit [2] casper_r;
+	casper_r[0] = init_foundKey1();
+	casper_r[1] = init_foundKey2();
+	
+	for (int casper_i = i0; casper_i < i; ++casper_i)
+	{
+		int[CASPER_NUM_OUTVARS] keys0;
+		bit[CASPER_NUM_OUTVARS] values0;
+		
+		int num_pairs = CASPER_NUM_OUTVARS;
+
+		map(words, casper_i, keys0, values0);
+
+		for (int casper_j = 0; casper_j < num_pairs; ++casper_j)
+		{ 
+	  		int key0 = keys0[casper_j];
+			
+	  		if(key0 == 0) {	}
+	  		else if (key0 == 1){ casper_r[0] = reduce_foundKey1(casper_r[0], values0[casper_j]); }
+			else if (key0 == 2){ casper_r[1] = reduce_foundKey2(casper_r[1], values0[casper_j]); }
+			
+	  		else{ assert 0; }
+		} 
+	}
+
+	casper_r[0] = merge_foundKey1(casper_r[0],foundKey10);
+	casper_r[1] = merge_foundKey2(casper_r[1],foundKey20);
+	
+
+	return casper_r;
+}

@@ -1,0 +1,1217 @@
+SKETCH version 1.7.2
+Benchmark = output/main_boolean_0.sk
+[SATBackend] === parallel trial w/ degree -1 (2) start ===
+Overriding inputs with 1
+boundmode = CALLNAME
+assuming  bounds checks
+BND W RAND = 20
+SOLVER RAND SEED = 323714114
+Reading SKETCH Program in File /home/Maaz/.sketch/tmp/main_boolean_0.sk/input0.tmp
+End of File
+ATTEMPT 0
+H__31_23 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__31_23: replacing with value 0 bnd= 1 totsize= 0
+H__32_23 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__32_23: replacing with value 0 bnd= 1 totsize= 0
+H__34_23 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 0
+H__35_23 odds = 1/5 0.099668 (1, 1)  try to replace
+H__35_23: replacing with value 21 bnd= 32 totsize= 3.46574
+H__37_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__37_24: replacing with value 0 bnd= 1 totsize= 3.46574
+H__38_24 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__38_24: replacing with value 0 bnd= 1 totsize= 3.46574
+H__39_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__39_24: replacing with value 0 bnd= 1 totsize= 3.46574
+H__41_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 3.46574
+H__43_24 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__43_24: replacing with value 1 bnd= 4 totsize= 4.85203
+H__44 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__44: replacing with value 2 bnd= 3 totsize= 5.95064
+H__0_17 odds = 1/5 0.099668 (0, 0)  try to replace
+H__0_17: replacing with value 1 bnd= 2 totsize= 6.64379
+H__2_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__2_17: replacing with value 2 bnd= 4 totsize= 8.03008
+H__3_17 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__3_17: replacing with value 21 bnd= 32 totsize= 11.4958
+H__4_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__4_17: replacing with value 3 bnd= 4 totsize= 12.8821
+H__6_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__6_17: replacing with value 3 bnd= 4 totsize= 14.2684
+H__9_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__9_18: replacing with value 2 bnd= 4 totsize= 15.6547
+H__11_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__11_18: replacing with value 0 bnd= 4 totsize= 17.041
+H__16_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__16_19: replacing with value 0 bnd= 4 totsize= 18.4273
+H__18_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__18_19: replacing with value 2 bnd= 4 totsize= 19.8136
+H__20_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__20_19: replacing with value 1 bnd= 4 totsize= 21.1999
+H__23_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__23_20: replacing with value 2 bnd= 4 totsize= 22.5862
+H__25_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__25_20: replacing with value 1 bnd= 4 totsize= 23.9725
+H__27_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__27_20: replacing with value 0 bnd= 4 totsize= 25.3588
+H__30_23 odds = 1/0.037037 1 (135, 135)  try to replace
+H__30_23: replacing with value 0 bnd= 1 totsize= 25.3588
+H__36_23 odds = 1/0.0362319 1 (138, 138)  try to replace
+H__36_23: replacing with value 0 bnd= 4 totsize= 26.7451
+* Final Problem size: Problem nodes = 550
+Assert at main_boolean_0.sk:76 (-1548720262108405254)
+********  0	ftime= 0	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:130 (-2528151675343118173)
+Problem became UNSAT.12= ASSERT 9 : Assert at main_boolean_0.sk:130 (-2528151675343118173)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:130 (-2528151675343118173)
+******** FAILED ********
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 0 : 26.7451 Round time:  0.094 ms 
+RNDDEG = 5
+SUMMRY , 1509, 1521, 1663, 1779, 1817, 1829, 1841, 1983, 2127, 1489, 9, 21, 133, 165, 307, 451, 589, 747, 893, 1033, 1181, 1321, 1461, 1497, 1805
+ charness = 0
+POST-SUMMRY , 9, 21, 133, 165, 307, 451, 589, 747, 893, 1033, 1181, 1321, 1461, 1489, 1497, 1509, 1521, 1663, 1779, 1805, 1817, 1829, 1841, 1983, 2127
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 1
+H__30_23 odds = 1/1 0.462117 (10, 10)  try to replace
+H__30_23: replacing with value 0 bnd= 1 totsize= 0
+H__31_23 odds = 1/1.25 0.379949 (8, 8)  try to replace
+H__31_23: replacing with value 0 bnd= 1 totsize= 0
+H__32_23 odds = 1/1 0.462117 (10, 10)  try to replace
+H__32_23: replacing with value 0 bnd= 1 totsize= 0
+H__36_23 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__36_23: replacing with value 1 bnd= 4 totsize= 1.38629
+H__39_24 odds = 1/1 0.462117 (10, 10)  try to replace
+H__39_24: replacing with value 0 bnd= 1 totsize= 1.38629
+H__2_17 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__2_17: replacing with value 0 bnd= 4 totsize= 2.77259
+H__6_17 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__6_17: replacing with value 2 bnd= 4 totsize= 4.15888
+H__9_18 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__9_18: replacing with value 1 bnd= 4 totsize= 5.54518
+H__12_18 odds = 1/5 0.099668 (2, 2)  try to replace
+H__12_18: replacing with value 24 bnd= 32 totsize= 9.01091
+H__18_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__18_19: replacing with value 2 bnd= 4 totsize= 10.3972
+H__20_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__20_19: replacing with value 3 bnd= 4 totsize= 11.7835
+H__34_23 odds = 1/0.0847458 0.999985 (118, 118)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 11.7835
+H__37_24 odds = 1/0.0689655 0.999999 (145, 145)  try to replace
+H__37_24: replacing with value 0 bnd= 1 totsize= 11.7835
+H__38_24 odds = 1/0.0877193 0.999978 (114, 114)  try to replace
+H__38_24: replacing with value 0 bnd= 1 totsize= 11.7835
+H__41_24 odds = 1/0.0833333 0.999988 (120, 120)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 11.7835
+H__43_24 odds = 1/0.0724638 0.999998 (138, 138)  try to replace
+H__43_24: replacing with value 0 bnd= 4 totsize= 13.1698
+H__28 odds = 1/0.555556 0.716298 (18, 18)  try to replace
+H__28: replacing with value 0 bnd= 1 totsize= 13.1698
+* Final Problem size: Problem nodes = 1016
+regen H__45
+********  0	ftime= 0	ctime= 0.002
+Assert at main_boolean_0.sk:103 (1643169775729241508)
+********  1	ftime= 0.002	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:103 (1643169775729241508)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:103 (1643169775729241508)
+Problem became UNSAT.89= ASSERT (0) : Assert at main_boolean_0.sk:103 (1643169775729241508)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:103 (1643169775729241508)
+******** FAILED ********
+* FIND TIME:  0.001 ms 0.003 ms
+* CHECK TIME:  0.001 ms 0.003 ms
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.003 CHECK TIME 0.003 TOTAL TIME 0.006
+RESULT = 1  
+**ROUND 1 : 13.1698 Round time:  0.081 ms 
+RNDDEG = 10
+SUMMRY , 1497, 1509, 1521, 1807, 1841, 17, 305, 449, 711, 893, 1037, 1663, 1817, 1829, 1983, 2125, 375
+ charness = 0
+POST-SUMMRY , 17, 305, 375, 449, 711, 893, 1037, 1497, 1509, 1521, 1663, 1807, 1817, 1829, 1841, 1983, 2125
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 2
+H__31_23 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__31_23: replacing with value 0 bnd= 1 totsize= 0
+H__36_23 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__36_23: replacing with value 1 bnd= 4 totsize= 1.38629
+H__37_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__37_24: replacing with value 0 bnd= 1 totsize= 1.38629
+H__39_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__39_24: replacing with value 0 bnd= 1 totsize= 1.38629
+H__41_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 1.38629
+H__43_24 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__43_24: replacing with value 0 bnd= 4 totsize= 2.77259
+H__44 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__44: replacing with value 1 bnd= 3 totsize= 3.8712
+H__2_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__2_17: replacing with value 0 bnd= 4 totsize= 5.2575
+H__3_17 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__3_17: replacing with value 18 bnd= 32 totsize= 8.72323
+H__6_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__6_17: replacing with value 1 bnd= 4 totsize= 10.1095
+H__9_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__9_18: replacing with value 1 bnd= 4 totsize= 11.4958
+H__11_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__11_18: replacing with value 2 bnd= 4 totsize= 12.8821
+H__13_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__13_18: replacing with value 3 bnd= 4 totsize= 14.2684
+H__16_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__16_19: replacing with value 3 bnd= 4 totsize= 15.6547
+H__17_19 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__17_19: replacing with value 7 bnd= 32 totsize= 19.1204
+H__18_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__18_19: replacing with value 3 bnd= 4 totsize= 20.5067
+H__20_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__20_19: replacing with value 3 bnd= 4 totsize= 21.893
+H__21_20 odds = 1/5 0.099668 (0, 0)  try to replace
+H__21_20: replacing with value 1 bnd= 2 totsize= 22.5862
+H__23_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__23_20: replacing with value 0 bnd= 4 totsize= 23.9725
+H__25_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__25_20: replacing with value 2 bnd= 4 totsize= 25.3588
+H__27_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__27_20: replacing with value 1 bnd= 4 totsize= 26.7451
+H__30_23 odds = 1/0.0381679 1 (131, 131)  try to replace
+H__30_23: replacing with value 0 bnd= 1 totsize= 26.7451
+H__32_23 odds = 1/0.0423729 1 (118, 118)  try to replace
+H__32_23: replacing with value 0 bnd= 1 totsize= 26.7451
+H__34_23 odds = 1/0.0423729 1 (118, 118)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 26.7451
+H__38_24 odds = 1/0.0438596 1 (114, 114)  try to replace
+H__38_24: replacing with value 0 bnd= 1 totsize= 26.7451
+* Final Problem size: Problem nodes = 773
+Assert at main_boolean_0.sk:76 (-1548720262108405254)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:103 (1643169775729241508)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:103 (1643169775729241508)
+Problem became UNSAT.82= ASSERT (0) : Assert at main_boolean_0.sk:103 (1643169775729241508)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:103 (1643169775729241508)
+******** FAILED ********
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
+RESULT = 1  
+**ROUND 2 : 26.7451 Round time:  0.083 ms 
+RNDDEG = 5
+SUMMRY , 1509, 1807, 1817, 1841, 1983, 2125, 1487, 17, 127, 303, 449, 593, 737, 753, 835, 895, 1037, 1169, 1177, 1323, 1463, 1497, 1521, 1663, 1829
+ charness = 0
+POST-SUMMRY , 17, 127, 303, 449, 593, 737, 753, 835, 895, 1037, 1169, 1177, 1323, 1463, 1487, 1497, 1509, 1521, 1663, 1807, 1817, 1829, 1841, 1983, 2125
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 3
+H__36_23 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__36_23: replacing with value 0 bnd= 4 totsize= 1.38629
+H__38_24 odds = 1/1.25 0.379949 (8, 8)  try to replace
+H__38_24: replacing with value 0 bnd= 1 totsize= 1.38629
+H__39_24 odds = 1/1 0.462117 (10, 10)  try to replace
+H__39_24: replacing with value 0 bnd= 1 totsize= 1.38629
+H__41_24 odds = 1/1 0.462117 (10, 10)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 1.38629
+H__43_24 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__43_24: replacing with value 0 bnd= 4 totsize= 2.77259
+H__4_17 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__4_17: replacing with value 3 bnd= 4 totsize= 4.15888
+H__6_17 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__6_17: replacing with value 1 bnd= 4 totsize= 5.54518
+H__12_18 odds = 1/5 0.099668 (2, 2)  try to replace
+H__12_18: replacing with value 17 bnd= 32 totsize= 9.01091
+H__16_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__16_19: replacing with value 3 bnd= 4 totsize= 10.3972
+H__19_19 odds = 1/5 0.099668 (2, 2)  try to replace
+H__19_19: replacing with value 12 bnd= 32 totsize= 13.8629
+H__20_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__20_19: replacing with value 2 bnd= 4 totsize= 15.2492
+H__23_20 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__23_20: replacing with value 2 bnd= 4 totsize= 16.6355
+H__24_20 odds = 1/5 0.099668 (2, 2)  try to replace
+H__24_20: replacing with value 11 bnd= 32 totsize= 20.1013
+H__25_20 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__25_20: replacing with value 0 bnd= 4 totsize= 21.4876
+H__30_23 odds = 1/0.035461 1 (282, 282)  try to replace
+H__30_23: replacing with value 0 bnd= 1 totsize= 21.4876
+H__31_23 odds = 1/0.0446429 1 (224, 224)  try to replace
+H__31_23: replacing with value 0 bnd= 1 totsize= 21.4876
+H__32_23 odds = 1/0.0438596 1 (228, 228)  try to replace
+H__32_23: replacing with value 0 bnd= 1 totsize= 21.4876
+H__34_23 odds = 1/0.0438596 1 (228, 228)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 21.4876
+H__37_24 odds = 1/0.035461 1 (282, 282)  try to replace
+H__37_24: replacing with value 0 bnd= 1 totsize= 21.4876
+H__29 odds = 1/0.555556 0.716298 (18, 18)  try to replace
+H__29: replacing with value 0 bnd= 1 totsize= 21.4876
+* Final Problem size: Problem nodes = 1423
+Assert at main_boolean_0.sk:76 (-1548720262108405254)
+********  0	ftime= 0	ctime= 0.002
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:92 (-466491054949896119)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:92 (-466491054949896119)
+Problem became UNSAT.222= ASSERT 221 : Assert at main_boolean_0.sk:92 (-466491054949896119)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:92 (-466491054949896119)
+******** FAILED ********
+* FIND TIME:  0.002 ms 
+* CHECK TIME:  0.002 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.002 CHECK TIME 0.002 TOTAL TIME 0.004
+RESULT = 1  
+**ROUND 3 : 21.4876 Round time:  0.084 ms 
+RNDDEG = 10
+SUMMRY , 1805, 1829, 1841, 1983, 2125, 165, 303, 697, 753, 987, 1035, 1181, 1273, 1319, 1497, 1509, 1521, 1663, 1817, 1105
+ charness = 0
+POST-SUMMRY , 165, 303, 697, 753, 987, 1035, 1105, 1181, 1273, 1319, 1497, 1509, 1521, 1663, 1805, 1817, 1829, 1841, 1983, 2125
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 4
+Nothing read
+cur=5 next=10 scorecur=24 scorenext=14
+Switch because next is better
+Averages 14.8336, 24.3184
+H__30_23 odds = 1/1 0.462117 (10, 10)  try to replace
+H__30_23: replacing with value 0 bnd= 1 totsize= 0
+H__31_23 odds = 1/1.25 0.379949 (8, 8)  try to replace
+H__31_23: replacing with value 0 bnd= 1 totsize= 0
+H__34_23 odds = 1/1 0.462117 (10, 10)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 0
+H__36_23 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__36_23: replacing with value 2 bnd= 4 totsize= 1.38629
+H__44 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__44: replacing with value 2 bnd= 3 totsize= 2.48491
+H__6_17 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__6_17: replacing with value 3 bnd= 4 totsize= 3.8712
+H__9_18 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__9_18: replacing with value 0 bnd= 4 totsize= 5.2575
+H__10_18 odds = 1/5 0.099668 (2, 2)  try to replace
+H__10_18: replacing with value 14 bnd= 32 totsize= 8.72323
+H__13_18 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__13_18: replacing with value 2 bnd= 4 totsize= 10.1095
+H__16_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__16_19: replacing with value 1 bnd= 4 totsize= 11.4958
+H__18_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__18_19: replacing with value 0 bnd= 4 totsize= 12.8821
+H__25_20 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__25_20: replacing with value 1 bnd= 4 totsize= 14.2684
+H__27_20 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__27_20: replacing with value 1 bnd= 4 totsize= 15.6547
+H__32_23 odds = 1/0.0847458 0.999985 (118, 118)  try to replace
+H__32_23: replacing with value 0 bnd= 1 totsize= 15.6547
+H__37_24 odds = 1/0.0689655 0.999999 (145, 145)  try to replace
+H__37_24: replacing with value 0 bnd= 1 totsize= 15.6547
+H__38_24 odds = 1/0.0877193 0.999978 (114, 114)  try to replace
+H__38_24: replacing with value 0 bnd= 1 totsize= 15.6547
+H__39_24 odds = 1/0.0833333 0.999988 (120, 120)  try to replace
+H__39_24: replacing with value 0 bnd= 1 totsize= 15.6547
+H__41_24 odds = 1/0.0833333 0.999988 (120, 120)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 15.6547
+H__43_24 odds = 1/0.0724638 0.999998 (138, 138)  try to replace
+H__43_24: replacing with value 2 bnd= 4 totsize= 17.041
+* Final Problem size: Problem nodes = 1152
+Assert at main_boolean_0.sk:76 (-1548720262108405254)
+********  0	ftime= 0	ctime= 0.001
+Assert at main_boolean_0.sk:382 (2960626505415363618)
+********  1	ftime= 0.002	ctime= 0.002
+Assert at main_boolean_0.sk:92 (-466491054949896119)
+********  2	ftime= 0.002	ctime= 0.001
+******** FAILED ********
+* FIND TIME:  0.002 ms 0.006 ms
+* CHECK TIME:  0.001 ms 0.004 ms
+ *FAILED IN 3 iterations.
+ *FIND TIME 0.006 CHECK TIME 0.004 TOTAL TIME 0.01
+RESULT = 1  
+**ROUND 4 : 17.041 Round time:  0.074 ms 
+RNDDEG = 10
+SUMMRY , 1497, 1509, 1663, 1809, 1489, 307, 447, 549, 735, 749, 889, 1321, 1463, 1521, 1817, 1829, 1841, 1983, 2129
+ charness = 0
+POST-SUMMRY , 307, 447, 549, 735, 749, 889, 1321, 1463, 1489, 1497, 1509, 1521, 1663, 1809, 1817, 1829, 1841, 1983, 2129
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 5
+H__30_23 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__30_23: replacing with value 0 bnd= 1 totsize= 0
+H__31_23 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__31_23: replacing with value 0 bnd= 1 totsize= 0
+H__32_23 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__32_23: replacing with value 0 bnd= 1 totsize= 0
+H__34_23 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 0
+H__36_23 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__36_23: replacing with value 1 bnd= 4 totsize= 1.38629
+H__39_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__39_24: replacing with value 0 bnd= 1 totsize= 1.38629
+H__41_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 1.38629
+H__43_24 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__43_24: replacing with value 3 bnd= 4 totsize= 2.77259
+H__46 odds = 1/5 0.099668 (1, 1)  try to replace
+H__46: replacing with value 1 bnd= 2 totsize= 3.46574
+H__45 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__45: replacing with value 1 bnd= 3 totsize= 4.56435
+H__2_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__2_17: replacing with value 1 bnd= 4 totsize= 5.95064
+H__3_17 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__3_17: replacing with value 17 bnd= 32 totsize= 9.41638
+H__4_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__4_17: replacing with value 1 bnd= 4 totsize= 10.8027
+H__6_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__6_17: replacing with value 0 bnd= 4 totsize= 12.189
+H__9_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__9_18: replacing with value 2 bnd= 4 totsize= 13.5753
+H__10_18 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__10_18: replacing with value 17 bnd= 32 totsize= 17.041
+H__11_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__11_18: replacing with value 1 bnd= 4 totsize= 18.4273
+H__12_18 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__12_18: replacing with value 6 bnd= 32 totsize= 21.893
+H__13_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__13_18: replacing with value 2 bnd= 4 totsize= 23.2793
+H__16_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__16_19: replacing with value 2 bnd= 4 totsize= 24.6656
+H__18_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__18_19: replacing with value 3 bnd= 4 totsize= 26.0519
+H__20_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__20_19: replacing with value 0 bnd= 4 totsize= 27.4382
+H__23_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__23_20: replacing with value 1 bnd= 4 totsize= 28.8245
+H__24_20 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__24_20: replacing with value 16 bnd= 32 totsize= 32.2902
+H__25_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__25_20: replacing with value 1 bnd= 4 totsize= 33.6765
+H__27_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__27_20: replacing with value 0 bnd= 4 totsize= 35.0628
+* Final Problem size: Problem nodes = 358
+Assert at main_boolean_0.sk:76 (-1548720262108405254)
+********  0	ftime= 0	ctime= 0
+Assert at main_boolean_0.sk:92 (-466491054949896119)
+********  1	ftime= 0.001	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:92 (-466491054949896119)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:92 (-466491054949896119)
+Problem became UNSAT.34= ASSERT 7 : Assert at main_boolean_0.sk:92 (-466491054949896119)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:92 (-466491054949896119)
+******** FAILED ********
+* FIND TIME:  0 ms 0.001 ms
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
+RESULT = 1  
+**ROUND 5 : 35.0628 Round time:  0.044 ms 
+RNDDEG = 5
+SUMMRY , 1497, 1509, 1521, 1663, 1807, 1841, 1983, 2131, 5, 1475, 19, 125, 161, 301, 451, 555, 591, 675, 735, 751, 895, 1031, 1179, 1283, 1321, 1461
+ charness = 0
+POST-SUMMRY , 5, 19, 125, 161, 301, 451, 555, 591, 675, 735, 751, 895, 1031, 1179, 1283, 1321, 1461, 1475, 1497, 1509, 1521, 1663, 1807, 1841, 1983, 2131
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 6
+H__38_24 odds = 1/1.25 0.379949 (8, 8)  try to replace
+H__38_24: replacing with value 0 bnd= 1 totsize= 0
+H__39_24 odds = 1/1 0.462117 (10, 10)  try to replace
+H__39_24: replacing with value 0 bnd= 1 totsize= 0
+H__41_24 odds = 1/1 0.462117 (10, 10)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 0
+H__1_17 odds = 1/10 0.0499584 (0, 0)  try to replace
+H__1_17: replacing with value 1 bnd= 2 totsize= 0.693147
+H__3_17 odds = 1/5 0.099668 (2, 2)  try to replace
+H__3_17: replacing with value 10 bnd= 32 totsize= 4.15888
+H__6_17 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__6_17: replacing with value 2 bnd= 4 totsize= 5.54518
+H__9_18 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__9_18: replacing with value 1 bnd= 4 totsize= 6.93147
+H__13_18 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__13_18: replacing with value 3 bnd= 4 totsize= 8.31777
+H__18_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__18_19: replacing with value 0 bnd= 4 totsize= 9.70406
+H__25_20 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__25_20: replacing with value 0 bnd= 4 totsize= 11.0904
+H__27_20 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__27_20: replacing with value 3 bnd= 4 totsize= 12.4766
+H__30_23 odds = 1/0.0380228 1 (263, 263)  try to replace
+H__30_23: replacing with value 0 bnd= 1 totsize= 12.4766
+H__31_23 odds = 1/0.0446429 1 (224, 224)  try to replace
+H__31_23: replacing with value 0 bnd= 1 totsize= 12.4766
+H__32_23 odds = 1/0.0434783 1 (230, 230)  try to replace
+H__32_23: replacing with value 0 bnd= 1 totsize= 12.4766
+H__34_23 odds = 1/0.0434783 1 (230, 230)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 12.4766
+H__36_23 odds = 1/0.037594 1 (266, 266)  try to replace
+H__36_23: replacing with value 3 bnd= 4 totsize= 13.8629
+H__37_24 odds = 1/0.0380228 1 (263, 263)  try to replace
+H__37_24: replacing with value 0 bnd= 1 totsize= 13.8629
+H__43_24 odds = 1/0.037594 1 (266, 266)  try to replace
+H__43_24: replacing with value 1 bnd= 4 totsize= 15.2492
+* Final Problem size: Problem nodes = 1825
+Assert at main_boolean_0.sk:76 (-1548720262108405254)
+********  0	ftime= 0	ctime= 0.003
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:134 (-4930568970833299034)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:134 (-4930568970833299034)
+Problem became UNSAT.25= ASSERT (0) : Assert at main_boolean_0.sk:134 (-4930568970833299034)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:134 (-4930568970833299034)
+******** FAILED ********
+* FIND TIME:  0.003 ms 
+* CHECK TIME:  0.003 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.003 CHECK TIME 0.003 TOTAL TIME 0.006
+RESULT = 1  
+**ROUND 6 : 15.2492 Round time:  999.089 ms 
+RNDDEG = 10
+SUMMRY , 1829, 1841, 1983, 11, 111, 305, 449, 737, 889, 1319, 1467, 1497, 1509, 1521, 1663, 1811, 1817, 2127
+ charness = 0
+POST-SUMMRY , 11, 111, 305, 449, 737, 889, 1319, 1467, 1497, 1509, 1521, 1663, 1811, 1817, 1829, 1841, 1983, 2127
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 7
+H__30_23 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__30_23: replacing with value 0 bnd= 1 totsize= 0
+H__31_23 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__31_23: replacing with value 0 bnd= 1 totsize= 0
+H__33_23 odds = 1/5 0.099668 (1, 1)  try to replace
+H__33_23: replacing with value 4 bnd= 32 totsize= 3.46574
+H__34_23 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 3.46574
+H__36_23 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__36_23: replacing with value 1 bnd= 4 totsize= 4.85203
+H__37_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__37_24: replacing with value 0 bnd= 1 totsize= 4.85203
+H__41_24 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 4.85203
+H__43_24 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__43_24: replacing with value 2 bnd= 4 totsize= 6.23832
+H__47 odds = 1/5 0.099668 (1, 1)  try to replace
+H__47: replacing with value 1 bnd= 2 totsize= 6.93147
+H__44 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__44: replacing with value 2 bnd= 3 totsize= 8.03008
+H__2_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__2_17: replacing with value 3 bnd= 4 totsize= 9.41638
+H__3_17 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__3_17: replacing with value 17 bnd= 32 totsize= 12.8821
+H__4_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__4_17: replacing with value 0 bnd= 4 totsize= 14.2684
+H__6_17 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__6_17: replacing with value 0 bnd= 4 totsize= 15.6547
+H__28 odds = 1/5 0.099668 (1, 1)  try to replace
+H__28: replacing with value 1 bnd= 32 totsize= 19.1204
+H__7_18 odds = 1/5 0.099668 (0, 0)  try to replace
+H__7_18: replacing with value 1 bnd= 2 totsize= 19.8136
+H__9_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__9_18: replacing with value 2 bnd= 4 totsize= 21.1999
+H__10_18 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__10_18: replacing with value 7 bnd= 32 totsize= 24.6656
+H__11_18 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__11_18: replacing with value 0 bnd= 4 totsize= 26.0519
+H__14_19 odds = 1/5 0.099668 (0, 0)  try to replace
+H__14_19: replacing with value 1 bnd= 2 totsize= 26.7451
+H__16_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__16_19: replacing with value 2 bnd= 4 totsize= 28.1314
+H__18_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__18_19: replacing with value 1 bnd= 4 totsize= 29.5176
+H__20_19 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__20_19: replacing with value 0 bnd= 4 totsize= 30.9039
+H__29 odds = 1/5 0.099668 (1, 1)  try to replace
+H__29: replacing with value 21 bnd= 32 totsize= 34.3697
+H__22_20 odds = 1/5 0.099668 (0, 0)  try to replace
+H__22_20: replacing with value 1 bnd= 2 totsize= 35.0628
+H__23_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__23_20: replacing with value 0 bnd= 4 totsize= 36.4491
+H__24_20 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__24_20: replacing with value 27 bnd= 32 totsize= 39.9149
+H__25_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__25_20: replacing with value 2 bnd= 4 totsize= 41.3011
+H__27_20 odds = 1/0.384615 0.861723 (13, 13)  try to replace
+H__27_20: replacing with value 0 bnd= 4 totsize= 42.6874
+* Final Problem size: Problem nodes = 318
+Assert at main_boolean_0.sk:194 (-77726358905723621)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:194 (-77726358905723621)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:194 (-77726358905723621)
+Problem became UNSAT.11= ASSERT (0) : Assert at main_boolean_0.sk:194 (-77726358905723621)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:194 (-77726358905723621)
+******** FAILED ********
+* FIND TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 7 : 42.6874 Round time:  0.045 ms 
+RNDDEG = 5
+SUMMRY , 1497, 1509, 1603, 1663, 1807, 1817, 1983, 2129, 3, 1489, 23, 125, 159, 301, 377, 439, 451, 535, 589, 739, 751, 891, 1031, 1147, 1171, 1177, 1305, 1323, 1461
+ charness = 0
+POST-SUMMRY , 3, 23, 125, 159, 301, 377, 439, 451, 535, 589, 739, 751, 891, 1031, 1147, 1171, 1177, 1305, 1323, 1461, 1489, 1497, 1509, 1603, 1663, 1807, 1817, 1983, 2129
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 8
+H__32_23 odds = 1/1 0.462117 (10, 10)  try to replace
+H__32_23: replacing with value 0 bnd= 1 totsize= 0
+H__34_23 odds = 1/1 0.462117 (10, 10)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 0
+H__37_24 odds = 1/1 0.462117 (10, 10)  try to replace
+H__37_24: replacing with value 0 bnd= 1 totsize= 0
+H__39_24 odds = 1/1 0.462117 (10, 10)  try to replace
+H__39_24: replacing with value 0 bnd= 1 totsize= 0
+H__41_24 odds = 1/1 0.462117 (10, 10)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 0
+H__43_24 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__43_24: replacing with value 2 bnd= 4 totsize= 1.38629
+H__45 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__45: replacing with value 0 bnd= 3 totsize= 2.48491
+H__2_17 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__2_17: replacing with value 2 bnd= 4 totsize= 3.8712
+H__4_17 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__4_17: replacing with value 1 bnd= 4 totsize= 5.2575
+H__6_17 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__6_17: replacing with value 0 bnd= 4 totsize= 6.64379
+H__9_18 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__9_18: replacing with value 3 bnd= 4 totsize= 8.03008
+H__13_18 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__13_18: replacing with value 2 bnd= 4 totsize= 9.41638
+H__16_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__16_19: replacing with value 0 bnd= 4 totsize= 10.8027
+H__18_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__18_19: replacing with value 0 bnd= 4 totsize= 12.189
+H__20_19 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__20_19: replacing with value 3 bnd= 4 totsize= 13.5753
+H__23_20 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__23_20: replacing with value 0 bnd= 4 totsize= 14.9616
+H__25_20 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__25_20: replacing with value 2 bnd= 4 totsize= 16.3479
+H__27_20 odds = 1/0.769231 0.57167 (13, 13)  try to replace
+H__27_20: replacing with value 2 bnd= 4 totsize= 17.7341
+* Final Problem size: Problem nodes = 403
+regen H__44
+********  0	ftime= 0	ctime= 0
+Assert at main_boolean_0.sk:92 (-466491054949896119)
+********  1	ftime= 0.002	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:92 (-466491054949896119)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:92 (-466491054949896119)
+Problem became UNSAT.47= ASSERT 46 : Assert at main_boolean_0.sk:92 (-466491054949896119)
+  UNSATISFIABLE ASSERTION Assert at main_boolean_0.sk:92 (-466491054949896119)
+******** FAILED ********
+* FIND TIME:  0.001 ms 0.003 ms
+* CHECK TIME:  0 ms 
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.003 CHECK TIME 0 TOTAL TIME 0.003
+RESULT = 1  
+**ROUND 8 : 17.7341 Round time:  0.047 ms 
+RNDDEG = 10
+SUMMRY , 1521, 1663, 1817, 1841, 1983, 2129, 1473, 21, 161, 301, 453, 735, 747, 889, 1037, 1177, 1323, 1465
+ charness = 0
+POST-SUMMRY , 21, 161, 301, 453, 735, 747, 889, 1037, 1177, 1323, 1465, 1473, 1521, 1663, 1817, 1841, 1983, 2129
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 9
+Nothing read
+cur=10 next=5 scorecur=16 scorenext=30
+ Switch by luck
+Averages 30.0406, 16.1874
+Climbing to 10, 20
+H__36_23 odds = 1/1.53846 0.314021 (13, 13)  try to replace
+H__36_23: replacing with value 1 bnd= 4 totsize= 1.38629
+H__9_18 odds = 1/1.53846 0.314021 (13, 13)  try to replace
+H__9_18: replacing with value 1 bnd= 4 totsize= 2.77259
+H__11_18 odds = 1/1.53846 0.314021 (13, 13)  try to replace
+H__11_18: replacing with value 2 bnd= 4 totsize= 4.15888
+H__25_20 odds = 1/1.53846 0.314021 (13, 13)  try to replace
+H__25_20: replacing with value 3 bnd= 4 totsize= 5.54518
+H__30_23 odds = 1/0.0719424 0.999998 (278, 278)  try to replace
+H__30_23: replacing with value 0 bnd= 1 totsize= 5.54518
+H__31_23 odds = 1/0.0892857 0.999973 (224, 224)  try to replace
+H__31_23: replacing with value 0 bnd= 1 totsize= 5.54518
+H__32_23 odds = 1/0.0877193 0.999978 (228, 228)  try to replace
+H__32_23: replacing with value 0 bnd= 1 totsize= 5.54518
+H__34_23 odds = 1/0.0877193 0.999978 (228, 228)  try to replace
+H__34_23: replacing with value 0 bnd= 1 totsize= 5.54518
+H__37_24 odds = 1/0.070922 0.999998 (282, 282)  try to replace
+H__37_24: replacing with value 0 bnd= 1 totsize= 5.54518
+H__38_24 odds = 1/0.0892857 0.999973 (224, 224)  try to replace
+H__38_24: replacing with value 0 bnd= 1 totsize= 5.54518
+H__39_24 odds = 1/0.0869565 0.99998 (230, 230)  try to replace
+H__39_24: replacing with value 0 bnd= 1 totsize= 5.54518
+H__41_24 odds = 1/0.0869565 0.99998 (230, 230)  try to replace
+H__41_24: replacing with value 0 bnd= 1 totsize= 5.54518
+H__43_24 odds = 1/0.075188 0.999997 (266, 266)  try to replace
+H__43_24: replacing with value 1 bnd= 4 totsize= 6.93147
+H__20_19 odds = 1/0.571429 0.703906 (35, 35)  try to replace
+H__20_19: replacing with value 1 bnd= 4 totsize= 8.31777
+H__6_17 odds = 1/0.571429 0.703906 (35, 35)  try to replace
+H__6_17: replacing with value 1 bnd= 4 totsize= 9.70406
+* Final Problem size: Problem nodes = 1794
+Assert at main_boolean_0.sk:76 (-1548720262108405254)
+********  0	ftime= 0	ctime= 0.003
+Assert at main_boolean_0.sk:92 (-466491054949896119)
+********  1	ftime= 0.006	ctime= 0.002
+Assert at main_boolean_0.sk:92 (-466491054949896119)
+********  2	ftime= 0.005	ctime= 0.003
+Assert at main_boolean_0.sk:92 (-466491054949896119)
+********  3	ftime= 0.005	ctime= 0.003
+Assert at main_boolean_0.sk:92 (-466491054949896119)
+********  4	ftime= 0.005	ctime= 0.003
+Assert at main_boolean_0.sk:92 (-466491054949896119)
+********  5	ftime= 0.007	ctime= 0.003
+Assert at main_boolean_0.sk:92 (-466491054949896119)
+********  6	ftime= 0.004	ctime= 0.002
+After all optim
+********  7	ftime= 0.007	ctime= 0.006
+ *GOT THE CORRECT ANSWER IN 8 iterations.
+ *FIND TIME 0.039 CHECK TIME 0.025 TOTAL TIME 0.064
+RESULT = 0  
+**ROUND 9 : 9.70406 Round time:  0.16 ms 
+RNDDEG = 20
+return 0
+
+----- Statistics -----
+Total elapsed time (ms):  999.919
+Model building time (ms): 0.098
+Solution time (ms):       999.815
+Max virtual mem (bytes):  96923648
+Max resident mem (bytes): 4460544
+Max private mem (bytes):  93331456
+ALL CORRECT
+
+[SATBackend] === parallel trial w/ degree -1 (2) solved ===
+[SATBackend] === resolved within 1 complete parallel trial(s)
+[SATBackend] destroying java.lang.UNIXProcess@46f3978d
+[SATBackend] destroying java.lang.UNIXProcess@2262ce5f
+[SATBackend] === parallel trial w/ degree -1 (0) done, but aborted ===
+[SATBackend] === parallel trial w/ degree -1 (1) done, but aborted ===
+/* BEGIN PACKAGE ANONYMOUS*/
+struct StringMatch {
+}
+/*main_boolean_0.sk:51*/
+
+void _main (bit[2] bitSet, int[6] intSet, bit csg_test_val1, bit csg_test_val2, ref global bit CASPER_FALSE__ANONYMOUS_s165, ref global bit CASPER_TRUE__ANONYMOUS_s166, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s289, ref global bit[1] _term_flag_bit_terminal0_map_c1__ANONYMOUS_s206, ref global bit[1] _term_flag_bit_terminal0_map_v0__ANONYMOUS_s321, ref global bit[1] _term_flag_bit_terminal0_map_v1__ANONYMOUS_s201, ref global bit[3] _term_flag_bit_terminal0_reduce0__ANONYMOUS_s207, ref global bit[3] _term_flag_bit_terminal0_reduce1__ANONYMOUS_s346, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s290, ref global bit[1] _term_flag_bit_terminal1_map_c1__ANONYMOUS_s208, ref global bit[1] _term_flag_bit_terminal1_map_v0__ANONYMOUS_s322, ref global bit[1] _term_flag_bit_terminal1_map_v1__ANONYMOUS_s202, ref global bit[3] _term_flag_bit_terminal1_reduce0__ANONYMOUS_s209, ref global bit[3] _term_flag_bit_terminal1_reduce1__ANONYMOUS_s347, ref global bit[4] _term_flag_string_terminal0_map_c0__ANONYMOUS_s291, ref global bit[4] _term_flag_string_terminal0_map_c1__ANONYMOUS_s210, ref global bit[4] _term_flag_string_terminal0_map_v0__ANONYMOUS_s323, ref global bit[4] _term_flag_string_terminal0_map_v1__ANONYMOUS_s203, ref global bit[3] _term_flag_string_terminal0_reduce0__ANONYMOUS_s211, ref global bit[3] _term_flag_string_terminal0_reduce1__ANONYMOUS_s348, ref global bit[4] _term_flag_string_terminal1_map_c0__ANONYMOUS_s292, ref global bit[4] _term_flag_string_terminal1_map_c1__ANONYMOUS_s212, ref global bit[4] _term_flag_string_terminal1_map_v0__ANONYMOUS_s324, ref global bit[4] _term_flag_string_terminal1_map_v1__ANONYMOUS_s204, ref global bit[3] _term_flag_string_terminal1_reduce0__ANONYMOUS_s213, ref global bit[3] _term_flag_string_terminal1_reduce1__ANONYMOUS_s349, ref global int key1__ANONYMOUS_s167, ref global int key2__ANONYMOUS_s168, ref global bit loop0__ANONYMOUS_s169, ref global bit[4] mapExp_c0__ANONYMOUS_s170, ref global bit[4] mapExp_c1__ANONYMOUS_s171, ref global bit[4] mapExp_v0__ANONYMOUS_s325, ref global bit[4] mapExp_v1__ANONYMOUS_s205, ref global bit[4] reduceExp0__ANONYMOUS_s172, ref global bit[4] reduceExp1__ANONYMOUS_s173)/*main_boolean_0.sk:51*/
+{
+  int[3] words = {0,0,0};
+  words[0] = intSet[3];
+  words[1] = intSet[2];
+  words[2] = intSet[1];
+  CASPER_TRUE__ANONYMOUS_s166 = 1;
+  CASPER_FALSE__ANONYMOUS_s165 = 0;
+  key1__ANONYMOUS_s167 = intSet[5];
+  key2__ANONYMOUS_s168 = intSet[4];
+  loop0__ANONYMOUS_s169 = 0;
+  int i;
+  i = intSet[0];
+  bit _out_s37 = 0;
+  loopInvariant(words, 0, 0, 0, 0, 0, 0, _out_s37, CASPER_FALSE__ANONYMOUS_s165, CASPER_TRUE__ANONYMOUS_s166, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s289, _term_flag_bit_terminal0_map_c1__ANONYMOUS_s206, _term_flag_bit_terminal0_map_v0__ANONYMOUS_s321, _term_flag_bit_terminal0_map_v1__ANONYMOUS_s201, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s207, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s346, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s290, _term_flag_bit_terminal1_map_c1__ANONYMOUS_s208, _term_flag_bit_terminal1_map_v0__ANONYMOUS_s322, _term_flag_bit_terminal1_map_v1__ANONYMOUS_s202, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s209, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s347, _term_flag_string_terminal0_map_c0__ANONYMOUS_s291, _term_flag_string_terminal0_map_c1__ANONYMOUS_s210, _term_flag_string_terminal0_map_v0__ANONYMOUS_s323, _term_flag_string_terminal0_map_v1__ANONYMOUS_s203, _term_flag_string_terminal0_reduce0__ANONYMOUS_s211, _term_flag_string_terminal0_reduce1__ANONYMOUS_s348, _term_flag_string_terminal1_map_c0__ANONYMOUS_s292, _term_flag_string_terminal1_map_c1__ANONYMOUS_s212, _term_flag_string_terminal1_map_v0__ANONYMOUS_s324, _term_flag_string_terminal1_map_v1__ANONYMOUS_s204, _term_flag_string_terminal1_reduce0__ANONYMOUS_s213, _term_flag_string_terminal1_reduce1__ANONYMOUS_s349, key1__ANONYMOUS_s167, key2__ANONYMOUS_s168, loop0__ANONYMOUS_s169, mapExp_c0__ANONYMOUS_s170, mapExp_c1__ANONYMOUS_s171, mapExp_v0__ANONYMOUS_s325, mapExp_v1__ANONYMOUS_s205, reduceExp0__ANONYMOUS_s172, reduceExp1__ANONYMOUS_s173);
+  assert (_out_s37); //Assert at main_boolean_0.sk:76 (-1548720262108405254)
+  bit _pac_sc_s38_s40 = 0;
+  loopInvariant(words, bitSet[0], 0, bitSet[1], 0, i, 0, _pac_sc_s38_s40, CASPER_FALSE__ANONYMOUS_s165, CASPER_TRUE__ANONYMOUS_s166, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s289, _term_flag_bit_terminal0_map_c1__ANONYMOUS_s206, _term_flag_bit_terminal0_map_v0__ANONYMOUS_s321, _term_flag_bit_terminal0_map_v1__ANONYMOUS_s201, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s207, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s346, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s290, _term_flag_bit_terminal1_map_c1__ANONYMOUS_s208, _term_flag_bit_terminal1_map_v0__ANONYMOUS_s322, _term_flag_bit_terminal1_map_v1__ANONYMOUS_s202, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s209, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s347, _term_flag_string_terminal0_map_c0__ANONYMOUS_s291, _term_flag_string_terminal0_map_c1__ANONYMOUS_s210, _term_flag_string_terminal0_map_v0__ANONYMOUS_s323, _term_flag_string_terminal0_map_v1__ANONYMOUS_s203, _term_flag_string_terminal0_reduce0__ANONYMOUS_s211, _term_flag_string_terminal0_reduce1__ANONYMOUS_s348, _term_flag_string_terminal1_map_c0__ANONYMOUS_s292, _term_flag_string_terminal1_map_c1__ANONYMOUS_s212, _term_flag_string_terminal1_map_v0__ANONYMOUS_s324, _term_flag_string_terminal1_map_v1__ANONYMOUS_s204, _term_flag_string_terminal1_reduce0__ANONYMOUS_s213, _term_flag_string_terminal1_reduce1__ANONYMOUS_s349, key1__ANONYMOUS_s167, key2__ANONYMOUS_s168, loop0__ANONYMOUS_s169, mapExp_c0__ANONYMOUS_s170, mapExp_c1__ANONYMOUS_s171, mapExp_v0__ANONYMOUS_s325, mapExp_v1__ANONYMOUS_s205, reduceExp0__ANONYMOUS_s172, reduceExp1__ANONYMOUS_s173);
+  bit _pac_sc_s38;
+  _pac_sc_s38 = _pac_sc_s38_s40;
+  if(_pac_sc_s38_s40)/*main_boolean_0.sk:77*/
+  {
+    _pac_sc_s38 = i < 3;
+  }
+  if(_pac_sc_s38)/*main_boolean_0.sk:77*/
+  {
+    bit _out_s42 = 0;
+    casper_str_equal(key2__ANONYMOUS_s168, words[i], _out_s42);
+    bit ind_foundKey2 = 0;
+    if(_out_s42)/*main_boolean_0.sk:79*/
+    {
+      ind_foundKey2 = 1;
+    }
+    else
+    {
+      ind_foundKey2 = bitSet[0];
+    }
+    bit _out_s44 = 0;
+    casper_str_equal(key1__ANONYMOUS_s167, words[i], _out_s44);
+    bit ind_foundKey1 = 0;
+    if(_out_s44)/*main_boolean_0.sk:85*/
+    {
+      ind_foundKey1 = 1;
+    }
+    else
+    {
+      ind_foundKey1 = bitSet[1];
+    }
+    bit _out_s46 = 0;
+    loopInvariant(words, ind_foundKey2, 0, ind_foundKey1, 0, i + 1, 0, _out_s46, CASPER_FALSE__ANONYMOUS_s165, CASPER_TRUE__ANONYMOUS_s166, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s289, _term_flag_bit_terminal0_map_c1__ANONYMOUS_s206, _term_flag_bit_terminal0_map_v0__ANONYMOUS_s321, _term_flag_bit_terminal0_map_v1__ANONYMOUS_s201, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s207, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s346, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s290, _term_flag_bit_terminal1_map_c1__ANONYMOUS_s208, _term_flag_bit_terminal1_map_v0__ANONYMOUS_s322, _term_flag_bit_terminal1_map_v1__ANONYMOUS_s202, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s209, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s347, _term_flag_string_terminal0_map_c0__ANONYMOUS_s291, _term_flag_string_terminal0_map_c1__ANONYMOUS_s210, _term_flag_string_terminal0_map_v0__ANONYMOUS_s323, _term_flag_string_terminal0_map_v1__ANONYMOUS_s203, _term_flag_string_terminal0_reduce0__ANONYMOUS_s211, _term_flag_string_terminal0_reduce1__ANONYMOUS_s348, _term_flag_string_terminal1_map_c0__ANONYMOUS_s292, _term_flag_string_terminal1_map_c1__ANONYMOUS_s212, _term_flag_string_terminal1_map_v0__ANONYMOUS_s324, _term_flag_string_terminal1_map_v1__ANONYMOUS_s204, _term_flag_string_terminal1_reduce0__ANONYMOUS_s213, _term_flag_string_terminal1_reduce1__ANONYMOUS_s349, key1__ANONYMOUS_s167, key2__ANONYMOUS_s168, loop0__ANONYMOUS_s169, mapExp_c0__ANONYMOUS_s170, mapExp_c1__ANONYMOUS_s171, mapExp_v0__ANONYMOUS_s325, mapExp_v1__ANONYMOUS_s205, reduceExp0__ANONYMOUS_s172, reduceExp1__ANONYMOUS_s173);
+    assert (_out_s46); //Assert at main_boolean_0.sk:92 (-466491054949896119)
+    assert (!((((mapExp_c0__ANONYMOUS_s170[1]) && (mapExp_c1__ANONYMOUS_s171[1])) && (reduceExp0__ANONYMOUS_s172[1])) && (reduceExp1__ANONYMOUS_s173[2]))); //ASSERTION CAN NOT BE SATISFIED: main_boolean_0.sk:94 Assert at main_boolean_0.sk:94 (-7736006959522477815)
+    assert (!((((mapExp_c0__ANONYMOUS_s170[1]) && (mapExp_c1__ANONYMOUS_s171[1])) && (reduceExp0__ANONYMOUS_s172[2])) && (reduceExp1__ANONYMOUS_s173[2]))); //ASSERTION CAN NOT BE SATISFIED: main_boolean_0.sk:95 Assert at main_boolean_0.sk:95 (-8014541580983673178)
+  }
+  bit _pac_sc_s47_s49 = 0;
+  loopInvariant(words, bitSet[0], 0, bitSet[1], 0, i, 0, _pac_sc_s47_s49, CASPER_FALSE__ANONYMOUS_s165, CASPER_TRUE__ANONYMOUS_s166, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s289, _term_flag_bit_terminal0_map_c1__ANONYMOUS_s206, _term_flag_bit_terminal0_map_v0__ANONYMOUS_s321, _term_flag_bit_terminal0_map_v1__ANONYMOUS_s201, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s207, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s346, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s290, _term_flag_bit_terminal1_map_c1__ANONYMOUS_s208, _term_flag_bit_terminal1_map_v0__ANONYMOUS_s322, _term_flag_bit_terminal1_map_v1__ANONYMOUS_s202, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s209, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s347, _term_flag_string_terminal0_map_c0__ANONYMOUS_s291, _term_flag_string_terminal0_map_c1__ANONYMOUS_s210, _term_flag_string_terminal0_map_v0__ANONYMOUS_s323, _term_flag_string_terminal0_map_v1__ANONYMOUS_s203, _term_flag_string_terminal0_reduce0__ANONYMOUS_s211, _term_flag_string_terminal0_reduce1__ANONYMOUS_s348, _term_flag_string_terminal1_map_c0__ANONYMOUS_s292, _term_flag_string_terminal1_map_c1__ANONYMOUS_s212, _term_flag_string_terminal1_map_v0__ANONYMOUS_s324, _term_flag_string_terminal1_map_v1__ANONYMOUS_s204, _term_flag_string_terminal1_reduce0__ANONYMOUS_s213, _term_flag_string_terminal1_reduce1__ANONYMOUS_s349, key1__ANONYMOUS_s167, key2__ANONYMOUS_s168, loop0__ANONYMOUS_s169, mapExp_c0__ANONYMOUS_s170, mapExp_c1__ANONYMOUS_s171, mapExp_v0__ANONYMOUS_s325, mapExp_v1__ANONYMOUS_s205, reduceExp0__ANONYMOUS_s172, reduceExp1__ANONYMOUS_s173);
+  bit _pac_sc_s47;
+  _pac_sc_s47 = _pac_sc_s47_s49;
+  if(_pac_sc_s47_s49)/*main_boolean_0.sk:98*/
+  {
+    _pac_sc_s47 = !(i < 3);
+  }
+  if(_pac_sc_s47)/*main_boolean_0.sk:98*/
+  {
+    bit _out_s51 = 0;
+    postCondition(words, bitSet[0], 0, bitSet[1], 0, i, 0, _out_s51, CASPER_FALSE__ANONYMOUS_s165, CASPER_TRUE__ANONYMOUS_s166, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s289, _term_flag_bit_terminal0_map_c1__ANONYMOUS_s206, _term_flag_bit_terminal0_map_v0__ANONYMOUS_s321, _term_flag_bit_terminal0_map_v1__ANONYMOUS_s201, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s207, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s346, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s290, _term_flag_bit_terminal1_map_c1__ANONYMOUS_s208, _term_flag_bit_terminal1_map_v0__ANONYMOUS_s322, _term_flag_bit_terminal1_map_v1__ANONYMOUS_s202, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s209, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s347, _term_flag_string_terminal0_map_c0__ANONYMOUS_s291, _term_flag_string_terminal0_map_c1__ANONYMOUS_s210, _term_flag_string_terminal0_map_v0__ANONYMOUS_s323, _term_flag_string_terminal0_map_v1__ANONYMOUS_s203, _term_flag_string_terminal0_reduce0__ANONYMOUS_s211, _term_flag_string_terminal0_reduce1__ANONYMOUS_s348, _term_flag_string_terminal1_map_c0__ANONYMOUS_s292, _term_flag_string_terminal1_map_c1__ANONYMOUS_s212, _term_flag_string_terminal1_map_v0__ANONYMOUS_s324, _term_flag_string_terminal1_map_v1__ANONYMOUS_s204, _term_flag_string_terminal1_reduce0__ANONYMOUS_s213, _term_flag_string_terminal1_reduce1__ANONYMOUS_s349, key1__ANONYMOUS_s167, key2__ANONYMOUS_s168, loop0__ANONYMOUS_s169, mapExp_c0__ANONYMOUS_s170, mapExp_c1__ANONYMOUS_s171, mapExp_v0__ANONYMOUS_s325, mapExp_v1__ANONYMOUS_s205, reduceExp0__ANONYMOUS_s172, reduceExp1__ANONYMOUS_s173);
+    assert (_out_s51); //Assert at main_boolean_0.sk:99 (4018030244231155972)
+  }
+  bit _out_s53 = 0;
+  reduce_foundKey1(csg_test_val1, csg_test_val2, _out_s53, CASPER_FALSE__ANONYMOUS_s165, CASPER_TRUE__ANONYMOUS_s166, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s207, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s209, _term_flag_string_terminal0_reduce0__ANONYMOUS_s211, _term_flag_string_terminal1_reduce0__ANONYMOUS_s213, key1__ANONYMOUS_s167, key2__ANONYMOUS_s168, loop0__ANONYMOUS_s169, reduceExp0__ANONYMOUS_s172);
+  bit _out_s55 = 0;
+  reduce_foundKey1(csg_test_val2, csg_test_val1, _out_s55, CASPER_FALSE__ANONYMOUS_s165, CASPER_TRUE__ANONYMOUS_s166, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s207, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s209, _term_flag_string_terminal0_reduce0__ANONYMOUS_s211, _term_flag_string_terminal1_reduce0__ANONYMOUS_s213, key1__ANONYMOUS_s167, key2__ANONYMOUS_s168, loop0__ANONYMOUS_s169, reduceExp0__ANONYMOUS_s172);
+  assert (_out_s53 == _out_s55); //Assert at main_boolean_0.sk:102 (-1562942942230276471)
+  bit _out_s57 = 0;
+  reduce_foundKey2(csg_test_val1, csg_test_val2, _out_s57, CASPER_FALSE__ANONYMOUS_s165, CASPER_TRUE__ANONYMOUS_s166, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s346, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s347, _term_flag_string_terminal0_reduce1__ANONYMOUS_s348, _term_flag_string_terminal1_reduce1__ANONYMOUS_s349, key1__ANONYMOUS_s167, key2__ANONYMOUS_s168, loop0__ANONYMOUS_s169, reduceExp1__ANONYMOUS_s173);
+  bit _out_s59 = 0;
+  reduce_foundKey2(csg_test_val2, csg_test_val1, _out_s59, CASPER_FALSE__ANONYMOUS_s165, CASPER_TRUE__ANONYMOUS_s166, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s346, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s347, _term_flag_string_terminal0_reduce1__ANONYMOUS_s348, _term_flag_string_terminal1_reduce1__ANONYMOUS_s349, key1__ANONYMOUS_s167, key2__ANONYMOUS_s168, loop0__ANONYMOUS_s169, reduceExp1__ANONYMOUS_s173);
+  assert (_out_s57 == _out_s59); //Assert at main_boolean_0.sk:103 (1643169775729241508)
+}
+/*utils.sk:1*/
+
+void casper_str_equal (int casper_a, int casper_b, ref bit _out)/*utils.sk:1*/
+{
+  _out = 0;
+  _out = casper_a == casper_b;
+  return;
+}
+/*main_boolean_0.sk:17*/
+
+void glblInit__term_flag_bit_terminal0_map_c0__ANONYMOUS_s386 (ref bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s385)/*main_boolean_0.sk:17*/
+{
+  _term_flag_bit_terminal0_map_c0__ANONYMOUS_s385 = {0};
+}
+/*main_boolean_0.sk:16*/
+
+void glblInit__term_flag_bit_terminal0_map_c1__ANONYMOUS_s388 (ref bit[1] _term_flag_bit_terminal0_map_c1__ANONYMOUS_s387)/*main_boolean_0.sk:16*/
+{
+  _term_flag_bit_terminal0_map_c1__ANONYMOUS_s387 = {0};
+}
+/*main_boolean_0.sk:32*/
+
+void glblInit__term_flag_bit_terminal0_map_v0__ANONYMOUS_s390 (ref bit[1] _term_flag_bit_terminal0_map_v0__ANONYMOUS_s389)/*main_boolean_0.sk:32*/
+{
+  _term_flag_bit_terminal0_map_v0__ANONYMOUS_s389 = {0};
+}
+/*main_boolean_0.sk:31*/
+
+void glblInit__term_flag_bit_terminal0_map_v1__ANONYMOUS_s392 (ref bit[1] _term_flag_bit_terminal0_map_v1__ANONYMOUS_s391)/*main_boolean_0.sk:31*/
+{
+  _term_flag_bit_terminal0_map_v1__ANONYMOUS_s391 = {0};
+}
+/*main_boolean_0.sk:36*/
+
+void glblInit__term_flag_bit_terminal0_reduce0__ANONYMOUS_s394 (ref bit[3] _term_flag_bit_terminal0_reduce0__ANONYMOUS_s393)/*main_boolean_0.sk:36*/
+{
+  _term_flag_bit_terminal0_reduce0__ANONYMOUS_s393 = ((bit[3]){0});
+}
+/*main_boolean_0.sk:35*/
+
+void glblInit__term_flag_bit_terminal0_reduce1__ANONYMOUS_s396 (ref bit[3] _term_flag_bit_terminal0_reduce1__ANONYMOUS_s395)/*main_boolean_0.sk:35*/
+{
+  _term_flag_bit_terminal0_reduce1__ANONYMOUS_s395 = ((bit[3]){0});
+}
+/*main_boolean_0.sk:37*/
+
+void glblInit__term_flag_bit_terminal1_map_c0__ANONYMOUS_s398 (ref bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s397)/*main_boolean_0.sk:37*/
+{
+  _term_flag_bit_terminal1_map_c0__ANONYMOUS_s397 = {0};
+}
+/*main_boolean_0.sk:38*/
+
+void glblInit__term_flag_bit_terminal1_map_c1__ANONYMOUS_s400 (ref bit[1] _term_flag_bit_terminal1_map_c1__ANONYMOUS_s399)/*main_boolean_0.sk:38*/
+{
+  _term_flag_bit_terminal1_map_c1__ANONYMOUS_s399 = {0};
+}
+/*main_boolean_0.sk:39*/
+
+void glblInit__term_flag_bit_terminal1_map_v0__ANONYMOUS_s402 (ref bit[1] _term_flag_bit_terminal1_map_v0__ANONYMOUS_s401)/*main_boolean_0.sk:39*/
+{
+  _term_flag_bit_terminal1_map_v0__ANONYMOUS_s401 = {0};
+}
+/*main_boolean_0.sk:40*/
+
+void glblInit__term_flag_bit_terminal1_map_v1__ANONYMOUS_s404 (ref bit[1] _term_flag_bit_terminal1_map_v1__ANONYMOUS_s403)/*main_boolean_0.sk:40*/
+{
+  _term_flag_bit_terminal1_map_v1__ANONYMOUS_s403 = {0};
+}
+/*main_boolean_0.sk:18*/
+
+void glblInit__term_flag_bit_terminal1_reduce0__ANONYMOUS_s406 (ref bit[3] _term_flag_bit_terminal1_reduce0__ANONYMOUS_s405)/*main_boolean_0.sk:18*/
+{
+  _term_flag_bit_terminal1_reduce0__ANONYMOUS_s405 = ((bit[3]){0});
+}
+/*main_boolean_0.sk:11*/
+
+void glblInit__term_flag_bit_terminal1_reduce1__ANONYMOUS_s408 (ref bit[3] _term_flag_bit_terminal1_reduce1__ANONYMOUS_s407)/*main_boolean_0.sk:11*/
+{
+  _term_flag_bit_terminal1_reduce1__ANONYMOUS_s407 = ((bit[3]){0});
+}
+/*main_boolean_0.sk:30*/
+
+void glblInit__term_flag_string_terminal0_map_c0__ANONYMOUS_s410 (ref bit[4] _term_flag_string_terminal0_map_c0__ANONYMOUS_s409)/*main_boolean_0.sk:30*/
+{
+  _term_flag_string_terminal0_map_c0__ANONYMOUS_s409 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:29*/
+
+void glblInit__term_flag_string_terminal0_map_c1__ANONYMOUS_s412 (ref bit[4] _term_flag_string_terminal0_map_c1__ANONYMOUS_s411)/*main_boolean_0.sk:29*/
+{
+  _term_flag_string_terminal0_map_c1__ANONYMOUS_s411 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:20*/
+
+void glblInit__term_flag_string_terminal0_map_v0__ANONYMOUS_s414 (ref bit[4] _term_flag_string_terminal0_map_v0__ANONYMOUS_s413)/*main_boolean_0.sk:20*/
+{
+  _term_flag_string_terminal0_map_v0__ANONYMOUS_s413 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:19*/
+
+void glblInit__term_flag_string_terminal0_map_v1__ANONYMOUS_s416 (ref bit[4] _term_flag_string_terminal0_map_v1__ANONYMOUS_s415)/*main_boolean_0.sk:19*/
+{
+  _term_flag_string_terminal0_map_v1__ANONYMOUS_s415 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:13*/
+
+void glblInit__term_flag_string_terminal0_reduce0__ANONYMOUS_s418 (ref bit[3] _term_flag_string_terminal0_reduce0__ANONYMOUS_s417)/*main_boolean_0.sk:13*/
+{
+  _term_flag_string_terminal0_reduce0__ANONYMOUS_s417 = ((bit[3]){0});
+}
+/*main_boolean_0.sk:14*/
+
+void glblInit__term_flag_string_terminal0_reduce1__ANONYMOUS_s420 (ref bit[3] _term_flag_string_terminal0_reduce1__ANONYMOUS_s419)/*main_boolean_0.sk:14*/
+{
+  _term_flag_string_terminal0_reduce1__ANONYMOUS_s419 = ((bit[3]){0});
+}
+/*main_boolean_0.sk:21*/
+
+void glblInit__term_flag_string_terminal1_map_c0__ANONYMOUS_s422 (ref bit[4] _term_flag_string_terminal1_map_c0__ANONYMOUS_s421)/*main_boolean_0.sk:21*/
+{
+  _term_flag_string_terminal1_map_c0__ANONYMOUS_s421 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:23*/
+
+void glblInit__term_flag_string_terminal1_map_c1__ANONYMOUS_s424 (ref bit[4] _term_flag_string_terminal1_map_c1__ANONYMOUS_s423)/*main_boolean_0.sk:23*/
+{
+  _term_flag_string_terminal1_map_c1__ANONYMOUS_s423 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:34*/
+
+void glblInit__term_flag_string_terminal1_map_v0__ANONYMOUS_s426 (ref bit[4] _term_flag_string_terminal1_map_v0__ANONYMOUS_s425)/*main_boolean_0.sk:34*/
+{
+  _term_flag_string_terminal1_map_v0__ANONYMOUS_s425 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:33*/
+
+void glblInit__term_flag_string_terminal1_map_v1__ANONYMOUS_s428 (ref bit[4] _term_flag_string_terminal1_map_v1__ANONYMOUS_s427)/*main_boolean_0.sk:33*/
+{
+  _term_flag_string_terminal1_map_v1__ANONYMOUS_s427 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:15*/
+
+void glblInit__term_flag_string_terminal1_reduce0__ANONYMOUS_s430 (ref bit[3] _term_flag_string_terminal1_reduce0__ANONYMOUS_s429)/*main_boolean_0.sk:15*/
+{
+  _term_flag_string_terminal1_reduce0__ANONYMOUS_s429 = ((bit[3]){0});
+}
+/*main_boolean_0.sk:12*/
+
+void glblInit__term_flag_string_terminal1_reduce1__ANONYMOUS_s432 (ref bit[3] _term_flag_string_terminal1_reduce1__ANONYMOUS_s431)/*main_boolean_0.sk:12*/
+{
+  _term_flag_string_terminal1_reduce1__ANONYMOUS_s431 = ((bit[3]){0});
+}
+/*main_boolean_0.sk:24*/
+
+void glblInit_mapExp_c0__ANONYMOUS_s434 (ref bit[4] mapExp_c0__ANONYMOUS_s433)/*main_boolean_0.sk:24*/
+{
+  mapExp_c0__ANONYMOUS_s433 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:22*/
+
+void glblInit_mapExp_c1__ANONYMOUS_s436 (ref bit[4] mapExp_c1__ANONYMOUS_s435)/*main_boolean_0.sk:22*/
+{
+  mapExp_c1__ANONYMOUS_s435 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:28*/
+
+void glblInit_mapExp_v0__ANONYMOUS_s438 (ref bit[4] mapExp_v0__ANONYMOUS_s437)/*main_boolean_0.sk:28*/
+{
+  mapExp_v0__ANONYMOUS_s437 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:27*/
+
+void glblInit_mapExp_v1__ANONYMOUS_s440 (ref bit[4] mapExp_v1__ANONYMOUS_s439)/*main_boolean_0.sk:27*/
+{
+  mapExp_v1__ANONYMOUS_s439 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:25*/
+
+void glblInit_reduceExp0__ANONYMOUS_s442 (ref bit[4] reduceExp0__ANONYMOUS_s441)/*main_boolean_0.sk:25*/
+{
+  reduceExp0__ANONYMOUS_s441 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:26*/
+
+void glblInit_reduceExp1__ANONYMOUS_s444 (ref bit[4] reduceExp1__ANONYMOUS_s443)/*main_boolean_0.sk:26*/
+{
+  reduceExp1__ANONYMOUS_s443 = ((bit[4]){0});
+}
+/*main_boolean_0.sk:338*/
+
+void init_foundKey1 (ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s153, ref global bit CASPER_TRUE__ANONYMOUS_s154)/*main_boolean_0.sk:338*/
+{
+  _out = 0;
+  _out = CASPER_FALSE__ANONYMOUS_s153;
+  return;
+}
+/*main_boolean_0.sk:342*/
+
+void init_foundKey2 (ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s101, ref global bit CASPER_TRUE__ANONYMOUS_s102)/*main_boolean_0.sk:342*/
+{
+  _out = 0;
+  _out = CASPER_FALSE__ANONYMOUS_s101;
+  return;
+}
+/*main_boolean_0.sk:117*/
+
+void loopInvariant (int[3] words, bit foundKey2, bit foundKey20, bit foundKey1, bit foundKey10, int i, int i0, ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s199, ref global bit CASPER_TRUE__ANONYMOUS_s200, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s370, ref global bit[1] _term_flag_bit_terminal0_map_c1__ANONYMOUS_s256, ref global bit[1] _term_flag_bit_terminal0_map_v0__ANONYMOUS_s257, ref global bit[1] _term_flag_bit_terminal0_map_v1__ANONYMOUS_s279, ref global bit[3] _term_flag_bit_terminal0_reduce0__ANONYMOUS_s258, ref global bit[3] _term_flag_bit_terminal0_reduce1__ANONYMOUS_s274, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s371, ref global bit[1] _term_flag_bit_terminal1_map_c1__ANONYMOUS_s259, ref global bit[1] _term_flag_bit_terminal1_map_v0__ANONYMOUS_s260, ref global bit[1] _term_flag_bit_terminal1_map_v1__ANONYMOUS_s280, ref global bit[3] _term_flag_bit_terminal1_reduce0__ANONYMOUS_s261, ref global bit[3] _term_flag_bit_terminal1_reduce1__ANONYMOUS_s275, ref global bit[4] _term_flag_string_terminal0_map_c0__ANONYMOUS_s372, ref global bit[4] _term_flag_string_terminal0_map_c1__ANONYMOUS_s262, ref global bit[4] _term_flag_string_terminal0_map_v0__ANONYMOUS_s263, ref global bit[4] _term_flag_string_terminal0_map_v1__ANONYMOUS_s281, ref global bit[3] _term_flag_string_terminal0_reduce0__ANONYMOUS_s264, ref global bit[3] _term_flag_string_terminal0_reduce1__ANONYMOUS_s276, ref global bit[4] _term_flag_string_terminal1_map_c0__ANONYMOUS_s373, ref global bit[4] _term_flag_string_terminal1_map_c1__ANONYMOUS_s265, ref global bit[4] _term_flag_string_terminal1_map_v0__ANONYMOUS_s266, ref global bit[4] _term_flag_string_terminal1_map_v1__ANONYMOUS_s282, ref global bit[3] _term_flag_string_terminal1_reduce0__ANONYMOUS_s267, ref global bit[3] _term_flag_string_terminal1_reduce1__ANONYMOUS_s277, ref global int key1__ANONYMOUS_s268, ref global int key2__ANONYMOUS_s269, ref global bit loop0__ANONYMOUS_s270, ref global bit[4] mapExp_c0__ANONYMOUS_s374, ref global bit[4] mapExp_c1__ANONYMOUS_s271, ref global bit[4] mapExp_v0__ANONYMOUS_s272, ref global bit[4] mapExp_v1__ANONYMOUS_s283, ref global bit[4] reduceExp0__ANONYMOUS_s273, ref global bit[4] reduceExp1__ANONYMOUS_s278)/*main_boolean_0.sk:117*/
+{
+  _out = 0;
+  bit[2] casper_r = {0,0};
+  casper_r[0] = foundKey1;
+  casper_r[1] = foundKey2;
+  bit _pac_sc_s98 = (0 <= i) && (i <= 3);
+  if(_pac_sc_s98)/*main_boolean_0.sk:121*/
+  {
+    bit[2] _pac_sc_s98_s100 = {0,0};
+    reduce(words, foundKey1, foundKey10, foundKey2, foundKey20, i, i0, _pac_sc_s98_s100, CASPER_FALSE__ANONYMOUS_s199, CASPER_TRUE__ANONYMOUS_s200, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s370, _term_flag_bit_terminal0_map_c1__ANONYMOUS_s256, _term_flag_bit_terminal0_map_v0__ANONYMOUS_s257, _term_flag_bit_terminal0_map_v1__ANONYMOUS_s279, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s258, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s274, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s371, _term_flag_bit_terminal1_map_c1__ANONYMOUS_s259, _term_flag_bit_terminal1_map_v0__ANONYMOUS_s260, _term_flag_bit_terminal1_map_v1__ANONYMOUS_s280, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s261, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s275, _term_flag_string_terminal0_map_c0__ANONYMOUS_s372, _term_flag_string_terminal0_map_c1__ANONYMOUS_s262, _term_flag_string_terminal0_map_v0__ANONYMOUS_s263, _term_flag_string_terminal0_map_v1__ANONYMOUS_s281, _term_flag_string_terminal0_reduce0__ANONYMOUS_s264, _term_flag_string_terminal0_reduce1__ANONYMOUS_s276, _term_flag_string_terminal1_map_c0__ANONYMOUS_s373, _term_flag_string_terminal1_map_c1__ANONYMOUS_s265, _term_flag_string_terminal1_map_v0__ANONYMOUS_s266, _term_flag_string_terminal1_map_v1__ANONYMOUS_s282, _term_flag_string_terminal1_reduce0__ANONYMOUS_s267, _term_flag_string_terminal1_reduce1__ANONYMOUS_s277, key1__ANONYMOUS_s268, key2__ANONYMOUS_s269, loop0__ANONYMOUS_s270, mapExp_c0__ANONYMOUS_s374, mapExp_c1__ANONYMOUS_s271, mapExp_v0__ANONYMOUS_s272, mapExp_v1__ANONYMOUS_s283, reduceExp0__ANONYMOUS_s273, reduceExp1__ANONYMOUS_s278);
+    _pac_sc_s98 = _pac_sc_s98_s100 == casper_r;
+  }
+  _out = _pac_sc_s98;
+  return;
+}
+/*main_boolean_0.sk:51*/
+
+void main__Wrapper (bit[2] bitSet, int[6] intSet, bit csg_test_val1, bit csg_test_val2)  implements main__WrapperNospec/*main_boolean_0.sk:51*/
+{
+  global bit[4] reduceExp1__ANONYMOUS_s364 = {0,0,0,0};
+  glblInit_reduceExp1__ANONYMOUS_s444(reduceExp1__ANONYMOUS_s364);
+  global bit[4] reduceExp0__ANONYMOUS_s335 = {0,0,0,0};
+  glblInit_reduceExp0__ANONYMOUS_s442(reduceExp0__ANONYMOUS_s335);
+  global bit[4] mapExp_v1__ANONYMOUS_s369 = {0,0,0,0};
+  glblInit_mapExp_v1__ANONYMOUS_s440(mapExp_v1__ANONYMOUS_s369);
+  global bit[4] mapExp_v0__ANONYMOUS_s359 = {0,0,0,0};
+  glblInit_mapExp_v0__ANONYMOUS_s438(mapExp_v0__ANONYMOUS_s359);
+  global bit[4] mapExp_c1__ANONYMOUS_s345 = {0,0,0,0};
+  glblInit_mapExp_c1__ANONYMOUS_s436(mapExp_c1__ANONYMOUS_s345);
+  global bit[4] mapExp_c0__ANONYMOUS_s320 = {0,0,0,0};
+  glblInit_mapExp_c0__ANONYMOUS_s434(mapExp_c0__ANONYMOUS_s320);
+  global bit[3] _term_flag_string_terminal1_reduce1__ANONYMOUS_s363 = {0,0,0};
+  glblInit__term_flag_string_terminal1_reduce1__ANONYMOUS_s432(_term_flag_string_terminal1_reduce1__ANONYMOUS_s363);
+  global bit[3] _term_flag_string_terminal1_reduce0__ANONYMOUS_s334 = {0,0,0};
+  glblInit__term_flag_string_terminal1_reduce0__ANONYMOUS_s430(_term_flag_string_terminal1_reduce0__ANONYMOUS_s334);
+  global bit[4] _term_flag_string_terminal1_map_v1__ANONYMOUS_s368 = {0,0,0,0};
+  glblInit__term_flag_string_terminal1_map_v1__ANONYMOUS_s428(_term_flag_string_terminal1_map_v1__ANONYMOUS_s368);
+  global bit[4] _term_flag_string_terminal1_map_v0__ANONYMOUS_s358 = {0,0,0,0};
+  glblInit__term_flag_string_terminal1_map_v0__ANONYMOUS_s426(_term_flag_string_terminal1_map_v0__ANONYMOUS_s358);
+  global bit[4] _term_flag_string_terminal1_map_c1__ANONYMOUS_s344 = {0,0,0,0};
+  glblInit__term_flag_string_terminal1_map_c1__ANONYMOUS_s424(_term_flag_string_terminal1_map_c1__ANONYMOUS_s344);
+  global bit[4] _term_flag_string_terminal1_map_c0__ANONYMOUS_s316 = {0,0,0,0};
+  glblInit__term_flag_string_terminal1_map_c0__ANONYMOUS_s422(_term_flag_string_terminal1_map_c0__ANONYMOUS_s316);
+  global bit[3] _term_flag_string_terminal0_reduce1__ANONYMOUS_s362 = {0,0,0};
+  glblInit__term_flag_string_terminal0_reduce1__ANONYMOUS_s420(_term_flag_string_terminal0_reduce1__ANONYMOUS_s362);
+  global bit[3] _term_flag_string_terminal0_reduce0__ANONYMOUS_s333 = {0,0,0};
+  glblInit__term_flag_string_terminal0_reduce0__ANONYMOUS_s418(_term_flag_string_terminal0_reduce0__ANONYMOUS_s333);
+  global bit[4] _term_flag_string_terminal0_map_v1__ANONYMOUS_s367 = {0,0,0,0};
+  glblInit__term_flag_string_terminal0_map_v1__ANONYMOUS_s416(_term_flag_string_terminal0_map_v1__ANONYMOUS_s367);
+  global bit[4] _term_flag_string_terminal0_map_v0__ANONYMOUS_s357 = {0,0,0,0};
+  glblInit__term_flag_string_terminal0_map_v0__ANONYMOUS_s414(_term_flag_string_terminal0_map_v0__ANONYMOUS_s357);
+  global bit[4] _term_flag_string_terminal0_map_c1__ANONYMOUS_s343 = {0,0,0,0};
+  glblInit__term_flag_string_terminal0_map_c1__ANONYMOUS_s412(_term_flag_string_terminal0_map_c1__ANONYMOUS_s343);
+  global bit[4] _term_flag_string_terminal0_map_c0__ANONYMOUS_s315 = {0,0,0,0};
+  glblInit__term_flag_string_terminal0_map_c0__ANONYMOUS_s410(_term_flag_string_terminal0_map_c0__ANONYMOUS_s315);
+  global bit[3] _term_flag_bit_terminal1_reduce1__ANONYMOUS_s361 = {0,0,0};
+  glblInit__term_flag_bit_terminal1_reduce1__ANONYMOUS_s408(_term_flag_bit_terminal1_reduce1__ANONYMOUS_s361);
+  global bit[3] _term_flag_bit_terminal1_reduce0__ANONYMOUS_s332 = {0,0,0};
+  glblInit__term_flag_bit_terminal1_reduce0__ANONYMOUS_s406(_term_flag_bit_terminal1_reduce0__ANONYMOUS_s332);
+  global bit[1] _term_flag_bit_terminal1_map_v1__ANONYMOUS_s366 = {0};
+  glblInit__term_flag_bit_terminal1_map_v1__ANONYMOUS_s404(_term_flag_bit_terminal1_map_v1__ANONYMOUS_s366);
+  global bit[1] _term_flag_bit_terminal1_map_v0__ANONYMOUS_s356 = {0};
+  glblInit__term_flag_bit_terminal1_map_v0__ANONYMOUS_s402(_term_flag_bit_terminal1_map_v0__ANONYMOUS_s356);
+  global bit[1] _term_flag_bit_terminal1_map_c1__ANONYMOUS_s342 = {0};
+  glblInit__term_flag_bit_terminal1_map_c1__ANONYMOUS_s400(_term_flag_bit_terminal1_map_c1__ANONYMOUS_s342);
+  global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s314 = {0};
+  glblInit__term_flag_bit_terminal1_map_c0__ANONYMOUS_s398(_term_flag_bit_terminal1_map_c0__ANONYMOUS_s314);
+  global bit[3] _term_flag_bit_terminal0_reduce1__ANONYMOUS_s360 = {0,0,0};
+  glblInit__term_flag_bit_terminal0_reduce1__ANONYMOUS_s396(_term_flag_bit_terminal0_reduce1__ANONYMOUS_s360);
+  global bit[3] _term_flag_bit_terminal0_reduce0__ANONYMOUS_s331 = {0,0,0};
+  glblInit__term_flag_bit_terminal0_reduce0__ANONYMOUS_s394(_term_flag_bit_terminal0_reduce0__ANONYMOUS_s331);
+  global bit[1] _term_flag_bit_terminal0_map_v1__ANONYMOUS_s365 = {0};
+  glblInit__term_flag_bit_terminal0_map_v1__ANONYMOUS_s392(_term_flag_bit_terminal0_map_v1__ANONYMOUS_s365);
+  global bit[1] _term_flag_bit_terminal0_map_v0__ANONYMOUS_s355 = {0};
+  glblInit__term_flag_bit_terminal0_map_v0__ANONYMOUS_s390(_term_flag_bit_terminal0_map_v0__ANONYMOUS_s355);
+  global bit[1] _term_flag_bit_terminal0_map_c1__ANONYMOUS_s341 = {0};
+  glblInit__term_flag_bit_terminal0_map_c1__ANONYMOUS_s388(_term_flag_bit_terminal0_map_c1__ANONYMOUS_s341);
+  global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s313 = {0};
+  glblInit__term_flag_bit_terminal0_map_c0__ANONYMOUS_s386(_term_flag_bit_terminal0_map_c0__ANONYMOUS_s313);
+  global bit CASPER_TRUE__ANONYMOUS_s230 = 0;
+  global bit CASPER_FALSE__ANONYMOUS_s229 = 0;
+  global bit loop0__ANONYMOUS_s319 = 0;
+  global int key2__ANONYMOUS_s318 = 0;
+  global int key1__ANONYMOUS_s317 = 0;
+  _main(bitSet, intSet, csg_test_val1, csg_test_val2, CASPER_FALSE__ANONYMOUS_s229, CASPER_TRUE__ANONYMOUS_s230, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s313, _term_flag_bit_terminal0_map_c1__ANONYMOUS_s341, _term_flag_bit_terminal0_map_v0__ANONYMOUS_s355, _term_flag_bit_terminal0_map_v1__ANONYMOUS_s365, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s331, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s360, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s314, _term_flag_bit_terminal1_map_c1__ANONYMOUS_s342, _term_flag_bit_terminal1_map_v0__ANONYMOUS_s356, _term_flag_bit_terminal1_map_v1__ANONYMOUS_s366, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s332, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s361, _term_flag_string_terminal0_map_c0__ANONYMOUS_s315, _term_flag_string_terminal0_map_c1__ANONYMOUS_s343, _term_flag_string_terminal0_map_v0__ANONYMOUS_s357, _term_flag_string_terminal0_map_v1__ANONYMOUS_s367, _term_flag_string_terminal0_reduce0__ANONYMOUS_s333, _term_flag_string_terminal0_reduce1__ANONYMOUS_s362, _term_flag_string_terminal1_map_c0__ANONYMOUS_s316, _term_flag_string_terminal1_map_c1__ANONYMOUS_s344, _term_flag_string_terminal1_map_v0__ANONYMOUS_s358, _term_flag_string_terminal1_map_v1__ANONYMOUS_s368, _term_flag_string_terminal1_reduce0__ANONYMOUS_s334, _term_flag_string_terminal1_reduce1__ANONYMOUS_s363, key1__ANONYMOUS_s317, key2__ANONYMOUS_s318, loop0__ANONYMOUS_s319, mapExp_c0__ANONYMOUS_s320, mapExp_c1__ANONYMOUS_s345, mapExp_v0__ANONYMOUS_s359, mapExp_v1__ANONYMOUS_s369, reduceExp0__ANONYMOUS_s335, reduceExp1__ANONYMOUS_s364);
+}
+/*main_boolean_0.sk:51*/
+
+void main__WrapperNospec (bit[2] bitSet, int[6] intSet, bit csg_test_val1, bit csg_test_val2)/*main_boolean_0.sk:51*/
+{ }
+/*main_boolean_0.sk:257*/
+
+void map (int[3] words, int i, ref int[2] keys0, ref int[2] values0, ref global bit CASPER_FALSE__ANONYMOUS_s236, ref global bit CASPER_TRUE__ANONYMOUS_s237, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s238, ref global bit[1] _term_flag_bit_terminal0_map_c1__ANONYMOUS_s336, ref global bit[1] _term_flag_bit_terminal0_map_v0__ANONYMOUS_s375, ref global bit[1] _term_flag_bit_terminal0_map_v1__ANONYMOUS_s380, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s239, ref global bit[1] _term_flag_bit_terminal1_map_c1__ANONYMOUS_s337, ref global bit[1] _term_flag_bit_terminal1_map_v0__ANONYMOUS_s376, ref global bit[1] _term_flag_bit_terminal1_map_v1__ANONYMOUS_s381, ref global bit[4] _term_flag_string_terminal0_map_c0__ANONYMOUS_s240, ref global bit[4] _term_flag_string_terminal0_map_c1__ANONYMOUS_s338, ref global bit[4] _term_flag_string_terminal0_map_v0__ANONYMOUS_s377, ref global bit[4] _term_flag_string_terminal0_map_v1__ANONYMOUS_s382, ref global bit[4] _term_flag_string_terminal1_map_c0__ANONYMOUS_s241, ref global bit[4] _term_flag_string_terminal1_map_c1__ANONYMOUS_s339, ref global bit[4] _term_flag_string_terminal1_map_v0__ANONYMOUS_s378, ref global bit[4] _term_flag_string_terminal1_map_v1__ANONYMOUS_s383, ref global int key1__ANONYMOUS_s242, ref global int key2__ANONYMOUS_s243, ref global bit loop0__ANONYMOUS_s244, ref global bit[4] mapExp_c0__ANONYMOUS_s245, ref global bit[4] mapExp_c1__ANONYMOUS_s340, ref global bit[4] mapExp_v0__ANONYMOUS_s379, ref global bit[4] mapExp_v1__ANONYMOUS_s384)/*main_boolean_0.sk:257*/
+{
+  _term_flag_bit_terminal0_map_c0__ANONYMOUS_s238[0] = 1;
+  _term_flag_bit_terminal1_map_c0__ANONYMOUS_s239[0] = 1;
+  _term_flag_string_terminal0_map_c0__ANONYMOUS_s240[0] = 1;
+  _term_flag_string_terminal1_map_c0__ANONYMOUS_s241[2] = 1;
+  int _string_terminal1 = words[i];
+  mapExp_c0__ANONYMOUS_s245[1] = 1;
+  bit _out_s97 = 0;
+  casper_str_equal(key1__ANONYMOUS_s242, _string_terminal1, _out_s97);
+  if(_out_s97)/*main_boolean_0.sk:259*/
+  {
+    keys0[0] = 1;
+    _term_flag_bit_terminal0_map_v0__ANONYMOUS_s375[0] = 1;
+    _term_flag_bit_terminal1_map_v0__ANONYMOUS_s376[0] = 1;
+    _term_flag_string_terminal0_map_v0__ANONYMOUS_s377[1] = 1;
+    _term_flag_string_terminal1_map_v0__ANONYMOUS_s378[2] = 1;
+    mapExp_v0__ANONYMOUS_s379[2] = 1;
+    values0[0] = CASPER_TRUE__ANONYMOUS_s237;
+  }
+  _term_flag_bit_terminal0_map_c1__ANONYMOUS_s336[0] = 1;
+  _term_flag_bit_terminal1_map_c1__ANONYMOUS_s337[0] = 1;
+  _term_flag_string_terminal0_map_c1__ANONYMOUS_s338[2] = 1;
+  int _string_terminal0 = words[i];
+  _term_flag_string_terminal1_map_c1__ANONYMOUS_s339[1] = 1;
+  mapExp_c1__ANONYMOUS_s340[1] = 1;
+  bit _out_s93 = 0;
+  casper_str_equal(_string_terminal0, key2__ANONYMOUS_s243, _out_s93);
+  if(_out_s93)/*main_boolean_0.sk:262*/
+  {
+    keys0[1] = 2;
+    _term_flag_bit_terminal0_map_v1__ANONYMOUS_s380[0] = 1;
+    _term_flag_bit_terminal1_map_v1__ANONYMOUS_s381[0] = 1;
+    _term_flag_string_terminal0_map_v1__ANONYMOUS_s382[0] = 1;
+    _term_flag_string_terminal1_map_v1__ANONYMOUS_s383[3] = 1;
+    mapExp_v1__ANONYMOUS_s384[0] = 1;
+    values0[1] = loop0__ANONYMOUS_s244;
+  }
+}
+/*main_boolean_0.sk:354*/
+
+void merge_foundKey1 (bit val1, bit val2, ref bit _out)/*main_boolean_0.sk:354*/
+{
+  _out = 0;
+  _out = val1;
+  return;
+}
+/*main_boolean_0.sk:357*/
+
+void merge_foundKey2 (bit val1, bit val2, ref bit _out)/*main_boolean_0.sk:357*/
+{
+  _out = 0;
+  _out = val1 || val2;
+  return;
+}
+/*main_boolean_0.sk:110*/
+
+void postCondition (int[3] words, bit foundKey2, bit foundKey20, bit foundKey1, bit foundKey10, int i, int i0, ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s189, ref global bit CASPER_TRUE__ANONYMOUS_s190, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s231, ref global bit[1] _term_flag_bit_terminal0_map_c1__ANONYMOUS_s293, ref global bit[1] _term_flag_bit_terminal0_map_v0__ANONYMOUS_s294, ref global bit[1] _term_flag_bit_terminal0_map_v1__ANONYMOUS_s191, ref global bit[3] _term_flag_bit_terminal0_reduce0__ANONYMOUS_s295, ref global bit[3] _term_flag_bit_terminal0_reduce1__ANONYMOUS_s296, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s232, ref global bit[1] _term_flag_bit_terminal1_map_c1__ANONYMOUS_s297, ref global bit[1] _term_flag_bit_terminal1_map_v0__ANONYMOUS_s298, ref global bit[1] _term_flag_bit_terminal1_map_v1__ANONYMOUS_s192, ref global bit[3] _term_flag_bit_terminal1_reduce0__ANONYMOUS_s299, ref global bit[3] _term_flag_bit_terminal1_reduce1__ANONYMOUS_s300, ref global bit[4] _term_flag_string_terminal0_map_c0__ANONYMOUS_s233, ref global bit[4] _term_flag_string_terminal0_map_c1__ANONYMOUS_s301, ref global bit[4] _term_flag_string_terminal0_map_v0__ANONYMOUS_s302, ref global bit[4] _term_flag_string_terminal0_map_v1__ANONYMOUS_s193, ref global bit[3] _term_flag_string_terminal0_reduce0__ANONYMOUS_s303, ref global bit[3] _term_flag_string_terminal0_reduce1__ANONYMOUS_s304, ref global bit[4] _term_flag_string_terminal1_map_c0__ANONYMOUS_s234, ref global bit[4] _term_flag_string_terminal1_map_c1__ANONYMOUS_s305, ref global bit[4] _term_flag_string_terminal1_map_v0__ANONYMOUS_s306, ref global bit[4] _term_flag_string_terminal1_map_v1__ANONYMOUS_s194, ref global bit[3] _term_flag_string_terminal1_reduce0__ANONYMOUS_s307, ref global bit[3] _term_flag_string_terminal1_reduce1__ANONYMOUS_s308, ref global int key1__ANONYMOUS_s195, ref global int key2__ANONYMOUS_s196, ref global bit loop0__ANONYMOUS_s197, ref global bit[4] mapExp_c0__ANONYMOUS_s235, ref global bit[4] mapExp_c1__ANONYMOUS_s309, ref global bit[4] mapExp_v0__ANONYMOUS_s310, ref global bit[4] mapExp_v1__ANONYMOUS_s198, ref global bit[4] reduceExp0__ANONYMOUS_s311, ref global bit[4] reduceExp1__ANONYMOUS_s312)/*main_boolean_0.sk:110*/
+{
+  _out = 0;
+  bit[2] casper_r = {0,0};
+  casper_r[0] = foundKey1;
+  casper_r[1] = foundKey2;
+  bit[2] _out_s69 = {0,0};
+  reduce(words, foundKey1, foundKey10, foundKey2, foundKey20, i, i0, _out_s69, CASPER_FALSE__ANONYMOUS_s189, CASPER_TRUE__ANONYMOUS_s190, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s231, _term_flag_bit_terminal0_map_c1__ANONYMOUS_s293, _term_flag_bit_terminal0_map_v0__ANONYMOUS_s294, _term_flag_bit_terminal0_map_v1__ANONYMOUS_s191, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s295, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s296, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s232, _term_flag_bit_terminal1_map_c1__ANONYMOUS_s297, _term_flag_bit_terminal1_map_v0__ANONYMOUS_s298, _term_flag_bit_terminal1_map_v1__ANONYMOUS_s192, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s299, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s300, _term_flag_string_terminal0_map_c0__ANONYMOUS_s233, _term_flag_string_terminal0_map_c1__ANONYMOUS_s301, _term_flag_string_terminal0_map_v0__ANONYMOUS_s302, _term_flag_string_terminal0_map_v1__ANONYMOUS_s193, _term_flag_string_terminal0_reduce0__ANONYMOUS_s303, _term_flag_string_terminal0_reduce1__ANONYMOUS_s304, _term_flag_string_terminal1_map_c0__ANONYMOUS_s234, _term_flag_string_terminal1_map_c1__ANONYMOUS_s305, _term_flag_string_terminal1_map_v0__ANONYMOUS_s306, _term_flag_string_terminal1_map_v1__ANONYMOUS_s194, _term_flag_string_terminal1_reduce0__ANONYMOUS_s307, _term_flag_string_terminal1_reduce1__ANONYMOUS_s308, key1__ANONYMOUS_s195, key2__ANONYMOUS_s196, loop0__ANONYMOUS_s197, mapExp_c0__ANONYMOUS_s235, mapExp_c1__ANONYMOUS_s309, mapExp_v0__ANONYMOUS_s310, mapExp_v1__ANONYMOUS_s198, reduceExp0__ANONYMOUS_s311, reduceExp1__ANONYMOUS_s312);
+  _out = _out_s69 == casper_r;
+  return;
+}
+/*main_boolean_0.sk:362*/
+
+void reduce (int[3] words, bit foundKey1, bit foundKey10, bit foundKey2, bit foundKey20, int i, int i0, ref bit[2] _out, ref global bit CASPER_FALSE__ANONYMOUS_s174, ref global bit CASPER_TRUE__ANONYMOUS_s175, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s326, ref global bit[1] _term_flag_bit_terminal0_map_c1__ANONYMOUS_s184, ref global bit[1] _term_flag_bit_terminal0_map_v0__ANONYMOUS_s224, ref global bit[1] _term_flag_bit_terminal0_map_v1__ANONYMOUS_s350, ref global bit[3] _term_flag_bit_terminal0_reduce0__ANONYMOUS_s176, ref global bit[3] _term_flag_bit_terminal0_reduce1__ANONYMOUS_s284, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s327, ref global bit[1] _term_flag_bit_terminal1_map_c1__ANONYMOUS_s185, ref global bit[1] _term_flag_bit_terminal1_map_v0__ANONYMOUS_s225, ref global bit[1] _term_flag_bit_terminal1_map_v1__ANONYMOUS_s351, ref global bit[3] _term_flag_bit_terminal1_reduce0__ANONYMOUS_s177, ref global bit[3] _term_flag_bit_terminal1_reduce1__ANONYMOUS_s285, ref global bit[4] _term_flag_string_terminal0_map_c0__ANONYMOUS_s328, ref global bit[4] _term_flag_string_terminal0_map_c1__ANONYMOUS_s186, ref global bit[4] _term_flag_string_terminal0_map_v0__ANONYMOUS_s226, ref global bit[4] _term_flag_string_terminal0_map_v1__ANONYMOUS_s352, ref global bit[3] _term_flag_string_terminal0_reduce0__ANONYMOUS_s178, ref global bit[3] _term_flag_string_terminal0_reduce1__ANONYMOUS_s286, ref global bit[4] _term_flag_string_terminal1_map_c0__ANONYMOUS_s329, ref global bit[4] _term_flag_string_terminal1_map_c1__ANONYMOUS_s187, ref global bit[4] _term_flag_string_terminal1_map_v0__ANONYMOUS_s227, ref global bit[4] _term_flag_string_terminal1_map_v1__ANONYMOUS_s353, ref global bit[3] _term_flag_string_terminal1_reduce0__ANONYMOUS_s179, ref global bit[3] _term_flag_string_terminal1_reduce1__ANONYMOUS_s287, ref global int key1__ANONYMOUS_s180, ref global int key2__ANONYMOUS_s181, ref global bit loop0__ANONYMOUS_s182, ref global bit[4] mapExp_c0__ANONYMOUS_s330, ref global bit[4] mapExp_c1__ANONYMOUS_s188, ref global bit[4] mapExp_v0__ANONYMOUS_s228, ref global bit[4] mapExp_v1__ANONYMOUS_s354, ref global bit[4] reduceExp0__ANONYMOUS_s183, ref global bit[4] reduceExp1__ANONYMOUS_s288)/*main_boolean_0.sk:362*/
+{
+  _out = ((bit[2])0);
+  bit _out_s71 = 0;
+  init_foundKey1(_out_s71, CASPER_FALSE__ANONYMOUS_s174, CASPER_TRUE__ANONYMOUS_s175);
+  _out[0] = _out_s71;
+  bit _out_s73 = 0;
+  init_foundKey2(_out_s73, CASPER_FALSE__ANONYMOUS_s174, CASPER_TRUE__ANONYMOUS_s175);
+  _out[1] = _out_s73;
+  for(int casper_i = i0; casper_i < i; casper_i = casper_i + 1)/*Canonical*/
+  {
+    bit[2] values0 = {0,0};
+    int[2] keys0 = {0,0};
+    map(words, casper_i, keys0, values0, CASPER_FALSE__ANONYMOUS_s174, CASPER_TRUE__ANONYMOUS_s175, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s326, _term_flag_bit_terminal0_map_c1__ANONYMOUS_s184, _term_flag_bit_terminal0_map_v0__ANONYMOUS_s224, _term_flag_bit_terminal0_map_v1__ANONYMOUS_s350, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s327, _term_flag_bit_terminal1_map_c1__ANONYMOUS_s185, _term_flag_bit_terminal1_map_v0__ANONYMOUS_s225, _term_flag_bit_terminal1_map_v1__ANONYMOUS_s351, _term_flag_string_terminal0_map_c0__ANONYMOUS_s328, _term_flag_string_terminal0_map_c1__ANONYMOUS_s186, _term_flag_string_terminal0_map_v0__ANONYMOUS_s226, _term_flag_string_terminal0_map_v1__ANONYMOUS_s352, _term_flag_string_terminal1_map_c0__ANONYMOUS_s329, _term_flag_string_terminal1_map_c1__ANONYMOUS_s187, _term_flag_string_terminal1_map_v0__ANONYMOUS_s227, _term_flag_string_terminal1_map_v1__ANONYMOUS_s353, key1__ANONYMOUS_s180, key2__ANONYMOUS_s181, loop0__ANONYMOUS_s182, mapExp_c0__ANONYMOUS_s330, mapExp_c1__ANONYMOUS_s188, mapExp_v0__ANONYMOUS_s228, mapExp_v1__ANONYMOUS_s354);
+    for(int casper_j = 0; casper_j < 2; casper_j = casper_j + 1)/*Canonical*/
+    {
+      int key0 = keys0[casper_j];
+      if(key0 == 0)/*main_boolean_0.sk:380*/
+        { }
+      else
+      {
+        if(key0 == 1)/*main_boolean_0.sk:381*/
+        {
+          bit _out_s75 = 0;
+          reduce_foundKey1(_out[0], values0[casper_j], _out_s75, CASPER_FALSE__ANONYMOUS_s174, CASPER_TRUE__ANONYMOUS_s175, _term_flag_bit_terminal0_reduce0__ANONYMOUS_s176, _term_flag_bit_terminal1_reduce0__ANONYMOUS_s177, _term_flag_string_terminal0_reduce0__ANONYMOUS_s178, _term_flag_string_terminal1_reduce0__ANONYMOUS_s179, key1__ANONYMOUS_s180, key2__ANONYMOUS_s181, loop0__ANONYMOUS_s182, reduceExp0__ANONYMOUS_s183);
+          _out[0] = _out_s75;
+        }
+        else
+        {
+          assert (key0 == 2); //Assert at main_boolean_0.sk:382 (2960626505415363618)
+          bit _out_s77 = 0;
+          reduce_foundKey2(_out[1], values0[casper_j], _out_s77, CASPER_FALSE__ANONYMOUS_s174, CASPER_TRUE__ANONYMOUS_s175, _term_flag_bit_terminal0_reduce1__ANONYMOUS_s284, _term_flag_bit_terminal1_reduce1__ANONYMOUS_s285, _term_flag_string_terminal0_reduce1__ANONYMOUS_s286, _term_flag_string_terminal1_reduce1__ANONYMOUS_s287, key1__ANONYMOUS_s180, key2__ANONYMOUS_s181, loop0__ANONYMOUS_s182, reduceExp1__ANONYMOUS_s288);
+          _out[1] = _out_s77;
+        }
+      }
+    }
+  }
+  bit _out_s79 = 0;
+  merge_foundKey1(_out[0], foundKey10, _out_s79);
+  _out[0] = _out_s79;
+  bit _out_s81 = 0;
+  merge_foundKey2(_out[1], foundKey20, _out_s81);
+  _out[1] = _out_s81;
+  return;
+}
+/*main_boolean_0.sk:346*/
+
+void reduce_foundKey1 (bit val1, bit val2, ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s246, ref global bit CASPER_TRUE__ANONYMOUS_s247, ref global bit[3] _term_flag_bit_terminal0_reduce0__ANONYMOUS_s248, ref global bit[3] _term_flag_bit_terminal1_reduce0__ANONYMOUS_s249, ref global bit[3] _term_flag_string_terminal0_reduce0__ANONYMOUS_s250, ref global bit[3] _term_flag_string_terminal1_reduce0__ANONYMOUS_s251, ref global int key1__ANONYMOUS_s252, ref global int key2__ANONYMOUS_s253, ref global bit loop0__ANONYMOUS_s254, ref global bit[4] reduceExp0__ANONYMOUS_s255)/*main_boolean_0.sk:346*/
+{
+  _out = 0;
+  _term_flag_bit_terminal0_reduce0__ANONYMOUS_s248[0] = 1;
+  _term_flag_bit_terminal1_reduce0__ANONYMOUS_s249[0] = 1;
+  _term_flag_string_terminal0_reduce0__ANONYMOUS_s250[0] = 1;
+  _term_flag_string_terminal1_reduce0__ANONYMOUS_s251[0] = 1;
+  reduceExp0__ANONYMOUS_s255[1] = 1;
+  bit _out_s67 = 0;
+  casper_str_equal(key1__ANONYMOUS_s252, key1__ANONYMOUS_s252, _out_s67);
+  _out = _out_s67;
+  return;
+}
+/*main_boolean_0.sk:350*/
+
+void reduce_foundKey2 (bit val1, bit val2, ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s214, ref global bit CASPER_TRUE__ANONYMOUS_s215, ref global bit[3] _term_flag_bit_terminal0_reduce1__ANONYMOUS_s216, ref global bit[3] _term_flag_bit_terminal1_reduce1__ANONYMOUS_s217, ref global bit[3] _term_flag_string_terminal0_reduce1__ANONYMOUS_s218, ref global bit[3] _term_flag_string_terminal1_reduce1__ANONYMOUS_s219, ref global int key1__ANONYMOUS_s220, ref global int key2__ANONYMOUS_s221, ref global bit loop0__ANONYMOUS_s222, ref global bit[4] reduceExp1__ANONYMOUS_s223)/*main_boolean_0.sk:350*/
+{
+  _out = 0;
+  _term_flag_bit_terminal0_reduce1__ANONYMOUS_s216[0] = 1;
+  _term_flag_bit_terminal1_reduce1__ANONYMOUS_s217[0] = 1;
+  _term_flag_string_terminal0_reduce1__ANONYMOUS_s218[0] = 1;
+  _term_flag_string_terminal1_reduce1__ANONYMOUS_s219[0] = 1;
+  reduceExp1__ANONYMOUS_s223[1] = 1;
+  bit _out_s63 = 0;
+  casper_str_equal(key1__ANONYMOUS_s220, key1__ANONYMOUS_s220, _out_s63);
+  _out = _out_s63;
+  return;
+}
+/* END PACKAGE ANONYMOUS*/
+[SKETCH] DONE
+Total time = 2913
