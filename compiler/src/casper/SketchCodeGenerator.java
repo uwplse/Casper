@@ -854,7 +854,7 @@ public class SketchCodeGenerator {
 							ext.recursionDepth
 						);
 		
-		if(sketchType.equals("bit")){
+		if(sketchType.equals("bit") && !index.startsWith("_c")){
 			exprs.add("CASPER_TRUE");
 			exprs.add("CASPER_FALSE");
 		}

@@ -15,7 +15,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import casper.Configuration;
@@ -38,6 +40,7 @@ public class GenerateScaffold extends NodeVisitor{
 	NodeFactory nf;
 	boolean opsAdded = false;
 	PrintWriter debugLog;
+	Map<String,Boolean> solFound;
 	
 	@SuppressWarnings("deprecation")
 	public GenerateScaffold(NodeFactory nf) throws IOException{
@@ -45,7 +48,8 @@ public class GenerateScaffold extends NodeVisitor{
 		this.log = true;
 		this.id = 0;
 		this.nf = nf;
-		this.opsAdded = false;	
+		this.opsAdded = false;
+		this.solFound = new HashMap<String,Boolean>();
 	}
 	
 	public NodeVisitor enter(Node parent, Node n){
@@ -150,6 +154,9 @@ public class GenerateScaffold extends NodeVisitor{
 										ext.verifiedCSG.add(true);
 										ext.blocks.add(new ArrayList<String>());
 										ext.termValuesTemp.clear();
+										
+										this.solFound.put(ext.keyIndex+","+ext.useConditionals+","+opsAdded,true);
+										this.solFound.put(ext.keyIndex+","+ext.useConditionals+","+ext.valCount+","+opsAdded,true);
 										
 										if(log){
 											debugLog.print("Solution Mappers: "+ext.mapEmits + "\n");
@@ -280,8 +287,7 @@ public class GenerateScaffold extends NodeVisitor{
         	// 1. If we have multiple keys, try other key2 types
         	if(keyCount > 1){
         		if(ext.keyIndex < ext.candidateKeyTypes.size()-1){
-        			if(debug || true)
-        				System.err.println("Keytype changed from " + ext.candidateKeyTypes.get(ext.keyIndex) + " to " + ext.candidateKeyTypes.get(ext.keyIndex+1));
+        			System.err.println("Keytype changed from " + ext.candidateKeyTypes.get(ext.keyIndex) + " to " + ext.candidateKeyTypes.get(ext.keyIndex+1));
         			System.err.println("Building new grammar...");
         			ext.keyIndex++;
         			return 1;
@@ -289,33 +295,36 @@ public class GenerateScaffold extends NodeVisitor{
         	}
         	// 2. Increase recursive bound until we are at 3.
         	if(ext.recursionDepth < Configuration.recursionDepth){
-        		ext.recursionDepth++;
-        		ext.keyIndex = 0;
-        		if(debug || true)
-    				System.err.println("Recursion depth changed from " + (ext.recursionDepth-1) + " to " + ext.recursionDepth);
-        		System.err.println("Building new grammar...");
-        		return 1;
+        		if(!this.solFound.containsKey(ext.keyIndex+","+ext.useConditionals+","+ext.valCount+","+opsAdded)){
+	        		ext.recursionDepth++;
+	        		ext.keyIndex = 0;
+	        		System.err.println("Recursion depth changed from " + (ext.recursionDepth-1) + " to " + ext.recursionDepth);
+	        		System.err.println("Building new grammar...");
+	        		return 1;
+        		}
         	}
         	// 3. Turn conditionals on if they were seen in code
         	if(ext.foundConditionals && !ext.useConditionals){
         		ext.useConditionals = true;
         		ext.recursionDepth = 2;
         		ext.keyIndex = 0;
-        		if(debug || true)
-    				System.err.println("Conditionals turned on");
+        		System.err.println("Conditionals turned on");
         		System.err.println("Building new grammar...");
         		return 1;
         	}
         	// 4. Increase number of values until 2.
         	if(ext.valCount < Configuration.maxValuesTupleSize){
-        		ext.valCount++;
-        		ext.recursionDepth = 2;
-        		if(ext.foundConditionals) ext.useConditionals = false;
-        		ext.keyIndex = 0;
-        		if(debug || true)
-    				System.err.println("Val count changed from " + (ext.valCount-1) + " to " + ext.valCount);
-        		System.err.println("Building new grammar...");
-        		return 1;
+        		System.err.println(this.solFound);
+        		System.err.println(ext.keyIndex+","+ext.useConditionals+","+opsAdded);
+        		if(!this.solFound.containsKey(ext.keyIndex+","+ext.useConditionals+","+opsAdded)){
+	        		ext.valCount++;
+	        		ext.recursionDepth = 2;
+	        		if(ext.foundConditionals) ext.useConditionals = false;
+	        		ext.keyIndex = 0;
+	        		System.err.println("Val count changed from " + (ext.valCount-1) + " to " + ext.valCount);
+	        		System.err.println("Building new grammar...");
+	        		return 1;
+        		}
         	}
         	// 5. Turn on conditionals even if they were not found in code. 
         	if(!ext.foundConditionals && !ext.useConditionals){
