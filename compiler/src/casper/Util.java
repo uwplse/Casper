@@ -394,7 +394,7 @@ public class Util {
 				return "seq<"+original.replace("["+Configuration.arraySizeBound+"]", "")+">";
 			}
 			else if(original.endsWith("[]")){
-				return "seq<"+original.replace("[]", "")+">";
+				return original.replace("[]","");
 			}
 			else{
 				return original;

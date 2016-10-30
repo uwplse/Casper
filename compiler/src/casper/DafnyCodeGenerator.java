@@ -689,7 +689,6 @@ public class DafnyCodeGenerator {
 	
 	public static String generateDomapEmitType(Map<String, List<KvPair>> mapEmits, String type) {
 		String code = "";
-
 		// Convert mapKeyType to dafny types
 		String keyType = "";
 		for(String conditional : mapEmits.keySet()){

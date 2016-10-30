@@ -138,11 +138,11 @@ public class GenerateScaffold extends NodeVisitor{
 								
 								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType, sketchReduceType);
 								
-								int verifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
+								int CSGverifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
 								
-								if(verifierExitCode == 0){
-									int CSGVerifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
-									if(CSGVerifierExitCode == 0){
+								if(CSGverifierExitCode == 0){
+									int VerifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
+									if(VerifierExitCode == 0){
 										ext.verifiedMapEmits.add(ext.mapEmits);
 										ext.verifiedInitExps.add(ext.initExps);
 										ext.verifiedReduceExps.add(ext.reduceExps);
