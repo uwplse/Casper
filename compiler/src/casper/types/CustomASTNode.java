@@ -64,7 +64,7 @@ abstract public class CustomASTNode {
 			String objType = ((New) exp).objectType().toString();
 			if(objType.startsWith("java.util.ArrayList<")){
 				String subType = objType.substring("java.util.ArrayList<".length(), objType.length()-1);
-				node = new ConstantNode(casper.Util.getInitVal(subType),ConstantNode.INTLIT);
+				node = new ConstantNode(casper.Util.getInitVal(subType),ConstantNode.ARRAYLIT);
 			}
 		}
 		else  if(exp instanceof NewArray){

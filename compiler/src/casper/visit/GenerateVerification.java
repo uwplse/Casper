@@ -255,7 +255,8 @@ public class GenerateVerification extends NodeVisitor {
 			if(alt){
 				CustomASTNode n1;
 				if(initVals.containsKey(varname.substring(0,varname.length()-1))){
-					if(initVals.get(varname.substring(0,varname.length()-1)) instanceof ConstantNode){
+					CustomASTNode val = initVals.get(varname.substring(0,varname.length()-1));
+					if(val instanceof ConstantNode && !(((ConstantNode) val).type == ConstantNode.ARRAYLIT)){
 						n1 = new IdentifierNode(initVals.get(varname.substring(0,varname.length()-1)).toString());
 					}
 					else{
@@ -292,8 +293,14 @@ public class GenerateVerification extends NodeVisitor {
 			CustomASTNode arg;
 			if(alt){
 				CustomASTNode n1;
-				if(initVals.containsKey(varname.substring(0,varname.length()-1)) && initVals.get(varname.substring(0,varname.length()-1)) instanceof ConstantNode){
-					n1 = new IdentifierNode(initVals.get(varname.substring(0,varname.length()-1)).toString());
+				if(initVals.containsKey(varname.substring(0,varname.length()-1))){
+					CustomASTNode val = initVals.get(varname.substring(0,varname.length()-1));
+					if(val instanceof ConstantNode && !(((ConstantNode) val).type == ConstantNode.ARRAYLIT)){
+						n1 = new IdentifierNode(initVals.get(varname.substring(0,varname.length()-1)).toString());
+					}
+					else{
+						n1 = new IdentifierNode(varname.toString());
+					}
 				}
 				else{
 					n1 = new IdentifierNode(varname.toString());
@@ -315,7 +322,7 @@ public class GenerateVerification extends NodeVisitor {
 		for(String varname : loopInvArgs.get(type)){
 			if(alt){
 				if(initVals.containsKey(varname)){
-					pCond = pCond.replaceAll(varname, new IdentifierNode(initVals.get(varname).toString()));
+					pCond = pCond.replaceAll(varname, new IdentifierNode(varname+"0"));
 				}
 				else{
 					pCond = pCond.replaceAll(varname, new IdentifierNode(varname+"0"));
@@ -338,7 +345,13 @@ public class GenerateVerification extends NodeVisitor {
 			if(alt){
 				CustomASTNode n1;
 				if(initVals.containsKey(varname.substring(0,varname.length()-1)) && initVals.get(varname.substring(0,varname.length()-1)) instanceof ConstantNode){
-					n1 = new IdentifierNode(initVals.get(varname.substring(0,varname.length()-1)).toString());
+					CustomASTNode val = new IdentifierNode(initVals.get(varname.substring(0,varname.length()-1)).toString());
+					if(val instanceof ConstantNode && !(((ConstantNode) val).type == ConstantNode.ARRAYLIT)){
+						n1 = new IdentifierNode(initVals.get(varname.substring(0,varname.length()-1)).toString());
+					}
+					else{
+						n1 = new IdentifierNode(varname.toString());
+					}
 				}
 				else{
 					n1 = new IdentifierNode(varname.toString());

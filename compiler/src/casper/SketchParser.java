@@ -408,7 +408,6 @@ public class SketchParser {
 			if(keep)
 				filteredEmits.add(emit);
 		}
-		System.err.println(filteredEmits);
 		mapEmits.put("noCondition",filteredEmits);
 		
 		// Extract map flags

@@ -237,7 +237,7 @@ public class SketchCodeGenerator {
 	private static String generateCSGTestCode(Set<Variable> sketchFilteredOutputVars) {
 		String code = "\n\n\t";
 		for(Variable var : sketchFilteredOutputVars){
-			code += "assert reduce_"+var.varName+"(csg_test_val1,csg_test_val2) == reduce_"+var.varName+"(csg_test_val2,csg_test_val1);\n\t";
+			code += "assert (reduce_"+var.varName+"(csg_test_val1,csg_test_val2) == reduce_"+var.varName+"(csg_test_val2,csg_test_val1)) || (reduce_"+var.varName+"(csg_test_val1,csg_test_val2) == csg_test_val2 && reduce_"+var.varName+"(csg_test_val2,csg_test_val1) == csg_test_val1);\n\t";
 		}
 		return code;
 	}
@@ -521,18 +521,21 @@ public class SketchCodeGenerator {
 			}
 			else if(ext.inputDataCollections.size() > 1){
 				ext.inputDataSet = new Variable("casper_data_set","java.util.List<CasperDataRecord>","",Variable.ARRAY_ACCESS);
-				ext.globalDataTypes.add("CasperDataRecord");
-				ext.globalDataTypesFields.put("CasperDataRecord", new HashSet<Variable>());
-				String fields = "";
-				for(Variable var : ext.inputDataCollections){
-					ext.globalDataTypesFields.get("CasperDataRecord").add(new Variable(var.varName,casper.Util.reducerType(var.getSketchType()),"",Variable.VAR));
-					fields += casper.Util.reducerType(var.getSketchType()) + " " + var.varName + ";";
-				}
+				if(!ext.globalDataTypes.contains("CasperDataRecord")){
+					ext.globalDataTypes.add("CasperDataRecord");
+					ext.globalDataTypesFields.put("CasperDataRecord", new HashSet<Variable>());
 				
-				PrintWriter writer = new PrintWriter("output/CasperDataRecord.sk", "UTF-8");
-				String text = "struct CasperDataRecord{ "+fields+" }";
-				writer.print(text);
-				writer.close();
+					String fields = "";
+					for(Variable var : ext.inputDataCollections){
+						ext.globalDataTypesFields.get("CasperDataRecord").add(new Variable(var.varName,casper.Util.reducerType(var.getSketchType()),"",Variable.VAR));
+						fields += casper.Util.reducerType(var.getSketchType()) + " " + var.varName + ";";
+					}
+					
+					PrintWriter writer = new PrintWriter("output/CasperDataRecord.sk", "UTF-8");
+					String text = "struct CasperDataRecord{ "+fields+" }";
+					writer.print(text);
+					writer.close();
+				}
 			}
 			
 			inputInit = ext.inputDataSet.getSketchType().replace("["+Configuration.arraySizeBound+"]", "["+(Configuration.arraySizeBound-1)+"]") + " " + ext.inputDataSet.varName + ";\n\t";
@@ -744,7 +747,7 @@ public class SketchCodeGenerator {
 		/******** Generate terminal options *******/
 		Map<String,List<String>> terminals = new HashMap<String,List<String>>();
 		
-		/*for(Variable var : ext.loopCounters){
+		for(Variable var : ext.loopCounters){
 			if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 1){
 				String keyType = "String";
 				if(!var.getOriginalType().replace("[]", "").equals("String"))
@@ -752,7 +755,7 @@ public class SketchCodeGenerator {
 				if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
 				terminals.get(keyType).add(var.varName);
 			}
-		}*/
+		}
 		for(Variable var : ext.inputVars){
 			if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 1){
 				String keyType = "String";
@@ -1198,7 +1201,6 @@ public class SketchCodeGenerator {
 		terminals.get(type).add("val1");
 		for(int i=2; i<ext.valCount+2; i++)
 			terminals.get(type).add("val"+i);
-		
 		
 		for(Variable var : ext.inputVars){
 			if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 1){

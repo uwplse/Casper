@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import casper.Configuration;
 import casper.DafnyCodeGenerator;
@@ -144,6 +146,9 @@ public class GenerateScaffold extends NodeVisitor{
 								
 								int CSGverifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
 								
+								System.err.println(ext.mapEmits);
+								System.err.println(ext.reduceExps);
+								
 								if(CSGverifierExitCode == 0){
 									int VerifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
 									if(VerifierExitCode == 0){
@@ -166,14 +171,54 @@ public class GenerateScaffold extends NodeVisitor{
 										}
 									}
 									else{
-										ext.blockExprs.get(ext.blockExprs.size()-1).putAll(ext.termValuesTemp);
+										Map<String,String> blockExprsNew = new HashMap<String,String>();
+										for(String key : ext.blockExprs.get(ext.blockExprs.size()-1).keySet()){
+											String prefix = "_term_flag";;
+											String postfix = "";
+											if(key.startsWith("mapExp")){
+												postfix = "_map"+key.substring(6);
+											}
+											else if(key.startsWith("reduceExp")){
+												postfix = "_reduce"+key.substring(9);
+											}
+											for(String s : ext.termValuesTemp.keySet()){
+												Pattern r = Pattern.compile(Pattern.quote(prefix)+"(.*?)"+Pattern.quote(postfix));
+												Matcher m = r.matcher(s);
+												if(m.matches()){
+													if(ext.blockExprs.get(ext.blockExprs.size()-1).get(key).contains(m.group(1))){
+														blockExprsNew.put(s, ext.termValuesTemp.get(s));
+													}
+												}
+											}
+										}
+										ext.blockExprs.get(ext.blockExprs.size()-1).putAll(blockExprsNew);
 										ext.blocks.add(new ArrayList<String>());
 										ext.termValuesTemp.clear();
 									}
 								}
 								else{
 									// Solution failed. Register terminal values in blockedExprs.
-									ext.blockExprs.get(ext.blockExprs.size()-1).putAll(ext.termValuesTemp);
+									Map<String,String> blockExprsNew = new HashMap<String,String>();
+									for(String key : ext.blockExprs.get(ext.blockExprs.size()-1).keySet()){
+										String prefix = "_term_flag";;
+										String postfix = "";
+										if(key.startsWith("mapExp")){
+											postfix = "_map"+key.substring(6);
+										}
+										else if(key.startsWith("reduceExp")){
+											postfix = "_reduce"+key.substring(9);
+										}
+										for(String s : ext.termValuesTemp.keySet()){
+											Pattern r = Pattern.compile(Pattern.quote(prefix)+"(.*?)"+Pattern.quote(postfix));
+											Matcher m = r.matcher(s);
+											if(m.matches()){
+												if(ext.blockExprs.get(ext.blockExprs.size()-1).get(key).contains(m.group(1))){
+													blockExprsNew.put(s, ext.termValuesTemp.get(s));
+												}
+											}
+										}
+									}
+									ext.blockExprs.get(ext.blockExprs.size()-1).putAll(blockExprsNew);
 									ext.blocks.add(new ArrayList<String>());
 									ext.termValuesTemp.clear();
 								}
@@ -314,8 +359,6 @@ public class GenerateScaffold extends NodeVisitor{
         	}
         	// 4. Increase number of values until 2.
         	if(ext.valCount < Configuration.maxValuesTupleSize){
-        		System.err.println(this.solFound);
-        		System.err.println(ext.keyIndex+","+ext.useConditionals+","+opsAdded);
         		if(!this.solFound.containsKey(ext.keyIndex+","+ext.useConditionals+","+opsAdded)){
 	        		ext.valCount++;
 	        		ext.recursionDepth = 2;

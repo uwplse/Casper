@@ -46,7 +46,7 @@ public class DafnyCodeGenerator {
 		String harnessArgs = generateDafnyHarnessArgs(ext,ext.inputVars,outputVars,ext.loopCounters);
 	
 		// Generate require statements for dafny main function
-		String mainReqStmts = generateRequireStatements(outputVars,ext.wpcValues,ext.inputDataSet);
+		String mainReqStmts = generateRequireStatements(ext,outputVars,ext.wpcValues,ext.inputDataSet);
 		
 		// Init variables in main
 		String initVars = generateVarInit(ext,ext.inputVars,outputVars,ext.loopCounters);
@@ -185,6 +185,7 @@ public class DafnyCodeGenerator {
 		template = template.replace("<doreduce-key-type>", doreduceKeyType);
 		template = template.replace("<output-type>", casper.Util.getDafnyTypeFromRaw(reducerType));
 		template = template.replace("<reduce-init-value>", reduceInitValues);
+		template = template.replace("<udts>", UDTs);
 		
 		writer.print(template);
 		writer.close();
@@ -192,7 +193,6 @@ public class DafnyCodeGenerator {
 
 	private static String generateUDTs(MyWhileExt ext) {
 		String code = "";
-		
 		for(String type : ext.globalDataTypes){
 			code += "class " + type + "{\n\t";
 			for(Variable field : ext.globalDataTypesFields.get(type)){
@@ -200,7 +200,6 @@ public class DafnyCodeGenerator {
 			}
 			code = code.substring(0,code.length()-1) + "}\n";
 		}
-		
 		return code;
 	}
 
@@ -211,7 +210,7 @@ public class DafnyCodeGenerator {
 		
 		for(Variable var : outputVars){
 			args += ", " + var.varName + ": " + var.getDafnyType();
-			if(!ext.initVals.containsKey(var.varName)){
+			if(!ext.initVals.containsKey(var.varName) || (ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode)ext.initVals.get(var.varName)).type == ConstantNode.ARRAYLIT)){
 				args += ", " + var.varName + "0: " + var.getDafnyType();
 			}
 		}
@@ -236,7 +235,7 @@ public class DafnyCodeGenerator {
 		return args;
 	}
 	
-	public static String generateRequireStatements(Set<Variable> outputVars, Map<String, CustomASTNode> wpcValues, Variable inputDataSet) {
+	public static String generateRequireStatements(MyWhileExt ext, Set<Variable> outputVars, Map<String, CustomASTNode> wpcValues, Variable inputDataSet) {
 		String code = "";
 		
 		if(casper.Util.getDafnyTypeClass(inputDataSet.getDafnyType()) == casper.Util.OBJECT_ARRAY){
@@ -246,6 +245,9 @@ public class DafnyCodeGenerator {
 		for(Variable var : outputVars){
 			if(casper.Util.getDafnyTypeClass(var.getDafnyType()) == casper.Util.ARRAY || casper.Util.getDafnyTypeClass(var.getDafnyType()) == casper.Util.OBJECT_ARRAY){
 				code += "requires  |" + var.varName + "| == |" + var.varName + "0|\n\t";
+				if(ext.initVals.containsKey(var.varName) && ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode)ext.initVals.get(var.varName)).type == ConstantNode.ARRAYLIT){
+					code += "requires  forall k :: 0 <= k < |" + var.varName + "0| ==> " + var.varName + "0[k] == "+ ext.initVals.get(var.varName) +"\n\t";
+				}
 			}
 		}
 		

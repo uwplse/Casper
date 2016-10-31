@@ -96,7 +96,7 @@ public class Util {
 			case "Integer[]":
 				return "int";
 			case "Double[]":
-				return "ddouble";
+				return "double";
 			case "Float[]":
 				return "float";
 			default:
