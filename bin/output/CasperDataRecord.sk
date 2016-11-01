@@ -1,1 +1,1 @@
-struct CasperDataRecord{ int v2;int v1; }
+struct CasperDataRecord{ int y;int x; }

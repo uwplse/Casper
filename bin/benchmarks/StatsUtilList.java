@@ -34,7 +34,7 @@ public class StatsUtilList {
      * @return
      *                  The covariance as a double giving the fit difference of least squares
      */
-    /*public static double mean(List<Double> data){
+   /* public static double mean(List<Double> data){
         double sum = 0.0;
         for(int i=0;i< data.size(); i++) sum += data.get(i);
         return sum / (double) data.size() - 1;
@@ -56,6 +56,12 @@ public class StatsUtilList {
     /*public static double covariance(double xVariance, double yVariance, List<List<Double>> data){
         double covariance=0.0;
         for (int i = 0; i < data.size(); i++) covariance += (data.get(i).get(0) - xVariance) * (data.get(i).get(1) - yVariance);
+        return covariance;
+    }
+*/
+	public static double covariance(double xVariance, double yVariance, double[] x, double[] y){
+        double covariance=0.0;
+        for (int i = 0; i < x.length; i++) covariance += (x[i] - xVariance) * (y[i] - yVariance);
         return covariance;
     }
 
@@ -150,11 +156,11 @@ public class StatsUtilList {
      * @return
      *                  The regression sum of squares as a double
      */
-    public static double regressionSumOfSquares(List<Double> fit, double yMean){
+    /*public static double regressionSumOfSquares(List<Double> fit, double yMean){
         double ssr = 0.0;
         for (int i = 0; i < fit.size(); i++) ssr += (fit.get(i) - yMean) * (fit.get(i) - yMean);
         return ssr;
-    }
+    }*/
 
     /**
      * residuals

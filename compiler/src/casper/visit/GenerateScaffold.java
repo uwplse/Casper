@@ -456,13 +456,6 @@ public class GenerateScaffold extends NodeVisitor{
 		Process pr = rt.exec("dafny " + filename);
 
 		PrintWriter writer = new PrintWriter("output/outputTempDafny.txt", "UTF-8");
-		
-		BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-			 
-        String line=null;
-        while((line=input.readLine()) != null) {
-        	writer.print(line+"\n");
-        }
 
         // Timeout wait
         long now = System.currentTimeMillis();
