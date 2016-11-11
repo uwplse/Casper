@@ -33,6 +33,16 @@ public class IdentifyDataSet extends NodeVisitor{
 					}
 				}
 				
+				if(!ext.hasInputData){
+					for(Variable var : ext.outputVars){
+						if(var.category == Variable.ARRAY_ACCESS){
+							ext.inputDataCollections.add(var);
+							ext.hasInputData = true;
+							ext.initInpCollection = false;
+						}
+					}
+				}
+				
 				if(!ext.hasInputData)
 					ext.interesting = false;
 			}

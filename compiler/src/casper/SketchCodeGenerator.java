@@ -515,7 +515,7 @@ public class SketchCodeGenerator {
 	public static String initMainInputData(MyWhileExt ext, Map<String, Integer> argsList) throws IOException {
 		String inputInit = "";
 		
-		if(ext.hasInputData){
+		if(ext.hasInputData && ext.initInpCollection){
 			if(ext.inputDataCollections.size() == 1){
 				ext.inputDataSet = ext.inputDataCollections.get(0);
 			}
@@ -541,6 +541,40 @@ public class SketchCodeGenerator {
 			inputInit = ext.inputDataSet.getSketchType().replace("["+Configuration.arraySizeBound+"]", "["+(Configuration.arraySizeBound-1)+"]") + " " + ext.inputDataSet.varName + ";\n\t";
 			for(int i=0; i<Configuration.arraySizeBound-1; i++){
 				inputInit += handleInputDataInit(ext.inputDataSet.getSketchType().replace("["+Configuration.arraySizeBound+"]", ""),ext.inputDataSet.varName+"["+i+"]",ext,argsList);
+			}
+		}
+		else{
+			if(ext.inputDataCollections.size() == 1){
+				ext.inputDataSet = new Variable("casper_data_set",ext.inputDataCollections.get(0).varType,"",Variable.ARRAY_ACCESS);
+				inputInit = ext.inputDataSet.getSketchType().replace("["+Configuration.arraySizeBound+"]", "["+(Configuration.arraySizeBound-1)+"]") + " " + ext.inputDataSet.varName + ";\n\t";
+				for(int i=0; i<Configuration.arraySizeBound-1; i++){
+					inputInit += ext.inputDataSet.varName+"["+i+"] = "+ext.inputDataCollections.get(0).varName+"["+i+"];\n\t";
+				}
+			}
+			else if(ext.inputDataCollections.size() > 1 || true){
+				ext.inputDataSet = new Variable("casper_data_set","java.util.List<CasperDataRecord>","",Variable.ARRAY_ACCESS);
+				if(!ext.globalDataTypes.contains("CasperDataRecord")){
+					ext.globalDataTypes.add("CasperDataRecord");
+					ext.globalDataTypesFields.put("CasperDataRecord", new HashSet<Variable>());
+				
+					String fields = "";
+					for(Variable var : ext.inputDataCollections){
+						ext.globalDataTypesFields.get("CasperDataRecord").add(new Variable(var.varName,casper.Util.reducerType(var.getSketchType()),"",Variable.VAR));
+						fields += casper.Util.reducerType(var.getSketchType()) + " " + var.varName + ";";
+					}
+					
+					PrintWriter writer = new PrintWriter("output/CasperDataRecord.sk", "UTF-8");
+					String text = "struct CasperDataRecord{ "+fields+" }";
+					writer.print(text);
+					writer.close();
+				}
+				
+				inputInit = ext.inputDataSet.getSketchType().replace("["+Configuration.arraySizeBound+"]", "["+(Configuration.arraySizeBound-1)+"]") + " " + ext.inputDataSet.varName + ";\n\t";
+				for(int i=0; i<Configuration.arraySizeBound-1; i++){
+					for(Variable dcol : ext.inputDataCollections){
+						inputInit += ext.inputDataSet.varName+"["+i+"]."+dcol.varName+" = "+dcol.varName+"["+i+"];\n\t";
+					}
+				}
 			}
 		}
 		
@@ -1376,16 +1410,16 @@ public class SketchCodeGenerator {
 		for(Variable var : sketchOutputVars){
 			switch(casper.Util.reducerType(var.getSketchType())){
 				case "int":
-					code += type + " init_" + var.varName + "(){\n\treturn {| 0 | 1 |};\n}";
+					code += type + " init_" + var.varName + "("+type + " "+var.varName+"0){\n\treturn {| 0 | 1 | "+var.varName+"0 |};\n}";
 					break;
 				case "bit":
-					code += type + " init_" + var.varName + "(){\n\treturn {| CASPER_TRUE | CASPER_FALSE |};\n}";
+					code += type + " init_" + var.varName + "("+type + " "+var.varName+"0){\n\treturn {| CASPER_TRUE | CASPER_FALSE | "+var.varName+"0 |};\n}";
 					break;
 				case "bit[32]":
-					code += type + " init_" + var.varName + "(){\n\treturn genRandBitVec();\n}";
+					code += type + " init_" + var.varName + "("+type + " "+var.varName+"0){\n\treturn {| genRandBitVec() | "+var.varName+"0 |};\n}";
 					break;
 				case "String":
-					code += type + " init_" + var.varName + "(){\n\treturn 0;\n}";
+					code += type + " init_" + var.varName + "("+type + " "+var.varName+"0){\n\treturn {| 0 | "+var.varName+"0 |};\n}";
 					break;
 			}
 			code += "\n\n";
@@ -1400,11 +1434,11 @@ public class SketchCodeGenerator {
 		for(Variable var : sketchOutputVars){
 			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]")){
 				for(int i=0; i<Configuration.arraySizeBound; i++){
-					code += "casper_r["+index+++"] = init_" + var.varName + "();\n\t";
+					code += "casper_r["+index+++"] = init_" + var.varName + "("+var.varName+"0["+i+"]);\n\t";
 				}
 			}
 			else{
-				code += "casper_r["+index+++"] = init_" + var.varName + "();\n\t";
+				code += "casper_r["+index+++"] = init_" + var.varName + "("+var.varName+"0);\n\t";
 			}
 		}
 		return code;

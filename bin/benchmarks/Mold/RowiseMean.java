@@ -5,9 +5,13 @@ import java.util.HashMap;
 import java.lang.Integer;
 import java.lang.String;
 
-public class KMeansAdd {
+public class RowWiseMean {
 
-	static Result calc_cov(Integer[][] matrix, int[] mean) {
+	int num_rows = 10;
+	int num_cols = 20;
+
+	static int[] mean(Integer[][] matrix) {
+        int[] mean = new int[num_rows];
 
         for (int i = 0; i < num_rows; i++) {
             int sum = 0;

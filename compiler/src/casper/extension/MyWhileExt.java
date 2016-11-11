@@ -109,6 +109,7 @@ public class MyWhileExt extends MyStmtExt {
 	
 	// Input data collections
 	public boolean hasInputData = false;
+	public boolean initInpCollection = true;
 	public List<Variable> inputDataCollections = new ArrayList<Variable>();
 	
 	// Input data set. Generated from inputDataCollections
