@@ -127,8 +127,6 @@ public class GenerateScaffold extends NodeVisitor{
 								System.err.println(ext.blockExprs);
 							}
 							
-							System.in.read();
-							
 							/* Generate main scaffold */
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
 							
@@ -146,9 +144,8 @@ public class GenerateScaffold extends NodeVisitor{
 								
 								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType, sketchReduceType);
 								
-								
 								int CSGverifierExitCode = 0;
-								if(ext.valCount > 1)
+								if(ext.valCount == 1)
 									CSGverifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
 								
 								System.err.println(ext.mapEmits);

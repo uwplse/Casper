@@ -121,6 +121,9 @@ public class DafnyCodeGenerator {
 		// Generate do reduce key type
 		String doreduceKeyType = generateDoreduceKeyType(ext.mapEmits,sketchReduceType);
 		
+		// Generate dooreduce key require statements
+		String keyRequires = generateKeyRequires(outputVars);
+		
 		// Generate reduce init values
 		String reduceInitValues = generateReduceInitValues(ext.mapEmits,ext.initExps,outputVars,reducerType);
 		
@@ -172,6 +175,7 @@ public class DafnyCodeGenerator {
 		template = template.replace("<emit-requires>", emitRequires);
 		template = template.replace("<mapper-requires>", mapperRequires);
 		template = template.replace("<udts>", UDTs);
+		template = template.replace("<key-requires>",keyRequires);
 		
 		writer.print(template);
 		writer.close();
@@ -191,9 +195,19 @@ public class DafnyCodeGenerator {
 		template = template.replace("<output-type>", casper.Util.getDafnyTypeFromRaw(reducerType));
 		template = template.replace("<reduce-init-value>", reduceInitValues);
 		template = template.replace("<udts>", UDTs);
+		template = template.replace("<key-requires>",keyRequires);
 		
 		writer.print(template);
 		writer.close();
+	}
+
+	private static String generateKeyRequires(Set<Variable> outputVars) {
+		String code = "";
+		for(Variable var : outputVars){
+			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]"))
+				code += "requires 0 <= key.1 < |"+var.varName+"0|\n\t";
+		}
+		return code;
 	}
 
 	private static String generateReduceFunctions(Map<String, String> reduceExps, int valCount, Set<Variable> outputVars, String reducerType) {
@@ -803,24 +817,20 @@ public class DafnyCodeGenerator {
 	}
 	
 	private static String generateReduceInitValues(Map<String, List<KvPair>> mapEmits, Map<String, String> initExps, Set<Variable> outputVars, String reducerType) {
-		boolean keyIsTuple = false;
-		for(String conditional : mapEmits.keySet()){
-			if(mapEmits.get(conditional).size() > 0){
-				KvPair kvp = mapEmits.get(conditional).get(0);
-				if(kvp.keys.size()>1) keyIsTuple = true;
-			}
-		}
-		
-		String key = "key";
-		if(keyIsTuple) key = "key.0";
-		
 		String code = "";
 		int index = 1;
 		String val = "";
 		for(Variable var : outputVars){
-			val = initExps.get(var.varName).replaceAll("CASPER_TRUE", "true").replaceAll("CASPER_FALSE", "false");
-			code += "if " + key + " == " + index + " then " + val + " else "; 
-			index++;
+			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]")){
+				val = initExps.get(var.varName).replaceAll("CASPER_TRUE", "true").replaceAll("CASPER_FALSE", "false").replace(var.varName+"0", var.varName+"0[key.1]");
+				code += "if key.0 == " + index + " then " + val + " else "; 
+				index++;
+			}
+			else{
+				val = initExps.get(var.varName).replaceAll("CASPER_TRUE", "true").replaceAll("CASPER_FALSE", "false");
+				code += "if key == " + index + " then " + val + " else "; 
+				index++;
+			}
 		}
 		code = code + val;
 		return code;
@@ -902,9 +912,10 @@ public class DafnyCodeGenerator {
 		String code = "";
 		String type = casper.Util.getDafnyTypeFromRaw(reducerType);
 		for(Variable var : outputVars){
-			code += "lemma LemmaCSG_"+var.varName+" (a: "+type+", b: "+type+", c: "+type+"<reducer-args-decl>)\n";
-		    code += "  ensures reduce_"+var.varName+"(a,b<reducer-args-call>) == reduce_"+var.varName+"(b,a<reducer-args-call>)\n";
-		    code += "  ensures reduce_"+var.varName+"(reduce_"+var.varName+"(a,b<reducer-args-call>),c<reducer-args-call>) == reduce_"+var.varName+"(a,reduce_"+var.varName+"(b,c<reducer-args-call>)<reducer-args-call>)\n";
+			if(reduceExps.get(var.varName).equals("(val2)")) continue;
+			code += "lemma LemmaCSG_"+var.varName+" (casper_a: "+type+", casper_b: "+type+", casper_c: "+type+"<reducer-args-decl>)\n";
+		    code += "  ensures reduce_"+var.varName+"(casper_a,casper_b<reducer-args-call>) == reduce_"+var.varName+"(casper_b,casper_a<reducer-args-call>)\n";
+		    code += "  ensures reduce_"+var.varName+"(reduce_"+var.varName+"(casper_a,casper_b<reducer-args-call>),casper_c<reducer-args-call>) == reduce_"+var.varName+"(casper_a,reduce_"+var.varName+"(casper_b,casper_c<reducer-args-call>)<reducer-args-call>)\n";
 			code += "{}";
 		}
 		return code;

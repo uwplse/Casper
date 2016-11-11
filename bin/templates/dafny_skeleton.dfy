@@ -27,6 +27,7 @@ function mapper (<mapper-args-decl>) : <domap-emit-type>
 <reduce-functions>
 
 function doreduce(input: <domap-emit-type>, key: <doreduce-key-type><reducer-args-decl>) : <output-type>
+    <key-requires>
     ensures (|input| > 0 && input[0].0 == key) ==> 
         doreduce(input, key<reducer-args-call>) == (<reduce-exp>)
     ensures (|input| > 0 && input[0].0 != key) ==> 
