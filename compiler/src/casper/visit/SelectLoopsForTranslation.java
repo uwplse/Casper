@@ -16,6 +16,7 @@ package casper.visit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
 import casper.JavaLibModel;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
@@ -64,7 +65,7 @@ public class SelectLoopsForTranslation extends NodeVisitor{
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			
 			// Save parent
-			ext.parent = this.parents.peek();
+   			ext.parent = this.parents.peek();
 			
 			// Set this loop's body as parent for all inner loops
 			Stmt loopBody = ((While) n).body();
@@ -187,6 +188,8 @@ public class SelectLoopsForTranslation extends NodeVisitor{
 					System.err.println(((While) n).body());
 				}
 			}
+			
+			this.parents.pop();
 			
 			// Reset currBranchCount to outer loop branch count
 			this.currBranchCount = this.branchCounts.pop();

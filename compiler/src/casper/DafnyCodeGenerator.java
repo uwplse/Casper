@@ -246,7 +246,8 @@ public class DafnyCodeGenerator {
 	public static String generateDafnyHarnessArgs(MyWhileExt ext, Set<Variable> inputVars, Set<Variable> outputVars, Set<Variable> loopCounters) {
 		String args = "";
 		
-		args += ext.inputDataSet.varName + ": " + ext.inputDataSet.getDafnyType();
+		if(ext.initInpCollection)
+			args += ext.inputDataSet.varName + ": " + ext.inputDataSet.getDafnyType();
 		
 		for(Variable var : outputVars){
 			args += ", " + var.varName + ": " + var.getDafnyType();
@@ -272,7 +273,7 @@ public class DafnyCodeGenerator {
 			args += ", " + "casperConst" + i + ": int";
 		}
 		
-		return args;
+		return args.substring(2);
 	}
 	
 	public static String generateRequireStatements(MyWhileExt ext, Set<Variable> outputVars, Map<String, CustomASTNode> wpcValues, Variable inputDataSet) {
@@ -320,6 +321,10 @@ public class DafnyCodeGenerator {
 	
 	public static String generateVarInit(MyWhileExt ext, Set<Variable> inputVars, Set<Variable> outputVars, Set<Variable> loopCounters) {
 		String code = "";
+		
+		if(!ext.initInpCollection){
+			code += "var " + ext.inputDataSet.varName + " := " + ext.inputDataCollections.get(0).varName +";\n\t";
+		}
 		
 		for(Variable var : outputVars){
 			if(ext.initVals.containsKey(var.varName) && var.category != Variable.ARRAY_ACCESS){
