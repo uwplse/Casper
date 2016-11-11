@@ -767,7 +767,7 @@ public class SketchCodeGenerator {
 		}
 		
 		for(Variable var : sketchLoopCounters){
-			inv += "return 0 <= " + var.varName + " && " + var.varName + " <= " + (Configuration.arraySizeBound-1) + " && reduce("+reduce_args+") == casper_r;";
+			inv += "return "+var.varName+"0 <= " + var.varName + " && " + var.varName + " <= " + (Configuration.arraySizeBound-1) + " && reduce("+reduce_args+") == casper_r;";
 			break;
 		}
 		
