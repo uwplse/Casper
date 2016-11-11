@@ -273,7 +273,10 @@ public class DafnyCodeGenerator {
 			args += ", " + "casperConst" + i + ": int";
 		}
 		
-		return args.substring(2);
+		if(!ext.initInpCollection)
+			args = args.substring(2);
+			
+		return args;
 	}
 	
 	public static String generateRequireStatements(MyWhileExt ext, Set<Variable> outputVars, Map<String, CustomASTNode> wpcValues, Variable inputDataSet) {

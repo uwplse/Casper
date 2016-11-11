@@ -34,3 +34,10 @@ function casper_math_max(val1: int, val2: int): int
 	if val1 < val2 then val2
 	else val1
 }
+
+function casper_math_pow(val1: int, val2: int): int
+	requires val2 >= 0
+{
+	if val2 == 0 then 1
+	else val1 * casper_math_pow(val1, val2-1)
+}

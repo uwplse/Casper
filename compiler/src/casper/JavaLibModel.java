@@ -461,6 +461,10 @@ public class JavaLibModel {
 			case "java.lang.Math":
 				ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
 				switch(id){
+					case "pow":
+						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+						args.add(CustomASTNode.convertToAST(c.arguments().get(1)));
+						return new CallNode("casper_math_pow",args);
 					case "sqrt":
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
 						return new CallNode("casper_math_sqrt",args);

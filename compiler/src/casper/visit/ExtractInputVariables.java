@@ -102,7 +102,7 @@ public class ExtractInputVariables extends NodeVisitor {
 			for(MyWhileExt ext : extensions){
 				List<Node> reads = JavaLibModel.extractReads((Call)exp,ext);
 				for(Node node : reads){
-					if(node instanceof Receiver){
+					if(node instanceof Receiver && !(node instanceof Lit) ){
 						ext.saveInputVariable(node.toString(),((Receiver)node).type().toString(),Variable.FIELD_ACCESS);
 					}
 					else if(node instanceof Expr){
@@ -208,7 +208,7 @@ public class ExtractInputVariables extends NodeVisitor {
 			for(MyWhileExt ext : extensions){
 				List<Node> reads = JavaLibModel.extractReads((Call)n,ext);
 				for(Node node : reads){
-					if(node instanceof Receiver){
+					if(node instanceof Receiver && !(node instanceof Lit) ){
 						ext.saveInputVariable(node.toString(),((Receiver)node).type().toString(),Variable.FIELD_ACCESS);
 					}
 					else if(node instanceof Expr){

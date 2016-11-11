@@ -201,7 +201,7 @@ public class MyWhileExt extends MyStmtExt {
     
     // Save an input variable.
     public void saveInputVariable(String varName, String varType, int category){
-    	saveInputVariable(varName,varType,"",category);
+		saveInputVariable(varName,varType,"",category);
     }
     
     // Save an expression.

@@ -1117,7 +1117,7 @@ public class SketchCodeGenerator {
 						if(subExprs.keySet().contains(temp.getSketchType())) 
 							continue;
 						List<String> subExprsList = new ArrayList<String>();
-						getMapExpressions(temp.getOriginalType(),binaryOps,unaryOps,methodOps,terminals,subExprsList,depth-1);
+						getMapExpressions(temp.getSketchType(),binaryOps,unaryOps,methodOps,terminals,subExprsList,depth-1);
 						subExprs.put(temp.getSketchType(), subExprsList);
 					}
 					List<List<String>> callarr = new ArrayList<List<String>>();
