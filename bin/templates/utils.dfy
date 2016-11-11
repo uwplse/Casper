@@ -4,35 +4,35 @@ function casper_str_equal(val1: int, val2: int) : bool
   val1 == val2
 }
 
-function shift_right(val: seq<bool>, amnt: int) : seq<bool>
+function casper_shift_right(val: seq<bool>, amnt: int) : seq<bool>
 	requires |val| == 32
 	requires 0 <= amnt <= 32
-	ensures shift_right(val,amnt) == (zeroSeq(amnt) + val[0..32-amnt])
-	ensures |shift_right(val,amnt)| == 32
+	ensures casper_shift_right(val,amnt) == (casper_zeroSeq(amnt) + val[0..32-amnt])
+	ensures |casper_shift_right(val,amnt)| == 32
 {
-	zeroSeq(amnt) + val[0..32-amnt]
+	casper_zeroSeq(amnt) + val[0..32-amnt]
 }
 
-function shift_left(val: seq<bool>, amnt: int) : seq<bool>
+function casper_shift_left(val: seq<bool>, amnt: int) : seq<bool>
 	requires |val| == 32
 	requires 0 <= amnt <= 32
-	ensures shift_left(val,amnt) == (val[amnt..32] + zeroSeq(amnt))
-	ensures |shift_left(val,amnt)| == 32
+	ensures casper_shift_left(val,amnt) == (val[amnt..32] + casper_zeroSeq(amnt))
+	ensures |casper_shift_left(val,amnt)| == 32
 {
-	val[amnt..32] + zeroSeq(amnt)
+	val[amnt..32] + casper_zeroSeq(amnt)
 }
 
-function zeroSeq(amnt: int) : seq<bool>
+function casper_zeroSeq(amnt: int) : seq<bool>
 	requires amnt >= 0
-	ensures (amnt == 0) ==> (zeroSeq(amnt) == [])
-	ensures (amnt > 0) ==> (zeroSeq(amnt) == [false] + zeroSeq(amnt-1))
-	ensures |zeroSeq(amnt)| == amnt
+	ensures (amnt == 0) ==> (casper_zeroSeq(amnt) == [])
+	ensures (amnt > 0) ==> (casper_zeroSeq(amnt) == [false] + casper_zeroSeq(amnt-1))
+	ensures |casper_zeroSeq(amnt)| == amnt
 {
 	if amnt == 0 then []
-	else [false] + zeroSeq(amnt-1)
+	else [false] + casper_zeroSeq(amnt-1)
 }
 
-function bitwise_and(val1: seq<bool>, val2: seq<bool>) : seq<bool>
+function casper_bitwise_and(val1: seq<bool>, val2: seq<bool>) : seq<bool>
 	requires |val1| == 32
 	requires |val2| == 32
 {
@@ -72,7 +72,7 @@ function bitwise_and(val1: seq<bool>, val2: seq<bool>) : seq<bool>
 	]
 }
 
-function bitwise_or(val1: seq<bool>, val2: seq<bool>) : seq<bool>
+function casper_bitwise_or(val1: seq<bool>, val2: seq<bool>) : seq<bool>
 	requires |val1| == 32
 	requires |val2| == 32
 {
@@ -110,4 +110,35 @@ function bitwise_or(val1: seq<bool>, val2: seq<bool>) : seq<bool>
 		val1[30] || val2[30],
 		val1[31] || val2[31]
 	]
+}
+
+function casper_math_sqrt(val: int) : int
+	requires val >= 0
+{
+	casper_math_sqrt2(val,0)
+}
+
+function casper_math_sqrt2(val: int, i: int) : int
+	requires val >= 0
+{
+	if i*i < val then casper_math_sqrt2(val,i+1)
+	else i
+}
+
+function casper_math_abs(val: int): int
+{
+	if val < 0 then val*-1
+	else val
+}
+
+function casper_math_min(val1: int, val2: int): int
+{
+	if val1 < val2 then val1
+	else val2
+}
+
+function casper_math_max(val1: int, val2: int): int
+{
+	if val1 < val2 then val2
+	else val1
 }

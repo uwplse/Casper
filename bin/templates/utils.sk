@@ -64,5 +64,51 @@ int casper_math_pow(int casper_a, int casper_b){
 		return casper_a*casper_a*casper_a*casper_a*casper_a*casper_a*casper_a*casper_a*casper_a*casper_a;
 }
 
+int casper_math_sqrt(int casper_b){
+	if(casper_b == 0)
+		return 0;
+	if(casper_b == 1)
+		return 1;
+	if(casper_b == 2)
+		return 1;
+	if(casper_b == 3)
+		return 2;
+	if(casper_b == 4)
+		return 2;
+	if(casper_b == 5)
+		return 2;
+	if(casper_b == 6)
+		return 2;
+	if(casper_b == 7)
+		return 3;
+	if(casper_b == 8)
+		return 3;
+	if(casper_b == 9)
+		return 3;
+	if(casper_b == 10)
+		return 3;
+}
+
+int casper_math_min(int casper_a, int casper_b){
+	if(casper_a > casper_b)
+		return casper_b;
+	else
+		return casper_a;
+}
+
+int casper_math_max(int casper_a, int casper_b){
+	if(casper_a > casper_b)
+		return casper_a;
+	else
+		return casper_b;
+}
+
+int casper_math_abs(int casper_a){
+	if(casper_a < 0)
+		return casper_a * -1;
+	else
+		return casper_a;
+}
+
 bit CASPER_TRUE;
 bit CASPER_FALSE;

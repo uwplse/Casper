@@ -1143,9 +1143,7 @@ public class SketchCodeGenerator {
 		}
 			
 		for(int j=0; j<callarr.get(i).size(); j++){
-			expr += callarr.get(i).get(j)+",";
-			buildExpressions(callarr,expr,exprs,i+1);
-		}
+			buildExpressions(callarr,expr + callarr.get(i).get(j)+",",exprs,i+1);}
 	}
 
 	public static String generateMapArgsDecl(Variable inputDataSet, Set<Variable> sketchLoopCounters, List<String> postConditionArgsOrder, int keyCount, int valCount) {
@@ -1538,7 +1536,7 @@ public class SketchCodeGenerator {
 		for(Variable var : sketchOutputVars){
 			switch(type){
 				case "int":
-					code += type + " merge_"+var.varName+"(int val1, int val2){\n\treturn {| val1 | val1+val2 |};\n}\n";
+					code += type + " merge_"+var.varName+"(int val1, int val2){\n\treturn {| val1 | val1+val2 | casper_math_max(val1,val2) | casper_math_min(val1,val2) |};\n}\n";
 					break;
 				case "String":
 					code += type + " merge_"+var.varName+"(int val1, int val2){\n\treturn {| val1 |};\n}\n";

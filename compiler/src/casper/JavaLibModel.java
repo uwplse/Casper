@@ -65,6 +65,9 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "pow":
 					case "sqrt":
+					case "max":
+					case "min":
+					case "abs":
 						return true;
 					default:
 						return false;
@@ -131,6 +134,15 @@ public class JavaLibModel {
 						reads.addAll(exp.arguments());
 						break;
 					case "sqrt":
+						reads.addAll(exp.arguments());
+						break;
+					case "max":
+						reads.addAll(exp.arguments());
+						break;
+					case "min":
+						reads.addAll(exp.arguments());
+						break;
+					case "abs":
 						reads.addAll(exp.arguments());
 						break;
 					default:
@@ -204,6 +216,9 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "pow":
 					case "sqrt":
+					case "max":
+					case "min":
+					case "abs":
 						break;
 					default:
 						break;
@@ -334,8 +349,35 @@ public class JavaLibModel {
 						return res;
 					case "sqrt":
 						res.target = "Math";
-						res.name = "math_sqrt";
+						res.name = "casper_math_sqrt";
 						res.nameOrig = "sqrt";
+						for(Expr arg : exp.arguments()){
+							res.args.add(arg.type().toString());
+						}
+						res.returnType = exp.type().toString();
+						return res;
+					case "max":
+						res.target = "Math";
+						res.name = "casper_math_max";
+						res.nameOrig = "max";
+						for(Expr arg : exp.arguments()){
+							res.args.add(arg.type().toString());
+						}
+						res.returnType = exp.type().toString();
+						return res;
+					case "min":
+						res.target = "Math";
+						res.name = "casper_math_min";
+						res.nameOrig = "min";
+						for(Expr arg : exp.arguments()){
+							res.args.add(arg.type().toString());
+						}
+						res.returnType = exp.type().toString();
+						return res;
+					case "abs":
+						res.target = "Math";
+						res.name = "casper_math_abs";
+						res.nameOrig = "abs";
 						for(Expr arg : exp.arguments()){
 							res.args.add(arg.type().toString());
 						}
@@ -415,17 +457,29 @@ public class JavaLibModel {
 						}
 						break;
 				}
+				break;
 			case "java.lang.Math":
+				ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
 				switch(id){
-				case "sqrt":
-					ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
-					args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
-					return new CallNode("math_sqrt",args);
-				default:
-					if(debug){
-						System.err.println("Method " + id + " of java.lang.Math not currently supported. Please extend the JavaLibModel.");
-					}
-					break;	
+					case "sqrt":
+						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+						return new CallNode("casper_math_sqrt",args);
+					case "max":
+						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+						args.add(CustomASTNode.convertToAST(c.arguments().get(1)));
+						return new CallNode("casper_math_max",args);
+					case "min":
+						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+						args.add(CustomASTNode.convertToAST(c.arguments().get(1)));
+						return new CallNode("casper_math_min",args);
+					case "abs":
+						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+						return new CallNode("casper_math_abs",args);
+					default:
+						if(debug){
+							System.err.println("Method " + id + " of java.lang.Math not currently supported. Please extend the JavaLibModel.");
+						}
+						break;	
 				}
 			default:
 				if(debug || true){

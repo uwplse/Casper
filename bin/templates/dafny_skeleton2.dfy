@@ -5,6 +5,8 @@ include "utils.dfy"
 <udts>
 
 /******************************* HARNESS ************************************/  
+<reduce-functions>
+
 function doreduce(input: <domap-emit-type>, key: <doreduce-key-type><reducer-args-decl>) : <output-type>
     ensures (|input| > 0 && input[0].0 == key) ==> 
         doreduce(input, key<reducer-args-call>) == (<reduce-exp>)

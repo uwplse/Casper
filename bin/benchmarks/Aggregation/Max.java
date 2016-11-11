@@ -8,11 +8,11 @@ public class Max {
 	}
 	
 	public static int maxList(List<Integer> data) {
-		int max = 0;
+		int max = Integer.MIN_VALUE;
 		for(int i=0; i<data.size(); i++) {
 			int var = data.get(i);
 			max = Math.max(var,max);
 		}
 		return max;
 	}
-}n
+}
