@@ -175,7 +175,7 @@ public class SketchCodeGenerator {
 		String reduceFunctions = generateReduceFunctions(sketchReducerType, sketchFilteredOutputVars, keyCount, ext.valCount);
 		
 		// Generate merge functions
-		String mergeFunctions = generateMergeFunctions(sketchReducerType, sketchFilteredOutputVars);
+		String mergeFunctions = generateMergeFunctions(sketchReducerType, sketchFilteredOutputVars, ext.methodOperators);
 		
 		// Generate code to merge output with initial values
 		String mergeOutput = generateMergeOutput(sketchFilteredOutputVars, keyCount);
@@ -1530,13 +1530,20 @@ public class SketchCodeGenerator {
 		return code;
 	}
 	
-	private static String generateMergeFunctions(String type, Set<Variable> sketchOutputVars) {
+	private static String generateMergeFunctions(String type, Set<Variable> sketchOutputVars, Set<SketchCall> methodOperators) {
 		String code = "";
 		
 		for(Variable var : sketchOutputVars){
 			switch(type){
 				case "int":
-					code += type + " merge_"+var.varName+"(int val1, int val2){\n\treturn {| val1 | val1+val2 | casper_math_max(val1,val2) | casper_math_min(val1,val2) |};\n}\n";
+					String minMax = "";
+					for(SketchCall c : methodOperators){
+						if(c.name.equals("casper_math_max")) 
+							minMax += " | casper_math_max(val1,val2)";
+						else if(c.name.equals("casper_math_min"))
+							minMax += " | casper_math_min(val1,val2)";
+					}
+					code += type + " merge_"+var.varName+"(int val1, int val2){\n\treturn {| val1 | val1+val2"+minMax+" |};\n}\n";
 					break;
 				case "String":
 					code += type + " merge_"+var.varName+"(int val1, int val2){\n\treturn {| val1 |};\n}\n";
