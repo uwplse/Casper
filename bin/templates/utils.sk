@@ -89,6 +89,10 @@ int casper_math_sqrt(int casper_b){
 		return 3;
 }
 
+int casper_math_ceil(int casper_a){
+	return (casper_a + 9) / 10;
+}
+
 int casper_math_min(int casper_a, int casper_b){
 	if(casper_a > casper_b)
 		return casper_b;

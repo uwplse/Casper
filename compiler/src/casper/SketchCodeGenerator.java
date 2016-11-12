@@ -108,7 +108,7 @@ public class SketchCodeGenerator {
 			break;
 		}
 		
-		String loopCondFalse = loopCond; if(ext.condInv) loopCondFalse = "!" + loopCondFalse;
+		String loopCondFalse = loopCond; loopCondFalse = "!" + loopCondFalse;
 		
 		String wpc = bodyExt.preConditions.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		
@@ -516,25 +516,27 @@ public class SketchCodeGenerator {
 		String inputInit = "";
 		
 		if(ext.hasInputData && ext.initInpCollection){
-			if(ext.inputDataCollections.size() == 1){
-				ext.inputDataSet = ext.inputDataCollections.get(0);
-			}
-			else if(ext.inputDataCollections.size() > 1){
-				ext.inputDataSet = new Variable("casper_data_set","java.util.List<CasperDataRecord>","",Variable.ARRAY_ACCESS);
-				if(!ext.globalDataTypes.contains("CasperDataRecord")){
-					ext.globalDataTypes.add("CasperDataRecord");
-					ext.globalDataTypesFields.put("CasperDataRecord", new HashSet<Variable>());
-				
-					String fields = "";
-					for(Variable var : ext.inputDataCollections){
-						ext.globalDataTypesFields.get("CasperDataRecord").add(new Variable(var.varName,casper.Util.reducerType(var.getSketchType()),"",Variable.VAR));
-						fields += casper.Util.reducerType(var.getSketchType()) + " " + var.varName + ";";
-					}
+			if(!ext.extForType){
+				if(ext.inputDataCollections.size() == 1){
+					ext.inputDataSet = ext.inputDataCollections.get(0);
+				}
+				else if(ext.inputDataCollections.size() > 1){
+					ext.inputDataSet = new Variable("casper_data_set","java.util.List<CasperDataRecord>","",Variable.ARRAY_ACCESS);
+					if(!ext.globalDataTypes.contains("CasperDataRecord")){
+						ext.globalDataTypes.add("CasperDataRecord");
+						ext.globalDataTypesFields.put("CasperDataRecord", new HashSet<Variable>());
 					
-					PrintWriter writer = new PrintWriter("output/CasperDataRecord.sk", "UTF-8");
-					String text = "struct CasperDataRecord{ "+fields+" }";
-					writer.print(text);
-					writer.close();
+						String fields = "";
+						for(Variable var : ext.inputDataCollections){
+							ext.globalDataTypesFields.get("CasperDataRecord").add(new Variable(var.varName,casper.Util.reducerType(var.getSketchType()),"",Variable.VAR));
+							fields += casper.Util.reducerType(var.getSketchType()) + " " + var.varName + ";";
+						}
+						
+						PrintWriter writer = new PrintWriter("output/CasperDataRecord.sk", "UTF-8");
+						String text = "struct CasperDataRecord{ "+fields+" }";
+						writer.print(text);
+						writer.close();
+					}
 				}
 			}
 			

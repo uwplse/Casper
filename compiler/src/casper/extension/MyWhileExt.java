@@ -149,6 +149,8 @@ public class MyWhileExt extends MyStmtExt {
     // need to be able to capture this effect.
     // Note: Not used anywhere currently
     public Map<Variable, Set<Variable>> aliases = new HashMap<Variable, Set<Variable>>();
+
+	public boolean extForType = false;
     
     // Save an loop counter variable.
     public void saveLoopCounterVariable(String varName, String varType, int category){

@@ -12,13 +12,16 @@ import java.util.Map;
 import java.util.Set;
 
 import polyglot.ast.Node;
+import polyglot.ast.Stmt;
 import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
 import casper.SketchParser.KvPair;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import casper.types.ArrayAccessNode;
 import casper.types.ArrayUpdateNode;
+import casper.types.CallNode;
 import casper.types.ConditionalNode;
 import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
@@ -54,14 +57,19 @@ public class DafnyCodeGenerator {
 		// Generate verification code
 		String preC = generatePreCondition(ext,reducerType,ext.inputVars,outputVars,ext.loopCounters);
 		
-		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(((While)n).body()));
+		Stmt loopBody;
+		if(n instanceof While)
+			loopBody = ((While)n).body();
+		else
+			loopBody = ((ExtendedFor)n).body();
+		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(loopBody));
 		
 		String loopCond = "";
 		for(Variable lc : ext.loopCounters){
 			loopCond = "("+lc.varName+"<|"+ext.inputDataSet.varName+"|)";
 		}
 		
-		String loopCondFalse = loopCond; if(ext.condInv) loopCondFalse = "!" + loopCondFalse;
+		String loopCondFalse = loopCond; loopCondFalse = "!" + loopCondFalse;
 		
 		String invariant = generateInvariant(ext,reducerType,ext.inputVars,outputVars,ext.loopCounters);
 		
@@ -256,7 +264,7 @@ public class DafnyCodeGenerator {
 			}
 		}
 		for(Variable var : inputVars){
-			if(ext.inputDataCollections.contains(var))
+			if(ext.inputDataCollections.contains(var) || ext.inputDataSet.equals(var))
 				continue;
 			
 			if(!ext.initVals.containsKey(var.varName) || (ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode)ext.initVals.get(var.varName)).type == ConstantNode.STRINGLIT)){
@@ -311,7 +319,10 @@ public class DafnyCodeGenerator {
 							code += "requires forall k :: 0 <= k < |" + ((ArrayAccessNode)((FieldNode)index).container).array + "| ==> 0 <= " + ((ArrayAccessNode)((FieldNode)index).container).array + "[k]."+index.toString().substring(index.toString().lastIndexOf(".")+1, index.toString().length())+" < |" + var.varName + "|\n\t";
 						}
 						else{
-							code += "requires 0 <= " + index + " < |" + var.varName + "|\n\t";
+							for(Variable lc : ext.loopCounters){
+								code += "requires 0 <= "+lc.varName+" < |"+ext.inputDataSet.varName+"| ==> 0 <= " + index + " < |" + var.varName + "|\n\t";
+								break;
+							}
 						}
 					}
 				}
@@ -335,7 +346,7 @@ public class DafnyCodeGenerator {
 			}
 		}
 		for(Variable var : inputVars){
-			if(ext.inputDataCollections.contains(var))
+			if(ext.inputDataCollections.contains(var) || ext.inputDataSet.equals(var))
 				continue;
 			
 			if(ext.initVals.containsKey(var.varName)){
@@ -358,7 +369,7 @@ public class DafnyCodeGenerator {
 		code = ext.preConditions.get(type).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		code = code.substring(0,code.length()-1) + ",";
 		for(Variable v : inputVars){
-			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v)){
+			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v) && !ext.inputDataSet.equals(v)){
 				code += v.varName + ",";
 			}
 		}
@@ -376,7 +387,7 @@ public class DafnyCodeGenerator {
 		invariant = ext.invariants.get(type).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		invariant = invariant.substring(0,invariant.length()-1) + ",";
 		for(Variable v : InputVars){
-			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v)){
+			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v) && !ext.inputDataSet.equals(v)){
 				invariant += v.varName + ",";
 			}
 		}
@@ -394,7 +405,7 @@ public class DafnyCodeGenerator {
 		wpc = bodyExt.preConditions.get(outputType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		wpc = wpc.substring(0,wpc.length()-1) + ",";
 		for(Variable v : InputVars){
-			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v)){
+			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v) && !ext.inputDataSet.equals(v)){
 				wpc += v.varName + ",";
 			}
 		}
@@ -412,7 +423,7 @@ public class DafnyCodeGenerator {
 		pcond = ext.postConditions.get(outputType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		pcond = pcond.substring(0,pcond.length()-1) + ",";
 		for(Variable v : InputVars){
-			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v)){
+			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v) && !ext.inputDataSet.equals(v)){
 				pcond += v.varName + ",";
 			}
 		}
@@ -487,7 +498,7 @@ public class DafnyCodeGenerator {
 			}
 		}
 		for(Variable var : InputVars){
-			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
+			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var) && !ext.inputDataSet.equals(var)){
 				code += ", " + var.varName + ": " + var.getDafnyType();
 			}
 		}
@@ -509,7 +520,7 @@ public class DafnyCodeGenerator {
 		}
 		
 		for(Variable var : inputVars){
-			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
+			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var) && !ext.inputDataSet.equals(var)){
 				args += ","+var.varName;
 			}
 		}
@@ -549,7 +560,7 @@ public class DafnyCodeGenerator {
 		}
 		
 		for(Variable var : inputVars){
-			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
+			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var) && !ext.inputDataSet.equals(var)){
 				args += ","+var.varName;
 			}
 		}
@@ -588,7 +599,7 @@ public class DafnyCodeGenerator {
 			args += ", " + var.varName + ": " + var.getDafnyType();
 		}
 		for(Variable var : InputVars){
-			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
+			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var) && !ext.inputDataSet.equals(var)){
 				args += ", " + var.varName + ": " + var.getDafnyType();
 			}
 		}
@@ -609,7 +620,7 @@ public class DafnyCodeGenerator {
 			args += ", " + var.varName;
 		}
 		for(Variable var : InputVars){
-			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
+			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var) && !ext.inputDataSet.equals(var)){
 				args += ", " + var.varName;
 			}
 		}
@@ -631,7 +642,7 @@ public class DafnyCodeGenerator {
 		}
 		
 		for(Variable var : InputVars){
-			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
+			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var) && !ext.inputDataSet.equals(var)){
 				args += ", " + var.varName;
 			}
 		}
@@ -653,7 +664,7 @@ public class DafnyCodeGenerator {
 		}
 		
 		for(Variable var : InputVars){
-			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
+			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var) && !ext.inputDataSet.equals(var)){
 				args += ", " + var.varName;
 			}
 		}
@@ -779,7 +790,7 @@ public class DafnyCodeGenerator {
 		String args = "";
 		
 		for(Variable var : InputVars){
-			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
+			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var) && !ext.inputDataSet.equals(var)){
 				args += ", " + var.varName + ": " + var.getDafnyType();
 			}
 		}
@@ -793,7 +804,7 @@ public class DafnyCodeGenerator {
 		String args = "";
 		
 		for(Variable var : InputVars){
-			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var)){
+			if(!outputVars.contains(var) && !loopCounters.contains(var) && !ext.inputDataCollections.contains(var) && !ext.inputDataSet.equals(var)){
 				args += ", " + var.varName;
 			}
 		}

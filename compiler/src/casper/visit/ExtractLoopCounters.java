@@ -71,7 +71,7 @@ public class ExtractLoopCounters extends NodeVisitor {
 			}
 		}
 		else if(n instanceof ExtendedFor){
-			((MyWhileExt)JavaExt.ext(n)).saveLoopCounterVariable("casper_i", "int", Variable.VAR);
+			((MyWhileExt)JavaExt.ext(n)).saveLoopCounterVariable("casper_index", "int", Variable.VAR);
 		}
 		else if(n instanceof Block){
 			// If statement

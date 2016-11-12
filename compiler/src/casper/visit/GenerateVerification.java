@@ -50,13 +50,13 @@ public class GenerateVerification extends NodeVisitor {
 			// Get extension of loop node
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			
-			// Extract Initial Values of all input, output and lc variables
-			extractInitialValues(n, ext);
-			if(n instanceof ExtendedFor)
-				ext.initVals.put("casper_i", new ConstantNode("0",ConstantNode.INTLIT));
-			
 			// If the loop was marked as interesting
 			if(ext.interesting){
+				// Extract Initial Values of all input, output and lc variables
+				extractInitialValues(n, ext);
+				if(n instanceof ExtendedFor)
+					ext.initVals.put("casper_index", new ConstantNode("0",ConstantNode.INTLIT));
+				
 				// Generate verification conditions for each output type
 				Set<String> handledTypes = new HashSet<String>();
 				for(Variable var : ext.outputVars){
@@ -100,7 +100,17 @@ public class GenerateVerification extends NodeVisitor {
 					CustomASTNode preCondBlock = generateWPC(reduceType,ext.parent,ext.loopInvariantArgsOrder,ext.terminationCondition,ext.initVals,wpcValues);
 					MyStmtExt blockExt = (MyStmtExt) JavaExt.ext(loopBody);
 					blockExt.preConditions.put(reduceType, preCondBlock);
-					ext.wpcValues = generateWPCValues(reduceType,wpcValues,loopBody,ext);
+					if(n instanceof ExtendedFor){
+						for(String varname : wpcValues.keySet()){
+							wpcValues.put(varname, casper.Util.generatePreCondition(reduceType,((ExtendedFor) n).body(),wpcValues.get(varname),ext,false));
+							wpcValues.put(varname, wpcValues.get(varname).replaceAll(((ExtendedFor) n).decl().id().toString(),new IdentifierNode(ext.inputDataSet.varName+"[casper_index]")));
+						}
+						wpcValues.put("casper_index", new BinaryOperatorNode("+",new IdentifierNode("casper_index"),new ConstantNode("1",ConstantNode.INTLIT)));
+						ext.wpcValues = wpcValues;
+					}
+					else{
+						ext.wpcValues = generateWPCValues(reduceType,wpcValues,loopBody,ext);
+					}
 					
 					if(ext.inputDataCollections.size()>1){
 						fixArrayAccesses(ext.wpcValues);
@@ -386,9 +396,7 @@ public class GenerateVerification extends NodeVisitor {
 					if(!casper.Util.containsBreak(cons) && !casper.Util.containsBreak(alt)){
 						// Must be the increment if, process it firs
 						for(String varname : wpcValues.keySet()){
-							wpcValues.put(varname, casper.Util.generatePreCondition(type,((If) currStatement).consequent(),wpcValues.get(varname),ext,debug));
-							if(varname.equals("ind_casper_i"))
-								wpcValues.put(varname, new BinaryOperatorNode("+",new IdentifierNode(varname),new ConstantNode("1",ConstantNode.INTLIT)));
+							wpcValues.put(varname, casper.Util.generatePreCondition(type,((If) currStatement).consequent(),wpcValues.get(varname),ext,false));
 						}
 						break;
 					}
@@ -417,8 +425,6 @@ public class GenerateVerification extends NodeVisitor {
 						// Must be the increment if, process it first
 						for(String varname : wpcValues.keySet()){
 							wpcValues.put(varname, casper.Util.generatePreCondition(type,((If) currStatement).consequent(),wpcValues.get(varname),ext,debug));
-							if(varname.equals("ind_casper_i"))
-								wpcValues.put(varname, new BinaryOperatorNode("+",new IdentifierNode(varname),new ConstantNode("1",ConstantNode.INTLIT)));
 						}
 					}
 				}

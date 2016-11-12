@@ -41,3 +41,8 @@ function casper_math_pow(val1: int, val2: int): int
 	if val2 == 0 then 1
 	else val1 * casper_math_pow(val1, val2-1)
 }
+
+function casper_math_ceil(val: int): int
+{
+	(val + 9) / 10
+}

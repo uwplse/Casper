@@ -14,7 +14,9 @@ import java.util.List;
 import casper.extension.MyWhileExt;
 import casper.types.ArrayAccessNode;
 import casper.types.ArrayUpdateNode;
+import casper.types.BinaryOperatorNode;
 import casper.types.CallNode;
+import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
 import casper.types.Variable;
@@ -57,6 +59,7 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "get":
 					case "put":
+					case "containsKey":
 						return true;
 					default:
 						return false;
@@ -68,6 +71,7 @@ public class JavaLibModel {
 					case "max":
 					case "min":
 					case "abs":
+					case "ceil":
 						return true;
 					default:
 						return false;
@@ -145,6 +149,9 @@ public class JavaLibModel {
 					case "abs":
 						reads.addAll(exp.arguments());
 						break;
+					case "ceil":
+						reads.addAll(exp.arguments());
+						break;
 					default:
 						break;
 				}
@@ -183,6 +190,10 @@ public class JavaLibModel {
 					case "put":
 						reads.addAll(exp.arguments());
 						break;
+					case "containsKey":
+						reads.add(exp.target());
+						reads.addAll(exp.arguments());
+						break;
 					default:
 						break;
 				}
@@ -219,6 +230,7 @@ public class JavaLibModel {
 					case "max":
 					case "min":
 					case "abs":
+					case "ceil":
 						break;
 					default:
 						break;
@@ -226,6 +238,7 @@ public class JavaLibModel {
 			case "java.util.Map":
 				switch(exp.id().toString()){
 					case "get":
+					case "containsKey":
 						break;
 					case "put":
 						if(exp.arguments().get(0) instanceof Local){
@@ -333,6 +346,7 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "get":
 					case "put":
+					case "containsKey":
 					default:
 						return res;
 				}
@@ -383,6 +397,15 @@ public class JavaLibModel {
 						}
 						res.returnType = exp.type().toString();
 						return res;
+					case "ceil":
+						res.target = "Math";
+						res.name = "casper_math_ceil";
+						res.nameOrig = "ceil";
+						for(Expr arg : exp.arguments()){
+							res.args.add(arg.type().toString());
+						}
+						res.returnType = exp.type().toString();
+						return res;
 					default:
 						return res;
 				}
@@ -416,6 +439,25 @@ public class JavaLibModel {
 		    				case "java.lang.Byte":
 		    				case "java.lang.BigInteger":
 		    					return new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
+		    				default:
+		    					if(debug){
+		    						System.err.println("Currently not handling Map of type: " + targetSubTypes[0]);
+		    					}
+		    					break;
+	    				}
+						break;
+					case "containsKey":
+						List<Expr> args2 = c.arguments();
+						switch(targetSubTypes[0]){
+		    				case "java.lang.Integer":
+		    				case "java.lang.String":
+		    				case "java.lang.Double":
+		    				case "java.lang.Float":
+		    				case "java.lang.Long":
+		    				case "java.lang.Short":
+		    				case "java.lang.Byte":
+		    				case "java.lang.BigInteger":
+		    					return new BinaryOperatorNode("==",new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args2.get(0))),new ConstantNode("0",ConstantNode.NULLLIT));
 		    				default:
 		    					if(debug){
 		    						System.err.println("Currently not handling Map of type: " + targetSubTypes[0]);
@@ -479,6 +521,9 @@ public class JavaLibModel {
 					case "abs":
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
 						return new CallNode("casper_math_abs",args);
+					case "ceil":
+						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
+						return new CallNode("casper_math_ceil",args);
 					default:
 						if(debug){
 							System.err.println("Method " + id + " of java.lang.Math not currently supported. Please extend the JavaLibModel.");
