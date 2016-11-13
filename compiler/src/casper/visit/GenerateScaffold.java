@@ -143,7 +143,7 @@ public class GenerateScaffold extends NodeVisitor{
 								System.err.println(ext.blockExprs);
 							}
 							
-							System.in.read();
+							//System.in.read();
 							
 							/* Generate main scaffold */
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
