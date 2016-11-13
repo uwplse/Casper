@@ -60,11 +60,18 @@ public class ConditionalNode extends CustomASTNode{
 		if(cons instanceof ArrayUpdateNode){
 			output += vardecl + ((ArrayUpdateNode) cons).toStringDafny() + ";\n\t\t} \n\t\telse \n\t\t{\n\t\t\t";
 		}
+		else if(cons instanceof ConditionalNode){
+			output += ((ConditionalNode) cons).toStringDafny(vardecl) + "\n\t\t} else {\n\t\t\t";
+		}
 		else{
 			output += vardecl + cons.toString() + ";\n\t\t} else \n\t\t{\n\t\t\t";
 		}
+		
 		if(alt instanceof ArrayUpdateNode){
 			output += vardecl + ((ArrayUpdateNode) alt).toStringDafny() + ";\n\t\t}\n\t\t";
+		}
+		else if(alt instanceof ConditionalNode){
+			output += ((ConditionalNode) alt).toStringDafny(vardecl) + "}\n\t\t";
 		}
 		else{
 			output += vardecl + alt.toString() + ";\n\t\t}\n\t\t";

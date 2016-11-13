@@ -389,6 +389,9 @@ public class Util {
 		else if(original.equals("double")){
 			return "int";
 		}
+		else if(original.equals("String")){
+			return "int";
+		}
 		else{
 			if(original.endsWith("["+Configuration.arraySizeBound+"]")){
 				return "seq<"+original.replace("["+Configuration.arraySizeBound+"]", "")+">";

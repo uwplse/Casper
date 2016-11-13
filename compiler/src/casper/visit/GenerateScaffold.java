@@ -132,7 +132,7 @@ public class GenerateScaffold extends NodeVisitor{
 								System.err.println(ext.blockExprs);
 							}
 							
-							System.in.read();
+							//System.in.read();
 							
 							/* Generate main scaffold */
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
@@ -147,7 +147,7 @@ public class GenerateScaffold extends NodeVisitor{
 							
 							if(synthesizerExitCode == 0){
 								/* Run theorem prover to verify summary */
-								SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, sketchFilteredOutputVars.size());
+								SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, ext.emitCount);
 								
 								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType, sketchReduceType);
 								
