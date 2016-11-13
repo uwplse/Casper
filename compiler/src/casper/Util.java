@@ -604,7 +604,7 @@ public class Util {
 			case "double":
 				return "0";
 			case "java.lang.Integer":
-				
+				return "0";
 			default:
 				return "null";
 		}

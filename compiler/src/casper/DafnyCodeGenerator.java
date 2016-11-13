@@ -315,9 +315,9 @@ public class DafnyCodeGenerator {
 						if(index instanceof ArrayAccessNode){
 							code += "requires forall k :: 0 <= k < |" + ((ArrayAccessNode)index).array + "| ==> 0 <= " + ((ArrayAccessNode)index).array + "[k] < |" + var.varName + "|\n\t";
 						}
-						else if(index instanceof FieldNode){
-							code += "requires forall k :: 0 <= k < |" + ((ArrayAccessNode)((FieldNode)index).container).array + "| ==> 0 <= " + ((ArrayAccessNode)((FieldNode)index).container).array + "[k]."+index.toString().substring(index.toString().lastIndexOf(".")+1, index.toString().length())+" < |" + var.varName + "|\n\t";
-						}
+						//else if(index instanceof FieldNode){
+						//	code += "requires forall k :: 0 <= k < |" + ((ArrayAccessNode)((FieldNode)index).container).array + "| ==> 0 <= " + ((ArrayAccessNode)((FieldNode)index).container).array + "[k]."+index.toString().substring(index.toString().lastIndexOf(".")+1, index.toString().length())+" < |" + var.varName + "|\n\t";
+						//}
 						else{
 							for(Variable lc : ext.loopCounters){
 								code += "requires 0 <= "+lc.varName+" < |"+ext.inputDataSet.varName+"| ==> 0 <= " + index + " < |" + var.varName + "|\n\t";

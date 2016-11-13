@@ -16,7 +16,7 @@ public class WikiPageCount {
 
         for (Record record : data) {
             if (!result.containsKey(record.name)) {
-                    result.put(record.name, 0);
+                   result.put(record.name, 0);
             }
             result.put(record.name, result.get(record.name) + record.views);
         }

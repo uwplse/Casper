@@ -119,9 +119,20 @@ public class GenerateScaffold extends NodeVisitor{
 						ext.candidateKeyTypes.add("int");
 						if(!ext.candidateKeyTypes.contains(sketchReduceType)) ext.candidateKeyTypes.add(sketchReduceType);
 						for(Variable v : ext.inputVars){
-							if(ext.candidateKeyTypes.contains(v.getReduceType())) continue;
-							if(v.getReduceType().equals("String") || v.getReduceType().equals("String[]"))
-								ext.candidateKeyTypes.add(v.getReduceType().replace("[]", ""));
+							String vtype = v.getReduceType();
+							if(ext.candidateKeyTypes.contains(vtype)) continue;
+							if(vtype.equals("String") || vtype.equals("String[]"))
+								ext.candidateKeyTypes.add(vtype.replace("[]", ""));
+							if(casper.Util.getTypeClass(vtype) == casper.Util.OBJECT ||
+									casper.Util.getTypeClass(vtype) == casper.Util.OBJECT_ARRAY){
+								vtype = v.getSketchType().replace("["+Configuration.arraySizeBound+"]", "");
+								if(ext.globalDataTypesFields.containsKey(vtype)){
+									for(Variable fdecl : ext.globalDataTypesFields.get(vtype)){
+										if(ext.candidateKeyTypes.contains(fdecl.getReduceType())) continue;
+										ext.candidateKeyTypes.add(fdecl.getReduceType());
+									}
+								}
+							}
 						}
 						
 						// Emit Count
@@ -132,7 +143,7 @@ public class GenerateScaffold extends NodeVisitor{
 								System.err.println(ext.blockExprs);
 							}
 							
-							//System.in.read();
+							System.in.read();
 							
 							/* Generate main scaffold */
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
@@ -390,7 +401,7 @@ public class GenerateScaffold extends NodeVisitor{
         		return 1;
         	}
         	// 6. Increase emit count 
-        	if(ext.emitCount < Configuration.arraySizeBound){
+        	if(ext.emitCount < Configuration.arraySizeBound && (ext.mapEmits == null || ext.mapEmits.size() == 0)){
         		ext.emitCount++;
         		ext.useConditionals = false;
         		ext.recursionDepth = 2;
