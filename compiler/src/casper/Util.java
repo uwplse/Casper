@@ -603,7 +603,7 @@ public class Util {
 			case "java.lang.Integer":
 				
 			default:
-				return "0";
+				return "null";
 		}
 	}
 	
@@ -626,7 +626,7 @@ public class Util {
 				
 				// Get extension of statement
 				MyStmtExt ext = (MyStmtExt) JavaExt.ext(currStatement);
-					
+				
 				if(currStatement instanceof Eval){
 					Expr expr = ((Eval) currStatement).expr();
 					
@@ -700,6 +700,7 @@ public class Util {
 						verifCondAlt = generatePreCondition(type,alt,currVerifCondition,loopExt,debug);
 					else
 						verifCondAlt = currVerifCondition;
+					
 					
 					if(!verifCondCons.toString().equals(verifCondAlt.toString()))
 						currVerifCondition = new ConditionalNode(loopCond,verifCondCons,verifCondAlt);

@@ -116,6 +116,7 @@ public class GenerateScaffold extends NodeVisitor{
 						}
 						
 						// Data type options
+						ext.candidateKeyTypes.add("int");
 						ext.candidateKeyTypes.add(sketchReduceType);
 						for(Variable v : ext.inputVars){
 							if(v.getReduceType().equals("String") || v.getReduceType().equals("String[]"))
@@ -126,6 +127,8 @@ public class GenerateScaffold extends NodeVisitor{
 							if(debug){
 								System.err.println(ext.blockExprs);
 							}
+							
+							System.in.read();
 							
 							/* Generate main scaffold */
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);

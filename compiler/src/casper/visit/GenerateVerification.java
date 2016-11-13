@@ -116,6 +116,13 @@ public class GenerateVerification extends NodeVisitor {
 						fixArrayAccesses(ext.wpcValues);
 					}
 					
+					for(String varname : ext.wpcValues.keySet()){
+						for(Variable lc : ext.loopCounters){ 
+							ext.wpcValues.put(varname, ext.wpcValues.get(varname).replaceAll("temp_index_casper", new IdentifierNode(lc.varName)));
+							break;
+						}
+					}
+					
 					if(debug){
 						System.err.println(ext.preConditions);
 						System.err.println(ext.invariants);

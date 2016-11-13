@@ -118,7 +118,7 @@ public class DafnyCodeGenerator {
 		String tCond = generateMapTerminateCondition(ext.loopCounters);
 		
 		// Generate map outputType
-		String domapEmitType = generateDomapEmitType(ext.mapEmits,reducerType);
+		String domapEmitType = generateDomapEmitType(ext.mapEmits,reducerType,ext.candidateKeyTypes.get(ext.keyIndex));
 		
 		// Do reduce args declaration
 		String reducerArgsDecl = generatedReducerArgsDecl(ext, ext.loopCounters, ext.inputVars, outputVars);
@@ -127,7 +127,7 @@ public class DafnyCodeGenerator {
 		String reducerArgsCall = generatedReducerArgsCall(ext, ext.loopCounters, ext.inputVars, outputVars);
 		
 		// Generate do reduce key type
-		String doreduceKeyType = generateDoreduceKeyType(ext.mapEmits,sketchReduceType);
+		String doreduceKeyType = generateDoreduceKeyType(ext.mapEmits,ext.candidateKeyTypes.get(ext.keyIndex));
 		
 		// Generate dooreduce key require statements
 		String keyRequires = generateKeyRequires(outputVars);
@@ -213,7 +213,7 @@ public class DafnyCodeGenerator {
 		String code = "";
 		for(Variable var : outputVars){
 			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]"))
-				code += "requires 0 <= key.1 < |"+var.varName+"0|\n\t";
+				code += "requires 0 <= casper_key.1 < |"+var.varName+"0|\n\t";
 		}
 		return code;
 	}
@@ -748,7 +748,7 @@ public class DafnyCodeGenerator {
 		return code;
 	}
 	
-	public static String generateDomapEmitType(Map<String, List<KvPair>> mapEmits, String type) {
+	public static String generateDomapEmitType(Map<String, List<KvPair>> mapEmits, String type, String keysType) {
 		String code = "";
 		// Convert mapKeyType to dafny types
 		String keyType = "";
@@ -760,7 +760,7 @@ public class DafnyCodeGenerator {
 					if(i==0)
 						keyType += "int,";
 					else
-						keyType += casper.Util.getDafnyTypeFromRaw(type)+",";
+						keyType += casper.Util.getDafnyTypeFromRaw(keysType)+",";
 				}
 				keyType = keyType.substring(0,keyType.length()-1);
 				if(kvp.keys.size()>1) keyType = keyType + ")";
@@ -841,13 +841,13 @@ public class DafnyCodeGenerator {
 		String val = "";
 		for(Variable var : outputVars){
 			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]")){
-				val = initExps.get(var.varName).replaceAll("CASPER_TRUE", "true").replaceAll("CASPER_FALSE", "false").replace(var.varName+"0", var.varName+"0[key.1]");
-				code += "if key.0 == " + index + " then " + val + " else "; 
+				val = initExps.get(var.varName).replaceAll("CASPER_TRUE", "true").replaceAll("CASPER_FALSE", "false").replace(var.varName+"0", var.varName+"0[casper_key.1]");
+				code += "if casper_key.0 == " + index + " then " + val + " else "; 
 				index++;
 			}
 			else{
 				val = initExps.get(var.varName).replaceAll("CASPER_TRUE", "true").replaceAll("CASPER_FALSE", "false");
-				code += "if key == " + index + " then " + val + " else "; 
+				code += "if casper_key == " + index + " then " + val + " else "; 
 				index++;
 			}
 		}
@@ -864,8 +864,8 @@ public class DafnyCodeGenerator {
 			}
 		}
 		
-		String key = "key";
-		if(keyIsTuple) key = "key.0";//<reducer-args-call>
+		String key = "casper_key";
+		if(keyIsTuple) key = "casper_key.0";//<reducer-args-call>
 		
 		String code = "";
 		int index = 1;
@@ -879,7 +879,7 @@ public class DafnyCodeGenerator {
 				for(int i=0; i<valCount; i++)
 					args += "input[0].1."+i+",";
 			}
-			reduceExp = "reduce_" + var.varName + "(doreduce(input[1..], key<reducer-args-call>),"+args+"<reducer-args-call>)";
+			reduceExp = "reduce_" + var.varName + "(doreduce(input[1..], casper_key<reducer-args-call>),"+args+"<reducer-args-call>)";
 			code += "if " + key + " == " + index + " then "+reduceExp+" else "; 
 			index++;
 		}

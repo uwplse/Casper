@@ -49,8 +49,15 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "size":
 					case "get":
-					case "add":
 					case "set":
+						return true;
+					default:
+						return false;
+				}
+			case "java.util.Set":
+				switch(exp.id().toString()){
+					case "size":	
+					case "add":
 						return true;
 					default:
 						return false;
@@ -171,9 +178,6 @@ public class JavaLibModel {
 							}
 						}
 						break;
-					case "add":
-						reads.addAll(exp.arguments());
-						break;
 					case "set":
 						reads.addAll(exp.arguments());
 						break;
@@ -181,6 +185,18 @@ public class JavaLibModel {
 						break;
 				}
 				break;
+			case "java.util.Set":
+					switch(exp.id().toString()){
+						case "size":
+							ext.saveInputVariable(exp.target().toString(), exp.target().type().toString(), Variable.CONST_ARRAY_ACCESS);
+							break;
+						case "add":
+							reads.addAll(exp.arguments());
+							break;
+						default:
+							break;
+					}
+					break;
 			case "java.util.Map":
 				switch(exp.id().toString()){
 					case "get":
@@ -256,9 +272,6 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "size":
 						break;
-					case "add":
-						writes.add(exp.target());
-						break;
 					case "get":
 						break;
 					case "set":
@@ -268,6 +281,17 @@ public class JavaLibModel {
 						else if(exp.arguments().get(0) instanceof Lit){
 							ext.saveOutputVariable(exp.target().toString(), exp.target().type().toString(), Variable.CONST_ARRAY_ACCESS);
 						}
+						break;
+					default:
+						break;
+				}
+				break;
+			case "java.util.Set":
+				switch(exp.id().toString()){
+					case "size":
+						break;
+					case "add":
+						writes.add(exp.target());
 						break;
 					default:
 						break;
@@ -338,6 +362,12 @@ public class JavaLibModel {
 				switch(exp.id().toString()){
 					case "size":
 					case "get":
+					default:
+						return res;
+				}
+			case "java.util.Set":
+				switch(exp.id().toString()){
+					case "size":
 					case "add":
 					default:
 						return res;
@@ -482,6 +512,17 @@ public class JavaLibModel {
 					default:
 						if(debug){
 							System.err.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
+						}
+						break;
+				}
+				break;
+			case "java.util.Set":
+				switch(id){
+					case "add":
+						return new ArrayUpdateNode(new IdentifierNode(target), new IdentifierNode("temp_index_casper"), CustomASTNode.convertToAST(c.arguments().get(0)));
+					default:
+						if(debug){
+							System.err.println("Method " + id + " of java.util.Set not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
 				}
@@ -640,6 +681,19 @@ public class JavaLibModel {
 					case "set":
 						List<Expr> args = c.arguments();
 						CustomASTNode acc = new ArrayUpdateNode(new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)),CustomASTNode.convertToAST(args.get(1)));
+						return currVerifCondition.replaceAll(target,acc);
+					default:
+						if(debug){
+							System.err.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
+						}
+						break;
+				}
+				break;
+			case "java.util.Set":
+				switch(id){
+					case "add":
+						List<Expr> args = c.arguments();
+						CustomASTNode acc = new ArrayUpdateNode(new IdentifierNode(target),new IdentifierNode("temp_index_casper"),CustomASTNode.convertToAST(args.get(0)));
 						return currVerifCondition.replaceAll(target,acc);
 					default:
 						if(debug){

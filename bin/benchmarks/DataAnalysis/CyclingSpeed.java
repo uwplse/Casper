@@ -17,9 +17,9 @@ public class CyclingSpeed {
 
         for(Record record : data) {
             int speed = ((int)Math.ceil(record.speed));
-            //if(!result.containsKey(speed)) {
-             //   result.put(speed,0);
-            ///}
+            if(!result.containsKey(speed)) {
+                result.put(speed,0);
+            }
             result.put(speed, result.get(speed)+1);
         }
 

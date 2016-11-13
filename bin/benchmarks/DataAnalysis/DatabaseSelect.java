@@ -1,22 +1,19 @@
 package biglambda;
 
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 
 public class DatabaseSelect {
-	
-	class Table {
-		public List<Record> records;
-	}
 	
 	class Record {
 	    public List<String> columns;
 	}
 
-	public List<Record> select(Table table, String key) {
-        List<Record> result = new ArrayList<Record>();
+	public Set<Record> select(List<Record> records, String key) {
+        Set<Record> result = new HashSet<Record>();
 
-        for (Record record : table.records) {
+        for (Record record : records) {
             if (record.columns.get(0).equals(key)) {
                 result.add(record);
             }

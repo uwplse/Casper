@@ -232,7 +232,7 @@ public class SketchParser {
 			}
 		}
 		// If array access with original container
-		r = Pattern.compile("^([a-zA-Z$][a-zA-Z_$0-9]*)\\[(.*?)\\]$");
+		r = Pattern.compile("^([a-zA-Z$][\\[\\].a-zA-Z_$0-9]*)\\[(.*?)\\]$");
 		m = r.matcher(exp);
 		if(m.matches()){
 			String container = m.group(1);
@@ -244,21 +244,23 @@ public class SketchParser {
 				if(mapLines.get(i).contains("=")){
 					String[] stmt = mapLines.get(i).split("=");
 					
-					r = Pattern.compile("\\b"+exp+"\\b");
+					r = Pattern.compile("(^|\\s)"+Pattern.quote(exp)+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
 						return prefix + resolve(stmt[1].trim(),mapLines,i,ext) + postfix;
 					}
 					
-					r = Pattern.compile("\\b"+container+"\\b");
+					r = Pattern.compile("(^|\\s)"+Pattern.quote(container)+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
 						return prefix + resolve(stmt[1].trim()+"["+index+"]",mapLines,i,ext) + postfix;
 					}
-					
-					r = Pattern.compile("\\b"+index+"\\b");
+					r = Pattern.compile("(^|\\s)"+Pattern.quote(index)+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
+						System.err.println(stmt[0]);
+						System.err.println(index);
+						System.err.println("ohonoes3");
 						return prefix + resolve(container+"["+stmt[1].trim()+"]",mapLines,i,ext) + postfix;
 					}
 				}

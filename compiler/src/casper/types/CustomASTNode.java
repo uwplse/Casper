@@ -71,6 +71,10 @@ abstract public class CustomASTNode {
 				String[] subTypes = subType.split(",");
 				node = new ConstantNode(casper.Util.getInitVal(subTypes[1]),ConstantNode.ARRAYLIT);
 			}
+			else if(objType.startsWith("java.util.HashSet<")){
+				String subType = objType.substring("java.util.HashSet<".length(), objType.length()-1);
+				node = new ConstantNode(casper.Util.getInitVal(subType),ConstantNode.ARRAYLIT);
+			}
 		}
 		else  if(exp instanceof NewArray){
 			node = new ConstantNode(casper.Util.getInitVal(((NewArray) exp).baseType().toString()),ConstantNode.ARRAYLIT);

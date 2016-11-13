@@ -84,6 +84,7 @@ public class Variable{
 			switch(targetType){
 				case "java.util.List":
 				case "java.util.ArrayList":
+				case "java.util.Set":
 					templateType = templateType.substring(end+1,templateType.length()-1);
 					this.category = Variable.ARRAY_ACCESS;
 					return casper.Util.getSketchTypeFromRaw(this.getSketchType(templateType))+"["+Configuration.arraySizeBound+"]";
@@ -129,6 +130,7 @@ public class Variable{
 			switch(targetType){
 				case "java.util.List":
 				case "java.util.ArrayList":
+				case "java.util.Set":
 					templateType = templateType.substring(end+1,templateType.length()-1);
 					this.category = Variable.ARRAY_ACCESS;
 					return casper.Util.getPrimitiveTypeFromRaw(this.getReduceType(templateType))+"[]";
