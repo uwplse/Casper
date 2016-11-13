@@ -117,18 +117,22 @@ public class GenerateScaffold extends NodeVisitor{
 						
 						// Data type options
 						ext.candidateKeyTypes.add("int");
-						ext.candidateKeyTypes.add(sketchReduceType);
+						if(!ext.candidateKeyTypes.contains(sketchReduceType)) ext.candidateKeyTypes.add(sketchReduceType);
 						for(Variable v : ext.inputVars){
+							if(ext.candidateKeyTypes.contains(v.getReduceType())) continue;
 							if(v.getReduceType().equals("String") || v.getReduceType().equals("String[]"))
 								ext.candidateKeyTypes.add(v.getReduceType().replace("[]", ""));
 						}
+						
+						// Emit Count
+						ext.emitCount = sketchFilteredOutputVars.size();
 						
 						while(true){
 							if(debug){
 								System.err.println(ext.blockExprs);
 							}
 							
-							//System.in.read();
+							System.in.read();
 							
 							/* Generate main scaffold */
 							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
@@ -385,7 +389,19 @@ public class GenerateScaffold extends NodeVisitor{
         		System.err.println("Building new grammar...");
         		return 1;
         	}
-        	// 6. Add new operators
+        	// 6. Increase emit count 
+        	if(ext.emitCount < Configuration.arraySizeBound){
+        		ext.emitCount++;
+        		ext.useConditionals = false;
+        		ext.recursionDepth = 2;
+        		ext.valCount = 1;
+        		ext.keyIndex = 0;
+        		if(debug || true)
+    				System.err.println("Emit count increased from "+(ext.emitCount-1)+" to "+ext.emitCount);
+        		System.err.println("Building new grammar...");
+        		return 1;
+        	}
+        	// 7. Add new operators
         	if(opsAdded) return 2;
         	this.opsAdded = true;
         	switch(type){

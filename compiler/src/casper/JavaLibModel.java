@@ -257,12 +257,13 @@ public class JavaLibModel {
 					case "containsKey":
 						break;
 					case "put":
-						if(exp.arguments().get(0) instanceof Local){
+						if(exp.arguments().get(0) instanceof Local || exp.arguments().get(0) instanceof Lit){
 							writes.add(exp.target());
 						}
-						else if(exp.arguments().get(0) instanceof Lit){
+						/*else if(exp.arguments().get(0) instanceof Lit){
+							System.err.println(exp.arguments().get(0) instanceof Lit);
 							ext.saveOutputVariable(exp.target().toString(), exp.target().type().toString(), Variable.CONST_ARRAY_ACCESS);
-						}
+						}*/
 						break;
 					default:
 						break;

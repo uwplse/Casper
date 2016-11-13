@@ -151,6 +151,8 @@ public class MyWhileExt extends MyStmtExt {
     public Map<Variable, Set<Variable>> aliases = new HashMap<Variable, Set<Variable>>();
 
 	public boolean extForType = false;
+
+	public int emitCount = 0;
     
     // Save an loop counter variable.
     public void saveLoopCounterVariable(String varName, String varType, int category){
@@ -267,6 +269,12 @@ public class MyWhileExt extends MyStmtExt {
     		}
     	}
     	else if(category == Variable.ARRAY_ACCESS){
+        	if(!localVars.contains(var)){
+        		inputVars.remove(var);
+        		outputVars.add(var);
+        	}
+    	}
+    	else if(category == Variable.CONST_ARRAY_ACCESS){
         	if(!localVars.contains(var)){
         		inputVars.remove(var);
         		outputVars.add(var);

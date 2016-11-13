@@ -42,6 +42,9 @@ public class UpdateConfigurations extends NodeVisitor {
 				case "RecursionDepth":
 					Configuration.recursionDepth = Integer.parseInt(keyVal[1]);
 					break;
+				case "EmitCount":
+					Configuration.maxEmits = Integer.parseInt(keyVal[1]);
+					break;
 			}
 		}
    	}

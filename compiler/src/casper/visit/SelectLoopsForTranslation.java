@@ -144,8 +144,9 @@ public class SelectLoopsForTranslation extends NodeVisitor{
 			// Do we recognize this function call?
 			if(!JavaLibModel.recognizes((Call)n)){
 				// We don't. So these loops cannot be optimized
-				for(MyWhileExt ext : this.extensions)
+				for(MyWhileExt ext : this.extensions){
 					ext.interesting = false;
+				}
 			}
 		}
 		else if(n instanceof Block){

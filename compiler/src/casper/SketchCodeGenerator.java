@@ -50,7 +50,7 @@ public class SketchCodeGenerator {
 		String includeList = generateIncludeList(ext, id);
 		
 		// Number of output variables
-		String numOutVars = Integer.toString(sketchFilteredOutputVars.size());
+		String numOutVars = Integer.toString(ext.emitCount);
 		
 		// Size of result array
 		int r_size = 0;
@@ -149,7 +149,7 @@ public class SketchCodeGenerator {
 		String mapArgsDecl = generateMapArgsDecl(ext.inputDataSet, ext.loopCounters, ext.postConditionArgsOrder.get(reducerType), keyCount, ext.valCount, sketchReducerType, ext.candidateKeyTypes.get(ext.keyIndex));
 		
 		// Generate map function emit code
-		String mapEmits = generateDomapEmits(sketchReducerType, ext, ext.inputDataSet, ext.loopCounters, sketchFilteredOutputVars.size(), ext.useConditionals, keyCount, ext.valCount);
+		String mapEmits = generateDomapEmits(sketchReducerType, ext, ext.inputDataSet, ext.loopCounters, ext.emitCount, ext.useConditionals, keyCount, ext.valCount);
 		
 		// Generate reduce/fold expression generator
 		String reduceGenerator = generateReduceGenerators(sketchReducerType, blockArrays, sketchFilteredOutputVars, ext);
@@ -1238,10 +1238,10 @@ public class SketchCodeGenerator {
 			if(i==0)
 				mapArgs += ", ref int[CASPER_NUM_OUTVARS] keys"+i;
 			else
-				mapArgs += ", ref "+keyType+"[CASPER_NUM_OUTVARS] keys"+i;
+				mapArgs += ", ref "+casper.Util.getSketchTypeFromRaw(keyType)+"[CASPER_NUM_OUTVARS] keys"+i;
 		}
 		for(int i=0; i<valCount; i++){
-			mapArgs += ", ref "+sketchReducerType+"[CASPER_NUM_OUTVARS] values"+i;
+			mapArgs += ", ref "+casper.Util.getSketchTypeFromRaw(sketchReducerType)+"[CASPER_NUM_OUTVARS] values"+i;
 		}
 		
 		return mapArgs;
@@ -1539,7 +1539,7 @@ public class SketchCodeGenerator {
 			if(i==0)
 				code += "int[CASPER_NUM_OUTVARS] keys"+i+";\n\t\t";
 			else
-				code += keyType+"[CASPER_NUM_OUTVARS] keys"+i+";\n\t\t";
+				code += casper.Util.getSketchTypeFromRaw(keyType)+"[CASPER_NUM_OUTVARS] keys"+i+";\n\t\t";
 		}
 		for(int i=0; i<valCount; i++){
 			code += type+"[CASPER_NUM_OUTVARS] values"+i+";\n\t\t";
@@ -1571,7 +1571,7 @@ public class SketchCodeGenerator {
 				code += "int key0 = keys0[casper_j];\n\t\t\t";
 			}
 			else{
-				code += type + " key"+i+" = keys"+i+"[casper_j];\n\t\t\t";
+				code += casper.Util.getSketchTypeFromRaw(type) + " key"+i+" = keys"+i+"[casper_j];\n\t\t\t";
 			}
 		}
 		
@@ -1716,7 +1716,7 @@ public class SketchCodeGenerator {
 		int indexC = 0;
 		int indexK = 0;
 		int indexV = 0;
-		for(int i=0; i<sketchFilteredOutputVars.size(); i++){
+		for(int i=0; i<ext.emitCount; i++){
 			if(ext.useConditionals){ 
 				mapGenerators += generateMapGrammarInlined(ext, "bit", "_c"+indexC++, blockArrays) + "\n\n";
 			}

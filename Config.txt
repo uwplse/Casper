@@ -1,3 +1,4 @@
 Inbits=1,
 ArraySizeBound=4,
-RecursionDepth=3
+RecursionDepth=3,
+EmitCount=5
