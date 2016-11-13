@@ -128,8 +128,8 @@ public class GenerateScaffold extends NodeVisitor{
 								vtype = v.getSketchType().replace("["+Configuration.arraySizeBound+"]", "");
 								if(ext.globalDataTypesFields.containsKey(vtype)){
 									for(Variable fdecl : ext.globalDataTypesFields.get(vtype)){
-										if(ext.candidateKeyTypes.contains(fdecl.getReduceType())) continue;
-										ext.candidateKeyTypes.add(fdecl.getReduceType());
+										if(ext.candidateKeyTypes.contains(fdecl.getReduceType().replace("[]",""))) continue;
+										ext.candidateKeyTypes.add(fdecl.getReduceType().replace("[]",""));
 									}
 								}
 							}

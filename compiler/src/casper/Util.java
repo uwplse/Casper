@@ -26,6 +26,7 @@ public class Util {
 	public static String getSketchTypeFromRaw(String original){
 		switch(original){
 			case "boolean":
+			case "Boolean":
 				return "bit";
 			case "char":
 				return "char";
