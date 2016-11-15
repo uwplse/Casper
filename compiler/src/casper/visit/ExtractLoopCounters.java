@@ -5,7 +5,9 @@
 package casper.visit;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import casper.JavaLibModel;
 import casper.ast.JavaExt;
@@ -117,7 +119,9 @@ public class ExtractLoopCounters extends NodeVisitor {
 				Stmt body = ((While) n).body();
 				
 				// Filter out loop counters
-				for(Variable var : ext.loopCounters){
+				Set<Variable> lcCopy = new HashSet<Variable>();
+				lcCopy.addAll(ext.loopCounters);
+				for(Variable var : lcCopy){
 					CustomASTNode lcExp = new IdentifierNode(var.varNameOrig);
 					
 					if(body instanceof Block){

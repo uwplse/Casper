@@ -108,6 +108,7 @@ public class SketchCodeGenerator {
 			break;
 		}
 		
+		//loopCond = ext.terminationCondition.toString();
 		String loopCondFalse = loopCond; loopCondFalse = "!" + loopCondFalse;
 		
 		String wpc = bodyExt.preConditions.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();

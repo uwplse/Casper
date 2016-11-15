@@ -390,6 +390,9 @@ public class Util {
 		else if(original.equals("double")){
 			return "int";
 		}
+		else if(original.equals("float")){
+			return "int";
+		}
 		else if(original.equals("String")){
 			return "int";
 		}
@@ -601,10 +604,14 @@ public class Util {
 	}
 
 	public static String getInitVal(String type) {
+		System.err.println(type);
 		switch(type){
-			case "double":
-				return "0";
 			case "java.lang.Integer":
+			case "java.lang.Double":
+			case "double":
+			case "float":
+			case "int":
+			case "boolean":
 				return "0";
 			default:
 				return "null";

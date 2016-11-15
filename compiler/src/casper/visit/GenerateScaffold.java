@@ -154,7 +154,7 @@ public class GenerateScaffold extends NodeVisitor{
 							
 							/* Run synthesizer to generate summary */
 							System.err.println("Attempting to synthesize solution...");
-							int synthesizerExitCode = runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, keyCount, sketchReduceType);
+							int synthesizerExitCode = runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, keyCount, sketchReduceType, sketchFilteredOutputVars.size());
 							
 							if(synthesizerExitCode == 0){
 								/* Run theorem prover to verify summary */
@@ -321,7 +321,7 @@ public class GenerateScaffold extends NodeVisitor{
 	    }
 	}
 
-	private int runSynthesizer(String filename, MyWhileExt ext, int keyCount, String type) throws IOException, InterruptedException {		
+	private int runSynthesizer(String filename, MyWhileExt ext, int keyCount, String type, int emitCountInit) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
 		
 		if(debug || true)
@@ -401,7 +401,7 @@ public class GenerateScaffold extends NodeVisitor{
         		return 1;
         	}
         	// 6. Increase emit count 
-        	if(ext.emitCount < Configuration.arraySizeBound && (ext.mapEmits == null || ext.mapEmits.size() == 0)){
+        	if(ext.emitCount < Configuration.maxEmits && (ext.mapEmits == null || ext.mapEmits.size() == 0)){
         		ext.emitCount++;
         		ext.useConditionals = false;
         		ext.recursionDepth = 2;
@@ -423,11 +423,10 @@ public class GenerateScaffold extends NodeVisitor{
             		ext.recursionDepth = 2;
             		ext.valCount = 1;
             		ext.keyIndex = 0;
+            		ext.emitCount = emitCountInit;
             		System.err.println("New operators added...");
             		System.err.println("Building new grammar...");
             		return 1;
-            	case "int":
-            		// Add min max functions
         		default:
         			// We're done.
         			return 2;
