@@ -27,6 +27,7 @@ import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.FieldNode;
 import casper.types.IdentifierNode;
+import casper.types.SequenceNode;
 import casper.types.Variable;
 
 public class DafnyCodeGenerator {
@@ -64,10 +65,7 @@ public class DafnyCodeGenerator {
 			loopBody = ((ExtendedFor)n).body();
 		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(loopBody));
 		
-		String loopCond = "";
-		for(Variable lc : ext.loopCounters){
-			loopCond = "("+lc.varName+"<|"+ext.inputDataSet.varName+"|)";
-		}
+		String loopCond = "("+ext.mainLoopCounter.varName+"<|"+ext.inputDataSet.varName+"|)";
 		
 		String loopCondFalse = loopCond; loopCondFalse = "!" + loopCondFalse;
 		
@@ -319,10 +317,7 @@ public class DafnyCodeGenerator {
 						//	code += "requires forall k :: 0 <= k < |" + ((ArrayAccessNode)((FieldNode)index).container).array + "| ==> 0 <= " + ((ArrayAccessNode)((FieldNode)index).container).array + "[k]."+index.toString().substring(index.toString().lastIndexOf(".")+1, index.toString().length())+" < |" + var.varName + "|\n\t";
 						//}
 						else{
-							for(Variable lc : ext.loopCounters){
-								code += "requires 0 <= "+lc.varName+" < |"+ext.inputDataSet.varName+"| ==> 0 <= " + index + " < |" + var.varName + "|\n\t";
-								break;
-							}
+							code += "requires 0 <= "+ext.mainLoopCounter.varName+" < |"+ext.inputDataSet.varName+"| ==> 0 <= " + index + " < |" + var.varName + "|\n\t";
 						}
 					}
 				}
@@ -445,6 +440,9 @@ public class DafnyCodeGenerator {
 					}
 					else if(value instanceof ArrayUpdateNode){
 						code += "ind_" + varname + " := " + ((ArrayUpdateNode)value).toStringDafny() + ";\n\t\t";
+					}
+					else if(value instanceof SequenceNode){
+						code += ((SequenceNode) value).inst1ToStringDafny("ind_" + varname + " := ") + ";\n\t\t" + ((SequenceNode) value).inst2ToStringDafny("ind_" + varname + " := ") + ";\n\t\t";
 					}
 					else{
 						code += "ind_" + varname + " := " + value + ";\n\t\t";

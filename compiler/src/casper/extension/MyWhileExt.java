@@ -41,6 +41,7 @@ public class MyWhileExt extends MyStmtExt {
 	// data structures like arrays and collections. Must change with
 	// loop iterations.
     public Set<Variable> loopCounters = new HashSet<Variable>();
+    public Variable mainLoopCounter = null;
 	
 	// Input variables are variables that were declared outside of the
 	// loop body, but were read within the loop. They are thus inputs
@@ -129,7 +130,11 @@ public class MyWhileExt extends MyStmtExt {
 	public List<Map<String,String>> verifiedReduceExps = new ArrayList<Map<String,String>>();
 	public List<Map<String,String>> verifiedInitExps = new ArrayList<Map<String,String>>();
 	public List<Map<String,String>> verifiedMergeExps = new ArrayList<Map<String,String>>();
+	public List<String> verifiedSolKeyTypes = new ArrayList<String>();
 	public List<Boolean> verifiedCSG = new ArrayList<Boolean>();
+	
+	// Index of selected solution
+	public int selectedSolutionIndex = -1;
 	
 	// Bits to block
 	public Map<String,List<String>> grammarExps = new HashMap<String,List<String>>();

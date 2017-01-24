@@ -34,8 +34,11 @@ public class ConditionalNode extends CustomASTNode{
 		else if(cons instanceof ConditionalNode){
 			output += ((ConditionalNode) cons).toString(vardecl) + "\n\t\t} else {\n\t\t\t";
 		}
+		else if(cons instanceof SequenceNode){
+			output += ((SequenceNode) cons).inst1ToString(vardecl) + ";\n\t\t" + ((SequenceNode) cons).inst2ToString(vardecl) + ";\n\t\t} else {\n\t\t\t";
+		}
 		else{
-			output += vardecl + cons.toString() + ";\n\t\t} else {\n\t\t\t";
+			output += vardecl + "ind_" + cons.toString() + ";\n\t\t} else {\n\t\t\t";
 		}
 		
 		if(alt instanceof ArrayUpdateNode){
@@ -44,8 +47,11 @@ public class ConditionalNode extends CustomASTNode{
 		else if(alt instanceof ConditionalNode){
 			output += ((ConditionalNode) alt).toString(vardecl) + "}\n\t\t";
 		}
+		else if(cons instanceof SequenceNode){
+			output += ((SequenceNode) alt).inst1ToString(vardecl) + ";\n\t\t" + ((SequenceNode) alt).inst2ToString(vardecl) + ";\n\t\t} else {\n\t\t\t";
+		}
 		else{
-			output += vardecl + alt.toString() + ";\n\t\t}\n\t\t";
+			output += vardecl + "ind_" + alt.toString() + ";\n\t\t}\n\t\t";
 		}
 		return output;
 	}
@@ -63,6 +69,22 @@ public class ConditionalNode extends CustomASTNode{
 		else if(cons instanceof ConditionalNode){
 			output += ((ConditionalNode) cons).toStringDafny(vardecl) + "\n\t\t} else {\n\t\t\t";
 		}
+
+		else if(cons instanceof SequenceNode){
+			if(((SequenceNode) cons).inst1 instanceof ConditionalNode){
+				output += ((SequenceNode) cons).inst1ToStringDafny(vardecl) + "\n\t\t"; 
+			}
+			else{
+				output += ((SequenceNode) cons).inst1ToStringDafny(vardecl) + ";\n\t\t";
+			}
+			
+			if(((SequenceNode) cons).inst2 instanceof ConditionalNode){
+				output += ((SequenceNode) cons).inst2ToStringDafny(vardecl) + "\n\t\t} else {\n\t\t\t"; 
+			}
+			else{
+				output += ((SequenceNode) cons).inst2ToStringDafny(vardecl) + ";\n\t\t} else {\n\t\t\t";
+			}
+		}
 		else{
 			output += vardecl + cons.toString() + ";\n\t\t} else \n\t\t{\n\t\t\t";
 		}
@@ -72,6 +94,21 @@ public class ConditionalNode extends CustomASTNode{
 		}
 		else if(alt instanceof ConditionalNode){
 			output += ((ConditionalNode) alt).toStringDafny(vardecl) + "}\n\t\t";
+		}
+		else if(alt instanceof SequenceNode){
+			if(((SequenceNode) alt).inst1 instanceof ConditionalNode){
+				output += ((SequenceNode) alt).inst1ToStringDafny(vardecl) + "\n\t\t"; 
+			}
+			else{
+				output += ((SequenceNode) alt).inst1ToStringDafny(vardecl) + ";\n\t\t";
+			}
+			
+			if(((SequenceNode) alt).inst2 instanceof ConditionalNode){
+				output += ((SequenceNode) alt).inst2ToStringDafny(vardecl) + "\n\t\t} else {\n\t\t\t"; 
+			}
+			else{
+				output += ((SequenceNode) alt).inst2ToStringDafny(vardecl) + ";\n\t\t} else {\n\t\t\t";
+			}
 		}
 		else{
 			output += vardecl + alt.toString() + ";\n\t\t}\n\t\t";

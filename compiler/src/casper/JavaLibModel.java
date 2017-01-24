@@ -19,6 +19,7 @@ import casper.types.CallNode;
 import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
+import casper.types.SequenceNode;
 import casper.types.Variable;
 import polyglot.ast.Call;
 import polyglot.ast.Expr;
@@ -488,7 +489,7 @@ public class JavaLibModel {
 		    				case "java.lang.Short":
 		    				case "java.lang.Byte":
 		    				case "java.lang.BigInteger":
-		    					return new BinaryOperatorNode("==",new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args2.get(0))),new ConstantNode("0",ConstantNode.NULLLIT));
+		    					return new BinaryOperatorNode("!=",new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args2.get(0))),new ConstantNode("0",ConstantNode.NULLLIT));
 		    				default:
 		    					if(debug){
 		    						System.err.println("Currently not handling Map of type: " + targetSubTypes[0]);
@@ -661,7 +662,15 @@ public class JavaLibModel {
 		    				case "java.lang.Byte":
 		    				case "java.lang.BigInteger":
 		    					CustomASTNode upd = new ArrayUpdateNode(new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)),CustomASTNode.convertToAST(args.get(1)));
-		    					return currVerifCondition.replaceAll(target,upd);
+		    					if(currVerifCondition.toString().equals(target)){
+		    						return upd;
+		    					}
+		    					if(currVerifCondition.contains(target)){
+		    						return new SequenceNode(upd,currVerifCondition);
+		    					}
+		    					else{
+		    						return currVerifCondition;
+		    					}
 		    				default:
 		    					if(debug){
 		    						System.err.println("Currently not handling Map of custom types");

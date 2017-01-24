@@ -312,7 +312,7 @@ public class GenerateVerification extends NodeVisitor {
 				CustomASTNode n1;
 				if(initVals.containsKey(varname.substring(0,varname.length()-1))){
 					CustomASTNode val = initVals.get(varname.substring(0,varname.length()-1));
-					if(val instanceof ConstantNode && !(((ConstantNode) val).type == ConstantNode.ARRAYLIT)){
+					if(false && val instanceof ConstantNode && !(((ConstantNode) val).type == ConstantNode.ARRAYLIT)){
 						n1 = new IdentifierNode(initVals.get(varname.substring(0,varname.length()-1)).toString());
 					}
 					else{

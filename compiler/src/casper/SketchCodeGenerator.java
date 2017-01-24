@@ -22,6 +22,7 @@ import casper.types.ConditionalNode;
 import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
+import casper.types.SequenceNode;
 import casper.types.Variable;
 import polyglot.ast.Node;
 import polyglot.ast.Stmt;
@@ -100,13 +101,13 @@ public class SketchCodeGenerator {
 		
 		String invariant = ext.invariants.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		
-		String loopCond = "";
-		String loopCounter = "";
 		for(Variable v : ext.loopCounters){
-			loopCond = "("+v.varName+"<"+(Configuration.arraySizeBound-1)+")";
-			loopCounter = v.varName;
+			ext.mainLoopCounter = v;
 			break;
 		}
+		
+		String loopCond = "("+ext.mainLoopCounter.varName+"<"+(Configuration.arraySizeBound-1)+")";
+		String loopCounter = ext.mainLoopCounter.varName;
 		
 		//loopCond = ext.terminationCondition.toString();
 		String loopCondFalse = loopCond; loopCondFalse = "!" + loopCondFalse;
@@ -689,7 +690,10 @@ public class SketchCodeGenerator {
 						code += ((ConditionalNode)value).toString("ind_" + varname + " = ");
 					}
 					else if(value instanceof ArrayUpdateNode){
-						code += wpcValues.get(varname).toString() + ";\n\t\t";
+						code += value.toString() + ";\n\t\t";
+					}
+					else if(value instanceof SequenceNode){
+						code += ((SequenceNode) value).inst1ToString("ind_" + varname + " = ") + ";\n\t\t" + ((SequenceNode) value).inst2ToString("ind_" + varname + " = ") + ";\n\t\t";
 					}
 					else{
 						code += "ind_" + varname + " = " + wpcValues.get(varname) + ";\n\t\t";
@@ -871,36 +875,38 @@ public class SketchCodeGenerator {
 		if(casper.Util.getTypeClass(ext.inputDataSet.getSketchType()) == casper.Util.OBJECT_ARRAY){
 			for(String globalType : ext.globalDataTypes){
 				if(globalType.equals(ext.inputDataSet.getOriginalType().replace("[]", ""))){
+					/*System.err.println(type);
+					System.err.println(ext.inputDataSet.getOriginalType().replace("[]", ""));
 					if(type.equals(ext.inputDataSet.getOriginalType().replace("[]", ""))){
 						String keyType = ext.inputDataSet.getOriginalType().replace("[]", "");
 						for(Variable lc : ext.loopCounters){
 							if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
 							terminals.get(keyType).add(ext.inputDataSet.varName + "["+lc.varName+"]");
 						}
-					}
-					else{
-						for(Variable field : ext.globalDataTypesFields.get(globalType)){
-							// Add an option for each field (of an arbitrary array index) that matches type
-							if(casper.Util.compatibleTypes(type,field.getOriginalType()) == 1){
-								String keyType = "String";
-								if(!field.getOriginalType().replace("[]", "").equals("String"))
-									keyType = casper.Util.reducerType(field.getSketchType());
-								for(Variable lc : ext.loopCounters){
-									if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
-									terminals.get(keyType).add(ext.inputDataSet.varName + "["+lc.varName+"]." + field.varName);
-								}
+					}*/
+					//else{
+					for(Variable field : ext.globalDataTypesFields.get(globalType)){
+						// Add an option for each field (of an arbitrary array index) that matches type
+						if(casper.Util.compatibleTypes(type,field.getOriginalType()) == 1){
+							String keyType = "String";
+							if(!field.getOriginalType().replace("[]", "").equals("String"))
+								keyType = casper.Util.reducerType(field.getSketchType());
+							for(Variable lc : ext.loopCounters){
+								if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
+								terminals.get(keyType).add(ext.inputDataSet.varName + "["+lc.varName+"]." + field.varName);
 							}
-							else if(casper.Util.compatibleTypes(type,field.getOriginalType()) == 2){
-								String keyType = "String";
-								if(!field.getOriginalType().replace("[]", "").equals("String"))
-									keyType = casper.Util.reducerType(field.getSketchType());
-								for(Variable lc : ext.loopCounters){
-									if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
-									terminals.get(keyType).add(ext.inputDataSet.varName + "["+lc.varName+"]." + field.varName + "[??]");
-								}
+						}
+						else if(casper.Util.compatibleTypes(type,field.getOriginalType()) == 2){
+							String keyType = "String";
+							if(!field.getOriginalType().replace("[]", "").equals("String"))
+								keyType = casper.Util.reducerType(field.getSketchType());
+							for(Variable lc : ext.loopCounters){
+								if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
+								terminals.get(keyType).add(ext.inputDataSet.varName + "["+lc.varName+"]." + field.varName + "[??]");
 							}
 						}
 					}
+					//}
 				}
     		}
 		}
@@ -927,6 +933,12 @@ public class SketchCodeGenerator {
 		String sketchType = type;
 		if(type.equals("String"))
 			sketchType = "int";
+		if(type.equals("Boolean"))
+			sketchType = "bit";
+		
+		String terminalType = type;
+		if(type.equals("Boolean"))
+			terminalType = "bit";
 		
 		String typeName = type.toLowerCase();
 		if(sketchType.equals("bit[32]"))
@@ -956,7 +968,7 @@ public class SketchCodeGenerator {
 		
 		// Grammar options
 		List<String> exprs = new ArrayList<String>();
-		getMapExpressions(	type,
+		getMapExpressions(	terminalType,
 							ext.binaryOperators,
 							ext.unaryOperators,
 							ext.methodOperators,
@@ -1275,7 +1287,7 @@ public class SketchCodeGenerator {
 			int indexV = 0;
 			// Generate emit code
 			for(int i=0; i<emitCount; i++){
-				emits += 	"if(bitMapGenerator_c"+indexC+++"("+args+")){\n\t\t";
+				emits += 	"if(booleanMapGenerator_c"+indexC+++"("+args+")){\n\t\t";
 				for(int j=0; j<keyCount; j++){
 					if(j==0)
 						emits += "keys"+j+"["+i+"] = ??;\n\t\t";
@@ -1357,6 +1369,12 @@ public class SketchCodeGenerator {
 		String sketchType = type;
 		if(type == "String")
 			sketchType = "int";
+		if(type.equals("Boolean"))
+			sketchType = "bit";
+		
+		String terminalType = type;
+		if(type.equals("Boolean"))
+			terminalType = "bit";
 		
 		String typeName = type.toLowerCase();
 		if(sketchType == "bit[32]")
@@ -1377,7 +1395,7 @@ public class SketchCodeGenerator {
 		
 		// Grammar options
 		List<String> exprs = new ArrayList<String>();
-		getMapExpressions(	type,
+		getMapExpressions(	terminalType,
 							ext.binaryOperators,
 							ext.unaryOperators,
 							ext.methodOperators,
@@ -1719,7 +1737,7 @@ public class SketchCodeGenerator {
 		int indexV = 0;
 		for(int i=0; i<ext.emitCount; i++){
 			if(ext.useConditionals){ 
-				mapGenerators += generateMapGrammarInlined(ext, "bit", "_c"+indexC++, blockArrays) + "\n\n";
+				mapGenerators += generateMapGrammarInlined(ext, "Boolean", "_c"+indexC++, blockArrays) + "\n\n";
 			}
 			for(int j=1; j<keyCount; j++){
 				mapGenerators += generateMapGrammarInlined(ext, ext.candidateKeyTypes.get(ext.keyIndex), "_k"+indexK++, blockArrays) + "\n\n";

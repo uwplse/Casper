@@ -59,7 +59,7 @@ public class GenerateScaffold extends NodeVisitor{
 		if(n instanceof While || n instanceof ExtendedFor){
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			
-			if(ext.interesting){	
+			if(ext.interesting){
 				if(debug){
 					System.err.println("Attempting to translate code fragment:-");
 					//n.prettyPrint(System.err);
@@ -68,7 +68,9 @@ public class GenerateScaffold extends NodeVisitor{
 					debugLog.print("Attempting to translate code fragment (Fragment ID: " + id + ")\n");
 				}
 				else{
-					System.err.println("Attempting to translate code fragment (Fragment ID: " + id + ")");
+					System.err.println("==================================================================");
+					System.err.println("Attempting to translate code fragment (Fragment ID: " + id + ")\n");
+					
 				}
 				
 				Set<String> handledTypes = new HashSet<String>();
@@ -83,7 +85,8 @@ public class GenerateScaffold extends NodeVisitor{
 						}
 						handledTypes.add(reduceType);
 						
-						System.err.println("Output type: " + var.varType);
+						System.err.println("Output type: " + var.varType + "\n");
+						
 						if(log){
 							this.debugLog = new PrintWriter("debug.txt", "UTF-8");
 							
@@ -166,9 +169,11 @@ public class GenerateScaffold extends NodeVisitor{
 								if(ext.valCount == 1)
 									CSGverifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
 								
-								System.err.println(ext.mapEmits);
-								System.err.println(ext.reduceExps);
-								
+								if(debug){
+									System.err.println(ext.mapEmits);
+									System.err.println(ext.reduceExps);
+								}
+									
 								if(CSGverifierExitCode == 0){
 									int VerifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
 									if(VerifierExitCode == 0){
@@ -176,6 +181,7 @@ public class GenerateScaffold extends NodeVisitor{
 										ext.verifiedInitExps.add(ext.initExps);
 										ext.verifiedReduceExps.add(ext.reduceExps);
 										ext.verifiedMergeExps.add(ext.mergeExps);
+										ext.verifiedSolKeyTypes.add(ext.candidateKeyTypes.get(ext.keyIndex));
 										ext.verifiedCSG.add(true);
 										ext.blocks.add(new ArrayList<String>());
 										ext.termValuesTemp.clear();
@@ -264,7 +270,7 @@ public class GenerateScaffold extends NodeVisitor{
 								}
 								else{
 									ext.generateCode.put(reduceType, true);
-									System.err.println(ext.verifiedMapEmits.size() + " solutions synthesized.");
+									System.err.println("\nSearch Complete. Generating Spark Code.");
 									debugLog.close();
 									break;
 								}
@@ -324,7 +330,7 @@ public class GenerateScaffold extends NodeVisitor{
 	private int runSynthesizer(String filename, MyWhileExt ext, int keyCount, String type, int emitCountInit) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
 		
-		if(debug || true)
+		if(debug)
 			System.err.println("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
 		
 		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
@@ -352,8 +358,8 @@ public class GenerateScaffold extends NodeVisitor{
         	// 1. If we have multiple keys, try other key2 types
         	if(keyCount > 1){
         		if(ext.keyIndex < ext.candidateKeyTypes.size()-1){
-        			System.err.println("Keytype changed from " + ext.candidateKeyTypes.get(ext.keyIndex) + " to " + ext.candidateKeyTypes.get(ext.keyIndex+1));
-        			System.err.println("Building new grammar...");
+        			System.err.println("\nBuilding new grammar...");
+        			System.err.println("Keytype changed from " + ext.candidateKeyTypes.get(ext.keyIndex) + " to " + ext.candidateKeyTypes.get(ext.keyIndex+1) + "\n");
         			ext.keyIndex++;
         			return 1;
         		}
@@ -363,8 +369,8 @@ public class GenerateScaffold extends NodeVisitor{
         		if(!this.solFound.containsKey(ext.keyIndex+","+ext.useConditionals+","+ext.valCount+","+opsAdded)){
 	        		ext.recursionDepth++;
 	        		ext.keyIndex = 0;
-	        		System.err.println("Recursion depth changed from " + (ext.recursionDepth-1) + " to " + ext.recursionDepth);
-	        		System.err.println("Building new grammar...");
+	        		System.err.println("\nBuilding new grammar...");
+	        		System.err.println("Recursion depth changed from " + (ext.recursionDepth-1) + " to " + ext.recursionDepth + "\n");
 	        		return 1;
         		}
         	}
@@ -373,8 +379,8 @@ public class GenerateScaffold extends NodeVisitor{
         		ext.useConditionals = true;
         		ext.recursionDepth = 2;
         		ext.keyIndex = 0;
-        		System.err.println("Conditionals turned on");
-        		System.err.println("Building new grammar...");
+        		System.err.println("\nBuilding new grammar...");
+        		System.err.println("Conditionals turned on\n");
         		return 1;
         	}
         	// 4. Increase number of values until 2.
@@ -384,8 +390,8 @@ public class GenerateScaffold extends NodeVisitor{
 	        		ext.recursionDepth = 2;
 	        		if(ext.foundConditionals) ext.useConditionals = false;
 	        		ext.keyIndex = 0;
-	        		System.err.println("Val count changed from " + (ext.valCount-1) + " to " + ext.valCount);
-	        		System.err.println("Building new grammar...");
+	        		System.err.println("\nBuilding new grammar...");
+	        		System.err.println("Val count changed from " + (ext.valCount-1) + " to " + ext.valCount + "\n");
 	        		return 1;
         		}
         	}
@@ -395,9 +401,8 @@ public class GenerateScaffold extends NodeVisitor{
         		ext.recursionDepth = 2;
         		ext.valCount = 1;
         		ext.keyIndex = 0;
-        		if(debug || true)
-    				System.err.println("Conditionals turned on second phase");
-        		System.err.println("Building new grammar...");
+        		System.err.println("\nBuilding new grammar...");
+        		System.err.println("Conditionals turned on second phase\n");
         		return 1;
         	}
         	// 6. Increase emit count 
@@ -407,9 +412,8 @@ public class GenerateScaffold extends NodeVisitor{
         		ext.recursionDepth = 2;
         		ext.valCount = 1;
         		ext.keyIndex = 0;
-        		if(debug || true)
-    				System.err.println("Emit count increased from "+(ext.emitCount-1)+" to "+ext.emitCount);
-        		System.err.println("Building new grammar...");
+        		System.err.println("\nBuilding new grammar...");
+				System.err.println("Emit count increased from "+(ext.emitCount-1)+" to "+ext.emitCount + "\n");
         		return 1;
         	}
         	// 7. Add new operators
@@ -424,8 +428,8 @@ public class GenerateScaffold extends NodeVisitor{
             		ext.valCount = 1;
             		ext.keyIndex = 0;
             		ext.emitCount = emitCountInit;
-            		System.err.println("New operators added...");
-            		System.err.println("Building new grammar...");
+            		System.err.println("\nBuilding new grammar...");
+            		System.err.println("New operators added...\n");
             		return 1;
         		default:
         			// We're done.
@@ -464,16 +468,16 @@ public class GenerateScaffold extends NodeVisitor{
         int exitVal;
         if ( isAlive( pr ) )
         {
-            System.err.println("Dafny timed out out after " + 120 + " seconds" );
+            System.err.println("Dafny timed out out after " + 120 + " seconds\n" );
             exitVal = 3;
         }
         else{
         	exitVal = pr.exitValue();
         	if(exitVal == 0){
-            	System.err.println("Summary successfully verified");
+            	System.err.println("Summary successfully verified\n");
         	}
         	else
-            	System.err.println("Verifier failed with error code "+exitVal);
+            	System.err.println("Verifier failed with error code "+exitVal + "\n");
         }
         
 		writer.close();
@@ -508,7 +512,7 @@ public class GenerateScaffold extends NodeVisitor{
             	System.err.println("CSG successfully verified");
         	}
         	else
-            	System.err.println("CSG Verifier failed with error code "+exitVal);
+            	System.err.println("CSG Verifier failed with error code "+exitVal + "\n");
         }
         
 		writer.close();

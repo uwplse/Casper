@@ -1,0 +1,7 @@
+struct Restaurant{
+	bit goodForKids;
+	int score;
+	int comment;
+	int city;
+	int state;
+	}

@@ -110,6 +110,56 @@ public class Util {
 		}
 	}
 	
+	public static String getSparkType(String varType) {
+		switch(varType){
+		case "int":
+			return "Integer";
+		case "boolean":
+			return "Boolean";
+		case "(int,int)":
+			return "Tuple2<Integer,Integer>";
+		case "(int,string)":
+			return "Tuple2<Integer,String>";
+		case "int[]":
+			return "Integer";
+		default:
+			String targetType = varType;
+			String templateType = varType;
+			int end = targetType.indexOf('<');
+			if(end != -1){
+				targetType = targetType.substring(0, end);
+				
+				switch(targetType){
+					case "java.util.List":
+					case "java.util.ArrayList":
+						templateType = templateType.substring(end+1,templateType.length()-1);
+						return templateType;
+					case "java.util.Map":
+						templateType = templateType.substring(end+1,templateType.length()-1);
+	    				String[] subTypes = templateType.split(",");
+	    				switch(subTypes[0]){
+	        				case "java.lang.Integer":
+	        				case "java.lang.String":
+	        				case "java.lang.Double":
+	        				case "java.lang.Float":
+	        				case "java.lang.Long":
+	        				case "java.lang.Short":
+	        				case "java.lang.Byte":
+	        				case "java.lang.BigInteger":
+	        					return subTypes[1];
+	        				default:
+	        					return varType;
+	    				}
+					default:
+						String[] components = varType.split("\\.");
+		        		return components[components.length-1];
+				}
+			}
+			
+			return varType;
+		}
+	}
+	
 	// Returns the type with the higher rank from the two
 	// Used for proper casting
 	public static String getHigherType(String type1, String type2) {
@@ -482,6 +532,43 @@ public class Util {
 				else{
 					return 0;
 				}
+			case "Boolean":
+				if(type2.equals("short")){
+					return 1;
+				}
+				else if(type2.equals("byte")){
+					return 1;
+				}
+				else if(type2.equals("int")){
+					return 1;
+				}
+				else if(type2.equals("long")){
+					return 1;
+				}
+				else if(type2.equals("float")){
+					return 1;
+				}
+				else if(type2.equals("double")){
+					return 1;
+				}
+				else if(type2.equals("Integer")){
+					return 1;
+				}
+				else if(type2.equals("Double")){
+					return 1;
+				}
+				else if(type2.equals("Float")){
+					return 1;
+				}
+				else if(type2.equals("Boolean")){
+					return 1;
+				}
+				else if(type2.equals("String")){
+					return 1;
+				}
+				else{
+					return 0;
+				}
 			case "bit":
 				if(type2.equals("bit[32]")){
 					return 0;
@@ -604,7 +691,6 @@ public class Util {
 	}
 
 	public static String getInitVal(String type) {
-		System.err.println(type);
 		switch(type){
 			case "java.lang.Integer":
 			case "java.lang.Double":
@@ -704,7 +790,7 @@ public class Util {
 					CustomASTNode loopCond = CustomASTNode.convertToAST(cond);
 					loopExt.constCount = loopCond.convertConstToIDs(loopExt.constMapping,loopExt.constCount);
 					
-					CustomASTNode verifCondCons = generatePreCondition(type,cons,currVerifCondition,loopExt,debug);
+					CustomASTNode verifCondCons = generatePreCondition(type,cons,currVerifCondition,loopExt,false);
 					
 					CustomASTNode verifCondAlt;
 					if(alt != null)

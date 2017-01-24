@@ -32,6 +32,7 @@ import casper.visit.GenerateSparkCode;
 import casper.visit.GenerateVerification;
 import casper.visit.IdentifyDataSet;
 import casper.visit.SelectLoopsForTranslation;
+import casper.visit.SelectOptimalSolution;
 import casper.visit.UpdateConfigurations;
 import polyglot.ast.NodeFactory;
 import polyglot.ext.jl7.JL7Scheduler;
@@ -293,6 +294,23 @@ public class CasperScheduler extends JL7Scheduler {
     }
     
     /*
+     * Select best solution
+     */
+    public Goal OptimalSolutionSelected (Job job) throws IOException
+    {
+		Goal g = internGoal(new VisitorGoal(job, new SelectOptimalSolution()));
+		
+    	try {
+			g.addPrerequisiteGoal(ScaffoldGenerated(job), this);
+		}
+    	catch (CyclicDependencyException e) {
+    		throw new InternalCompilerError(e);
+		}
+
+    	return internGoal(g);
+    }
+    
+    /*
      * Generate the output code
      */
     public Goal SparkCodeGenerated (Job job) throws IOException
@@ -300,7 +318,7 @@ public class CasperScheduler extends JL7Scheduler {
 		Goal g = internGoal(new VisitorGoal(job, new GenerateSparkCode(extInfo.nodeFactory())));
 		
     	try {
-			g.addPrerequisiteGoal(ScaffoldGenerated(job), this);
+			g.addPrerequisiteGoal(OptimalSolutionSelected(job), this);
 		}
     	catch (CyclicDependencyException e) {
     		throw new InternalCompilerError(e);
@@ -321,7 +339,7 @@ public class CasperScheduler extends JL7Scheduler {
 				List<Goal> l = new ArrayList<Goal>();
 				l.addAll(super.prerequisiteGoals(scheduler));
 				try {
-					l.add(ScaffoldGenerated(job));
+					l.add(SparkCodeGenerated(job));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

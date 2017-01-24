@@ -54,7 +54,7 @@ public class ExtractOperators  extends NodeVisitor {
 		}
 		else if(n instanceof Unary){
 			for(MyWhileExt ext : extensions){
-				ext.binaryOperators.add(((Unary) n).operator().toString());
+				ext.unaryOperators.add(((Unary) n).operator().toString());
 			}
 		}
 		else if(n instanceof Call){
