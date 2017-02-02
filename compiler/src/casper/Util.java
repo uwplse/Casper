@@ -122,6 +122,8 @@ public class Util {
 			return "Tuple2<Integer,String>";
 		case "int[]":
 			return "Integer";
+		case "double[]":
+			return "Double";
 		default:
 			String targetType = varType;
 			String templateType = varType;
@@ -565,6 +567,33 @@ public class Util {
 				}
 				else if(type2.equals("String")){
 					return 1;
+				}
+				else if(type2.equals("short[]")){
+					return 2;
+				}
+				else if(type2.equals("byte[]")){
+					return 2;
+				}
+				else if(type2.equals("int[]")){
+					return 2;
+				}
+				else if(type2.equals("long[]")){
+					return 2;
+				}
+				else if(type2.equals("float[]")){
+					return 2;
+				}
+				else if(type2.equals("double[]")){
+					return 2;
+				}
+				else if(type2.equals("Integer[]")){
+					return 2;
+				}
+				else if(type2.equals("Double[]")){
+					return 2;
+				}
+				else if(type2.equals("Float[]")){
+					return 2;
 				}
 				else{
 					return 0;

@@ -227,7 +227,13 @@ public class Variable{
 			}
 		}
 		
-		return varType;
+		System.err.println("RDD cannot be created from: "+targetType+" (input data type)");
+		switch(targetType){
+			case "double[]":
+				return "Double";
+			default:
+				return varType;
+		}
 	}
 	
 	public String getDafnyType(){

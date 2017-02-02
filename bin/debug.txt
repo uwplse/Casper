@@ -1,4 +1,4 @@
-Output type: java.util.Map<java.lang.String,java.lang.Integer>
+Output type: int[]
 
 Key Index: 0
 Recursion Depth: 2
@@ -6,90 +6,10 @@ Conditionals: false
 Num of Vals: 1
 Operators Added: false
 Number of solutions so far: 0
-Time stamp: 1485269105940
+Time stamp: 1485999235049
 
 
-Key Index: 1
-Recursion Depth: 2
-Conditionals: false
-Num of Vals: 1
-Operators Added: false
-Number of solutions so far: 0
-
-Time stamp: 1485269108511
-
-
-Key Index: 2
-Recursion Depth: 2
-Conditionals: false
-Num of Vals: 1
-Operators Added: false
-Number of solutions so far: 0
-
-Time stamp: 1485269110078
-
-
-Key Index: 0
-Recursion Depth: 3
-Conditionals: false
-Num of Vals: 1
-Operators Added: false
-Number of solutions so far: 0
-
-Time stamp: 1485269111479
-
-
-Key Index: 1
-Recursion Depth: 3
-Conditionals: false
-Num of Vals: 1
-Operators Added: false
-Number of solutions so far: 0
-
-Time stamp: 1485269114164
-
-
-Key Index: 2
-Recursion Depth: 3
-Conditionals: false
-Num of Vals: 1
-Operators Added: false
-Number of solutions so far: 0
-
-Time stamp: 1485269116898
-
-
-Key Index: 0
-Recursion Depth: 2
-Conditionals: true
-Num of Vals: 1
-Operators Added: false
-Number of solutions so far: 0
-
-Time stamp: 1485269118511
-
-
-Key Index: 1
-Recursion Depth: 2
-Conditionals: true
-Num of Vals: 1
-Operators Added: false
-Number of solutions so far: 0
-
-Time stamp: 1485269122848
-
-
-Key Index: 2
-Recursion Depth: 2
-Conditionals: true
-Num of Vals: 1
-Operators Added: false
-Number of solutions so far: 0
-
-Time stamp: 1485269124541
-
-
-Solution Mappers: {noCondition=[], data[casper_index].goodForKids=[[{0=1, 1=data[casper_index].city},{0=1}]]}
-Solution Reducers: {result=(val2+val1)}
-Time stamp: 1485269129479
+Solution Mappers: {noCondition=[[{0=2, 1=image[i].g},{0=1}], [{0=1, 1=image[i].r},{0=1}], [{0=3, 1=image[i].b},{0=1}]]}
+Solution Reducers: {hG=(val2+val1), hR=(val2+val1), hB=(val1+val2)}
+Time stamp: 1485999259288
 

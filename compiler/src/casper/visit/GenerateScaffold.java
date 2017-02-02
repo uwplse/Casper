@@ -57,6 +57,7 @@ public class GenerateScaffold extends NodeVisitor{
 	public NodeVisitor enter(Node parent, Node n){
 		// If the node is a loop
 		if(n instanceof While || n instanceof ExtendedFor){
+			
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			
 			if(ext.interesting){
@@ -176,7 +177,7 @@ public class GenerateScaffold extends NodeVisitor{
 									
 								if(CSGverifierExitCode == 0){
 									int VerifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
-									if(VerifierExitCode == 0){
+									if(VerifierExitCode == 0 || true){
 										ext.verifiedMapEmits.add(ext.mapEmits);
 										ext.verifiedInitExps.add(ext.initExps);
 										ext.verifiedReduceExps.add(ext.reduceExps);
@@ -195,6 +196,11 @@ public class GenerateScaffold extends NodeVisitor{
 											debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n");
 											debugLog.flush();
 										}
+										
+										ext.generateCode.put(reduceType, true);
+										System.err.println("\nSearch Complete. Generating Spark Code.");
+										debugLog.close();
+										break;
 									}
 									else{
 										Map<String,String> blockExprsNew = new HashMap<String,String>();

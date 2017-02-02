@@ -5,15 +5,15 @@ import java.util.HashMap;
 import java.lang.Integer;
 import java.lang.String;
 
-public class WordCountJava {
+public class WordCount {
 
 	public static void main(String[] args) {
 		List<String> words = Arrays.asList("foo", "bar", "cat", "bar", "dog");
-		Map<String, Integer> counts = new HashMap<String, Integer>();
-		countWords(words, counts);
+		countWords(words);
 	}
 
-	private static Map<String, Integer> countWords(List<String> words, Map<String, Integer> counts) {
+	private static Map<String, Integer> countWords(List<String> words) {
+		Map<String, Integer> counts = new HashMap<String, Integer>();
 		for (int j = 0; j < words.size(); j++) {
 			String word = words.get(j);
 			Integer prev = counts.get(word);

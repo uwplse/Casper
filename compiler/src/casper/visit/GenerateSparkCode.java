@@ -118,7 +118,7 @@ public class GenerateSparkCode extends NodeVisitor{
 									+ "import scala.Tuple2;\n"
 									+ "import java.util.ArrayList;\n"
 									+ "import java.util.Map;\n"
-									+ "import java.util.Iterator;";
+									+ "import java.util.Iterator;\n";
 				
 				n = nf.Import(n.position(), ((Import) n).kind(), imports+n.toString());
 				first = !first;
@@ -239,18 +239,18 @@ public class GenerateSparkCode extends NodeVisitor{
 				
 				if(kvp.keys.size() < 2){
 					if(cond.equals("noCondition")){
-						emits += "emits.add(new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+"));\n";
+						emits += "emits.add(new Tuple2("+kvp.keys.get(0)+",new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+")));\n";
 					}
 					else{
-						emits += "if("+fixedCond+") emits.add(new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+"));\n";
+						emits += "if("+fixedCond+") emits.add(new Tuple2("+kvp.keys.get(0)+",new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+")));\n";
 					}
 				}
 				else{
 					if(cond.equals("noCondition")){
-						emits += "emits.add(new Tuple2(new Tuple2("+kvp.keys.get(0)+","+kvp.keys.get(1)+"), "+kvp.values.get(0)+"));\n";
+						emits += "emits.add(new Tuple2(new Tuple2("+kvp.keys.get(0)+","+kvp.keys.get(1)+"), new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+")));\n";
 					}
 					else{
-						emits += "if("+fixedCond+") emits.add(new Tuple2(new Tuple2("+kvp.keys.get(0)+","+kvp.keys.get(1)+"), "+kvp.values.get(0)+"));\n";
+						emits += "if("+fixedCond+") emits.add(new Tuple2(new Tuple2("+kvp.keys.get(0)+","+kvp.keys.get(1)+"), new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+")));\n";
 					}
 				}
 			}
@@ -261,7 +261,7 @@ public class GenerateSparkCode extends NodeVisitor{
 	private String generateOutputReconstruction(MyWhileExt ext, String type) {
 		String code = "Map<<map-key-type>, <output-type>> output_<rdd-name> = reduceEmits.collectAsMap();\n";
 		
-		int id = 0;
+		int id = 1;
 		for(Variable var : ext.outputVars){
 			if(var.varType == type){
 				if(type.startsWith("java.util.Map")){
@@ -276,7 +276,7 @@ public class GenerateSparkCode extends NodeVisitor{
 									+ "};\n";
 				}
 				else{
-					code += var.varName + " = output_<rdd-name>.get("+id+");\n";
+					code += var.varName + " = output_<rdd-name>.get("+id+")._2;\n";
 				}
 					
 				id++;
@@ -287,11 +287,12 @@ public class GenerateSparkCode extends NodeVisitor{
 	}
 	
 	private String generateReduceExps(MyWhileExt ext) {
-		int id = 0;
+		int id = 1;
 		String code = "";
 		Map<String, String> reduceExps = ext.verifiedReduceExps.get(ext.selectedSolutionIndex);
 		for(Variable var : ext.outputVars){
 			code += "if(val1._1 == "+id+"){\n\t\treturn new Tuple2(val1._1,"+ reduceExps.get(var.varName).replaceAll("val1", "val1._2").replaceAll("val2", "val2._2") + ");\n\t}\n\t";
+			id++;
 		}
 		return code;
 	}

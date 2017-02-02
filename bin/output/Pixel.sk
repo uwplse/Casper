@@ -1,5 +1,0 @@
-struct Pixel{
-	int b;
-	int g;
-	int r;
-	}
