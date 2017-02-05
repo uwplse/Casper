@@ -29,6 +29,7 @@ import casper.SketchParser;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
 import casper.types.Variable;
+import polyglot.ast.Formal;
 import polyglot.ast.Node;
 import polyglot.ast.NodeFactory;
 import polyglot.ast.While;
@@ -57,6 +58,7 @@ public class GenerateScaffold extends NodeVisitor{
 	public NodeVisitor enter(Node parent, Node n){
 		// If the node is a loop
 		if(n instanceof While || n instanceof ExtendedFor){
+			
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			
 			if(ext.interesting){
@@ -74,7 +76,7 @@ public class GenerateScaffold extends NodeVisitor{
 				}
 				
 				Set<String> handledTypes = new HashSet<String>();
-				try {					
+				try {
 					for(Variable var : ext.outputVars){
 						String sketchReduceType = casper.Util.reducerType(var.getSketchType());
 						String reduceType = var.getReduceType();
@@ -185,6 +187,7 @@ public class GenerateScaffold extends NodeVisitor{
 										ext.verifiedCSG.add(true);
 										ext.blocks.add(new ArrayList<String>());
 										ext.termValuesTemp.clear();
+										ext.outVarCount = sketchFilteredOutputVars.size();
 										
 										this.solFound.put(ext.keyIndex+","+ext.useConditionals+","+opsAdded,true);
 										this.solFound.put(ext.keyIndex+","+ext.useConditionals+","+ext.valCount+","+opsAdded,true);
@@ -195,6 +198,11 @@ public class GenerateScaffold extends NodeVisitor{
 											debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n");
 											debugLog.flush();
 										}
+										
+										//ext.generateCode.put(reduceType, true);
+										//System.err.println("\nSearch Complete. Generating Spark Code.");
+										//debugLog.close();
+										//break;
 									}
 									else{
 										Map<String,String> blockExprsNew = new HashMap<String,String>();
@@ -331,9 +339,9 @@ public class GenerateScaffold extends NodeVisitor{
 		Runtime rt = Runtime.getRuntime();
 		
 		if(debug)
-			System.err.println("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
+			System.err.println("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 4 "+ filename);
 		
-		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 6 "+ filename);
+		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits 1 --bnd-unroll-amnt 4 "+ filename);
 
 		PrintWriter writer = new PrintWriter(filename.replace(".sk", ".txt"), "UTF-8");
 		

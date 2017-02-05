@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +19,9 @@ import casper.SketchParser.KvPair;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
 import casper.types.Variable;
+import polyglot.ast.Formal;
 import polyglot.ast.Import;
+import polyglot.ast.MethodDecl;
 import polyglot.ast.Node;
 import polyglot.ast.NodeFactory;
 import polyglot.ast.While;
@@ -26,21 +30,41 @@ import polyglot.visit.NodeVisitor;
 
 public class GenerateSparkCode extends NodeVisitor{
 	boolean debug;
+	boolean demo;
 	NodeFactory nf;
 	int id;
 	boolean first;
+	MyWhileExt loopExt;
 	
 	public GenerateSparkCode(NodeFactory nodeFactory){
 		this.debug = false;
+		this.demo = true;
 		this.nf = nodeFactory;
 		this.id = 0;
 		this.first = true;
+		this.loopExt = null;
 	}
 	
 	@Override
 	public Node leave(Node old, Node n, NodeVisitor v){
+		// Change parameters to RDD type
+		if(n instanceof MethodDecl){
+			if(demo){
+				List<Formal> fixedFormals = new ArrayList<Formal>();
+				for(Formal arg : ((MethodDecl) n).formals()){
+					if(arg.id().toString().equals(loopExt.inputDataSet.varName)){
+						String newType = "JavaRDD<" + loopExt.inputDataSet.getRDDType() + ">";
+						fixedFormals.add(nf.Formal(arg.position(), arg.flags(), nf.TypeNodeFromQualifiedName(arg.type().position(), newType), arg.id()));
+					}
+					else{
+						fixedFormals.add(arg);
+					}
+				}
+				n = nf.MethodDecl(n.position(), ((MethodDecl) n).flags(), ((MethodDecl) n).returnType(), ((MethodDecl) n).id(), fixedFormals, ((MethodDecl) n).throwTypes(), ((MethodDecl) n).body());
+			}
+		}
 		// If the node is a loop
-		if(n instanceof While || n instanceof ExtendedFor){
+		else if(n instanceof While || n instanceof ExtendedFor){
 			// If the loop was marked as interesting
 			if(((MyWhileExt)JavaExt.ext(n)).interesting){
 				MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
@@ -54,10 +78,12 @@ public class GenerateSparkCode extends NodeVisitor{
 						
 						if(!ext.generateCode.get(var.getReduceType())) continue;
 						
+						if(demo) loopExt = ext;
+						
 						String template = "";
 						
 						try {
-							template = new String(Files.readAllBytes(Paths.get("templates/spark_skeleton.txt")), StandardCharsets.UTF_8);
+							template = new String(Files.readAllBytes(Paths.get("templates/spark_skeleton_demo.txt")), StandardCharsets.UTF_8);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -65,6 +91,7 @@ public class GenerateSparkCode extends NodeVisitor{
 						
 						String createRDD = generateCreateRDD(ext);
 						String rddName = "rdd_"+typeid+"_"+id;
+						if(demo) rddName = ext.inputDataSet.varName;
 						String dupInputVars = generateDuplicateVarInit(ext);
 						String mapKeyType = generateMapKeyType(ext);
 						String inputDataType = generateInputDataType(ext);
@@ -118,7 +145,7 @@ public class GenerateSparkCode extends NodeVisitor{
 									+ "import scala.Tuple2;\n"
 									+ "import java.util.ArrayList;\n"
 									+ "import java.util.Map;\n"
-									+ "import java.util.Iterator;";
+									+ "import java.util.Iterator;\n";
 				
 				n = nf.Import(n.position(), ((Import) n).kind(), imports+n.toString());
 				first = !first;
@@ -150,7 +177,10 @@ public class GenerateSparkCode extends NodeVisitor{
 	}
 	
 	private String generateOutputDataType(MyWhileExt ext, String type) {
-		return "Tuple2<Integer," + casper.Util.getSparkType(type) + ">";
+		if(ext.outVarCount > 1)
+			return "Tuple2<Integer," + casper.Util.getSparkType(type) + ">";
+		else
+			return casper.Util.getSparkType(type);
 	}
 	
 	private String generateMapKeyType(MyWhileExt ext) {
@@ -160,15 +190,16 @@ public class GenerateSparkCode extends NodeVisitor{
 		for(String conditional : mapEmits.keySet()){
 			if(mapEmits.get(conditional).size() > 0){
 				KvPair kvp = mapEmits.get(conditional).get(0);
-				if(kvp.keys.size()>1) keyType += "Tuple2<";
+				if(kvp.keys.size()>1 && ext.outVarCount > 1) keyType += "Tuple2<";
 				for(Integer i : kvp.keys.keySet()){
 					if(i==0)
-						keyType += "Integer,";
+						if(ext.outVarCount > 1)
+							keyType += "Integer,";
 					else
 						keyType += casper.Util.getSparkType(ext.verifiedSolKeyTypes.get(ext.selectedSolutionIndex)) +",";
 				}
 				keyType = keyType.substring(0,keyType.length()-1);
-				if(kvp.keys.size()>1) keyType = keyType + ">";
+				if(kvp.keys.size()>1 && ext.outVarCount > 1) keyType = keyType + ">";
 				break;
 			}
 		}
@@ -239,18 +270,30 @@ public class GenerateSparkCode extends NodeVisitor{
 				
 				if(kvp.keys.size() < 2){
 					if(cond.equals("noCondition")){
-						emits += "emits.add(new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+"));\n";
+						if(ext.outVarCount > 1)
+							emits += "emits.add(new Tuple2("+kvp.keys.get(0)+",new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+")));\n";
+						else
+							emits += "emits.add(new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+"));\n";
 					}
 					else{
-						emits += "if("+fixedCond+") emits.add(new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+"));\n";
+						if(ext.outVarCount > 1)
+							emits += "if("+fixedCond+") emits.add(new Tuple2("+kvp.keys.get(0)+",new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+")));\n";
+						else
+							emits += "if("+fixedCond+") emits.add(new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+"));\n";
 					}
 				}
 				else{
 					if(cond.equals("noCondition")){
-						emits += "emits.add(new Tuple2(new Tuple2("+kvp.keys.get(0)+","+kvp.keys.get(1)+"), "+kvp.values.get(0)+"));\n";
+						if(ext.outVarCount > 1)
+							emits += "emits.add(new Tuple2(new Tuple2("+kvp.keys.get(0)+","+kvp.keys.get(1)+"), new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+")));\n";
+						else
+							emits += "emits.add(new Tuple2("+kvp.keys.get(1)+", "+kvp.values.get(0)+"));\n";
 					}
 					else{
-						emits += "if("+fixedCond+") emits.add(new Tuple2(new Tuple2("+kvp.keys.get(0)+","+kvp.keys.get(1)+"), "+kvp.values.get(0)+"));\n";
+						if(ext.outVarCount > 1)
+							emits += "if("+fixedCond+") emits.add(new Tuple2(new Tuple2("+kvp.keys.get(0)+","+kvp.keys.get(1)+"), new Tuple2("+kvp.keys.get(0)+","+kvp.values.get(0)+")));\n";
+						else
+							emits += "if("+fixedCond+") emits.add(new Tuple2("+kvp.keys.get(1)+", "+kvp.values.get(0)+"));\n";
 					}
 				}
 			}
@@ -261,14 +304,17 @@ public class GenerateSparkCode extends NodeVisitor{
 	private String generateOutputReconstruction(MyWhileExt ext, String type) {
 		String code = "Map<<map-key-type>, <output-type>> output_<rdd-name> = reduceEmits.collectAsMap();\n";
 		
-		int id = 0;
+		int id = 1;
 		for(Variable var : ext.outputVars){
 			if(var.varType == type){
 				if(type.startsWith("java.util.Map")){
-					code += "for(<map-key-type> output_<rdd-name>_k : output_<rdd-name>.keySet()){\n\t" +
-								"if(output_<rdd-name>_k._1 == " + id + ") " +
-								var.varName+".put(output_<rdd-name>_k._2, output_<rdd-name>.get(output_<rdd-name>_k)._2);\n" + 
-							"};\n";
+					if(ext.outVarCount > 1)
+						code += "for(<map-key-type> output_<rdd-name>_k : output_<rdd-name>.keySet()){\n\t" +
+									"if(output_<rdd-name>_k._1 == " + id + ") " +
+									var.varName+".put(output_<rdd-name>_k._2, output_<rdd-name>.get(output_<rdd-name>_k)._2);\n" + 
+								"}\n";
+					else
+						code += var.varName+" = output_<rdd-name>;\n";
 				}
 				else if(type.startsWith("java.util.List")){
 					code += "for(int "+var.varName+"_ind = 0; "+var.varName+"_ind < "+var.varName+".size(); "+var.varName+"_ind++){\n\t"
@@ -276,7 +322,7 @@ public class GenerateSparkCode extends NodeVisitor{
 									+ "};\n";
 				}
 				else{
-					code += var.varName + " = output_<rdd-name>.get("+id+");\n";
+					code += var.varName + " = output_<rdd-name>.get("+id+")._2;\n";
 				}
 					
 				id++;
@@ -287,13 +333,20 @@ public class GenerateSparkCode extends NodeVisitor{
 	}
 	
 	private String generateReduceExps(MyWhileExt ext) {
-		int id = 0;
+		int id = 1;
 		String code = "";
 		Map<String, String> reduceExps = ext.verifiedReduceExps.get(ext.selectedSolutionIndex);
 		for(Variable var : ext.outputVars){
-			code += "if(val1._1 == "+id+"){\n\t\treturn new Tuple2(val1._1,"+ reduceExps.get(var.varName).replaceAll("val1", "val1._2").replaceAll("val2", "val2._2") + ");\n\t}\n\t";
+			if(ext.outVarCount > 1)
+				code += "if(val1._1 == "+id+"){\n\t\treturn new Tuple2(val1._1,"+ reduceExps.get(var.varName).replaceAll("val1", "val1._2").replaceAll("val2", "val2._2") + ");\n\t}\n\t";
+			else
+				code += "return "+ reduceExps.get(var.varName) + ";";
+			id++;
 		}
-		return code;
+		if(ext.outVarCount > 1)
+			return code + "return null;";
+		else
+			return code;
 	}
 	
 	@Override

@@ -38,7 +38,8 @@ public class ConditionalNode extends CustomASTNode{
 			output += ((SequenceNode) cons).inst1ToString(vardecl) + ";\n\t\t" + ((SequenceNode) cons).inst2ToString(vardecl) + ";\n\t\t} else {\n\t\t\t";
 		}
 		else{
-			output += vardecl + "ind_" + cons.toString() + ";\n\t\t} else {\n\t\t\t";
+			//output += vardecl + "ind_" + cons.toString() + ";\n\t\t} else {\n\t\t\t";
+			output += vardecl + cons.toString() + ";\n\t\t} else {\n\t\t\t";
 		}
 		
 		if(alt instanceof ArrayUpdateNode){
@@ -51,7 +52,7 @@ public class ConditionalNode extends CustomASTNode{
 			output += ((SequenceNode) alt).inst1ToString(vardecl) + ";\n\t\t" + ((SequenceNode) alt).inst2ToString(vardecl) + ";\n\t\t} else {\n\t\t\t";
 		}
 		else{
-			output += vardecl + "ind_" + alt.toString() + ";\n\t\t}\n\t\t";
+			output += vardecl + alt.toString() + ";\n\t\t}\n\t\t";
 		}
 		return output;
 	}

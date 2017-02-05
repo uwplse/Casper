@@ -139,7 +139,13 @@ public class ExtractOutputVariables extends NodeVisitor  {
 				List<Node> writes = JavaLibModel.extractWrites((Call)n,ext);
 				for(Node node : writes){
 					if(node instanceof Receiver){
-						ext.saveOutputVariable(node.toString(),((Receiver)node).type().toString(),Variable.FIELD_ACCESS);
+						String recType = ((Receiver)node).type().toString();
+						if(recType.startsWith("java.util.List"))
+							ext.saveOutputVariable(node.toString(),((Receiver)node).type().toString(),Variable.ARRAY_ACCESS);
+						else if(recType.startsWith("java.util.Map"))
+							ext.saveOutputVariable(node.toString(),((Receiver)node).type().toString(),Variable.ARRAY_ACCESS);
+						else
+							ext.saveOutputVariable(node.toString(),((Receiver)node).type().toString(),Variable.FIELD_ACCESS);
 					}
 					else if(node instanceof Local){
 						ext.saveOutputVariable(ext.toString(),node.toString(),((Local) node).type().toString(),Variable.VAR);

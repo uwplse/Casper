@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.lang.Integer;
 
 public class RedToMagenta {	
@@ -11,8 +12,6 @@ public class RedToMagenta {
 			int red = (value >> 16) & 0xff;
 			int green = (value >> 8) & 0xff;
 			int blue = value & 0xff;
-			if (false && blue > 16)
-				continue;
 			pixels.set(i, (red << 16) | (green << 8) | red);
 		}
 	}

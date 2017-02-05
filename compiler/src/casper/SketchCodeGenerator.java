@@ -833,12 +833,16 @@ public class SketchCodeGenerator {
 	// Generate do map grammars
 	public static String generateMapGrammarInlined(MyWhileExt ext, String type, String index, Map<String, String> blockArrays) {
 		String generator = "";
-			
+		
+		String terminalType = type;
+		if(type.equals("Boolean"))
+			terminalType = "bit";
+		
 		/******** Generate terminal options *******/
 		Map<String,List<String>> terminals = new HashMap<String,List<String>>();
 		
 		for(Variable var : ext.loopCounters){
-			if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 1){
+			if(casper.Util.compatibleTypes(terminalType,var.getOriginalType()) == 1){
 				String keyType = "String";
 				if(!var.getOriginalType().replace("[]", "").equals("String"))
 					keyType = casper.Util.reducerType(var.getSketchType());
@@ -847,20 +851,20 @@ public class SketchCodeGenerator {
 			}
 		}
 		for(Variable var : ext.inputVars){
-			if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 1){
+			if(casper.Util.compatibleTypes(terminalType,var.getOriginalType()) == 1){
 				String keyType = "String";
 				if(!var.getOriginalType().replace("[]", "").equals("String"))
 					keyType = casper.Util.reducerType(var.getSketchType());
 				if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
 				terminals.get(keyType).add(var.varName);
 			}
-			else if(casper.Util.compatibleTypes(type,var.getOriginalType()) == 0){
+			else if(casper.Util.compatibleTypes(terminalType,var.getOriginalType()) == 0){
 				for(String globalType : ext.globalDataTypes){
 					// If it is one of the global data types
 					if(globalType.equals(var.getOriginalType())){
 						// Add an option for each field that matches type
 	        			for(Variable field : ext.globalDataTypesFields.get(globalType)){
-	        				if(casper.Util.compatibleTypes(type,field.getOriginalType()) == 1){
+	        				if(casper.Util.compatibleTypes(terminalType,field.getOriginalType()) == 1){
 	        					String keyType = "String";
 	        					if(!var.getOriginalType().replace("[]", "").equals("String"))
 	        						keyType = casper.Util.reducerType(var.getSketchType());
@@ -887,7 +891,7 @@ public class SketchCodeGenerator {
 					//else{
 					for(Variable field : ext.globalDataTypesFields.get(globalType)){
 						// Add an option for each field (of an arbitrary array index) that matches type
-						if(casper.Util.compatibleTypes(type,field.getOriginalType()) == 1){
+						if(casper.Util.compatibleTypes(terminalType,field.getOriginalType()) == 1){
 							String keyType = "String";
 							if(!field.getOriginalType().replace("[]", "").equals("String"))
 								keyType = casper.Util.reducerType(field.getSketchType());
@@ -896,7 +900,7 @@ public class SketchCodeGenerator {
 								terminals.get(keyType).add(ext.inputDataSet.varName + "["+lc.varName+"]." + field.varName);
 							}
 						}
-						else if(casper.Util.compatibleTypes(type,field.getOriginalType()) == 2){
+						else if(casper.Util.compatibleTypes(terminalType,field.getOriginalType()) == 2){
 							String keyType = "String";
 							if(!field.getOriginalType().replace("[]", "").equals("String"))
 								keyType = casper.Util.reducerType(field.getSketchType());
@@ -911,7 +915,7 @@ public class SketchCodeGenerator {
     		}
 		}
 		else if(casper.Util.getTypeClass(ext.inputDataSet.getSketchType()) == casper.Util.ARRAY){
-			if(casper.Util.compatibleTypes(type,ext.inputDataSet.getOriginalType()) == 2){
+			if(casper.Util.compatibleTypes(terminalType,ext.inputDataSet.getOriginalType()) == 2){
 				String keyType = "String";
 				if(!ext.inputDataSet.getOriginalType().replace("[]", "").equals("String"))
 					keyType = casper.Util.reducerType(ext.inputDataSet.getSketchType());
@@ -923,8 +927,10 @@ public class SketchCodeGenerator {
 		}
 			
 		for(int i=0; i<ext.constCount; i++){
-			if(casper.Util.compatibleTypes(type,"int") == 1){
-				if(!terminals.containsKey(type)) terminals.put(type, new ArrayList());
+			if(casper.Util.compatibleTypes(terminalType,"int") == 1){
+				String termType = terminalType;
+				if(termType.equals("Boolean")) termType = "bit";
+				if(!terminals.containsKey(termType)) terminals.put(termType, new ArrayList());
 				terminals.get("int").add("casperConst" + i);
 			}
 		}
@@ -935,10 +941,6 @@ public class SketchCodeGenerator {
 			sketchType = "int";
 		if(type.equals("Boolean"))
 			sketchType = "bit";
-		
-		String terminalType = type;
-		if(type.equals("Boolean"))
-			terminalType = "bit";
 		
 		String typeName = type.toLowerCase();
 		if(sketchType.equals("bit[32]"))
