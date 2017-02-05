@@ -1,7 +1,3 @@
-SparkConf conf = new SparkConf().setAppName("spark");
-JavaSparkContext sc = new JavaSparkContext(conf);
-
-<create-rdd>
 <duplicate-input-vars>
 JavaPairRDD<<map-key-type>, <output-type>> mapEmits = <rdd-name>.flatMapToPair(new PairFlatMapFunction<<input-type>, <map-key-type>, <output-type>>() {
 	public Iterator<Tuple2<<map-key-type>, <output-type>>> call(<input-type> <input-name>) throws Exception {

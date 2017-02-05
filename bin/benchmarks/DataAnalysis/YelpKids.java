@@ -10,7 +10,7 @@ public class YelpKids {
 	    public String city;
 	    public String comment;
 	    public int score;
-	    public Map<String,Boolean> flags;
+	    public boolean goodForKids;
 	}
 
 	public Map<String,Integer> reviewCount(List<Record> data) {
@@ -22,8 +22,7 @@ public class YelpKids {
             if (!result.containsKey(record.city)) {
                 result.put(record.city, 0);
             }
-            if (record.flags != null &&
-                record.flags.get(key)) {
+            if (record.goodForKids) {
                 result.put(record.city, result.get(record.city)+1);
             }
         }

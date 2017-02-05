@@ -158,6 +158,8 @@ public class MyWhileExt extends MyStmtExt {
 	public boolean extForType = false;
 
 	public int emitCount = 0;
+
+	public int outVarCount;
     
     // Save an loop counter variable.
     public void saveLoopCounterVariable(String varName, String varType, int category){

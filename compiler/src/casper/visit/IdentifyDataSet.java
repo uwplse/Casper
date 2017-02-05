@@ -43,7 +43,7 @@ public class IdentifyDataSet extends NodeVisitor{
 						}
 					}
 				}
-				
+
 				if(!ext.hasInputData)
 					ext.interesting = false;
 			}
