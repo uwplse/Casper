@@ -209,11 +209,15 @@ public class DafnyCodeGenerator {
 
 	private static String generateKeyRequires(Set<Variable> outputVars) {
 		String code = "";
+		int index = 1;
+		String app = "requires ";
 		for(Variable var : outputVars){
 			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]"))
-				code += "requires 0 <= casper_key.1 < |"+var.varName+"0|\n\t";
+				code += "requires casper_key.0 == "+index+" ==> 0 <= casper_key.1 < |"+var.varName+"0|\n\t";
+			app += "casper_key.0 == "+index+" || ";
+			index++;
 		}
-		return code;
+		return code + app.substring(0, app.length()-4);
 	}
 
 	private static String generateReduceFunctions(Map<String, String> reduceExps, int valCount, Set<Variable> outputVars, String reducerType) {
