@@ -24,3 +24,4 @@ public class WikiPageCount {
         return result;
     }
 }
+
