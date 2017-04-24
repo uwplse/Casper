@@ -1,4 +1,8 @@
-Inbits=1,
+Inbits=2,
 ArraySizeBound=4,
-RecursionDepth=3,
-EmitCount=3
+IntRange=4,
+LoopUnrollBound=4,
+MaxNumMROps=5,
+MaxNumEmits=5,
+MaxTupleSize=5,
+MaxRecursionDepth=5

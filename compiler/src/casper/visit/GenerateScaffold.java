@@ -8,51 +8,85 @@
 package casper.visit;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import casper.Configuration;
-import casper.DafnyCodeGenerator;
-import casper.SketchCodeGenerator;
-import casper.SketchParser;
-import casper.ast.JavaExt;
-import casper.extension.MyWhileExt;
-import casper.types.Variable;
-import polyglot.ast.Formal;
 import polyglot.ast.Node;
 import polyglot.ast.NodeFactory;
 import polyglot.ast.While;
 import polyglot.ext.jl5.ast.ExtendedFor;
 import polyglot.visit.NodeVisitor;
+import casper.Configuration;
+import casper.SketchCodeGenerator;
+import casper.ast.JavaExt;
+import casper.extension.MyWhileExt;
+import casper.types.Variable;
 
 public class GenerateScaffold extends NodeVisitor{
 	boolean debug;
 	boolean log;
+	
 	int id;
-	NodeFactory nf;
-	boolean opsAdded = false;
+	boolean arrayOutputs;
+	
 	PrintWriter debugLog;
+	NodeFactory nf;
+	
+	List<String> candidateKeyTypes;
+	int keyIndex;
+	
+	SearchConfiguration conf;
+	
 	Map<String,Boolean> solFound;
 	
 	@SuppressWarnings("deprecation")
 	public GenerateScaffold(NodeFactory nf) throws IOException{
 		this.debug = false;
-		this.log = true;
-		this.id = 0;
+		this.log = false;
+		
 		this.nf = nf;
-		this.opsAdded = false;
+		
+		this.id = 0;
+		this.arrayOutputs = false;
+		
+		this.candidateKeyTypes = new ArrayList<String>();
+		this.keyIndex = 0;
+		
+		this.conf = new SearchConfiguration();
+		
+		this.conf.tuplesAdded = false;
+		this.conf.simpleEmits = true;
+		this.conf.opsAdded = false;
+		
+		this.conf.stageCount = 1;
+		this.conf.emitCount = 1;
+		this.conf.keyTupleSize = 1;
+		this.conf.valuesTupleSize = 1;
+		this.conf.recursionDepth = 2;
+		
 		this.solFound = new HashMap<String,Boolean>();
+	}
+	
+	public class SearchConfiguration{
+		public boolean tuplesAdded;
+		public boolean simpleEmits;
+		public boolean opsAdded;
+		
+		public int stageCount;
+		public int keyTupleSize;
+		public int valuesTupleSize;
+		public int emitCount;
+		public int recursionDepth;
+		
+		public String keyType;
 	}
 	
 	public NodeVisitor enter(Node parent, Node n){
@@ -64,7 +98,6 @@ public class GenerateScaffold extends NodeVisitor{
 			if(ext.interesting){
 				if(debug){
 					System.err.println("Attempting to translate code fragment:-");
-					//n.prettyPrint(System.err);
 					System.err.println("");
 					
 					debugLog.print("Attempting to translate code fragment (Fragment ID: " + id + ")\n");
@@ -72,7 +105,6 @@ public class GenerateScaffold extends NodeVisitor{
 				else{
 					System.err.println("==================================================================");
 					System.err.println("Attempting to translate code fragment (Fragment ID: " + id + ")\n");
-					
 				}
 				
 				Set<String> handledTypes = new HashSet<String>();
@@ -89,20 +121,6 @@ public class GenerateScaffold extends NodeVisitor{
 						
 						System.err.println("Output type: " + var.varType + "\n");
 						
-						if(log){
-							this.debugLog = new PrintWriter("debug.txt", "UTF-8");
-							
-							debugLog.print("Output type: " + var.varType + "\n\n");
-							debugLog.print("Key Index: "+ext.keyIndex + "\n");
-							debugLog.print("Recursion Depth: "+ext.recursionDepth + "\n");
-							debugLog.print("Conditionals: "+ext.useConditionals + "\n");
-							debugLog.print("Num of Vals: "+ext.valCount + "\n");
-							debugLog.print("Operators Added: "+this.opsAdded + "\n");
-							debugLog.print("Number of solutions so far: "+ext.verifiedMapEmits.size() + "\n");
-							debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n\n");
-							debugLog.flush();
-						}
-						
 						// Get output variables handled under this type
 						Set<Variable> sketchFilteredOutputVars = new HashSet<Variable>();
 						for(Variable v : ext.outputVars){
@@ -112,46 +130,56 @@ public class GenerateScaffold extends NodeVisitor{
 						}
 						
 						// Number of keys to be used
-						int keyCount = 1;
 						for(Variable v : sketchFilteredOutputVars){
 							String type = v.getSketchType();
 							if(type.endsWith("["+Configuration.arraySizeBound+"]")){
-								keyCount = 2;
+								this.conf.keyTupleSize = 2;
+								this.arrayOutputs = true;
 							}
 						}
 						
-						// Data type options
-						ext.candidateKeyTypes.add("int");
-						if(!ext.candidateKeyTypes.contains(sketchReduceType)) ext.candidateKeyTypes.add(sketchReduceType);
-						for(Variable v : ext.inputVars){
-							String vtype = v.getReduceType();
-							if(ext.candidateKeyTypes.contains(vtype)) continue;
-							if(vtype.equals("String") || vtype.equals("String[]"))
-								ext.candidateKeyTypes.add(vtype.replace("[]", ""));
-							if(casper.Util.getTypeClass(vtype) == casper.Util.OBJECT ||
-									casper.Util.getTypeClass(vtype) == casper.Util.OBJECT_ARRAY){
-								vtype = v.getSketchType().replace("["+Configuration.arraySizeBound+"]", "");
-								if(ext.globalDataTypesFields.containsKey(vtype)){
-									for(Variable fdecl : ext.globalDataTypesFields.get(vtype)){
-										if(ext.candidateKeyTypes.contains(fdecl.getReduceType().replace("[]",""))) continue;
-										ext.candidateKeyTypes.add(fdecl.getReduceType().replace("[]",""));
-									}
-								}
-							}
+						// Key Type options
+						this.candidateKeyTypes.add("int");
+						for(Variable v : ext.inputDataCollections){
+							addKeyOptions(ext, v);
 						}
+						for(Variable v : ext.inputVars){
+							addKeyOptions(ext, v);
+						}
+						
+						// Key Type
+						this.conf.keyType = this.candidateKeyTypes.get(this.keyIndex);
 						
 						// Emit Count
-						ext.emitCount = sketchFilteredOutputVars.size();
+						this.conf.emitCount = 1;
+						
+						if(log){
+							this.debugLog = new PrintWriter("debug.txt", "UTF-8");
+							
+							debugLog.print("Output type: " + var.varType + "\n\n");
+							debugLog.print("Simple Emits: "+ this.conf.simpleEmits + "\n");
+							debugLog.print("Tuples: "+ this.conf.tuplesAdded + "\n");
+							debugLog.print("Ops Added: "+ this.conf.opsAdded + "\n");
+							debugLog.print("Emit Count: "+ this.conf.emitCount + "\n");
+							debugLog.print("Key Tuple Size: "+ this.conf.keyTupleSize + "\n");
+							debugLog.print("Val Tuple Size: "+ this.conf.valuesTupleSize + "\n");
+							debugLog.print("Recursion Depth: "+ this.conf.recursionDepth + "\n");
+							debugLog.print("Key type: "+ this.candidateKeyTypes.get(this.keyIndex) + "\n");
+							debugLog.print("Number of solutions so far: "+ext.verifiedMapEmits.size() + "\n");
+							debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n\n");
+							debugLog.flush();
+						}
 						
 						while(true){
 							if(debug){
 								System.err.println(ext.blockExprs);
 							}
 							
-							//System.in.read();
+							if(Configuration.slow)
+								System.in.read();
 							
 							/* Generate main scaffold */
-							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType);
+							SketchCodeGenerator.generateScaffold(id, n, sketchFilteredOutputVars, sketchReduceType, reduceType, this.conf);
 							
 							if(debug){
 								System.err.println(ext.blocks);
@@ -159,26 +187,28 @@ public class GenerateScaffold extends NodeVisitor{
 							
 							/* Run synthesizer to generate summary */
 							System.err.println("Attempting to synthesize solution...");
-							int synthesizerExitCode = runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, keyCount, sketchReduceType, sketchFilteredOutputVars.size());
+							int synthesizerExitCode = runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, sketchReduceType);
 							
 							if(synthesizerExitCode == 0){
+								ext.generateCode.put(reduceType, false);
+								break;
 								/* Run theorem prover to verify summary */
-								SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, ext.emitCount);
+								/*SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, this.emitCount);
 								
 								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType, sketchReduceType);
 								
 								int CSGverifierExitCode = 0;
-								if(ext.valCount == 1)
+								if(ext.valCount == 1 && false)
 									CSGverifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
 								
-								if(debug){
+								if(debug || true){
 									System.err.println(ext.mapEmits);
 									System.err.println(ext.reduceExps);
 								}
 									
-								if(CSGverifierExitCode == 0){
+								if(CSGverifierExitCode == 0 || true){
 									int VerifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
-									if(VerifierExitCode == 0){
+									if(VerifierExitCode == 0 && false){
 										ext.verifiedMapEmits.add(ext.mapEmits);
 										ext.verifiedInitExps.add(ext.initExps);
 										ext.verifiedReduceExps.add(ext.reduceExps);
@@ -255,16 +285,20 @@ public class GenerateScaffold extends NodeVisitor{
 									ext.blockExprs.get(ext.blockExprs.size()-1).putAll(blockExprsNew);
 									ext.blocks.add(new ArrayList<String>());
 									ext.termValuesTemp.clear();
-								}
+								}*/
 							}
 							else if(synthesizerExitCode == 1){
 								if(log){
-									debugLog.print("Key Index: "+ext.keyIndex + "\n");
-									debugLog.print("Recursion Depth: "+ext.recursionDepth + "\n");
-									debugLog.print("Conditionals: "+ext.useConditionals + "\n");
-									debugLog.print("Num of Vals: "+ext.valCount + "\n");
-									debugLog.print("Operators Added: "+this.opsAdded + "\n");
-									debugLog.print("Number of solutions so far: "+ext.verifiedMapEmits.size() + "\n\n");
+									debugLog.print("Output type: " + var.varType + "\n\n");
+									debugLog.print("Simple Emits: "+ this.conf.simpleEmits + "\n");
+									debugLog.print("Tuples: "+ this.conf.tuplesAdded + "\n");
+									debugLog.print("Ops Added: "+ this.conf.opsAdded + "\n");
+									debugLog.print("Emit Count: "+ this.conf.emitCount + "\n");
+									debugLog.print("Key Tuple Size: "+ this.conf.keyTupleSize + "\n");
+									debugLog.print("Val Tuple Size: "+ this.conf.valuesTupleSize + "\n");
+									debugLog.print("Recursion Depth: "+ this.conf.recursionDepth + "\n");
+									debugLog.print("Key type: "+ this.candidateKeyTypes.get(this.keyIndex) + "\n");
+									debugLog.print("Number of solutions so far: "+ext.verifiedMapEmits.size() + "\n");
 									debugLog.print("Time stamp: "+System.currentTimeMillis() + "\n\n\n");
 									debugLog.flush();
 								}
@@ -274,14 +308,16 @@ public class GenerateScaffold extends NodeVisitor{
 									System.err.println("Casper failed to synthesize a summary for this code fragment.\nPlease submit your code example at our"
 														+ " GitHub Issues tracker (https://github.com/uwplse/Casper/issues)");
 									ext.generateCode.put(reduceType, false);
-									System.exit(1);
+									
 								}
 								else{
-									ext.generateCode.put(reduceType, true);
 									System.err.println("\nSearch Complete. Generating Spark Code.");
-									debugLog.close();
-									break;
+									ext.generateCode.put(reduceType, true);
 								}
+								if(log){
+									debugLog.close();
+								}
+								break;
 							}
 						}
 					}
@@ -295,6 +331,34 @@ public class GenerateScaffold extends NodeVisitor{
 		}		
 		
 		return this;
+	}
+
+	private void addKeyOptions(MyWhileExt ext, Variable v) {
+		String vtype = v.getReduceType();
+		if(casper.Util.getTypeClass(vtype) == casper.Util.PRIMITIVE){
+			if(!this.candidateKeyTypes.contains(vtype))
+				this.candidateKeyTypes.add(vtype);
+		}
+		else if(casper.Util.getTypeClass(vtype) == casper.Util.ARRAY){
+			vtype = vtype.replace("[]","");
+			if(!this.candidateKeyTypes.contains(vtype))
+				this.candidateKeyTypes.add(vtype);
+		}
+		else if(casper.Util.getTypeClass(vtype) == casper.Util.OBJECT){
+			if(ext.globalDataTypesFields.containsKey(vtype)){
+				for(Variable fdecl : ext.globalDataTypesFields.get(vtype)){
+					addKeyOptions(ext, fdecl);
+				}
+			}
+		}
+		else if(casper.Util.getTypeClass(vtype) == casper.Util.OBJECT_ARRAY){
+			vtype = vtype.replace("[]","");
+			if(ext.globalDataTypesFields.containsKey(vtype)){
+				for(Variable fdecl : ext.globalDataTypesFields.get(vtype)){
+					addKeyOptions(ext, fdecl);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -335,13 +399,13 @@ public class GenerateScaffold extends NodeVisitor{
 	    }
 	}
 
-	private int runSynthesizer(String filename, MyWhileExt ext, int keyCount, String type, int emitCountInit) throws IOException, InterruptedException {		
+	private int runSynthesizer(String filename, MyWhileExt ext, String type) throws IOException, InterruptedException {		
 		Runtime rt = Runtime.getRuntime();
 		
-		if(debug)
-			System.err.println("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt 4 "+ filename);
+		if(debug || Configuration.slow)
+			System.err.println("sketch --slv-parallel --bnd-int-range "+Configuration.intRange+" --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+Configuration.loopUnrollBound+" --bnd-arr-size "+Configuration.arraySizeBound+" "+ filename);
 		
-		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range 20 --bnd-inbits 1 --bnd-unroll-amnt 4 "+ filename);
+		Process pr = rt.exec("sketch --slv-parallel --bnd-int-range "+Configuration.intRange+" --bnd-inbits "+Configuration.inbits+" --bnd-unroll-amnt "+Configuration.loopUnrollBound+" --bnd-arr-size "+Configuration.arraySizeBound+" "+ filename);
 
 		PrintWriter writer = new PrintWriter(filename.replace(".sk", ".txt"), "UTF-8");
 		
@@ -358,11 +422,117 @@ public class GenerateScaffold extends NodeVisitor{
         	return 0;
         }
         else{
-        	System.err.println("Synthesizer exited with error code "+exitVal);
+        	System.err.println("Synthesizer exited with error code: "+exitVal);
         	writer.close();
         	
-        	// Increment grammar
-
+        	/* Increment grammar */
+        	
+        	// Has current grammar been checked for all types?
+        	if(this.conf.keyTupleSize > 1){
+        		if(this.keyIndex < this.candidateKeyTypes.size()-1){
+        			this.keyIndex++;
+        			this.conf.keyType = this.candidateKeyTypes.get(this.keyIndex);
+        			
+        			System.err.println("\nBuilding new grammar...");
+        			System.err.println("Keytype changed ("+this.candidateKeyTypes.get(this.keyIndex-1)+" -> "+this.conf.keyType +".\n");
+        			
+        			return 1;
+        		}
+        	}
+        	
+        	// G1 -> G2
+        	if(!this.conf.opsAdded && !this.conf.simpleEmits && !this.conf.tuplesAdded){
+        		this.conf.tuplesAdded = true;
+        		
+    			System.err.println("\nBuilding new grammar...");
+        		System.err.println("Tuples enabled (G1 -> G2).\n");
+        		
+        		return 1;
+        	}
+        	// G2 -> G3
+        	if(!this.conf.opsAdded && !this.conf.simpleEmits && this.conf.tuplesAdded){
+        		this.conf.simpleEmits = true;
+        		
+    			System.err.println("\nBuilding new grammar...");
+        		System.err.println("Simple emits enabled (G2 -> G3).\n");
+        		
+        		return 1;
+        	}
+        	// G3 -> G4
+        	if(!this.conf.opsAdded && this.conf.simpleEmits && this.conf.tuplesAdded){
+        		this.conf.opsAdded = true;
+        		
+    			System.err.println("\nBuilding new grammar...");
+        		System.err.println("New operators enabled (G3 -> G4).\n");
+        		
+        		return 1;
+        	}
+        	
+        	// Can recursive bounds be increased?
+    		if(this.conf.recursionDepth < Configuration.maxRecursionDepth){
+    			this.conf.recursionDepth++;
+    			
+    			this.conf.tuplesAdded = this.conf.simpleEmits = this.conf.opsAdded = true;
+    			
+    			System.err.println("\nBuilding new grammar...");
+    			System.err.println("Max expression depth increased ("+(this.conf.recursionDepth-1)+" -> "+this.conf.recursionDepth+").\n");
+    			
+    			return 1;
+    		}
+    		else if(this.conf.valuesTupleSize < Configuration.maxTupleSize){
+    			this.conf.valuesTupleSize++;
+    			
+    			this.conf.recursionDepth = 2;
+    			this.conf.tuplesAdded = this.conf.simpleEmits = this.conf.opsAdded = true;
+    			
+    			System.err.println("\nBuilding new grammar...");
+    			System.err.println("Max value tuple size increased ("+(this.conf.valuesTupleSize-1)+" -> "+this.conf.valuesTupleSize+").\n");
+    			
+    			return 1;
+    		}
+    		else if(this.conf.keyTupleSize < Configuration.maxTupleSize){
+    			this.conf.keyTupleSize++;
+    			
+    			this.conf.valuesTupleSize = 1;
+    			this.conf.recursionDepth = 2;
+    			this.conf.tuplesAdded = this.conf.simpleEmits = this.conf.opsAdded = true;
+    			
+    			System.err.println("\nBuilding new grammar...");
+    			System.err.println("Max key tuple size increased ("+(this.conf.keyTupleSize-1)+" -> "+this.conf.keyTupleSize+").\n");
+    			
+    			return 1;
+    		}
+    		else if(this.conf.emitCount < Configuration.maxNumEmits){
+    			this.conf.emitCount++;
+    			
+    			this.conf.keyTupleSize = (this.arrayOutputs?2:1);
+    			this.conf.valuesTupleSize = 1;
+    			this.conf.recursionDepth = 2;
+    			this.conf.tuplesAdded = this.conf.simpleEmits = this.conf.opsAdded = true;
+    			
+    			System.err.println("\nBuilding new grammar...");
+    			System.err.println("Max emit count increased ("+(this.conf.emitCount-1)+" -> "+this.conf.emitCount+").\n");
+    			
+    			return 1;
+    		}
+    		else if(this.conf.stageCount < Configuration.maxNumMROps){
+    			this.conf.stageCount++;
+    			
+    			this.conf.emitCount = 1;
+    			this.conf.keyTupleSize = (this.arrayOutputs?2:1);
+    			this.conf.valuesTupleSize = 1;
+    			this.conf.recursionDepth = 2;
+    			this.conf.tuplesAdded = this.conf.simpleEmits = this.conf.opsAdded = true;
+    			
+    			System.err.println("\nBuilding new grammar...");
+    			System.err.println("Max MR operations count increased ("+(this.conf.stageCount-1)+" -> "+this.conf.stageCount+").\n");
+    			
+    			return 1;
+    		}
+    		
+    		// The entire search space has been exhausted :(
+    		return 2;
+        	/*
         	// 1. If we have multiple keys, try other key2 types
         	if(keyCount > 1){
         		if(ext.keyIndex < ext.candidateKeyTypes.size()-1){
@@ -373,8 +543,8 @@ public class GenerateScaffold extends NodeVisitor{
         		}
         	}
         	// 2. Increase recursive bound until we are at 3.
-        	if(ext.recursionDepth < Configuration.recursionDepth){
-        		if(!this.solFound.containsKey(ext.keyIndex+","+ext.useConditionals+","+ext.valCount+","+opsAdded)){
+        	if(ext.recursionDepth < Configuration.maxRecursionDepth){
+        		if(!this.solFound.containsKey(ext.keyIndex+","+ext.useConditionals+","+ext.valCount+","+opsAdded) || true){
 	        		ext.recursionDepth++;
 	        		ext.keyIndex = 0;
 	        		System.err.println("\nBuilding new grammar...");
@@ -393,7 +563,7 @@ public class GenerateScaffold extends NodeVisitor{
         	}
         	// 4. Increase number of values until 2.
         	if(ext.valCount < Configuration.maxValuesTupleSize){
-        		if(!this.solFound.containsKey(ext.keyIndex+","+ext.useConditionals+","+opsAdded)){
+        		if(!this.solFound.containsKey(ext.keyIndex+","+ext.useConditionals+","+opsAdded) || true){
 	        		ext.valCount++;
 	        		ext.recursionDepth = 2;
 	        		if(ext.foundConditionals) ext.useConditionals = false;
@@ -414,14 +584,14 @@ public class GenerateScaffold extends NodeVisitor{
         		return 1;
         	}
         	// 6. Increase emit count 
-        	if(ext.emitCount < Configuration.maxEmits && (ext.mapEmits == null || ext.mapEmits.size() == 0)){
-        		ext.emitCount++;
+        	if(this.emitCount < Configuration.maxEmits && (ext.mapEmits == null || ext.mapEmits.size() == 0)){
+        		this.emitCount++;
         		ext.useConditionals = false;
         		ext.recursionDepth = 2;
         		ext.valCount = 1;
         		ext.keyIndex = 0;
         		System.err.println("\nBuilding new grammar...");
-				System.err.println("Emit count increased from "+(ext.emitCount-1)+" to "+ext.emitCount + "\n");
+				System.err.println("Emit count increased from "+(this.emitCount-1)+" to "+this.emitCount + "\n");
         		return 1;
         	}
         	// 7. Add new operators
@@ -435,14 +605,14 @@ public class GenerateScaffold extends NodeVisitor{
             		ext.recursionDepth = 2;
             		ext.valCount = 1;
             		ext.keyIndex = 0;
-            		ext.emitCount = emitCountInit;
+            		this.emitCount = emitCountInit;
             		System.err.println("\nBuilding new grammar...");
             		System.err.println("New operators added...\n");
             		return 1;
         		default:
         			// We're done.
         			return 2;
-            }
+            }*/
         }
 	}
 	

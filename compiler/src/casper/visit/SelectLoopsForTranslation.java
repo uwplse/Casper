@@ -156,7 +156,7 @@ public class SelectLoopsForTranslation extends NodeVisitor{
 			if(stmtext.process)
 				this.ignore.push(false);
 		}
-   		// If the node is a conditional
+   		// If the node is a conditional - Deprecated
 		else if(n instanceof If && !this.ignore.peek()){
 			for(MyWhileExt ext : this.extensions)
 				ext.foundConditionals = true;

@@ -1,16 +1,9 @@
 package casper;
 
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import casper.ast.JavaExt;
-import casper.extension.MyStmtExt;
-import casper.extension.MyWhileExt;
-import casper.types.ArrayUpdateNode;
-import casper.types.ConditionalNode;
-import casper.types.CustomASTNode;
 import polyglot.ast.ArrayAccess;
 import polyglot.ast.Assign;
 import polyglot.ast.Block;
@@ -21,6 +14,12 @@ import polyglot.ast.Expr;
 import polyglot.ast.If;
 import polyglot.ast.LocalDecl;
 import polyglot.ast.Stmt;
+import casper.ast.JavaExt;
+import casper.extension.MyStmtExt;
+import casper.extension.MyWhileExt;
+import casper.types.ArrayUpdateNode;
+import casper.types.ConditionalNode;
+import casper.types.CustomASTNode;
 
 public class Util {
 	public static String getSketchTypeFromRaw(String original){

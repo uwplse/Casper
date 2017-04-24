@@ -59,11 +59,11 @@ public class CasperScheduler extends JL7Scheduler {
 		try {
 			g = internGoal(new VisitorGoal(job, new UpdateConfigurations()));
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
         
 		try {
+			// All Java type and error checking by polyglot
     		g.addPrerequisiteGoal(TypeChecked(job),this);
     		g.addPrerequisiteGoal(ConstantsChecked(job),this);
     		g.addPrerequisiteGoal(ReachabilityChecked(job),this);
@@ -126,7 +126,7 @@ public class CasperScheduler extends JL7Scheduler {
 	/*
 	 * Mark loops that are suitable for an optimization attempt.
 	 */
-    public Goal LoopsSelected (Job job) 
+    public Goal LoopsSelected (Job job)
     {
         Goal g = internGoal(new VisitorGoal(job, new SelectLoopsForTranslation()));
         

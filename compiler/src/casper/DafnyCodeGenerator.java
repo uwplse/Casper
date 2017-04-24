@@ -21,18 +21,17 @@ import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import casper.types.ArrayAccessNode;
 import casper.types.ArrayUpdateNode;
-import casper.types.CallNode;
 import casper.types.ConditionalNode;
 import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
-import casper.types.FieldNode;
 import casper.types.IdentifierNode;
 import casper.types.SequenceNode;
 import casper.types.Variable;
+import casper.visit.GenerateScaffold.SearchConfiguration;
 
 public class DafnyCodeGenerator {
 	
-	public static void generateSummary(int id, Node n, Set<Variable> outputVars, String reducerType, String sketchReduceType) throws IOException {
+	public static void generateSummary(int id, Node n, Set<Variable> outputVars, String reducerType, String sketchReduceType, SearchConfiguration conf) throws IOException {
 		// Get node extension
 		MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 		
@@ -116,7 +115,7 @@ public class DafnyCodeGenerator {
 		String tCond = generateMapTerminateCondition(ext.loopCounters);
 		
 		// Generate map outputType
-		String domapEmitType = generateDomapEmitType(ext.mapEmits,reducerType,ext.candidateKeyTypes.get(ext.keyIndex));
+		String domapEmitType = generateDomapEmitType(ext.mapEmits, reducerType, conf.keyType);
 		
 		// Do reduce args declaration
 		String reducerArgsDecl = generatedReducerArgsDecl(ext, ext.loopCounters, ext.inputVars, outputVars);
@@ -125,19 +124,19 @@ public class DafnyCodeGenerator {
 		String reducerArgsCall = generatedReducerArgsCall(ext, ext.loopCounters, ext.inputVars, outputVars);
 		
 		// Generate do reduce key type
-		String doreduceKeyType = generateDoreduceKeyType(ext.mapEmits,ext.candidateKeyTypes.get(ext.keyIndex));
+		String doreduceKeyType = generateDoreduceKeyType(ext.mapEmits, conf.keyType);
 		
 		// Generate dooreduce key require statements
 		String keyRequires = generateKeyRequires(outputVars);
 		
 		// Generate reduce init values
-		String reduceInitValues = generateReduceInitValues(ext.mapEmits,ext.initExps,outputVars,reducerType);
+		String reduceInitValues = generateReduceInitValues(ext.mapEmits, ext.initExps, outputVars, reducerType);
 		
 		// Generate reduce expression
-		String reduceExp = generateReduceExp(ext.mapEmits,ext.valCount, outputVars);
+		String reduceExp = generateReduceExp(ext.mapEmits, conf.valuesTupleSize, outputVars);
 		
 		// Generate reduce functions
-		String reduceFunctions = generateReduceFunctions(ext.reduceExps,ext.valCount,outputVars,reducerType);
+		String reduceFunctions = generateReduceFunctions(ext.reduceExps, conf.valuesTupleSize, outputVars, reducerType);
 		
 		// Generate invariant pre-condition
 		String invRequires = generateInvPreCond(ext, outputVars);
@@ -149,9 +148,9 @@ public class DafnyCodeGenerator {
 		String mapperRequires = generateMapperPreCond(ext, ext.loopCounters);
 		
 		// Generate CSG Lemmas
-		String csgLemmas = generateReduceLemmas(ext.mapEmits,ext.reduceExps,ext.valCount,outputVars,reducerType);
+		String csgLemmas = generateReduceLemmas(ext.mapEmits,ext.reduceExps, conf.valuesTupleSize, outputVars, reducerType);
 		
-		// Generate User Defined Data Typess
+		// Generate User Defined Data Types
 		String UDTs = generateUDTs(ext);
 		
 		// Plug in generated code into template
@@ -212,12 +211,18 @@ public class DafnyCodeGenerator {
 		int index = 1;
 		String app = "requires ";
 		for(Variable var : outputVars){
-			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]"))
+			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]")){
 				code += "requires casper_key.0 == "+index+" ==> 0 <= casper_key.1 < |"+var.varName+"0|\n\t";
-			app += "casper_key.0 == "+index+" || ";
+			}
+			else{
+				app += "casper_key == "+index+" || ";
+			}
 			index++;
 		}
-		return code + app.substring(0, app.length()-4);
+		if(code.equals(""))
+			return app.substring(0, app.length()-4);
+		else
+		return code;
 	}
 
 	private static String generateReduceFunctions(Map<String, String> reduceExps, int valCount, Set<Variable> outputVars, String reducerType) {

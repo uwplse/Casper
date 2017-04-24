@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import casper.JavaLibModel.SketchCall;
 import casper.extension.MyWhileExt;
 import casper.types.Variable;
+import casper.visit.GenerateScaffold.SearchConfiguration;
 
 public class SketchParser {
 	
@@ -346,7 +347,7 @@ public class SketchParser {
 		return emits;
 	}
 	
-	public static void parseSolution(String filename, Set<Variable> outputVars, MyWhileExt ext, int emitCount) throws IOException {
+	public static void parseSolution(String filename, Set<Variable> outputVars, MyWhileExt ext, int emitCount, SearchConfiguration conf) throws IOException {
 		// Read sketch output
 		BufferedReader br = new BufferedReader(new FileReader(filename));
 		
@@ -457,21 +458,21 @@ public class SketchParser {
 				m = r.matcher(reduce);
 				while(m.find()){
 					ext.blockExprs.get(ext.blockExprs.size()-1).put("reduceExp"+m.group(1), ext.grammarExps.get("reduceExp"+m.group(1)).get(Integer.parseInt(m.group(3))));
-					for(int i=2; i<ext.valCount+2; i++){
+					for(int i=2; i<conf.valuesTupleSize+2; i++){
 						if(!reduceExps.get(var.varName).contains("val"+i)){
 							for(String conditional : mapEmits.keySet()){
 								for(KvPair kvp : mapEmits.get(conditional)){
 									if(kvp.keys.get(0).equals(Integer.toString(index))){
-										ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
+										//ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
 										Map<String,String> temp = new HashMap<String,String>();
 										temp.putAll(ext.termValuesTemp);
 										for(String key : ext.termValuesTemp.keySet()){
-											if(key.contains("_map_v"+((kvp.index*ext.valCount)+(i-2)))){
-												temp.remove(key);
+											if(key.contains("_map_v"+((kvp.index*conf.valuesTupleSize)+(i-2)))){
+											//	temp.remove(key);
 											}
 										}
 										ext.termValuesTemp = temp;
-										ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
+										//ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
 									}
 								}
 							}

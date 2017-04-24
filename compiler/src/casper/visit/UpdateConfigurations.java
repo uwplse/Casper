@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import casper.Configuration;
 import polyglot.visit.NodeVisitor;
+import casper.Configuration;
 
 public class UpdateConfigurations extends NodeVisitor {
 	
@@ -39,11 +39,23 @@ public class UpdateConfigurations extends NodeVisitor {
 				case "ArraySizeBound":
 					Configuration.arraySizeBound = Integer.parseInt(keyVal[1]);
 					break;
-				case "RecursionDepth":
-					Configuration.recursionDepth = Integer.parseInt(keyVal[1]);
+				case "IntRange":
+					Configuration.intRange = Integer.parseInt(keyVal[1]);
 					break;
-				case "EmitCount":
-					Configuration.maxEmits = Integer.parseInt(keyVal[1]);
+				case "LoopUnrollBound":
+					Configuration.loopUnrollBound = Integer.parseInt(keyVal[1]);
+					break;
+				case "MaxNumMROps":
+					Configuration.maxNumMROps = Integer.parseInt(keyVal[1]);
+					break;
+				case "MaxNumEmits":
+					Configuration.maxNumEmits = Integer.parseInt(keyVal[1]);
+					break;
+				case "MaxTupleSize":
+					Configuration.maxTupleSize = Integer.parseInt(keyVal[1]);
+					break;
+				case "MaxRecursionDepth":
+					Configuration.maxRecursionDepth = Integer.parseInt(keyVal[1]);
 					break;
 			}
 		}

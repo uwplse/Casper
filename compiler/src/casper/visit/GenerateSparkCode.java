@@ -38,7 +38,7 @@ public class GenerateSparkCode extends NodeVisitor{
 	
 	public GenerateSparkCode(NodeFactory nodeFactory){
 		this.debug = false;
-		this.demo = true;
+		this.demo = false;
 		this.nf = nodeFactory;
 		this.id = 0;
 		this.first = true;

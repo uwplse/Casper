@@ -141,13 +141,6 @@ public class MyWhileExt extends MyStmtExt {
 	public List<Map<String,String>> blockExprs = new ArrayList<Map<String,String>>();
 	public Map<String,String> termValuesTemp = new HashMap<String,String>();
 	public List<List<String>> blocks = new ArrayList<List<String>>();
-	
-	// Grammar incrementing flags
-	public int valCount = 1;
-	public int recursionDepth = 2;
-	public boolean useConditionals = false;
-	public List<String> candidateKeyTypes = new ArrayList<String>();
-	public int keyIndex = 0;
     
     // We perform an alias analysis. If two variables are aliases, then
     // modifying one should change the other too. Our generated programs
@@ -156,8 +149,6 @@ public class MyWhileExt extends MyStmtExt {
     public Map<Variable, Set<Variable>> aliases = new HashMap<Variable, Set<Variable>>();
 
 	public boolean extForType = false;
-
-	public int emitCount = 0;
 
 	public int outVarCount;
     
