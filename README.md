@@ -2,7 +2,7 @@
 Casper is a compiler for automatically re-targeting sequential Java code fragments to Apache Spark. 
 Casper works by synthesizing high level MapReduce program specifications from raw un-annotated 
 sequential Java source code and using the synthesized specificiations to generate Apache Spark code. 
-The most recent release version for Casper is v0.0.1.
+The most recent release version for Casper is [v0.1.1](https://github.com/uwplse/Casper/releases/tag/v0.1.1).
 
 To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read our 
 [paper](http://homes.cs.washington.edu/~maazsaf/synt16.pdf) or 
