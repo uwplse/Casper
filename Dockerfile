@@ -35,9 +35,11 @@ ENV PATH $PATH:/sketch-1.7.2/sketch-frontend/
 ENV SKETCH_HOME /sketch-1.7.2/sketch-frontend/runtime
 
 # Install Dafny
-RUN wget -O dafny-1.9.7.zip "http://download-codeplex.sec.s-msft.com/Download/Release?ProjectName=dafny&DownloadId=1559952&FileTime=131040300896400000&Build=21031"
-RUN unzip dafny-1.9.7.zip -d .
-RUN rm dafny-1.9.7.zip
+RUN wget -O dafny-1.9.9.zip "https://github.com/Microsoft/dafny/releases/download/v1.9.9/dafny-1.9.9.40414-x64-ubuntu-14.04.zip"
+RUN unzip dafny-1.9.9.zip -d .
+RUN rm dafny-1.9.9.zip
+RUN /bin/bash -c "sed $'s/\r$//' ./dafny/dafny > ./dafny/dafny.Unix"
+RUN mv /dafny/dafny.Unix /dafny/dafny
 RUN chmod -R a+rwx dafny/*
 ENV PATH $PATH:/dafny/
 
