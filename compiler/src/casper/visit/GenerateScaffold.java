@@ -19,16 +19,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import polyglot.ast.Node;
-import polyglot.ast.NodeFactory;
-import polyglot.ast.While;
-import polyglot.ext.jl5.ast.ExtendedFor;
-import polyglot.visit.NodeVisitor;
 import casper.Configuration;
 import casper.SketchCodeGenerator;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
 import casper.types.Variable;
+import polyglot.ast.Node;
+import polyglot.ast.NodeFactory;
+import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
+import polyglot.visit.NodeVisitor;
 
 public class GenerateScaffold extends NodeVisitor{
 	boolean debug;

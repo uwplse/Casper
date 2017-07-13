@@ -2,3 +2,5 @@
 *~
 *.mdb
 *.dll
+.classpath
+.settings/*
