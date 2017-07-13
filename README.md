@@ -2,7 +2,7 @@
 Casper is a compiler for automatically re-targeting sequential Java code fragments to Apache Spark. 
 Casper works by synthesizing high level MapReduce program specifications from raw un-annotated 
 sequential Java source code and using the synthesized specificiations to generate Apache Spark code. 
-The most recent release version for Casper is v0.0.1.
+The most recent release version for Casper is [v0.1.1](https://github.com/uwplse/Casper/releases/tag/v0.1.1).
 
 To learn more about Casper, visit our [homepage](http://casper.uwplse.org), read our 
 [paper](http://homes.cs.washington.edu/~maazsaf/synt16.pdf) or 
@@ -12,10 +12,14 @@ our tool, please star our repo!
 Casper has been implemented as an extension of 
 [Polyglot 2.6.1](https://www.cs.cornell.edu/projects/polyglot/).
 
+### Online Demo
+The quickest way to try out Casper is by using our [online demo](http://demo.casper.uwplse.org/). To 
+download and install Casper on your own machine, follow the instructions below.
+
 ### Getting Started
-The quickest way to try out Casper is by using our [Docker image](#running-in-a-docker-container). 
+The easiest way to install Casper is by using our [Docker image](#running-in-a-docker-container). 
 It comes with all the dependencies installed and Casper already configured to run. Alternatively, 
-use [these instructions](#build-casper) to configure and build Casper on your machine.
+use [these instructions](#build-casper) to configure and build Casper on your own.
 
 ### Running in a Docker Container
 You can run Casper inside a docker container using our pre-configured image of Ubuntu 16.04 LTS.
