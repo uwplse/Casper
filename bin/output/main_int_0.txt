@@ -5,99 +5,465 @@ Overriding inputs with 2
 boundmode = CALLNAME
 assuming  bounds checks
 BND W RAND = 4
-SOLVER RAND SEED = 1083424941
+SOLVER RAND SEED = 1088317194
 Reading SKETCH Program in File /home/maaz/.sketch/tmp/main_int_0.sk/input0.tmp
 End of File
 ATTEMPT 0
 H__21 odds = 1/1.25 0.379949 (4, 4)  try to replace
 H__21: replacing with value 0 bnd= 3 totsize= 1.09861
-H__12 odds = 1/0.178571 0.992632 (28, 28)  try to replace
-H__12: replacing with value 0 bnd= 2 totsize= 1.79176
+H__12 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__12: replacing with value 1 bnd= 2 totsize= 1.79176
 H__7_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
 H__7_7: replacing with value 0 bnd= 1 totsize= 1.79176
 H__9_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
 H__9_7: replacing with value 0 bnd= 1 totsize= 1.79176
-H__10_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
-H__10_7: replacing with value 28 bnd= 32 totsize= 5.2575
-H__0_8 odds = 1/1.66667 0.291313 (3, 3)  try to replace
-H__0_8: replacing with value 1 bnd= 2 totsize= 5.95064
 H__2_8 odds = 1/0.625 0.664037 (8, 8)  try to replace
-H__2_8: replacing with value 0 bnd= 1 totsize= 5.95064
-H__4_8 odds = 1/0.625 0.664037 (8, 8)  try to replace
-H__4_8: replacing with value 0 bnd= 1 totsize= 5.95064
-H__9_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
-H__9_9: replacing with value 0 bnd= 1 totsize= 5.95064
-H__15_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
-H__15_10: replacing with value 0 bnd= 1 totsize= 5.95064
-H__16_10 odds = 1/2.5 0.197375 (2, 2)  try to replace
-H__16_10: replacing with value 16 bnd= 32 totsize= 9.41638
-H__17_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
-H__17_10: replacing with value 0 bnd= 1 totsize= 9.41638
-* Final Problem size: Problem nodes = 237
-Assert at main_int_0.sk:202 (5039098793636284918)
+H__2_8: replacing with value 0 bnd= 1 totsize= 1.79176
+H__5_8 odds = 1/5 0.099668 (1, 1)  try to replace
+H__5_8: replacing with value 14 bnd= 32 totsize= 5.2575
+H__11_9 odds = 1/1.66667 0.291313 (3, 3)  try to replace
+H__11_9: replacing with value 1 bnd= 2 totsize= 5.95064
+* Final Problem size: Problem nodes = 254
+Assert at main_int_0.sk:51 (1019248453668098139)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+Problem became UNSAT.19= ASSERT (0) : Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+******** FAILED ********
+* FIND TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 0 : 5.95064 Round time:  0.015 ms 
+RNDDEG = 5
+SUMMRY , 7, 17, 153, 295, 443, 687, 1139
+ charness = 0
+POST-SUMMRY , 7, 17, 153, 295, 443, 687, 1139
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 1
+H__12 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__12: replacing with value 0 bnd= 2 totsize= 0.693147
+H__7_7 odds = 1/1 0.462117 (10, 10)  try to replace
+H__7_7: replacing with value 0 bnd= 1 totsize= 0.693147
+H__16_10 odds = 1/5 0.099668 (2, 2)  try to replace
+H__16_10: replacing with value 29 bnd= 32 totsize= 4.15888
+H__19_10 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__19_10: replacing with value 1 bnd= 2 totsize= 4.85203
+H__11_7 odds = 1/0.555556 0.716298 (18, 18)  try to replace
+H__11_7: replacing with value 0 bnd= 2 totsize= 5.54518
+* Final Problem size: Problem nodes = 391
+Assert at main_int_0.sk:51 (1019248453668098139)
 ********  0	ftime= 0	ctime= 0
-Assert at main_int_0.sk:57 (-6049097958422876494)
+Assert at main_int_0.sk:51 (1019248453668098139)
+********  1	ftime= 0.002	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+Problem became UNSAT.61= ASSERT 60 : Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+******** FAILED ********
+* FIND TIME:  0 ms 0.002 ms
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.002 CHECK TIME 0.001 TOTAL TIME 0.003
+RESULT = 1  
+**ROUND 1 : 5.54518 Round time:  0.021 ms 
+RNDDEG = 10
+SUMMRY , 16, 153, 1279, 1427, 432
+ charness = 0
+POST-SUMMRY , 16, 153, 432, 1279, 1427
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 2
+H__21 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__21: replacing with value 0 bnd= 3 totsize= 1.09861
+H__20 odds = 1/5 0.099668 (1, 1)  try to replace
+H__20: replacing with value 1 bnd= 2 totsize= 1.79176
+H__12 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__12: replacing with value 0 bnd= 2 totsize= 2.48491
+H__7_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_7: replacing with value 0 bnd= 1 totsize= 2.48491
+H__9_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__9_7: replacing with value 0 bnd= 1 totsize= 2.48491
+H__2_8 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__2_8: replacing with value 0 bnd= 1 totsize= 2.48491
+H__7_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_9: replacing with value 0 bnd= 1 totsize= 2.48491
+H__15_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__15_10: replacing with value 0 bnd= 1 totsize= 2.48491
+H__17_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__17_10: replacing with value 0 bnd= 1 totsize= 2.48491
+* Final Problem size: Problem nodes = 240
+Assert at main_int_0.sk:194 (-2183990844100508298)
+********  0	ftime= 0	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+Problem became UNSAT.13= ASSERT (0) : Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+******** FAILED ********
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 2 : 2.48491 Round time:  0.02 ms 
+RNDDEG = 5
+SUMMRY , 7, 1141, 16, 153, 295, 443, 859, 1147, 1289
+ charness = 0
+POST-SUMMRY , 7, 16, 153, 295, 443, 859, 1141, 1147, 1289
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 3
+H__21 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__21: replacing with value 2 bnd= 3 totsize= 1.09861
+H__12 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__12: replacing with value 0 bnd= 2 totsize= 1.79176
+H__7_7 odds = 1/1 0.462117 (10, 10)  try to replace
+H__7_7: replacing with value 0 bnd= 1 totsize= 1.79176
+H__1_8 odds = 1/10 0.0499584 (0, 0)  try to replace
+H__1_8: replacing with value 1 bnd= 2 totsize= 2.48491
+H__7_9 odds = 1/1 0.462117 (10, 10)  try to replace
+H__7_9: replacing with value 0 bnd= 1 totsize= 2.48491
+H__15_10 odds = 1/1 0.462117 (10, 10)  try to replace
+H__15_10: replacing with value 0 bnd= 1 totsize= 2.48491
+H__16_10 odds = 1/5 0.099668 (2, 2)  try to replace
+H__16_10: replacing with value 20 bnd= 32 totsize= 5.95064
+H__17_10 odds = 1/1 0.462117 (10, 10)  try to replace
+H__17_10: replacing with value 0 bnd= 1 totsize= 5.95064
+H__18_10 odds = 1/5 0.099668 (2, 2)  try to replace
+H__18_10: replacing with value 12 bnd= 32 totsize= 9.41638
+* Final Problem size: Problem nodes = 316
+Assert at main_int_0.sk:51 (1019248453668098139)
+********  0	ftime= 0	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+Problem became UNSAT.26= ASSERT (0) : Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+******** FAILED ********
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 3 : 9.41638 Round time:  0.026 ms 
+RNDDEG = 10
+SUMMRY , 11, 16, 153, 437, 859, 1147, 1261, 1289, 1387
+ charness = 0
+POST-SUMMRY , 11, 16, 153, 437, 859, 1147, 1261, 1289, 1387
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 4
+Nothing read
+cur=5 next=10 scorecur=0 scorenext=3
+ Stay with what we had 5, 10
+Averages 0.161911, 3.72433
+H__20 odds = 1/5 0.099668 (1, 1)  try to replace
+H__20: replacing with value 0 bnd= 2 totsize= 0.693147
+H__12 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__12: replacing with value 0 bnd= 2 totsize= 1.38629
+H__7_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_7: replacing with value 0 bnd= 1 totsize= 1.38629
+H__8_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__8_7: replacing with value 19 bnd= 32 totsize= 4.85203
+H__9_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__9_7: replacing with value 0 bnd= 1 totsize= 4.85203
+H__11_7 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__11_7: replacing with value 1 bnd= 2 totsize= 5.54518
+H__0_8 odds = 1/5 0.099668 (0, 0)  try to replace
+H__0_8: replacing with value 1 bnd= 2 totsize= 6.23832
+H__1_8 odds = 1/5 0.099668 (0, 0)  try to replace
+H__1_8: replacing with value 1 bnd= 2 totsize= 6.93147
+H__2_8 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__2_8: replacing with value 0 bnd= 1 totsize= 6.93147
+H__3_8 odds = 1/5 0.099668 (1, 1)  try to replace
+H__3_8: replacing with value 16 bnd= 32 totsize= 10.3972
+H__4_8 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__4_8: replacing with value 0 bnd= 1 totsize= 10.3972
+H__7_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_9: replacing with value 0 bnd= 1 totsize= 10.3972
+H__8_9 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__8_9: replacing with value 28 bnd= 32 totsize= 13.8629
+H__9_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__9_9: replacing with value 0 bnd= 1 totsize= 13.8629
+H__15_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__15_10: replacing with value 0 bnd= 1 totsize= 13.8629
+H__17_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__17_10: replacing with value 0 bnd= 1 totsize= 13.8629
+H__19_10 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__19_10: replacing with value 0 bnd= 2 totsize= 14.5561
+* Final Problem size: Problem nodes = 139
+Assert at main_int_0.sk:194 (-2183990844100508298)
+********  0	ftime= 0	ctime= 0
+Assert at main_int_0.sk:51 (1019248453668098139)
+********  1	ftime= 0.001	ctime= 0
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+Problem became UNSAT.17= ASSERT (!8) : Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+******** FAILED ********
+* FIND TIME:  0.001 ms 0.002 ms
+* CHECK TIME:  0 ms 
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.002 CHECK TIME 0 TOTAL TIME 0.002
+RESULT = 1  
+**ROUND 4 : 14.5561 Round time:  0.021 ms 
+RNDDEG = 5
+SUMMRY , 1140, 16, 153, 265, 295, 433, 435, 437, 443, 549, 585, 859, 989, 1001, 1147, 1289, 1426
+ charness = 0
+POST-SUMMRY , 16, 153, 265, 295, 433, 435, 437, 443, 549, 585, 859, 989, 1001, 1140, 1147, 1289, 1426
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 5
+H__12 odds = 1/0.37037 0.874053 (27, 27)  try to replace
+H__12: replacing with value 0 bnd= 2 totsize= 0.693147
+H__7_7 odds = 1/1 0.462117 (10, 10)  try to replace
+H__7_7: replacing with value 0 bnd= 1 totsize= 0.693147
+H__9_7 odds = 1/1 0.462117 (10, 10)  try to replace
+H__9_7: replacing with value 0 bnd= 1 totsize= 0.693147
+H__4_8 odds = 1/1.25 0.379949 (8, 8)  try to replace
+H__4_8: replacing with value 0 bnd= 1 totsize= 0.693147
+H__7_9 odds = 1/1 0.462117 (10, 10)  try to replace
+H__7_9: replacing with value 0 bnd= 1 totsize= 0.693147
+H__15_10 odds = 1/1 0.462117 (10, 10)  try to replace
+H__15_10: replacing with value 0 bnd= 1 totsize= 0.693147
+H__19_10 odds = 1/2.5 0.197375 (4, 4)  try to replace
+H__19_10: replacing with value 0 bnd= 2 totsize= 1.38629
+* Final Problem size: Problem nodes = 264
+Assert at main_int_0.sk:194 (-2183990844100508298)
+********  0	ftime= 0	ctime= 0
+Assert at main_int_0.sk:51 (1019248453668098139)
 ********  1	ftime= 0.001	ctime= 0.001
-  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:57 (-6049097958422876494)
-  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:57 (-6049097958422876494)
-Problem became UNSAT.13= ASSERT (0) : Assert at main_int_0.sk:57 (-6049097958422876494)
-  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:57 (-6049097958422876494)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+Problem became UNSAT.44= ASSERT (!8) : Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
 ******** FAILED ********
 * FIND TIME:  0 ms 0.001 ms
 * CHECK TIME:  0.001 ms 
  *FAILED IN 2 iterations.
  *FIND TIME 0.001 CHECK TIME 0.001 TOTAL TIME 0.002
 RESULT = 1  
-**ROUND 0 : 9.41638 Round time:  0.015 ms 
-RNDDEG = 5
-SUMMRY , 7, 16, 153, 295, 425, 435, 443, 585, 1001, 1147, 1253, 1289
+**ROUND 5 : 1.38629 Round time:  0.012 ms 
+RNDDEG = 10
+SUMMRY , 16, 153, 295, 585, 859, 1147, 1426
  charness = 0
-POST-SUMMRY , 7, 16, 153, 295, 425, 435, 443, 585, 1001, 1147, 1253, 1289
+POST-SUMMRY , 16, 153, 295, 585, 859, 1147, 1426
 TRAIL: 
 ALLOK
 ALLRESET
-ATTEMPT 1
-H__12 odds = 1/0.357143 0.885352 (28, 28)  try to replace
+ATTEMPT 6
+H__12 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__12: replacing with value 1 bnd= 2 totsize= 0.693147
+H__7_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_7: replacing with value 0 bnd= 1 totsize= 0.693147
+H__9_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__9_7: replacing with value 0 bnd= 1 totsize= 0.693147
+H__10_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__10_7: replacing with value 19 bnd= 32 totsize= 4.15888
+H__7_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_9: replacing with value 0 bnd= 1 totsize= 4.15888
+H__9_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__9_9: replacing with value 0 bnd= 1 totsize= 4.15888
+* Final Problem size: Problem nodes = 361
+Assert at main_int_0.sk:81 (4643983314059327999)
+********  0	ftime= 0	ctime= 0.001
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+Problem became UNSAT.52= ASSERT 51 : Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+******** FAILED ********
+* FIND TIME:  0 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0 CHECK TIME 0.001 TOTAL TIME 0.001
+RESULT = 1  
+**ROUND 6 : 4.15888 Round time:  0.017 ms 
+RNDDEG = 5
+SUMMRY , 17, 153, 295, 407, 859, 1001
+ charness = 0
+POST-SUMMRY , 17, 153, 295, 407, 859, 1001
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 7
+H__12 odds = 1/0.37037 0.874053 (27, 27)  try to replace
 H__12: replacing with value 0 bnd= 2 totsize= 0.693147
-H__8_7 odds = 1/5 0.099668 (2, 2)  try to replace
-H__8_7: replacing with value 8 bnd= 32 totsize= 4.15888
+H__13 odds = 1/10 0.0499584 (1, 1)  try to replace
+H__13: replacing with value 9 bnd= 32 totsize= 4.15888
+H__7_7 odds = 1/1 0.462117 (10, 10)  try to replace
+H__7_7: replacing with value 0 bnd= 1 totsize= 4.15888
 H__9_7 odds = 1/1 0.462117 (10, 10)  try to replace
 H__9_7: replacing with value 0 bnd= 1 totsize= 4.15888
-H__0_8 odds = 1/3.33333 0.148885 (3, 3)  try to replace
-H__0_8: replacing with value 0 bnd= 2 totsize= 4.85203
 H__2_8 odds = 1/1.25 0.379949 (8, 8)  try to replace
-H__2_8: replacing with value 0 bnd= 1 totsize= 4.85203
-H__16_10 odds = 1/5 0.099668 (2, 2)  try to replace
-H__16_10: replacing with value 10 bnd= 32 totsize= 8.31777
-H__17_10 odds = 1/1 0.462117 (10, 10)  try to replace
-H__17_10: replacing with value 0 bnd= 1 totsize= 8.31777
-H__19_10 odds = 1/2.5 0.197375 (4, 4)  try to replace
-H__19_10: replacing with value 1 bnd= 2 totsize= 9.01091
-* Final Problem size: Problem nodes = 341
-regen H__21
+H__2_8: replacing with value 0 bnd= 1 totsize= 4.15888
+H__4_8 odds = 1/1.25 0.379949 (8, 8)  try to replace
+H__4_8: replacing with value 0 bnd= 1 totsize= 4.15888
+H__14 odds = 1/10 0.0499584 (1, 1)  try to replace
+H__14: replacing with value 25 bnd= 32 totsize= 7.62462
+H__9_9 odds = 1/1 0.462117 (10, 10)  try to replace
+H__9_9: replacing with value 0 bnd= 1 totsize= 7.62462
+H__15_10 odds = 1/1 0.462117 (10, 10)  try to replace
+H__15_10: replacing with value 0 bnd= 1 totsize= 7.62462
+H__11_7 odds = 1/0.588235 0.691069 (17, 17)  try to replace
+H__11_7: replacing with value 1 bnd= 2 totsize= 8.31777
+* Final Problem size: Problem nodes = 270
+Assert at main_int_0.sk:194 (-2183990844100508298)
 ********  0	ftime= 0	ctime= 0.001
-Assert at main_int_0.sk:202 (5039098793636284918)
-********  1	ftime= 0.009	ctime= 0.001
-Assert at main_int_0.sk:57 (-6049097958422876494)
-********  2	ftime= 0.005	ctime= 0.001
-Assert at main_int_0.sk:57 (-6049097958422876494)
-********  3	ftime= 0.004	ctime= 0.001
-After all optim
-********  4	ftime= 0.002	ctime= 0.003
- *GOT THE CORRECT ANSWER IN 5 iterations.
- *FIND TIME 0.02 CHECK TIME 0.007 TOTAL TIME 0.027
-RESULT = 0  
-**ROUND 1 : 9.01091 Round time:  0.037 ms 
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:194 (-2183990844100508298)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:194 (-2183990844100508298)
+Problem became UNSAT.10= ASSERT (0) : Assert at main_int_0.sk:194 (-2183990844100508298)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:194 (-2183990844100508298)
+******** FAILED ********
+* FIND TIME:  0.002 ms 
+* CHECK TIME:  0.001 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.002 CHECK TIME 0.001 TOTAL TIME 0.003
+RESULT = 1  
+**ROUND 7 : 8.31777 Round time:  0.017 ms 
 RNDDEG = 10
+SUMMRY , 16, 103, 153, 295, 443, 585, 841, 1001, 1147, 433
+ charness = 0
+POST-SUMMRY , 16, 103, 153, 295, 433, 443, 585, 841, 1001, 1147
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 8
+H__21 odds = 1/1.25 0.379949 (4, 4)  try to replace
+H__21: replacing with value 1 bnd= 3 totsize= 1.09861
+H__12 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__12: replacing with value 0 bnd= 2 totsize= 1.79176
+H__7_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_7: replacing with value 0 bnd= 1 totsize= 1.79176
+H__9_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__9_7: replacing with value 0 bnd= 1 totsize= 1.79176
+H__10_7 odds = 1/2.5 0.197375 (2, 2)  try to replace
+H__10_7: replacing with value 26 bnd= 32 totsize= 5.2575
+H__0_8 odds = 1/5 0.099668 (0, 0)  try to replace
+H__0_8: replacing with value 1 bnd= 2 totsize= 5.95064
+H__2_8 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__2_8: replacing with value 0 bnd= 1 totsize= 5.95064
+H__4_8 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__4_8: replacing with value 0 bnd= 1 totsize= 5.95064
+H__7_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_9: replacing with value 0 bnd= 1 totsize= 5.95064
+H__9_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__9_9: replacing with value 0 bnd= 1 totsize= 5.95064
+H__15_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__15_10: replacing with value 0 bnd= 1 totsize= 5.95064
+H__17_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__17_10: replacing with value 0 bnd= 1 totsize= 5.95064
+H__19_10 odds = 1/0.277778 0.946806 (18, 18)  try to replace
+H__19_10: replacing with value 1 bnd= 2 totsize= 6.64379
+* Final Problem size: Problem nodes = 204
+Assert at main_int_0.sk:49 (-1917003822300690994)
+********  0	ftime= 0	ctime= 0.002
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:49 (-1917003822300690994)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:49 (-1917003822300690994)
+Problem became UNSAT.1= ASSERT (0) : Assert at main_int_0.sk:49 (-1917003822300690994)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:49 (-1917003822300690994)
+******** FAILED ********
+* FIND TIME:  0.001 ms 
+* CHECK TIME:  0.002 ms 
+ *FAILED IN 1 iterations.
+ *FIND TIME 0.001 CHECK TIME 0.002 TOTAL TIME 0.003
+RESULT = 1  
+**ROUND 8 : 6.64379 Round time:  0.013 ms 
+RNDDEG = 5
+SUMMRY , 9, 16, 153, 295, 421, 435, 443, 585, 859, 1001, 1147, 1289
+ charness = 0
+POST-SUMMRY , 9, 16, 153, 295, 421, 435, 443, 585, 859, 1001, 1147, 1289
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 9
+Nothing read
+cur=5 next=20 scorecur=2 scorenext=0
+Switch because next is better
+Averages 0, 2.6804
+H__12 odds = 1/0.185185 0.991007 (27, 27)  try to replace
+H__12: replacing with value 0 bnd= 2 totsize= 0.693147
+H__7_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_7: replacing with value 0 bnd= 1 totsize= 0.693147
+H__9_7 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__9_7: replacing with value 0 bnd= 1 totsize= 0.693147
+H__2_8 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__2_8: replacing with value 0 bnd= 1 totsize= 0.693147
+H__4_8 odds = 1/0.625 0.664037 (8, 8)  try to replace
+H__4_8: replacing with value 0 bnd= 1 totsize= 0.693147
+H__7_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__7_9: replacing with value 0 bnd= 1 totsize= 0.693147
+H__9_9 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__9_9: replacing with value 0 bnd= 1 totsize= 0.693147
+H__11_9 odds = 1/1.66667 0.291313 (3, 3)  try to replace
+H__11_9: replacing with value 1 bnd= 2 totsize= 1.38629
+H__15_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__15_10: replacing with value 0 bnd= 1 totsize= 1.38629
+H__17_10 odds = 1/0.5 0.761594 (10, 10)  try to replace
+H__17_10: replacing with value 0 bnd= 1 totsize= 1.38629
+H__19_10 odds = 1/0.277778 0.946806 (18, 18)  try to replace
+H__19_10: replacing with value 1 bnd= 2 totsize= 2.07944
+* Final Problem size: Problem nodes = 212
+Assert at main_int_0.sk:194 (-2183990844100508298)
+********  0	ftime= 0	ctime= 0
+Assert at main_int_0.sk:51 (1019248453668098139)
+********  1	ftime= 0.001	ctime= 0.002
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+Problem became UNSAT.31= ASSERT 30 : Assert at main_int_0.sk:51 (1019248453668098139)
+  UNSATISFIABLE ASSERTION Assert at main_int_0.sk:51 (1019248453668098139)
+******** FAILED ********
+* FIND TIME:  0.001 ms 0.002 ms
+* CHECK TIME:  0.002 ms 
+ *FAILED IN 2 iterations.
+ *FIND TIME 0.002 CHECK TIME 0.002 TOTAL TIME 0.004
+RESULT = 1  
+**ROUND 9 : 2.07944 Round time:  0.017 ms 
+RNDDEG = 5
+SUMMRY , 16, 153, 295, 443, 585, 859, 1001, 1139, 1147, 1289
+ charness = 0
+POST-SUMMRY , 16, 153, 295, 443, 585, 859, 1001, 1139, 1147, 1289
+TRAIL: 
+ALLOK
+ALLRESET
+ATTEMPT 10
+H__0_8 odds = 1/20 0.0249948 (0, 0)  try to replace
+H__0_8: replacing with value 1 bnd= 2 totsize= 0.693147
+H__4_8 odds = 1/2.5 0.197375 (8, 8)  try to replace
+H__4_8: replacing with value 0 bnd= 1 totsize= 0.693147
+H__11_7 odds = 1/1.33333 0.358357 (15, 15)  try to replace
+H__11_7: replacing with value 0 bnd= 2 totsize= 1.38629
+* Final Problem size: Problem nodes = 753
+Assert at main_int_0.sk:51 (1019248453668098139)
+********  0	ftime= 0	ctime= 0.001
+Assert at main_int_0.sk:51 (1019248453668098139)
+********  1	ftime= 0.012	ctime= 0.001
+Assert at main_int_0.sk:51 (1019248453668098139)
+********  2	ftime= 0.003	ctime= 0.003
+Assert at main_int_0.sk:51 (1019248453668098139)
+********  3	ftime= 0.007	ctime= 0.001
+After all optim
+********  4	ftime= 0.003	ctime= 0.006
+ *GOT THE CORRECT ANSWER IN 5 iterations.
+ *FIND TIME 0.025 CHECK TIME 0.012 TOTAL TIME 0.037
+RESULT = 0  
+**ROUND 10 : 1.38629 Round time:  0.057 ms 
+RNDDEG = 20
 return 0
 
 ----- Statistics -----
-Total elapsed time (ms):  0.074
-Model building time (ms): 0.016
-Solution time (ms):       0.056
-Max virtual mem (bytes):  96907264
-Max resident mem (bytes): 2011136
-Max private mem (bytes):  95084544
+Total elapsed time (ms):  0.272
+Model building time (ms): 0.018
+Solution time (ms):       0.243
+Max virtual mem (bytes):  98177024
+Max resident mem (bytes): 5758976
+Max private mem (bytes):  93794304
 ALL CORRECT
 
 [SATBackend] === parallel trial w/ degree -1 (0) solved ===
@@ -109,9 +475,9 @@ ALL CORRECT
 /* BEGIN PACKAGE ANONYMOUS*/
 struct Sum {
 }
-/*main_int_0.sk:30*/
+/*main_int_0.sk:29*/
 
-void _main (int[14] intSet, int csg_test_val1, int csg_test_val2, ref global bit CASPER_FALSE__ANONYMOUS_s65, ref global bit CASPER_TRUE__ANONYMOUS_s66, ref global bit[2] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s139, ref global bit[2] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s140, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s141, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s133, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s81, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s142, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s134, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s82, ref global bit loop0__ANONYMOUS_s67, ref global bit[1] mapExp_c0__ANONYMOUS_s143, ref global bit[2] mapExp_v0__ANONYMOUS_s135, ref global bit[2] reduceExp0__ANONYMOUS_s83)/*main_int_0.sk:30*/
+void _main (int[14] intSet, int csg_test_val1, int csg_test_val2, ref global bit CASPER_FALSE__ANONYMOUS_s65, ref global bit CASPER_TRUE__ANONYMOUS_s66, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s133, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s134, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s135, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s127, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s79, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s136, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s128, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s80, ref global bit[1] mapExp_c0__ANONYMOUS_s137, ref global bit[2] mapExp_v0__ANONYMOUS_s129, ref global bit[2] reduceExp0__ANONYMOUS_s81)/*main_int_0.sk:29*/
 {
   int[3] data = {0,0,0};
   data[0] = intSet[12];
@@ -119,222 +485,217 @@ void _main (int[14] intSet, int csg_test_val1, int csg_test_val2, ref global bit
   data[2] = intSet[10];
   CASPER_TRUE__ANONYMOUS_s66 = 1;
   CASPER_FALSE__ANONYMOUS_s65 = 0;
-  loop0__ANONYMOUS_s67 = 0;
-  int i;
-  i = intSet[9];
   bit _out_s35 = 0;
-  loopInvariant(data, 0, 0, 0, 0, _out_s35, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s139, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s140, _term_flag_int_terminal0_map_c0__ANONYMOUS_s141, _term_flag_int_terminal0_map_v0__ANONYMOUS_s133, _term_flag_int_terminal0_reduce0__ANONYMOUS_s81, _term_flag_int_terminal1_map_c0__ANONYMOUS_s142, _term_flag_int_terminal1_map_v0__ANONYMOUS_s134, _term_flag_int_terminal1_reduce0__ANONYMOUS_s82, loop0__ANONYMOUS_s67, mapExp_c0__ANONYMOUS_s143, mapExp_v0__ANONYMOUS_s135, reduceExp0__ANONYMOUS_s83);
-  assert (_out_s35); //Assert at main_int_0.sk:51 (3954518708735128829)
+  loopInvariant(data, 0, 0, 0, 0, _out_s35, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s133, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s134, _term_flag_int_terminal0_map_c0__ANONYMOUS_s135, _term_flag_int_terminal0_map_v0__ANONYMOUS_s127, _term_flag_int_terminal0_reduce0__ANONYMOUS_s79, _term_flag_int_terminal1_map_c0__ANONYMOUS_s136, _term_flag_int_terminal1_map_v0__ANONYMOUS_s128, _term_flag_int_terminal1_reduce0__ANONYMOUS_s80, mapExp_c0__ANONYMOUS_s137, mapExp_v0__ANONYMOUS_s129, reduceExp0__ANONYMOUS_s81);
+  assert (_out_s35); //Assert at main_int_0.sk:49 (-1917003822300690994)
   bit _pac_sc_s36_s38 = 0;
-  loopInvariant(data, intSet[13], 0, i, 0, _pac_sc_s36_s38, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s139, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s140, _term_flag_int_terminal0_map_c0__ANONYMOUS_s141, _term_flag_int_terminal0_map_v0__ANONYMOUS_s133, _term_flag_int_terminal0_reduce0__ANONYMOUS_s81, _term_flag_int_terminal1_map_c0__ANONYMOUS_s142, _term_flag_int_terminal1_map_v0__ANONYMOUS_s134, _term_flag_int_terminal1_reduce0__ANONYMOUS_s82, loop0__ANONYMOUS_s67, mapExp_c0__ANONYMOUS_s143, mapExp_v0__ANONYMOUS_s135, reduceExp0__ANONYMOUS_s83);
+  loopInvariant(data, intSet[13], 0, intSet[9], 0, _pac_sc_s36_s38, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s133, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s134, _term_flag_int_terminal0_map_c0__ANONYMOUS_s135, _term_flag_int_terminal0_map_v0__ANONYMOUS_s127, _term_flag_int_terminal0_reduce0__ANONYMOUS_s79, _term_flag_int_terminal1_map_c0__ANONYMOUS_s136, _term_flag_int_terminal1_map_v0__ANONYMOUS_s128, _term_flag_int_terminal1_reduce0__ANONYMOUS_s80, mapExp_c0__ANONYMOUS_s137, mapExp_v0__ANONYMOUS_s129, reduceExp0__ANONYMOUS_s81);
   bit _pac_sc_s36;
   _pac_sc_s36 = _pac_sc_s36_s38;
-  if(_pac_sc_s36_s38)/*main_int_0.sk:52*/
+  if(_pac_sc_s36_s38)/*main_int_0.sk:50*/
   {
-    _pac_sc_s36 = i < 3;
+    _pac_sc_s36 = (intSet[9]) < 3;
   }
-  if(_pac_sc_s36)/*main_int_0.sk:52*/
+  if(_pac_sc_s36)/*main_int_0.sk:50*/
   {
-    int ind_sum = (intSet[13]) + (data[i]);
     bit _out_s40 = 0;
-    loopInvariant(data, ind_sum, 0, i + 1, 0, _out_s40, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s139, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s140, _term_flag_int_terminal0_map_c0__ANONYMOUS_s141, _term_flag_int_terminal0_map_v0__ANONYMOUS_s133, _term_flag_int_terminal0_reduce0__ANONYMOUS_s81, _term_flag_int_terminal1_map_c0__ANONYMOUS_s142, _term_flag_int_terminal1_map_v0__ANONYMOUS_s134, _term_flag_int_terminal1_reduce0__ANONYMOUS_s82, loop0__ANONYMOUS_s67, mapExp_c0__ANONYMOUS_s143, mapExp_v0__ANONYMOUS_s135, reduceExp0__ANONYMOUS_s83);
-    assert (_out_s40); //Assert at main_int_0.sk:57 (-6049097958422876494)
+    loopInvariant(data, (intSet[13]) + (data[intSet[9]]), 0, (intSet[9]) + 1, 0, _out_s40, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s133, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s134, _term_flag_int_terminal0_map_c0__ANONYMOUS_s135, _term_flag_int_terminal0_map_v0__ANONYMOUS_s127, _term_flag_int_terminal0_reduce0__ANONYMOUS_s79, _term_flag_int_terminal1_map_c0__ANONYMOUS_s136, _term_flag_int_terminal1_map_v0__ANONYMOUS_s128, _term_flag_int_terminal1_reduce0__ANONYMOUS_s80, mapExp_c0__ANONYMOUS_s137, mapExp_v0__ANONYMOUS_s129, reduceExp0__ANONYMOUS_s81);
+    assert (_out_s40); //Assert at main_int_0.sk:51 (1019248453668098139)
   }
   bit _pac_sc_s41_s43 = 0;
-  loopInvariant(data, intSet[13], 0, i, 0, _pac_sc_s41_s43, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s139, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s140, _term_flag_int_terminal0_map_c0__ANONYMOUS_s141, _term_flag_int_terminal0_map_v0__ANONYMOUS_s133, _term_flag_int_terminal0_reduce0__ANONYMOUS_s81, _term_flag_int_terminal1_map_c0__ANONYMOUS_s142, _term_flag_int_terminal1_map_v0__ANONYMOUS_s134, _term_flag_int_terminal1_reduce0__ANONYMOUS_s82, loop0__ANONYMOUS_s67, mapExp_c0__ANONYMOUS_s143, mapExp_v0__ANONYMOUS_s135, reduceExp0__ANONYMOUS_s83);
+  loopInvariant(data, intSet[13], 0, intSet[9], 0, _pac_sc_s41_s43, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s133, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s134, _term_flag_int_terminal0_map_c0__ANONYMOUS_s135, _term_flag_int_terminal0_map_v0__ANONYMOUS_s127, _term_flag_int_terminal0_reduce0__ANONYMOUS_s79, _term_flag_int_terminal1_map_c0__ANONYMOUS_s136, _term_flag_int_terminal1_map_v0__ANONYMOUS_s128, _term_flag_int_terminal1_reduce0__ANONYMOUS_s80, mapExp_c0__ANONYMOUS_s137, mapExp_v0__ANONYMOUS_s129, reduceExp0__ANONYMOUS_s81);
   bit _pac_sc_s41;
   _pac_sc_s41 = _pac_sc_s41_s43;
-  if(_pac_sc_s41_s43)/*main_int_0.sk:61*/
+  if(_pac_sc_s41_s43)/*main_int_0.sk:55*/
   {
-    _pac_sc_s41 = !(i < 3);
+    _pac_sc_s41 = !((intSet[9]) < 3);
   }
-  if(_pac_sc_s41)/*main_int_0.sk:61*/
+  if(_pac_sc_s41)/*main_int_0.sk:55*/
   {
     bit _out_s45 = 0;
-    postCondition(data, intSet[13], 0, i, 0, _out_s45, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s139, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s140, _term_flag_int_terminal0_map_c0__ANONYMOUS_s141, _term_flag_int_terminal0_map_v0__ANONYMOUS_s133, _term_flag_int_terminal0_reduce0__ANONYMOUS_s81, _term_flag_int_terminal1_map_c0__ANONYMOUS_s142, _term_flag_int_terminal1_map_v0__ANONYMOUS_s134, _term_flag_int_terminal1_reduce0__ANONYMOUS_s82, loop0__ANONYMOUS_s67, mapExp_c0__ANONYMOUS_s143, mapExp_v0__ANONYMOUS_s135, reduceExp0__ANONYMOUS_s83);
-    assert (_out_s45); //Assert at main_int_0.sk:62 (5564128916200905217)
+    postCondition(data, intSet[13], 0, intSet[9], 0, _out_s45, CASPER_FALSE__ANONYMOUS_s65, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s133, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s134, _term_flag_int_terminal0_map_c0__ANONYMOUS_s135, _term_flag_int_terminal0_map_v0__ANONYMOUS_s127, _term_flag_int_terminal0_reduce0__ANONYMOUS_s79, _term_flag_int_terminal1_map_c0__ANONYMOUS_s136, _term_flag_int_terminal1_map_v0__ANONYMOUS_s128, _term_flag_int_terminal1_reduce0__ANONYMOUS_s80, mapExp_c0__ANONYMOUS_s137, mapExp_v0__ANONYMOUS_s129, reduceExp0__ANONYMOUS_s81);
+    assert (_out_s45); //Assert at main_int_0.sk:56 (7186899653178023580)
   }
 }
 /*main_int_0.sk:20*/
 
-void glblInit__term_flag_bit_terminal0_map_c0__ANONYMOUS_s159 (ref bit[2] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s158)/*main_int_0.sk:20*/
+void glblInit__term_flag_bit_terminal0_map_c0__ANONYMOUS_s152 (ref bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s151)/*main_int_0.sk:20*/
 {
-  _term_flag_bit_terminal0_map_c0__ANONYMOUS_s158 = ((bit[2]){0});
+  _term_flag_bit_terminal0_map_c0__ANONYMOUS_s151 = {0};
 }
 /*main_int_0.sk:16*/
 
-void glblInit__term_flag_bit_terminal1_map_c0__ANONYMOUS_s161 (ref bit[2] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s160)/*main_int_0.sk:16*/
+void glblInit__term_flag_bit_terminal1_map_c0__ANONYMOUS_s154 (ref bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s153)/*main_int_0.sk:16*/
 {
-  _term_flag_bit_terminal1_map_c0__ANONYMOUS_s160 = ((bit[2]){0});
+  _term_flag_bit_terminal1_map_c0__ANONYMOUS_s153 = {0};
 }
 /*main_int_0.sk:18*/
 
-void glblInit__term_flag_int_terminal0_map_c0__ANONYMOUS_s163 (ref bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s162)/*main_int_0.sk:18*/
+void glblInit__term_flag_int_terminal0_map_c0__ANONYMOUS_s156 (ref bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s155)/*main_int_0.sk:18*/
 {
-  _term_flag_int_terminal0_map_c0__ANONYMOUS_s162 = ((bit[3]){0});
+  _term_flag_int_terminal0_map_c0__ANONYMOUS_s155 = ((bit[3]){0});
 }
 /*main_int_0.sk:13*/
 
-void glblInit__term_flag_int_terminal0_map_v0__ANONYMOUS_s165 (ref bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s164)/*main_int_0.sk:13*/
+void glblInit__term_flag_int_terminal0_map_v0__ANONYMOUS_s158 (ref bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s157)/*main_int_0.sk:13*/
 {
-  _term_flag_int_terminal0_map_v0__ANONYMOUS_s164 = ((bit[3]){0});
+  _term_flag_int_terminal0_map_v0__ANONYMOUS_s157 = ((bit[3]){0});
 }
 /*main_int_0.sk:15*/
 
-void glblInit__term_flag_int_terminal0_reduce0__ANONYMOUS_s167 (ref bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s166)/*main_int_0.sk:15*/
+void glblInit__term_flag_int_terminal0_reduce0__ANONYMOUS_s160 (ref bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s159)/*main_int_0.sk:15*/
 {
-  _term_flag_int_terminal0_reduce0__ANONYMOUS_s166 = ((bit[3]){0});
+  _term_flag_int_terminal0_reduce0__ANONYMOUS_s159 = ((bit[3]){0});
 }
 /*main_int_0.sk:19*/
 
-void glblInit__term_flag_int_terminal1_map_c0__ANONYMOUS_s169 (ref bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s168)/*main_int_0.sk:19*/
+void glblInit__term_flag_int_terminal1_map_c0__ANONYMOUS_s162 (ref bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s161)/*main_int_0.sk:19*/
 {
-  _term_flag_int_terminal1_map_c0__ANONYMOUS_s168 = ((bit[3]){0});
+  _term_flag_int_terminal1_map_c0__ANONYMOUS_s161 = ((bit[3]){0});
 }
 /*main_int_0.sk:11*/
 
-void glblInit__term_flag_int_terminal1_map_v0__ANONYMOUS_s171 (ref bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s170)/*main_int_0.sk:11*/
+void glblInit__term_flag_int_terminal1_map_v0__ANONYMOUS_s164 (ref bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s163)/*main_int_0.sk:11*/
 {
-  _term_flag_int_terminal1_map_v0__ANONYMOUS_s170 = ((bit[3]){0});
+  _term_flag_int_terminal1_map_v0__ANONYMOUS_s163 = ((bit[3]){0});
 }
 /*main_int_0.sk:21*/
 
-void glblInit__term_flag_int_terminal1_reduce0__ANONYMOUS_s173 (ref bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s172)/*main_int_0.sk:21*/
+void glblInit__term_flag_int_terminal1_reduce0__ANONYMOUS_s166 (ref bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s165)/*main_int_0.sk:21*/
 {
-  _term_flag_int_terminal1_reduce0__ANONYMOUS_s172 = ((bit[3]){0});
+  _term_flag_int_terminal1_reduce0__ANONYMOUS_s165 = ((bit[3]){0});
 }
 /*main_int_0.sk:14*/
 
-void glblInit_mapExp_c0__ANONYMOUS_s175 (ref bit[1] mapExp_c0__ANONYMOUS_s174)/*main_int_0.sk:14*/
+void glblInit_mapExp_c0__ANONYMOUS_s168 (ref bit[1] mapExp_c0__ANONYMOUS_s167)/*main_int_0.sk:14*/
 {
-  mapExp_c0__ANONYMOUS_s174 = {0};
+  mapExp_c0__ANONYMOUS_s167 = {0};
 }
 /*main_int_0.sk:12*/
 
-void glblInit_mapExp_v0__ANONYMOUS_s177 (ref bit[2] mapExp_v0__ANONYMOUS_s176)/*main_int_0.sk:12*/
+void glblInit_mapExp_v0__ANONYMOUS_s170 (ref bit[2] mapExp_v0__ANONYMOUS_s169)/*main_int_0.sk:12*/
 {
-  mapExp_v0__ANONYMOUS_s176 = ((bit[2]){0});
+  mapExp_v0__ANONYMOUS_s169 = ((bit[2]){0});
 }
 /*main_int_0.sk:17*/
 
-void glblInit_reduceExp0__ANONYMOUS_s179 (ref bit[2] reduceExp0__ANONYMOUS_s178)/*main_int_0.sk:17*/
+void glblInit_reduceExp0__ANONYMOUS_s172 (ref bit[2] reduceExp0__ANONYMOUS_s171)/*main_int_0.sk:17*/
 {
-  reduceExp0__ANONYMOUS_s178 = ((bit[2]){0});
+  reduceExp0__ANONYMOUS_s171 = ((bit[2]){0});
 }
-/*main_int_0.sk:171*/
+/*main_int_0.sk:163*/
 
-void init_sum (int sum0, ref int _out)/*main_int_0.sk:171*/
+void init_sum (int sum0, ref int _out)/*main_int_0.sk:163*/
 {
   _out = 0;
-  _out = 0;
+  _out = sum0;
   return;
 }
-/*main_int_0.sk:75*/
+/*main_int_0.sk:69*/
 
-void loopInvariant (int[3] data, int sum, int sum0, int i, int i0, ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s90, ref global bit[2] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s91, ref global bit[2] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s92, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s93, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s97, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s144, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s94, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s98, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s145, ref global bit loop0__ANONYMOUS_s95, ref global bit[1] mapExp_c0__ANONYMOUS_s96, ref global bit[2] mapExp_v0__ANONYMOUS_s99, ref global bit[2] reduceExp0__ANONYMOUS_s146)/*main_int_0.sk:75*/
+void loopInvariant (int[3] data, int sum, int sum0, int casper_index, int casper_index0, ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s88, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s89, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s90, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s91, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s94, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s138, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s92, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s95, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s139, ref global bit[1] mapExp_c0__ANONYMOUS_s93, ref global bit[2] mapExp_v0__ANONYMOUS_s96, ref global bit[2] reduceExp0__ANONYMOUS_s140)/*main_int_0.sk:69*/
 {
   _out = 0;
   int[1] casper_r = {0};
   casper_r[0] = sum;
-  bit _pac_sc_s62 = (i0 <= i) && (i <= 3);
-  if(_pac_sc_s62)/*main_int_0.sk:78*/
+  bit _pac_sc_s62 = (casper_index0 <= casper_index) && (casper_index <= 3);
+  if(_pac_sc_s62)/*main_int_0.sk:72*/
   {
     int[1] _pac_sc_s62_s64 = {0};
-    reduce(data, sum, sum0, i, i0, _pac_sc_s62_s64, CASPER_FALSE__ANONYMOUS_s90, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s91, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s92, _term_flag_int_terminal0_map_c0__ANONYMOUS_s93, _term_flag_int_terminal0_map_v0__ANONYMOUS_s97, _term_flag_int_terminal0_reduce0__ANONYMOUS_s144, _term_flag_int_terminal1_map_c0__ANONYMOUS_s94, _term_flag_int_terminal1_map_v0__ANONYMOUS_s98, _term_flag_int_terminal1_reduce0__ANONYMOUS_s145, loop0__ANONYMOUS_s95, mapExp_c0__ANONYMOUS_s96, mapExp_v0__ANONYMOUS_s99, reduceExp0__ANONYMOUS_s146);
+    reduce(data, sum, sum0, casper_index, casper_index0, _pac_sc_s62_s64, CASPER_FALSE__ANONYMOUS_s88, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s89, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s90, _term_flag_int_terminal0_map_c0__ANONYMOUS_s91, _term_flag_int_terminal0_map_v0__ANONYMOUS_s94, _term_flag_int_terminal0_reduce0__ANONYMOUS_s138, _term_flag_int_terminal1_map_c0__ANONYMOUS_s92, _term_flag_int_terminal1_map_v0__ANONYMOUS_s95, _term_flag_int_terminal1_reduce0__ANONYMOUS_s139, mapExp_c0__ANONYMOUS_s93, mapExp_v0__ANONYMOUS_s96, reduceExp0__ANONYMOUS_s140);
     _pac_sc_s62 = _pac_sc_s62_s64 == casper_r;
   }
   _out = _pac_sc_s62;
   return;
 }
-/*main_int_0.sk:30*/
+/*main_int_0.sk:29*/
 
-void main__Wrapper (int[14] intSet, int csg_test_val1, int csg_test_val2)  implements main__WrapperNospec/*main_int_0.sk:30*/
+void main__Wrapper (int[14] intSet, int csg_test_val1, int csg_test_val2)  implements main__WrapperNospec/*main_int_0.sk:29*/
 {
-  global bit[2] reduceExp0__ANONYMOUS_s122 = {0,0};
-  glblInit_reduceExp0__ANONYMOUS_s179(reduceExp0__ANONYMOUS_s122);
-  global bit[2] mapExp_v0__ANONYMOUS_s119 = {0,0};
-  glblInit_mapExp_v0__ANONYMOUS_s177(mapExp_v0__ANONYMOUS_s119);
-  global bit[1] mapExp_c0__ANONYMOUS_s118 = {0};
-  glblInit_mapExp_c0__ANONYMOUS_s175(mapExp_c0__ANONYMOUS_s118);
-  global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s121 = {0,0,0};
-  glblInit__term_flag_int_terminal1_reduce0__ANONYMOUS_s173(_term_flag_int_terminal1_reduce0__ANONYMOUS_s121);
-  global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s116 = {0,0,0};
-  glblInit__term_flag_int_terminal1_map_v0__ANONYMOUS_s171(_term_flag_int_terminal1_map_v0__ANONYMOUS_s116);
-  global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s115 = {0,0,0};
-  glblInit__term_flag_int_terminal1_map_c0__ANONYMOUS_s169(_term_flag_int_terminal1_map_c0__ANONYMOUS_s115);
-  global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s120 = {0,0,0};
-  glblInit__term_flag_int_terminal0_reduce0__ANONYMOUS_s167(_term_flag_int_terminal0_reduce0__ANONYMOUS_s120);
-  global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s114 = {0,0,0};
-  glblInit__term_flag_int_terminal0_map_v0__ANONYMOUS_s165(_term_flag_int_terminal0_map_v0__ANONYMOUS_s114);
-  global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s113 = {0,0,0};
-  glblInit__term_flag_int_terminal0_map_c0__ANONYMOUS_s163(_term_flag_int_terminal0_map_c0__ANONYMOUS_s113);
-  global bit[2] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s112 = {0,0};
-  glblInit__term_flag_bit_terminal1_map_c0__ANONYMOUS_s161(_term_flag_bit_terminal1_map_c0__ANONYMOUS_s112);
-  global bit[2] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s111 = {0,0};
-  glblInit__term_flag_bit_terminal0_map_c0__ANONYMOUS_s159(_term_flag_bit_terminal0_map_c0__ANONYMOUS_s111);
-  global bit CASPER_TRUE__ANONYMOUS_s147 = 0;
-  global bit CASPER_FALSE__ANONYMOUS_s110 = 0;
-  global bit loop0__ANONYMOUS_s117 = 0;
-  _main(intSet, csg_test_val1, csg_test_val2, CASPER_FALSE__ANONYMOUS_s110, CASPER_TRUE__ANONYMOUS_s147, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s111, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s112, _term_flag_int_terminal0_map_c0__ANONYMOUS_s113, _term_flag_int_terminal0_map_v0__ANONYMOUS_s114, _term_flag_int_terminal0_reduce0__ANONYMOUS_s120, _term_flag_int_terminal1_map_c0__ANONYMOUS_s115, _term_flag_int_terminal1_map_v0__ANONYMOUS_s116, _term_flag_int_terminal1_reduce0__ANONYMOUS_s121, loop0__ANONYMOUS_s117, mapExp_c0__ANONYMOUS_s118, mapExp_v0__ANONYMOUS_s119, reduceExp0__ANONYMOUS_s122);
+  global bit[2] reduceExp0__ANONYMOUS_s117 = {0,0};
+  glblInit_reduceExp0__ANONYMOUS_s172(reduceExp0__ANONYMOUS_s117);
+  global bit[2] mapExp_v0__ANONYMOUS_s114 = {0,0};
+  glblInit_mapExp_v0__ANONYMOUS_s170(mapExp_v0__ANONYMOUS_s114);
+  global bit[1] mapExp_c0__ANONYMOUS_s113 = {0};
+  glblInit_mapExp_c0__ANONYMOUS_s168(mapExp_c0__ANONYMOUS_s113);
+  global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s116 = {0,0,0};
+  glblInit__term_flag_int_terminal1_reduce0__ANONYMOUS_s166(_term_flag_int_terminal1_reduce0__ANONYMOUS_s116);
+  global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s112 = {0,0,0};
+  glblInit__term_flag_int_terminal1_map_v0__ANONYMOUS_s164(_term_flag_int_terminal1_map_v0__ANONYMOUS_s112);
+  global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s111 = {0,0,0};
+  glblInit__term_flag_int_terminal1_map_c0__ANONYMOUS_s162(_term_flag_int_terminal1_map_c0__ANONYMOUS_s111);
+  global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s115 = {0,0,0};
+  glblInit__term_flag_int_terminal0_reduce0__ANONYMOUS_s160(_term_flag_int_terminal0_reduce0__ANONYMOUS_s115);
+  global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s110 = {0,0,0};
+  glblInit__term_flag_int_terminal0_map_v0__ANONYMOUS_s158(_term_flag_int_terminal0_map_v0__ANONYMOUS_s110);
+  global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s109 = {0,0,0};
+  glblInit__term_flag_int_terminal0_map_c0__ANONYMOUS_s156(_term_flag_int_terminal0_map_c0__ANONYMOUS_s109);
+  global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s108 = {0};
+  glblInit__term_flag_bit_terminal1_map_c0__ANONYMOUS_s154(_term_flag_bit_terminal1_map_c0__ANONYMOUS_s108);
+  global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s107 = {0};
+  glblInit__term_flag_bit_terminal0_map_c0__ANONYMOUS_s152(_term_flag_bit_terminal0_map_c0__ANONYMOUS_s107);
+  global bit CASPER_TRUE__ANONYMOUS_s141 = 0;
+  global bit CASPER_FALSE__ANONYMOUS_s106 = 0;
+  _main(intSet, csg_test_val1, csg_test_val2, CASPER_FALSE__ANONYMOUS_s106, CASPER_TRUE__ANONYMOUS_s141, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s107, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s108, _term_flag_int_terminal0_map_c0__ANONYMOUS_s109, _term_flag_int_terminal0_map_v0__ANONYMOUS_s110, _term_flag_int_terminal0_reduce0__ANONYMOUS_s115, _term_flag_int_terminal1_map_c0__ANONYMOUS_s111, _term_flag_int_terminal1_map_v0__ANONYMOUS_s112, _term_flag_int_terminal1_reduce0__ANONYMOUS_s116, mapExp_c0__ANONYMOUS_s113, mapExp_v0__ANONYMOUS_s114, reduceExp0__ANONYMOUS_s117);
 }
-/*main_int_0.sk:30*/
+/*main_int_0.sk:29*/
 
-void main__WrapperNospec (int[14] intSet, int csg_test_val1, int csg_test_val2)/*main_int_0.sk:30*/
+void main__WrapperNospec (int[14] intSet, int csg_test_val1, int csg_test_val2)/*main_int_0.sk:29*/
 { }
-/*main_int_0.sk:135*/
+/*main_int_0.sk:127*/
 
-void map (int[3] data, int i, ref int[1] keys0, ref int[1] values0, ref global bit CASPER_FALSE__ANONYMOUS_s123, ref global bit[2] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s124, ref global bit[2] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s125, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s126, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s155, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s127, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s156, ref global bit loop0__ANONYMOUS_s128, ref global bit[1] mapExp_c0__ANONYMOUS_s129, ref global bit[2] mapExp_v0__ANONYMOUS_s157)/*main_int_0.sk:135*/
+void map (int[3] data, int casper_index, ref int[1] keys0, ref int[1] values0, ref global bit CASPER_FALSE__ANONYMOUS_s118, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s119, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s120, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s121, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s148, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s122, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s149, ref global bit[1] mapExp_c0__ANONYMOUS_s123, ref global bit[2] mapExp_v0__ANONYMOUS_s150)/*main_int_0.sk:127*/
 {
   keys0[0] = 1;
-  _term_flag_int_terminal0_map_v0__ANONYMOUS_s155[1] = 1;
-  int _int_terminal0 = data[i];
-  _term_flag_int_terminal1_map_v0__ANONYMOUS_s156[0] = 1;
-  mapExp_v0__ANONYMOUS_s157[0] = 1;
+  _term_flag_int_terminal0_map_v0__ANONYMOUS_s148[1] = 1;
+  int _int_terminal0 = data[casper_index];
+  _term_flag_int_terminal1_map_v0__ANONYMOUS_s149[0] = 1;
+  mapExp_v0__ANONYMOUS_s150[0] = 1;
   values0[0] = _int_terminal0;
 }
-/*main_int_0.sk:179*/
+/*main_int_0.sk:171*/
 
-void merge_sum (int val1, int val2, ref int _out)/*main_int_0.sk:179*/
+void merge_sum (int val1, int val2, ref int _out)/*main_int_0.sk:171*/
 {
   _out = 0;
   _out = val1;
   return;
 }
-/*main_int_0.sk:69*/
+/*main_int_0.sk:63*/
 
-void postCondition (int[3] data, int sum, int sum0, int i, int i0, ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s103, ref global bit[2] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s104, ref global bit[2] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s105, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s106, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s84, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s136, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s107, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s85, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s137, ref global bit loop0__ANONYMOUS_s108, ref global bit[1] mapExp_c0__ANONYMOUS_s109, ref global bit[2] mapExp_v0__ANONYMOUS_s86, ref global bit[2] reduceExp0__ANONYMOUS_s138)/*main_int_0.sk:69*/
+void postCondition (int[3] data, int sum, int sum0, int casper_index, int casper_index0, ref bit _out, ref global bit CASPER_FALSE__ANONYMOUS_s100, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s101, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s102, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s103, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s82, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s130, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s104, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s83, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s131, ref global bit[1] mapExp_c0__ANONYMOUS_s105, ref global bit[2] mapExp_v0__ANONYMOUS_s84, ref global bit[2] reduceExp0__ANONYMOUS_s132)/*main_int_0.sk:63*/
 {
   _out = 0;
   int[1] casper_r = {0};
   casper_r[0] = sum;
   int[1] _out_s47 = {0};
-  reduce(data, sum, sum0, i, i0, _out_s47, CASPER_FALSE__ANONYMOUS_s103, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s104, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s105, _term_flag_int_terminal0_map_c0__ANONYMOUS_s106, _term_flag_int_terminal0_map_v0__ANONYMOUS_s84, _term_flag_int_terminal0_reduce0__ANONYMOUS_s136, _term_flag_int_terminal1_map_c0__ANONYMOUS_s107, _term_flag_int_terminal1_map_v0__ANONYMOUS_s85, _term_flag_int_terminal1_reduce0__ANONYMOUS_s137, loop0__ANONYMOUS_s108, mapExp_c0__ANONYMOUS_s109, mapExp_v0__ANONYMOUS_s86, reduceExp0__ANONYMOUS_s138);
+  reduce(data, sum, sum0, casper_index, casper_index0, _out_s47, CASPER_FALSE__ANONYMOUS_s100, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s101, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s102, _term_flag_int_terminal0_map_c0__ANONYMOUS_s103, _term_flag_int_terminal0_map_v0__ANONYMOUS_s82, _term_flag_int_terminal0_reduce0__ANONYMOUS_s130, _term_flag_int_terminal1_map_c0__ANONYMOUS_s104, _term_flag_int_terminal1_map_v0__ANONYMOUS_s83, _term_flag_int_terminal1_reduce0__ANONYMOUS_s131, mapExp_c0__ANONYMOUS_s105, mapExp_v0__ANONYMOUS_s84, reduceExp0__ANONYMOUS_s132);
   _out = _out_s47 == casper_r;
   return;
 }
-/*main_int_0.sk:184*/
+/*main_int_0.sk:176*/
 
-void reduce (int[3] data, int sum, int sum0, int i, int i0, ref int[1] _out, ref global bit CASPER_FALSE__ANONYMOUS_s148, ref global bit[2] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s149, ref global bit[2] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s150, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s151, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s130, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s100, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s152, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s131, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s101, ref global bit loop0__ANONYMOUS_s153, ref global bit[1] mapExp_c0__ANONYMOUS_s154, ref global bit[2] mapExp_v0__ANONYMOUS_s132, ref global bit[2] reduceExp0__ANONYMOUS_s102)/*main_int_0.sk:184*/
+void reduce (int[3] data, int sum, int sum0, int casper_index, int casper_index0, ref int[1] _out, ref global bit CASPER_FALSE__ANONYMOUS_s142, ref global bit[1] _term_flag_bit_terminal0_map_c0__ANONYMOUS_s143, ref global bit[1] _term_flag_bit_terminal1_map_c0__ANONYMOUS_s144, ref global bit[3] _term_flag_int_terminal0_map_c0__ANONYMOUS_s145, ref global bit[3] _term_flag_int_terminal0_map_v0__ANONYMOUS_s124, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s97, ref global bit[3] _term_flag_int_terminal1_map_c0__ANONYMOUS_s146, ref global bit[3] _term_flag_int_terminal1_map_v0__ANONYMOUS_s125, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s98, ref global bit[1] mapExp_c0__ANONYMOUS_s147, ref global bit[2] mapExp_v0__ANONYMOUS_s126, ref global bit[2] reduceExp0__ANONYMOUS_s99)/*main_int_0.sk:176*/
 {
   _out = ((int[1])0);
   int _out_s49 = 0;
   init_sum(sum0, _out_s49);
   _out[0] = _out_s49;
-  for(int casper_i = i0; casper_i < i; casper_i = casper_i + 1)/*Canonical*/
+  for(int casper_i = casper_index0; casper_i < casper_index; casper_i = casper_i + 1)/*Canonical*/
   {
     int[1] values0 = {0};
     int[1] keys0 = {0};
-    map(data, casper_i, keys0, values0, CASPER_FALSE__ANONYMOUS_s148, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s149, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s150, _term_flag_int_terminal0_map_c0__ANONYMOUS_s151, _term_flag_int_terminal0_map_v0__ANONYMOUS_s130, _term_flag_int_terminal1_map_c0__ANONYMOUS_s152, _term_flag_int_terminal1_map_v0__ANONYMOUS_s131, loop0__ANONYMOUS_s153, mapExp_c0__ANONYMOUS_s154, mapExp_v0__ANONYMOUS_s132);
+    map(data, casper_i, keys0, values0, CASPER_FALSE__ANONYMOUS_s142, _term_flag_bit_terminal0_map_c0__ANONYMOUS_s143, _term_flag_bit_terminal1_map_c0__ANONYMOUS_s144, _term_flag_int_terminal0_map_c0__ANONYMOUS_s145, _term_flag_int_terminal0_map_v0__ANONYMOUS_s124, _term_flag_int_terminal1_map_c0__ANONYMOUS_s146, _term_flag_int_terminal1_map_v0__ANONYMOUS_s125, mapExp_c0__ANONYMOUS_s147, mapExp_v0__ANONYMOUS_s126);
     for(int casper_j = 0; casper_j < 1; casper_j = casper_j + 1)/*Canonical*/
     {
       int key0 = keys0[casper_j];
-      if(key0 == 0)/*main_int_0.sk:201*/
+      if(key0 == 0)/*main_int_0.sk:193*/
         { }
       else
       {
-        assert (key0 == 1); //Assert at main_int_0.sk:202 (5039098793636284918)
+        assert (key0 == 1); //Assert at main_int_0.sk:194 (-2183990844100508298)
         int _out_s51 = 0;
-        reduce_sum(_out[0], values0[casper_j], _out_s51, _term_flag_int_terminal0_reduce0__ANONYMOUS_s100, _term_flag_int_terminal1_reduce0__ANONYMOUS_s101, reduceExp0__ANONYMOUS_s102);
+        reduce_sum(_out[0], values0[casper_j], _out_s51, _term_flag_int_terminal0_reduce0__ANONYMOUS_s97, _term_flag_int_terminal1_reduce0__ANONYMOUS_s98, reduceExp0__ANONYMOUS_s99);
         _out[0] = _out_s51;
       }
     }
@@ -344,17 +705,17 @@ void reduce (int[3] data, int sum, int sum0, int i, int i0, ref int[1] _out, ref
   _out[0] = _out_s53;
   return;
 }
-/*main_int_0.sk:175*/
+/*main_int_0.sk:167*/
 
-void reduce_sum (int val1, int val2, ref int _out, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s87, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s88, ref global bit[2] reduceExp0__ANONYMOUS_s89)/*main_int_0.sk:175*/
+void reduce_sum (int val1, int val2, ref int _out, ref global bit[3] _term_flag_int_terminal0_reduce0__ANONYMOUS_s85, ref global bit[3] _term_flag_int_terminal1_reduce0__ANONYMOUS_s86, ref global bit[2] reduceExp0__ANONYMOUS_s87)/*main_int_0.sk:167*/
 {
   _out = 0;
-  _term_flag_int_terminal0_reduce0__ANONYMOUS_s87[1] = 1;
-  _term_flag_int_terminal1_reduce0__ANONYMOUS_s88[0] = 1;
-  reduceExp0__ANONYMOUS_s89[1] = 1;
+  _term_flag_int_terminal0_reduce0__ANONYMOUS_s85[1] = 1;
+  _term_flag_int_terminal1_reduce0__ANONYMOUS_s86[0] = 1;
+  reduceExp0__ANONYMOUS_s87[1] = 1;
   _out = val2 + val1;
   return;
 }
 /* END PACKAGE ANONYMOUS*/
 [SKETCH] DONE
-Total time = 2205
+Total time = 1485
