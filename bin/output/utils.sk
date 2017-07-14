@@ -117,8 +117,16 @@ int casper_math_abs(int casper_a){
 bit CASPER_TRUE;
 bit CASPER_FALSE;
 
-<setter-functions>
 
-<getter-functions>
 
-<ite-functions>
+int int_getter(int[4] array, int index){
+		return array[index];
+}
+
+int int_ite(bit condition, int op1, int op2){
+		if(condition) return op1; else return op2;
+}
+
+int[4] intarray_ite(bit condition, int[4] op1, int[4] op2){
+		if(condition) return op1; else return op2;
+}
