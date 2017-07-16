@@ -1,38 +1,38 @@
 language: java
-	jdk:
-	  - oraclejdk7
-	before_install:
-	  - sudo apt-get update && sudo apt-get -y install curl
-	  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-	  - echo "deb http://download.mono-project.com/repo/ubuntu precise main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
-	  - curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -
-	  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-	  - sudo apt-get update && sudo apt-get install -y bash g++-4.8 flex bison make ant openjdk-7-jdk nodejs unzip mono-complete git wget
-	  - export CXX="g++-4.8" CC="gcc-4.8"
-	  - wget "http://people.csail.mit.edu/asolar/sketch-1.7.2.tar.gz"
-	  - tar -xvzf sketch-1.7.2.tar.gz
-	  - rm sketch-1.7.2.tar.gz
-	  - cd sketch-1.7.2/sketch-backend/
-	  - chmod +x ./configure
-	  - ./configure
-	  - make
-	  - cd ../../
-	  - chmod a+rwx sketch-1.7.2/*
-	  - export PATH="$PATH:/home/travis/build/uwplse/Casper/sketch-1.7.2/sketch-frontend"
-	  - export SKETCH_HOME="/home/travis/build/uwplse/Casper/sketch-1.7.2/sketch-frontend/runtime"
-	  - wget -O dafny-1.9.7.zip "https://github.com/Microsoft/dafny/releases/download/v1.9.7/Dafny.1.9.7.for.Ubuntu.zip"
-	  - unzip dafny-1.9.7.zip -d .
-	  - rm dafny-1.9.7.zip
-	  - chmod -R a+rwx dafny/*
-	  - export PATH="$PATH:/home/travis/build/uwplse/Casper/dafny/"
-	before_script:
-	  - chmod +x ./tests/ProjectTester.java
-	  - javac -d . ./tests/ProjectTester.java
-	  - ant
-	jobs:
-	  include: 
-	    - script: travis_wait 40 java ProjectTester 1
-	    - script: travis_wait 40 java ProjectTester 2
-	    - script: travis_wait 40 java ProjectTester 3
-	notifications:
-	  email: false
+jdk:
+  - oraclejdk7
+before_install:
+  - sudo apt-get update && sudo apt-get -y install curl
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+  - echo "deb http://download.mono-project.com/repo/ubuntu precise main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+  - curl -sL https://deb.nodesource.com/setup_6.x | sudo bash -
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update && sudo apt-get install -y bash g++-4.8 flex bison make ant openjdk-7-jdk nodejs unzip mono-complete git wget
+  - export CXX="g++-4.8" CC="gcc-4.8"
+  - wget "http://people.csail.mit.edu/asolar/sketch-1.7.2.tar.gz"
+  - tar -xvzf sketch-1.7.2.tar.gz
+  - rm sketch-1.7.2.tar.gz
+  - cd sketch-1.7.2/sketch-backend/
+  - chmod +x ./configure
+  - ./configure
+  - make
+  - cd ../../
+  - chmod a+rwx sketch-1.7.2/*
+  - export PATH="$PATH:/home/travis/build/uwplse/Casper/sketch-1.7.2/sketch-frontend"
+  - export SKETCH_HOME="/home/travis/build/uwplse/Casper/sketch-1.7.2/sketch-frontend/runtime"
+  - wget -O dafny-1.9.7.zip "https://github.com/Microsoft/dafny/releases/download/v1.9.7/Dafny.1.9.7.for.Ubuntu.zip"
+  - unzip dafny-1.9.7.zip -d .
+  - rm dafny-1.9.7.zip
+  - chmod -R a+rwx dafny/*
+  - export PATH="$PATH:/home/travis/build/uwplse/Casper/dafny/"
+before_script:
+  - chmod +x ./tests/ProjectTester.java
+  - javac -d . ./tests/ProjectTester.java
+  - ant
+jobs:
+  include: 
+    - script: travis_wait 40 java ProjectTester 1
+    - script: travis_wait 40 java ProjectTester 2
+    - script: travis_wait 40 java ProjectTester 3
+notifications:
+  email: false
