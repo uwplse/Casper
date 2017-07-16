@@ -20,7 +20,9 @@ import java.util.Map;
 import java.util.Set;
 
 import casper.Configuration;
+import casper.DafnyCodeGenerator;
 import casper.SketchCodeGenerator;
+import casper.SketchParser;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
 import casper.types.Variable;
@@ -193,12 +195,12 @@ public class GenerateScaffold extends NodeVisitor{
 								ext.generateCode.put(reduceType, false);
 								break;
 								/* Run theorem prover to verify summary */
-								/*SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, this.emitCount);
+								/*SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, this.conf);
 								
-								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType, sketchReduceType);
+								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType, sketchReduceType, this.conf);
 								
 								int CSGverifierExitCode = 0;
-								if(ext.valCount == 1 && false)
+								if(conf.valuesTupleSize == 1 && false)
 									CSGverifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
 								
 								if(debug || true){

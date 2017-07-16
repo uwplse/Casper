@@ -347,7 +347,7 @@ public class SketchParser {
 		return emits;
 	}
 	
-	public static void parseSolution(String filename, Set<Variable> outputVars, MyWhileExt ext, int emitCount, SearchConfiguration conf) throws IOException {
+	public static void parseSolution(String filename, Set<Variable> outputVars, MyWhileExt ext, SearchConfiguration conf) throws IOException {
 		// Read sketch output
 		BufferedReader br = new BufferedReader(new FileReader(filename));
 		
@@ -394,11 +394,11 @@ public class SketchParser {
 					break;
 				}
 			}
-			mapEmits.put(conditional_res,extractMapEmits(conditionals.get(conditional),mapLines,ext,emitCount));
+			mapEmits.put(conditional_res,extractMapEmits(conditionals.get(conditional),mapLines,ext,conf.emitCount));
 		}
 		
 		// Remaining emits
-		List<KvPair> allEmits = extractMapEmits(map,mapLines,ext,emitCount);
+		List<KvPair> allEmits = extractMapEmits(map,mapLines,ext,conf.emitCount);
 		List<KvPair> filteredEmits = new ArrayList<KvPair>();
 		for(KvPair emit : allEmits){
 			boolean keep = true;

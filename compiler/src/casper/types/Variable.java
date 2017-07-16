@@ -74,6 +74,10 @@ public class Variable{
 		return sketchType;
 	}
 	
+	public String getSketchArrayType() {
+		return (this.getSketchType(varType)).replace("[" + Configuration.arraySizeBound + "]", "");
+	}
+	
 	private String getSketchType(String vtype){
 		String targetType = vtype;
 		String templateType = vtype;

@@ -106,7 +106,7 @@ public class MyWhileExt extends MyStmtExt {
 	public Map<String,CustomASTNode> invariants = new HashMap<String,CustomASTNode>();	
 		
 	// Save how values change in loop body
-	public Map<String,CustomASTNode> wpcValues;
+	public Map<String,CustomASTNode> wpcs = new HashMap<String,CustomASTNode>();
 	
 	// Input data collections
 	public boolean hasInputData = false;

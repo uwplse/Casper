@@ -49,7 +49,7 @@ public class DafnyCodeGenerator {
 		String harnessArgs = generateDafnyHarnessArgs(ext,ext.inputVars,outputVars,ext.loopCounters);
 	
 		// Generate require statements for dafny main function
-		String mainReqStmts = generateRequireStatements(ext,outputVars,ext.wpcValues,ext.inputDataSet);
+		String mainReqStmts = generateRequireStatements(ext,outputVars,ext.wpcs,ext.inputDataSet);
 		
 		// Init variables in main
 		String initVars = generateVarInit(ext,ext.inputVars,outputVars,ext.loopCounters);
@@ -77,7 +77,7 @@ public class DafnyCodeGenerator {
 		String postC = generatePostCondStmt(ext,reducerType,ext.inputVars,outputVars,ext.loopCounters);
 		
 		// Weakest pre condition value updates
-		String wpcInits = generateWPCInits(ext.wpcValues,outputVars,ext.loopCounters);
+		String wpcInits = generateWPCInits(ext.wpcs,outputVars,ext.loopCounters);
 		
 		// 1. Assert loop invariant is true before the loop executes.
 		String verifCode = "assert " + preC + ";\n\n\t";

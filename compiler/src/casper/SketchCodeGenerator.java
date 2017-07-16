@@ -35,13 +35,27 @@ public class SketchCodeGenerator {
 		// Get node extension
 		MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 		
-		// Generate Utils File
+		/************** Generate Utils File ****************/
 		PrintWriter writer = new PrintWriter("output/utils.sk", "UTF-8");
 		String text = new String(Files.readAllBytes(Paths.get("templates/utils.sk")), StandardCharsets.UTF_8);
+		
+		// Generate setter functions
+		String setterFuncs = generateSetterFunctions(sketchFilteredOutputVars);
+		
+		// Generate getter functions
+		String getterFuncs = generateGetterFunctions(sketchFilteredOutputVars, ext.inputVars);
+		
+		// Generate ite functions
+		String iteFuncs = generateITEFunctions(sketchFilteredOutputVars, ext.inputVars);
+		
+		text = text.replace("<setter-functions>", setterFuncs);
+		text = text.replace("<getter-functions>", getterFuncs);
+		text = text.replace("<ite-functions>",iteFuncs);
+		
 		writer.print(text);
 		writer.close();
 		
-		// Create scaffold file
+		/************** Create scaffold file ****************/
 		writer = new PrintWriter("output/main_"+reducerType+"_"+id+".sk", "UTF-8");
 		
 		// Read template
@@ -90,13 +104,6 @@ public class SketchCodeGenerator {
 		String loopCountersInit = initLoopCounters(ext, argsList, ext.loopCounters);
 		
 		// Generate verification code
-		Stmt loopBody;
-		if(n instanceof While)
-			loopBody = ((While)n).body();
-		else
-			loopBody = ((ExtendedFor)n).body();
-		MyStmtExt bodyExt = ((MyStmtExt) JavaExt.ext(loopBody));
-		
 		String invariant = ext.invariants.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		
 		for(Variable v : ext.loopCounters){
@@ -110,21 +117,21 @@ public class SketchCodeGenerator {
 		//loopCond = ext.terminationCondition.toString();
 		String loopCondFalse = loopCond; loopCondFalse = "!" + loopCondFalse;
 		
-		String wpc = bodyExt.preConditions.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
+		String wpc = ext.wpcs.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		
 		String postC = ext.postConditions.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		
 		String preC = ext.preConditions.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
 		
-		// Generate weakest pre condition values initialization
-		String wpcValuesInit = generateWPCValuesInit(ext.wpcValues,sketchFilteredOutputVars,ext.loopCounters);
+		// Generate weakest pre condition values initialization (deprecated)
+		//String wpcValuesInit = generateWPCValuesInit(ext.wpcValues,sketchFilteredOutputVars,ext.loopCounters);
 				
 		// 1. Assert loop invariant is true before the loop executes.
 		String verifCode = "assert " + preC + ";\n\t";
 		
 		// 2. Assert loop invariant is preserved if the loop continues: I && loop condition is true --> wp(c, I), 
 		//    where wp(c, I) is the weakest precondition of the body of the loop with I as the post-condition
-		verifCode += "if(" + invariant + " && " + loopCond + ") {\n\t\t"+wpcValuesInit+"assert " + wpc + ";\n\t\t\n\t\t<block-solutions>\n\t}\n\t";
+		verifCode += "if(" + invariant + " && " + loopCond + ") {\n\t\tassert " + wpc + ";\n\t\t\n\t\t<block-solutions>\n\t}\n\t";
 		
 		// 2. Assert loop invariant implies the post condition if the loop terminates: I && loop condition is false --> POST
 		verifCode += "if(" + invariant + " && " + loopCondFalse + ") {\n\t\tassert " + postC + ";\n\t}";
@@ -232,6 +239,121 @@ public class SketchCodeGenerator {
 		// Save
 		writer.print(text);
 		writer.close();
+	}
+
+	private static String generateSetterFunctions(Set<Variable> sketchFilteredOutputVars) {
+		String code = "";
+		Set<String> handledTypes = new HashSet<String>();
+		for(Variable v : sketchFilteredOutputVars) {
+			if( casper.Util.getTypeClass(v.getSketchType()) == casper.Util.ARRAY ||
+				casper.Util.getTypeClass(v.getSketchType()) == casper.Util.OBJECT_ARRAY )
+			{	
+				if(handledTypes.contains(v.getSketchArrayType()))
+					continue;
+				else 
+					handledTypes.add(v.getSketchArrayType());
+				
+				code += v.getSketchType()+" "+v.getSketchArrayType()+"_setter("+v.getSketchType()+" array, int index, "+v.getSketchArrayType()+" value){\n\t" + 
+						"	array[index] = value;\n\t" + 
+						"	return array;\n" + 
+						"}\n\n";
+			}
+		}
+		
+		if(code.length() > 0) code = code.substring(0,code.length()-2);
+		return code;
+	}
+
+	private static String generateGetterFunctions(Set<Variable> sketchFilteredOutputVars, Set<Variable> inputVars) {
+		String code = "";
+		Set<String> handledTypes = new HashSet<String>();
+		for(Variable v : sketchFilteredOutputVars) {
+			if( casper.Util.getTypeClass(v.getSketchType()) == casper.Util.ARRAY ||
+				casper.Util.getTypeClass(v.getSketchType()) == casper.Util.OBJECT_ARRAY )
+			{	
+				if(handledTypes.contains(v.getSketchArrayType()))
+					continue;
+				else 
+					handledTypes.add(v.getSketchArrayType());
+				
+				code += v.getSketchArrayType()+" "+v.getSketchArrayType()+"_getter("+v.getSketchType()+" array, int index){\n\t" +  
+						"	return array[index];\n" + 
+						"}\n\n";
+			}
+		}
+		
+		for(Variable v : inputVars) {
+			if( casper.Util.getTypeClass(v.getSketchType()) == casper.Util.ARRAY ||
+				casper.Util.getTypeClass(v.getSketchType()) == casper.Util.OBJECT_ARRAY )
+			{	
+				if(handledTypes.contains(v.getSketchArrayType()))
+					continue;
+				else 
+					handledTypes.add(v.getSketchArrayType());
+				
+				code += v.getSketchArrayType()+" "+v.getSketchArrayType()+"_getter("+v.getSketchType()+" array, int index){\n\t" +  
+						"	return array[index];\n" + 
+						"}\n\n";
+			}
+		}
+		
+		if(code.length() > 0) code = code.substring(0,code.length()-2);
+		return code;
+	}
+
+	private static String generateITEFunctions(Set<Variable> sketchFilteredOutputVars, Set<Variable> inputVars) {
+		String code = "";
+		Set<String> handledTypes = new HashSet<String>();
+		for(Variable v : sketchFilteredOutputVars) {
+			if( casper.Util.getTypeClass(v.getSketchType()) == casper.Util.ARRAY ||
+				casper.Util.getTypeClass(v.getSketchType()) == casper.Util.OBJECT_ARRAY )
+			{
+				if(!handledTypes.contains(v.getSketchArrayType()))
+				{
+					handledTypes.add(v.getSketchArrayType());
+				
+					code += v.getSketchArrayType()+" "+v.getSketchArrayType()+"_ite(bit condition, "+v.getSketchArrayType()+" op1, "+v.getSketchArrayType()+" op2){\n\t" +  
+							"	if(condition) return op1; else return op2;\n" + 
+							"}\n\n";
+				}
+				
+				if(!handledTypes.contains(v.getSketchType()))
+				{
+					handledTypes.add(v.getSketchType());
+					
+					code += v.getSketchType()+" "+v.getSketchArrayType()+"array_ite(bit condition, "+v.getSketchType()+" op1, "+v.getSketchType()+" op2){\n\t" +  
+							"	if(condition) return op1; else return op2;\n" + 
+							"}\n\n";
+				}
+			}
+		}
+		
+		for(Variable v : inputVars) {
+			if( casper.Util.getTypeClass(v.getSketchType()) == casper.Util.ARRAY ||
+				casper.Util.getTypeClass(v.getSketchType()) == casper.Util.OBJECT_ARRAY )
+			{
+				if(!handledTypes.contains(v.getSketchArrayType()))
+				{
+					handledTypes.add(v.getSketchArrayType());
+				
+					code += v.getSketchArrayType()+" "+v.getSketchArrayType()+"_ite(bit condition, "+v.getSketchArrayType()+" op1, "+v.getSketchArrayType()+" op2){\n\t" +  
+							"	if(condition) return op1; else return op2;\n" + 
+							"}\n\n";
+				}
+				
+				if(!handledTypes.contains(v.getSketchType()))
+				{
+					handledTypes.add(v.getSketchType());
+					
+					code += v.getSketchType()+" "+v.getSketchArrayType()+"array_ite(bit condition, "+v.getSketchType()+" op1, "+v.getSketchType()+" op2){\n\t" +  
+							"	if(condition) return op1; else return op2;\n" + 
+							"}\n\n";
+				}
+			}
+		}
+		
+		if(code.length() > 0) code = code.substring(0,code.length()-2);
+		return code;
 	}
 
 	private static String generateCSGTestCode(Set<Variable> sketchFilteredOutputVars) {
