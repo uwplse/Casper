@@ -3,12 +3,11 @@ package casper.types;
 import java.util.List;
 import java.util.Map;
 
-import polyglot.ast.Expr;
-
 public class IdentifierNode extends CustomASTNode {
 
-	public IdentifierNode(String n) {
+	public IdentifierNode(String n, String t) {
 		super(n);
+		type = t;
 	}
 
 	@Override
@@ -17,7 +16,7 @@ public class IdentifierNode extends CustomASTNode {
 			return rhs;
 		}
 		// Return clone of self
-		return new IdentifierNode(name);
+		return new IdentifierNode(name, type);
 	}
 	
 	public boolean equals(Object o){

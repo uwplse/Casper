@@ -3,8 +3,6 @@ package casper.types;
 import java.util.List;
 import java.util.Map;
 
-import polyglot.ast.Expr;
-
 public class ConditionalNode extends CustomASTNode{
 
 	CustomASTNode cond;
@@ -16,6 +14,9 @@ public class ConditionalNode extends CustomASTNode{
 		cond = co;
 		cons = c;
 		alt = a;
+		type = c.type;
+		
+		assert c.type.equals(a.type);
 	}
 
 	@Override
@@ -26,44 +27,14 @@ public class ConditionalNode extends CustomASTNode{
 		return new ConditionalNode(newCond,newCons,newAlt);
 	}
 	
-	public String toString(String vardecl){
-		String output = "if("+cond.toString()+"){\n\t\t\t";
-		if(cons instanceof ArrayUpdateNode){
-			output += cons.toString() + ";\n\t\t} else {\n\t\t\t";
-		}
-		else if(cons instanceof ConditionalNode){
-			output += ((ConditionalNode) cons).toString(vardecl) + "\n\t\t} else {\n\t\t\t";
-		}
-		else if(cons instanceof SequenceNode){
-			output += ((SequenceNode) cons).inst1ToString(vardecl) + ";\n\t\t" + ((SequenceNode) cons).inst2ToString(vardecl) + ";\n\t\t} else {\n\t\t\t";
-		}
-		else{
-			//output += vardecl + "ind_" + cons.toString() + ";\n\t\t} else {\n\t\t\t";
-			output += vardecl + cons.toString() + ";\n\t\t} else {\n\t\t\t";
-		}
-		
-		if(alt instanceof ArrayUpdateNode){
-			output += alt.toString() + ";\n\t\t}\n\t\t";
-		}
-		else if(alt instanceof ConditionalNode){
-			output += ((ConditionalNode) alt).toString(vardecl) + "}\n\t\t";
-		}
-		else if(cons instanceof SequenceNode){
-			output += ((SequenceNode) alt).inst1ToString(vardecl) + ";\n\t\t" + ((SequenceNode) alt).inst2ToString(vardecl) + ";\n\t\t} else {\n\t\t\t";
-		}
-		else{
-			output += vardecl + alt.toString() + ";\n\t\t}\n\t\t";
-		}
-		return output;
-	}
-
 	@Override
 	public boolean contains(String exp) {
 		return cond.contains(exp) || cons.contains(exp) || alt.contains(exp);
 	}
 
 	public String toStringDafny(String vardecl) {
-		String output = "if("+cond.toString()+")\n\t\t{\n\t\t\t";
+		return "";
+		/*String output = "if("+cond.toString()+")\n\t\t{\n\t\t\t";
 		if(cons instanceof ArrayUpdateNode){
 			output += vardecl + ((ArrayUpdateNode) cons).toStringDafny() + ";\n\t\t} \n\t\telse \n\t\t{\n\t\t\t";
 		}
@@ -114,11 +85,11 @@ public class ConditionalNode extends CustomASTNode{
 		else{
 			output += vardecl + alt.toString() + ";\n\t\t}\n\t\t";
 		}
-		return output;
+		return output;*/
 	}
 	
 	public String toString(){
-		return "Cond: " + cond + "\n" + "Cons: " + cons + "\n" + "Alt: " + alt;
+		return type+"_ite(" + cond + "," + cons + "," + alt +")";
 	}
 
 	@Override

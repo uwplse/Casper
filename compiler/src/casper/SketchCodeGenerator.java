@@ -12,22 +12,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import polyglot.ast.Node;
-import polyglot.ast.Stmt;
-import polyglot.ast.While;
-import polyglot.ext.jl5.ast.ExtendedFor;
 import casper.JavaLibModel.SketchCall;
 import casper.ast.JavaExt;
-import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
-import casper.types.ArrayUpdateNode;
-import casper.types.ConditionalNode;
 import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
-import casper.types.SequenceNode;
 import casper.types.Variable;
 import casper.visit.GenerateScaffold.SearchConfiguration;
+import polyglot.ast.Node;
 
 public class SketchCodeGenerator {
 	
@@ -104,7 +97,7 @@ public class SketchCodeGenerator {
 		String loopCountersInit = initLoopCounters(ext, argsList, ext.loopCounters);
 		
 		// Generate verification code
-		String invariant = ext.invariants.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
+		String invariant = ext.invariants.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName,ext.inputDataSet.getSketchType())).toString();
 		
 		for(Variable v : ext.loopCounters){
 			ext.mainLoopCounter = v;
@@ -117,14 +110,11 @@ public class SketchCodeGenerator {
 		//loopCond = ext.terminationCondition.toString();
 		String loopCondFalse = loopCond; loopCondFalse = "!" + loopCondFalse;
 		
-		String wpc = ext.wpcs.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
+		String wpc = ext.wpcs.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName,ext.inputDataSet.getSketchType())).toString();
 		
-		String postC = ext.postConditions.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
+		String postC = ext.postConditions.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName,ext.inputDataSet.getSketchType())).toString();
 		
-		String preC = ext.preConditions.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
-		
-		// Generate weakest pre condition values initialization (deprecated)
-		//String wpcValuesInit = generateWPCValuesInit(ext.wpcValues,sketchFilteredOutputVars,ext.loopCounters);
+		String preC = ext.preConditions.get(reducerType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName,ext.inputDataSet.getSketchType())).toString();
 				
 		// 1. Assert loop invariant is true before the loop executes.
 		String verifCode = "assert " + preC + ";\n\t";
@@ -385,7 +375,7 @@ public class SketchCodeGenerator {
 		
 		for(Variable var : sketchInputVars){
 			if(!sketchOutputVars.contains(var)){
-				if(!ext.initVals.containsKey(var.varName) || !(ext.initVals.get(var.varName) instanceof ConstantNode) || ((ConstantNode)ext.initVals.get(var.varName)).type == ConstantNode.STRINGLIT){
+				if(!ext.initVals.containsKey(var.varName) || !(ext.initVals.get(var.varName) instanceof ConstantNode) || ((ConstantNode)ext.initVals.get(var.varName)).type_code == ConstantNode.STRINGLIT){
 					handleVarArgs(var.getSketchType(),var.category,ext,argsList,1,true);
 				}
 			}
@@ -626,7 +616,7 @@ public class SketchCodeGenerator {
 		if(casper.Util.getTypeClass(vartype) == casper.Util.PRIMITIVE){
 			if(ext.initVals.containsKey(varname)){
 				CustomASTNode initVal = ext.initVals.get(varname);
-				if(initVal instanceof ConstantNode && ((ConstantNode) initVal).type == ConstantNode.STRINGLIT){
+				if(initVal instanceof ConstantNode && ((ConstantNode) initVal).type_code == ConstantNode.STRINGLIT){
 					inputInit += varname + " = " + vartype + "Set["+(argsList.get(vartype)-1)+"];\n\t";
 					argsList.put(vartype, argsList.get(vartype) - 1);
 				}
@@ -794,54 +784,6 @@ public class SketchCodeGenerator {
 			return ret;
 		
 		return ret.substring(0, ret.length()-2);
-	}
-	
-	
-	public static String generateWPCValuesInit(Map<String,CustomASTNode> wpcValues, Set<Variable> sketchOutputVars, Set<Variable> sketchLoopCounters) {
-		String code = "";
-		for(String varname : wpcValues.keySet())
-		{
-			boolean found = false;
-			for(Variable var : sketchOutputVars){
-				if(var.varName.equals(varname)){
-					code += var.getSketchType() + " ind_" + varname + " = " + varname + ";\n\t\t";
-					CustomASTNode value = wpcValues.get(varname);
-					if(value instanceof ConditionalNode){
-						code += ((ConditionalNode)value).toString("ind_" + varname + " = ");
-					}
-					else if(value instanceof ArrayUpdateNode){
-						code += value.toString() + ";\n\t\t";
-					}
-					else if(value instanceof SequenceNode){
-						code += ((SequenceNode) value).inst1ToString("ind_" + varname + " = ") + ";\n\t\t" + ((SequenceNode) value).inst2ToString("ind_" + varname + " = ") + ";\n\t\t";
-					}
-					else{
-						code += "ind_" + varname + " = " + wpcValues.get(varname) + ";\n\t\t";
-					}
-					found = true;
-					break;
-				}
-			}
-			if(found) continue;
-			for(Variable var : sketchLoopCounters){
-				if(var.varName.equals(varname)){
-					code += var.getSketchType() + " ind_" + varname + " = " + varname + ";\n\t\t";
-					CustomASTNode value = wpcValues.get(varname);
-					if(value instanceof ConditionalNode){
-						code += ((ConditionalNode)value).toString("ind_" + varname + " = ");
-					}
-					else if(value instanceof ArrayUpdateNode){
-						code += wpcValues.get(varname).toString() + ";\n\t\t";
-					}
-					else{
-						code += "ind_" + varname + " = " + wpcValues.get(varname) + ";\n\t\t";
-					}
-					found = true;
-					break;
-				}
-			}
-		}
-		return code;
 	}
 	
 	// Generate post condition function args	
@@ -1402,16 +1344,15 @@ public class SketchCodeGenerator {
 			typeName = "bitInt";
 		
 		// Include conditionals?
-		if(!simpleEmits){
+		if(simpleEmits){
 			int indexC = 0;
 			int indexK = 0;
 			int indexV = 0;
 			// Generate emit code
 			for(int i=0; i<emitCount; i++){
-				emits += 	"if(booleanMapGenerator_c"+indexC+++"("+args+")){\n\t\t";
 				for(int j=0; j<keyCount; j++){
 					if(j==0)
-						emits += "keys"+j+"["+i+"] = ??;\n\t\t";
+						emits += "keys"+j+"["+i+"] = ??;\n\t";
 					else
 						emits += "keys"+j+"["+i+"] = "+keyType.toLowerCase()+"MapGenerator_k"+indexK+++"("+inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
@@ -1419,7 +1360,6 @@ public class SketchCodeGenerator {
 					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator_v"+indexV+++"("+inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
 				emits = emits.substring(0,emits.length()-1);
-				emits += "}";
 			}
 		}
 		else{

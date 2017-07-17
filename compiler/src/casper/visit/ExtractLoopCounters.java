@@ -122,7 +122,7 @@ public class ExtractLoopCounters extends NodeVisitor {
 				Set<Variable> lcCopy = new HashSet<Variable>();
 				lcCopy.addAll(ext.loopCounters);
 				for(Variable var : lcCopy){
-					CustomASTNode lcExp = new IdentifierNode(var.varNameOrig);
+					CustomASTNode lcExp = new IdentifierNode(var.varNameOrig,var.getSketchType());
 					
 					if(body instanceof Block){
 						List<Stmt> statements = ((Block) body).statements();

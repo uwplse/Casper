@@ -24,6 +24,7 @@ import casper.types.CustomASTNode;
 import casper.types.Expression;
 import casper.types.Variable;
 import polyglot.ast.Node;
+import polyglot.util.Pair;
 
 public class MyWhileExt extends MyStmtExt {
 	private static final long serialVersionUID = 1L;
@@ -100,7 +101,7 @@ public class MyWhileExt extends MyStmtExt {
 	public Map<String,List<String>> postConditionArgsOrder = new HashMap<String,List<String>>();
 	
 	// The ordering of loop invariant args
-	public Map<String,List<String>> loopInvariantArgsOrder = new HashMap<String,List<String>>();
+	public Map<String,List<Pair<String,String>>> loopInvariantArgsOrder = new HashMap<String,List<Pair<String,String>>>();
 		
 	// The loop invariant (expressed using function loopInvariant(..)
 	public Map<String,CustomASTNode> invariants = new HashMap<String,CustomASTNode>();	

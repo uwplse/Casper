@@ -3,15 +3,14 @@ package casper.types;
 import java.util.List;
 import java.util.Map;
 
-import polyglot.ast.Expr;
-
 public class FieldNode extends CustomASTNode{
 
 	public CustomASTNode container;
 	
-	public FieldNode(String n, CustomASTNode c) {
+	public FieldNode(String n, String t, CustomASTNode c) {
 		super(n);
 		container = c;
+		type = t;
 	}
 
 	@Override
@@ -22,7 +21,7 @@ public class FieldNode extends CustomASTNode{
 		CustomASTNode newContainer = container.replaceAll(lhs,rhs);
 		String[] components = name.split("\\.");
 		String newName = newContainer.toString() + "." + components[components.length-1];
-		return new FieldNode(newName,newContainer);
+		return new FieldNode(newName,type,newContainer);
 	}
 	
 	public String toString(){

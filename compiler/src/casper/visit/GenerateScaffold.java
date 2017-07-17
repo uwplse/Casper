@@ -20,9 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import casper.Configuration;
-import casper.DafnyCodeGenerator;
 import casper.SketchCodeGenerator;
-import casper.SketchParser;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
 import casper.types.Variable;
@@ -65,7 +63,7 @@ public class GenerateScaffold extends NodeVisitor{
 		this.conf = new SearchConfiguration();
 		
 		this.conf.tuplesAdded = false;
-		this.conf.simpleEmits = true;
+		this.conf.simpleEmits = false;
 		this.conf.opsAdded = false;
 		
 		this.conf.stageCount = 1;

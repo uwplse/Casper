@@ -11,23 +11,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import polyglot.ast.Node;
-import polyglot.ast.Stmt;
-import polyglot.ast.While;
-import polyglot.ext.jl5.ast.ExtendedFor;
 import casper.SketchParser.KvPair;
 import casper.ast.JavaExt;
 import casper.extension.MyStmtExt;
 import casper.extension.MyWhileExt;
 import casper.types.ArrayAccessNode;
-import casper.types.ArrayUpdateNode;
-import casper.types.ConditionalNode;
 import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
-import casper.types.SequenceNode;
 import casper.types.Variable;
 import casper.visit.GenerateScaffold.SearchConfiguration;
+import polyglot.ast.Node;
+import polyglot.ast.Stmt;
+import polyglot.ast.While;
+import polyglot.ext.jl5.ast.ExtendedFor;
 
 public class DafnyCodeGenerator {
 	
@@ -265,7 +262,7 @@ public class DafnyCodeGenerator {
 		
 		for(Variable var : outputVars){
 			args += ", " + var.varName + ": " + var.getDafnyType();
-			if(!ext.initVals.containsKey(var.varName) || (ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode)ext.initVals.get(var.varName)).type == ConstantNode.ARRAYLIT)){
+			if(!ext.initVals.containsKey(var.varName) || (ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode)ext.initVals.get(var.varName)).type_code == ConstantNode.ARRAYLIT)){
 				args += ", " + var.varName + "0: " + var.getDafnyType();
 			}
 		}
@@ -273,7 +270,7 @@ public class DafnyCodeGenerator {
 			if(ext.inputDataCollections.contains(var) || ext.inputDataSet.equals(var))
 				continue;
 			
-			if(!ext.initVals.containsKey(var.varName) || (ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode)ext.initVals.get(var.varName)).type == ConstantNode.STRINGLIT)){
+			if(!ext.initVals.containsKey(var.varName) || (ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode)ext.initVals.get(var.varName)).type_code == ConstantNode.STRINGLIT)){
 				args += ", " + var.varName + ": " + var.getDafnyType();
 			}
 		}
@@ -304,7 +301,7 @@ public class DafnyCodeGenerator {
 		for(Variable var : outputVars){
 			if(casper.Util.getDafnyTypeClass(var.getDafnyType()) == casper.Util.ARRAY || casper.Util.getDafnyTypeClass(var.getDafnyType()) == casper.Util.OBJECT_ARRAY){
 				code += "requires  |" + var.varName + "| == |" + var.varName + "0|\n\t";
-				if(ext.initVals.containsKey(var.varName) && ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode)ext.initVals.get(var.varName)).type == ConstantNode.ARRAYLIT){
+				if(ext.initVals.containsKey(var.varName) && ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode)ext.initVals.get(var.varName)).type_code == ConstantNode.ARRAYLIT){
 					code += "requires  forall k :: 0 <= k < |" + var.varName + "0| ==> " + var.varName + "0[k] == "+ ext.initVals.get(var.varName) +"\n\t";
 				}
 			}
@@ -350,7 +347,7 @@ public class DafnyCodeGenerator {
 				continue;
 			
 			if(ext.initVals.containsKey(var.varName)){
-				if(!(ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode) ext.initVals.get(var.varName)).type == ConstantNode.STRINGLIT))
+				if(!(ext.initVals.get(var.varName) instanceof ConstantNode && ((ConstantNode) ext.initVals.get(var.varName)).type_code == ConstantNode.STRINGLIT))
 					code += "var " + var.varName + " := " + ext.initVals.get(var.varName) + ";\n\t";
 			}
 		}
@@ -366,7 +363,7 @@ public class DafnyCodeGenerator {
 	public static String generatePreCondition(MyWhileExt ext, String type, Set<Variable> inputVars, Set<Variable> outputVars, Set<Variable> loopCounters) {
 		String code = "";
 		
-		code = ext.preConditions.get(type).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
+		code = ext.preConditions.get(type).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName,ext.inputDataSet.getSketchType())).toString();
 		code = code.substring(0,code.length()-1) + ",";
 		for(Variable v : inputVars){
 			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v) && !ext.inputDataSet.equals(v)){
@@ -384,7 +381,7 @@ public class DafnyCodeGenerator {
 	public static String generateInvariant(MyWhileExt ext, String type, Set<Variable> InputVars, Set<Variable> outputVars, Set<Variable> loopCounters) {
 		String invariant = "";
 		
-		invariant = ext.invariants.get(type).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
+		invariant = ext.invariants.get(type).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName,ext.inputDataSet.getSketchType())).toString();
 		invariant = invariant.substring(0,invariant.length()-1) + ",";
 		for(Variable v : InputVars){
 			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v) && !ext.inputDataSet.equals(v)){
@@ -402,7 +399,7 @@ public class DafnyCodeGenerator {
 	public static String generateWPC(MyWhileExt ext, String outputType, Set<Variable> InputVars, Set<Variable> outputVars, Set<Variable> loopCounters, MyStmtExt bodyExt) {
 		String wpc = "";
 		
-		wpc = bodyExt.preConditions.get(outputType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
+		wpc = bodyExt.preConditions.get(outputType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName,ext.inputDataSet.getSketchType())).toString();
 		wpc = wpc.substring(0,wpc.length()-1) + ",";
 		for(Variable v : InputVars){
 			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v) && !ext.inputDataSet.equals(v)){
@@ -420,7 +417,7 @@ public class DafnyCodeGenerator {
 	public static String generatePostCondStmt(MyWhileExt ext, String outputType, Set<Variable> InputVars, Set<Variable> outputVars, Set<Variable> loopCounters) {
 		String pcond = "";
 		
-		pcond = ext.postConditions.get(outputType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName)).toString();
+		pcond = ext.postConditions.get(outputType).replaceAll("casper_data_set", new IdentifierNode(ext.inputDataSet.varName,ext.inputDataSet.getSketchType())).toString();
 		pcond = pcond.substring(0,pcond.length()-1) + ",";
 		for(Variable v : InputVars){
 			if(!outputVars.contains(v) && !loopCounters.contains(v) && !ext.inputDataCollections.contains(v) && !ext.inputDataSet.equals(v)){
@@ -437,7 +434,7 @@ public class DafnyCodeGenerator {
 	
 	public static String generateWPCInits(Map<String, CustomASTNode> wpcValues, Set<Variable> outputVars, Set<Variable> loopCounters) {
 		String code = "";
-		for(String varname : wpcValues.keySet())
+		/*for(String varname : wpcValues.keySet())
 		{
 			boolean found = false;
 			for(Variable var : outputVars){
@@ -477,7 +474,7 @@ public class DafnyCodeGenerator {
 					break;
 				}
 			}
-		}
+		}*/
 		return code;
 	}
 	

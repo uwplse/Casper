@@ -3,19 +3,18 @@ package casper.types;
 import java.util.List;
 import java.util.Map;
 
-import polyglot.ast.Expr;
-
 public class ArrayUpdateNode  extends CustomASTNode{
 
-	CustomASTNode array;
-	CustomASTNode index;
-	CustomASTNode value;
+	public CustomASTNode array;
+	public CustomASTNode index;
+	public CustomASTNode value;
 	
-	public ArrayUpdateNode(CustomASTNode a, CustomASTNode i, CustomASTNode v) {
+	public ArrayUpdateNode(String t, CustomASTNode a, CustomASTNode i, CustomASTNode v) {
 		super("");
 		array = a;
 		index = i;
 		value = v;
+		type = t;
 	}
 
 	@Override
@@ -23,11 +22,11 @@ public class ArrayUpdateNode  extends CustomASTNode{
 		CustomASTNode newArray = array.replaceAll(lhs, rhs);
 		CustomASTNode newIndex = index.replaceAll(lhs, rhs);
 		CustomASTNode newValue = value.replaceAll(lhs, rhs);
-		return new ArrayUpdateNode(newArray,newIndex,newValue);
+		return new ArrayUpdateNode(type,newArray,newIndex,newValue);
 	}
 	 
 	public String toString(){
-		return "ind_" + array + "["+ index +"] = " + value;
+		return type+"_setter(" + array + ","+ index +"," + value + ")";
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class ArrayUpdateNode  extends CustomASTNode{
 	@Override
 	public void replaceIndexesWith(String k) {
 		if(index instanceof IdentifierNode)
-			index = new IdentifierNode(k);
+			index = new IdentifierNode(k,index.type);
 		else
 			index.replaceIndexesWith(k);
 		array.replaceIndexesWith(k);

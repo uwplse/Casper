@@ -19,7 +19,6 @@ import casper.types.CallNode;
 import casper.types.ConstantNode;
 import casper.types.CustomASTNode;
 import casper.types.IdentifierNode;
-import casper.types.SequenceNode;
 import casper.types.Variable;
 import polyglot.ast.Call;
 import polyglot.ast.Expr;
@@ -450,17 +449,21 @@ public class JavaLibModel {
 		String target = c.target().toString();
 		String targetType = c.target().type().toString();
 		String targetTypeMain = targetType;
-		if(targetType.contains("<"))
+		String[] targetSubTypes = null;
+		if(targetType.contains("<")) {
 			targetTypeMain = targetType.substring(0,targetType.indexOf("<"));
+			targetSubTypes = targetType.substring(targetType.indexOf("<")+1,targetType.lastIndexOf(">")).split(",");
+		}
 		
 		String id = c.id().toString();
 		
 		switch(targetTypeMain){
 			case "java.util.Map":
-				String[] targetSubTypes = targetType.substring(targetType.indexOf("<")+1,targetType.lastIndexOf(">")).split(",");
 				switch(id){
 					case "get":
 						List<Expr> args = c.arguments();
+						String sketchtSubType = casper.Util.getSketchTypeFromRaw(targetSubTypes[1]);
+						String sketchtType = sketchtSubType+"[]";
 						switch(targetSubTypes[0]){
 		    				case "java.lang.Integer":
 		    				case "java.lang.String":
@@ -470,7 +473,7 @@ public class JavaLibModel {
 		    				case "java.lang.Short":
 		    				case "java.lang.Byte":
 		    				case "java.lang.BigInteger":
-		    					return new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
+		    					return new ArrayAccessNode(sketchtSubType,new IdentifierNode(target,sketchtType),CustomASTNode.convertToAST(args.get(0)));
 		    				default:
 		    					if(debug){
 		    						System.err.println("Currently not handling Map of type: " + targetSubTypes[0]);
@@ -480,16 +483,22 @@ public class JavaLibModel {
 						break;
 					case "containsKey":
 						List<Expr> args2 = c.arguments();
+						String sketchTargetSubType = casper.Util.getSketchTypeFromRaw(targetSubTypes[1]);
+						String sketchTargetType = sketchTargetSubType+"[]";
+						CustomASTNode key = CustomASTNode.convertToAST(args2.get(0));
 						switch(targetSubTypes[0]){
-		    				case "java.lang.Integer":
 		    				case "java.lang.String":
+		    					return new BinaryOperatorNode("!=", "bit", new ArrayAccessNode(sketchTargetSubType,new IdentifierNode(target,sketchTargetType),key),new ConstantNode("0","String",ConstantNode.NULLLIT));
 		    				case "java.lang.Double":
+		    					return new BinaryOperatorNode("!=", "bit", new ArrayAccessNode(sketchTargetSubType,new IdentifierNode(target,sketchTargetType),key),new ConstantNode("0","double",ConstantNode.NULLLIT));
 		    				case "java.lang.Float":
+		    					return new BinaryOperatorNode("!=", "bit", new ArrayAccessNode(sketchTargetSubType,new IdentifierNode(target,sketchTargetType),key),new ConstantNode("0","float",ConstantNode.NULLLIT));
+		    				case "java.lang.Integer":
 		    				case "java.lang.Long":
 		    				case "java.lang.Short":
 		    				case "java.lang.Byte":
 		    				case "java.lang.BigInteger":
-		    					return new BinaryOperatorNode("!=",new ArrayAccessNode("",new IdentifierNode(target),CustomASTNode.convertToAST(args2.get(0))),new ConstantNode("0",ConstantNode.NULLLIT));
+		    					return new BinaryOperatorNode("!=", "bit", new ArrayAccessNode(sketchTargetSubType,new IdentifierNode(target,sketchTargetType),key),new ConstantNode("0","int",ConstantNode.NULLLIT));
 		    				default:
 		    					if(debug){
 		    						System.err.println("Currently not handling Map of type: " + targetSubTypes[0]);
@@ -507,10 +516,12 @@ public class JavaLibModel {
 			case "java.util.List":
 				switch(id){
 					case "get":
+						String sketchTargetSubType = casper.Util.getSketchTypeFromRaw(targetSubTypes[0]);
+						String sketchTargetType = sketchTargetSubType+"[]";
 						List<Expr> args = c.arguments();
-						return new ArrayAccessNode(target+"["+args.get(0)+"]",new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)));
+						return new ArrayAccessNode(sketchTargetSubType,new IdentifierNode(target,sketchTargetType),CustomASTNode.convertToAST(args.get(0)));
 					case "size":
-						return new CallNode(target+".size",new ArrayList<CustomASTNode>());
+						return new CallNode(target+".size","int",new ArrayList<CustomASTNode>());
 					default:
 						if(debug){
 							System.err.println("Method " + id + " of java.util.List not currently supported. Please extend the JavaLibModel.");
@@ -521,7 +532,9 @@ public class JavaLibModel {
 			case "java.util.Set":
 				switch(id){
 					case "add":
-						return new ArrayUpdateNode(new IdentifierNode(target), new IdentifierNode("temp_index_casper"), CustomASTNode.convertToAST(c.arguments().get(0)));
+						String sketchTargetSubType = casper.Util.getSketchTypeFromRaw(targetSubTypes[0]);
+						String sketchTargetType = sketchTargetSubType+"[]";
+						return new ArrayUpdateNode(sketchTargetSubType,new IdentifierNode(target,sketchTargetType), new IdentifierNode("temp_index_casper","int"), CustomASTNode.convertToAST(c.arguments().get(0)));
 					default:
 						if(debug){
 							System.err.println("Method " + id + " of java.util.Set not currently supported. Please extend the JavaLibModel.");
@@ -533,9 +546,9 @@ public class JavaLibModel {
 				switch(id){
 					case "equals":
 						ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
-						args.add(new IdentifierNode(target));
+						args.add(new IdentifierNode(target, "String"));
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
-						return new CallNode("casper_str_equal",args);
+						return new CallNode("casper_str_equal","bit",args);
 					default:
 						if(debug){
 							System.err.println("Method " + id + " of java.lang.String not currently supported. Please extend the JavaLibModel.");
@@ -545,28 +558,29 @@ public class JavaLibModel {
 				break;
 			case "java.lang.Math":
 				ArrayList<CustomASTNode> args = new ArrayList<CustomASTNode>();
+				String type = casper.Util.getSketchTypeFromRaw(c.arguments().get(0).type().toString());
 				switch(id){
 					case "pow":
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
 						args.add(CustomASTNode.convertToAST(c.arguments().get(1)));
-						return new CallNode("casper_math_pow",args);
+						return new CallNode("casper_math_pow",type,args);
 					case "sqrt":
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
-						return new CallNode("casper_math_sqrt",args);
+						return new CallNode("casper_math_sqrt",type,args);
 					case "max":
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
 						args.add(CustomASTNode.convertToAST(c.arguments().get(1)));
-						return new CallNode("casper_math_max",args);
+						return new CallNode("casper_math_max",type,args);
 					case "min":
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
 						args.add(CustomASTNode.convertToAST(c.arguments().get(1)));
-						return new CallNode("casper_math_min",args);
+						return new CallNode("casper_math_min",type,args);
 					case "abs":
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
-						return new CallNode("casper_math_abs",args);
+						return new CallNode("casper_math_abs",type,args);
 					case "ceil":
 						args.add(CustomASTNode.convertToAST(c.arguments().get(0)));
-						return new CallNode("casper_math_ceil",args);
+						return new CallNode("casper_math_ceil",type,args);
 					default:
 						if(debug){
 							System.err.println("Method " + id + " of java.lang.Math not currently supported. Please extend the JavaLibModel.");
@@ -579,7 +593,7 @@ public class JavaLibModel {
 				}
 		}
 		
-		return new IdentifierNode("");
+		return new IdentifierNode("","");
 	}
 
 	// Currently cannot handle data structures containing non primitive types
@@ -641,17 +655,21 @@ public class JavaLibModel {
 		String target = c.target().toString();
 		String targetType = c.target().type().toString();
 		String targetTypeMain = targetType;
-		if(targetType.contains("<"))
+		String[] targetSubTypes = null;
+		if(targetType.contains("<")) {
 			targetTypeMain = targetType.substring(0,targetType.indexOf("<"));
+			targetSubTypes = targetType.substring(targetType.indexOf("<")+1,targetType.lastIndexOf(">")).split(",");
+		}
 		
 		String id = c.id().toString();
 		
 		switch(targetTypeMain){
 			case "java.util.Map":
-				String[] targetSubTypes = targetType.substring(targetType.indexOf("<")+1,targetType.lastIndexOf(">")).split(",");
 				switch(id){
 					case "put":
 						List<Expr> args = c.arguments();
+						String sketchTargetSubType = casper.Util.getSketchTypeFromRaw(targetSubTypes[1]);
+						String sketchTargetType = sketchTargetSubType+"[]";
 						switch(targetSubTypes[0]){
 		    				case "java.lang.Integer":
 		    				case "java.lang.String":
@@ -661,12 +679,9 @@ public class JavaLibModel {
 		    				case "java.lang.Short":
 		    				case "java.lang.Byte":
 		    				case "java.lang.BigInteger":
-		    					CustomASTNode upd = new ArrayUpdateNode(new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)),CustomASTNode.convertToAST(args.get(1)));
-		    					if(currVerifCondition.toString().equals(target)){
-		    						return upd;
-		    					}
+		    					CustomASTNode upd = new ArrayUpdateNode(sketchTargetSubType,new IdentifierNode(target,sketchTargetType),CustomASTNode.convertToAST(args.get(0)),CustomASTNode.convertToAST(args.get(1)));
 		    					if(currVerifCondition.contains(target)){
-		    						return new SequenceNode(upd,currVerifCondition);
+		    						return currVerifCondition.replaceAll(target, upd);
 		    					}
 		    					else{
 		    						return currVerifCondition;
@@ -690,7 +705,9 @@ public class JavaLibModel {
 				switch(id){
 					case "set":
 						List<Expr> args = c.arguments();
-						CustomASTNode acc = new ArrayUpdateNode(new IdentifierNode(target),CustomASTNode.convertToAST(args.get(0)),CustomASTNode.convertToAST(args.get(1)));
+						String sketchTargetSubType = casper.Util.getSketchTypeFromRaw(targetSubTypes[0]);
+						String sketchTargetType = sketchTargetSubType+"[]";
+						CustomASTNode acc = new ArrayUpdateNode(sketchTargetSubType,new IdentifierNode(target,sketchTargetType),CustomASTNode.convertToAST(args.get(0)),CustomASTNode.convertToAST(args.get(1)));
 						return currVerifCondition.replaceAll(target,acc);
 					default:
 						if(debug){
@@ -703,7 +720,9 @@ public class JavaLibModel {
 				switch(id){
 					case "add":
 						List<Expr> args = c.arguments();
-						CustomASTNode acc = new ArrayUpdateNode(new IdentifierNode(target),new IdentifierNode("temp_index_casper"),CustomASTNode.convertToAST(args.get(0)));
+						String sketchTargetSubType = casper.Util.getSketchTypeFromRaw(targetSubTypes[0]);
+						String sketchTargetType = sketchTargetSubType+"[]";
+						CustomASTNode acc = new ArrayUpdateNode(sketchTargetSubType,new IdentifierNode(target,sketchTargetType),new IdentifierNode("temp_index_casper","int"),CustomASTNode.convertToAST(args.get(0)));
 						return currVerifCondition.replaceAll(target,acc);
 					default:
 						if(debug){

@@ -6,10 +6,11 @@ import java.util.Map;
 public class ArrayAccessNode extends CustomASTNode{
 
 	public CustomASTNode array;
-	CustomASTNode index;
+	public CustomASTNode index;
 	
-	public ArrayAccessNode(String n, CustomASTNode a, CustomASTNode i) {
-		super(n);
+	public ArrayAccessNode(String t, CustomASTNode a, CustomASTNode i) {
+		super(t+"_getter("+a+","+i+")");
+		type = t;
 		array = a;
 		index = i;
 	}
@@ -21,8 +22,7 @@ public class ArrayAccessNode extends CustomASTNode{
 		}
 		CustomASTNode newIndex = index.replaceAll(lhs, rhs);
 		CustomASTNode newArray = array.replaceAll(lhs, rhs);
-		String newName = newArray.toString() + "[" + newIndex.toString() + "]";
-		return new ArrayAccessNode(newName,newArray,newIndex);
+		return new ArrayAccessNode(type,newArray,newIndex);
 	}
 	
 	public String toString(){
@@ -31,7 +31,7 @@ public class ArrayAccessNode extends CustomASTNode{
 
 	@Override
 	public boolean contains(String exp) {
-		return name.equals(exp) || array.contains(exp) || index.contains(exp);
+		return array.contains(exp) || index.contains(exp);
 	}
 
 	@Override
@@ -47,13 +47,13 @@ public class ArrayAccessNode extends CustomASTNode{
 
 	@Override
 	public CustomASTNode fixArrays() {
-		return new FieldNode("casper_data_set["+index.name+"]."+array.toString(),new ArrayAccessNode("casper_data_set["+index.name+"]",new IdentifierNode("casper_data_set"),index));
+		return new FieldNode("CasperDataRecord_getter(casper_data_set,"+index.name+")."+array.toString(),"CasperDataRecord",new ArrayAccessNode("CasperDataRecord",new IdentifierNode("casper_data_set","CasperDataRecord"),index));
 	}
 	
 	@Override
 	public void replaceIndexesWith(String k) {
 		if(index instanceof IdentifierNode)
-			index = new IdentifierNode(k);
+			index = new IdentifierNode(k,index.type);
 		else
 			index.replaceIndexesWith(k);
 		array.replaceIndexesWith(k);

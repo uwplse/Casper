@@ -26,6 +26,7 @@ public class Util {
 		switch(original){
 			case "boolean":
 			case "Boolean":
+			case "java.lang.Boolean":
 				return "bit";
 			case "char":
 				return "char";
@@ -39,8 +40,14 @@ public class Util {
 			case "Integer":
 			case "Double":
 			case "Float":
+			case "java.lang.String":
+			case "java.lang.Integer":
+			case "java.lang.Double":
+			case "java.lang.Float":
 				return "int";
 			case "boolean[]":
+			case "Boolean[]":
+			case "java.lang.Boolean[]":
 				return "bit[" + Configuration.arraySizeBound + "]";
 			case "char[]":
 				return "char[" + Configuration.arraySizeBound + "]";
@@ -54,6 +61,10 @@ public class Util {
 			case "Integer[]":
 			case "Double[]":
 			case "Float[]":
+			case "java.lang.String[]":
+			case "java.lang.Integer[]":
+			case "java.lang.Double[]":
+			case "java.lang.Float[]":
 				return "int[" + Configuration.arraySizeBound + "]";
 			default:
 				String[] components = original.split("\\.");
@@ -767,7 +778,7 @@ public class Util {
 						loopExt.constCount = rhsAST.convertConstToIDs(loopExt.constMapping,loopExt.constCount);
 						
 						if(lhs instanceof ArrayAccess){
-							currVerifCondition = currVerifCondition.replaceAll(((ArrayAccess) lhs).array().toString(), new ArrayUpdateNode(CustomASTNode.convertToAST(((ArrayAccess) lhs).array()),CustomASTNode.convertToAST(((ArrayAccess) lhs).index()),rhsAST));
+							currVerifCondition = currVerifCondition.replaceAll(((ArrayAccess) lhs).array().toString(), new ArrayUpdateNode(lhs.type().toString(),CustomASTNode.convertToAST(((ArrayAccess) lhs).array()),CustomASTNode.convertToAST(((ArrayAccess) lhs).index()),rhsAST));
 						}
 						else {
 							currVerifCondition = currVerifCondition.replaceAll(lhs.toString(), rhsAST);

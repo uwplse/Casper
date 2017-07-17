@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import polyglot.ast.Expr;
-
 public class CallNode extends CustomASTNode {
 	
 	public ArrayList<CustomASTNode> arguments;
 	
-	public CallNode(String n, ArrayList<CustomASTNode> args) {
+	public CallNode(String n, String t, ArrayList<CustomASTNode> args) {
 		super(n);
 		arguments = args;
+		type = t;
 	}
 
 	@Override
@@ -21,7 +20,7 @@ public class CallNode extends CustomASTNode {
 		for(CustomASTNode arg : arguments){
 			newArgs.add(arg.replaceAll(lhs, rhs));
 		}
-		return new CallNode(name,newArgs);
+		return new CallNode(name,type,newArgs);
 	}
 	
 	public String toString(){
@@ -61,7 +60,7 @@ public class CallNode extends CustomASTNode {
 		for(CustomASTNode arg : arguments){
 			args.add(arg.fixArrays());
 		}
-		return new CallNode(name,args);
+		return new CallNode(name,type,args);
 	}
 	
 	@Override

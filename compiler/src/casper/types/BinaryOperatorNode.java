@@ -5,20 +5,21 @@ import java.util.Map;
 
 public class BinaryOperatorNode extends CustomASTNode{
 	
-	CustomASTNode operandLeft;
-	CustomASTNode operandRight;
+	public CustomASTNode operandLeft;
+	public CustomASTNode operandRight;
 	
-	public BinaryOperatorNode(String n, CustomASTNode oleft, CustomASTNode oright) {
+	public BinaryOperatorNode(String n, String t, CustomASTNode oleft, CustomASTNode oright) {
 		super(n);
 		operandLeft = oleft;
 		operandRight = oright;
+		type = t;
 	}
 
 	@Override
 	public CustomASTNode replaceAll(String lhs, CustomASTNode rhs){
 		CustomASTNode newOperandLeft = operandLeft.replaceAll(lhs, rhs);
 		CustomASTNode newOperandRight = operandRight.replaceAll(lhs, rhs);
-		return new BinaryOperatorNode(name,newOperandLeft,newOperandRight);
+		return new BinaryOperatorNode(name,type,newOperandLeft,newOperandRight);
 	}
 	
 	public String toString(){
@@ -40,21 +41,21 @@ public class BinaryOperatorNode extends CustomASTNode{
 	public int convertConstToIDs(Map<String,String> constMapping, int constID){
 		if(casper.Util.operatorType(name) == casper.Util.RELATIONAL_OP){
 			if(operandLeft instanceof ConstantNode){
-				if(((ConstantNode) operandLeft).type == ConstantNode.INTLIT){
+				if(((ConstantNode) operandLeft).type_code == ConstantNode.INTLIT){
 					if(!constMapping.containsKey(operandLeft.toString())){
 						constMapping.put(operandLeft.toString(), "casperConst"+constID);
 						constID++;
 					}
-					operandLeft = new IdentifierNode(constMapping.get(operandLeft.toString()));
+					operandLeft = new IdentifierNode(constMapping.get(operandLeft.toString()),operandLeft.type);
 				}
 			}
 			if(operandRight instanceof ConstantNode){
-				if(((ConstantNode) operandRight).type == ConstantNode.INTLIT){
+				if(((ConstantNode) operandRight).type_code == ConstantNode.INTLIT){
 					if(!constMapping.containsKey(operandRight.toString())){
 						constMapping.put(operandRight.toString(), "casperConst"+constID);
 						constID++;
 					}
-					operandRight = new IdentifierNode(constMapping.get(operandRight.toString()));
+					operandRight = new IdentifierNode(constMapping.get(operandRight.toString()),operandRight.type);
 				}
 			}
 		}

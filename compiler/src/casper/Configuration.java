@@ -20,5 +20,5 @@ public class Configuration {
 	static public int maxRecursionDepth = 5;
 	
 	// Run in debug mode
-	static public boolean slow = false;
+	static public boolean slow = true;
 }
