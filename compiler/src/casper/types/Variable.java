@@ -78,6 +78,10 @@ public class Variable{
 		return (this.getSketchType(varType)).replace("[" + Configuration.arraySizeBound + "]", "");
 	}
 	
+	public String getDafnyArrayType() {
+		return casper.Util.getDafnyType((this.getSketchType(varType)).replace("[" + Configuration.arraySizeBound + "]", ""));
+	}
+	
 	private String getSketchType(String vtype){
 		String targetType = vtype;
 		String templateType = vtype;

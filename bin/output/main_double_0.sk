@@ -1,0 +1,324 @@
+/******************************************************************************/
+/* Include necessory packages                                                 */
+
+include "output/utils.sk";
+include "output/MulVecSca.sk";
+
+/******************************************************************************/
+/* Global Control Variables                                                   */
+int CASPER_NUM_OUTVARS = 1;
+
+int[1] stageTypes = {0};
+bit[4] _term_flag_int_terminal0_map_k0 = {false};
+bit[4] _term_flag_int_terminal1_map_k0 = {false};
+bit[2] mapExp_v0 = {false};
+bit[2] mapExp_v1 = {false};
+bit[2] _term_flag_bit_terminal1_map_c0 = {false};
+bit[4] _term_flag_int_terminal0_map_c0 = {false};
+bit[4] _term_flag_int_terminal1_map_c0 = {false};
+bit[2] _term_flag_bit_terminal0_map_c0 = {false};
+bit[3] _term_flag_int_terminal1_map_v0 = {false};
+bit[3] _term_flag_int_terminal1_map_v1 = {false};
+bit[3] _term_flag_int_terminal0_map_v0 = {false};
+bit[1] mapExp_c0 = {false};
+bit[6] _term_flag_int_terminal0_reduce0 = {false};
+bit[3] _term_flag_int_terminal0_map_v1 = {false};
+bit[2] reduceExp0 = {false};
+bit[6] _term_flag_int_terminal1_reduce0 = {false};
+bit[2] mapExp_k0 = {false};
+
+
+// Input variables decl
+bit loop0;
+int b;
+
+/******************************************************************************/
+/* Main function to verify the two results generated are equal                */
+
+harness void main(int[18] intSet, int csg_test_val1, int csg_test_val2){
+	// Initialize output variables.
+	int[4] temp0;
+	temp0[0] = 0;
+	temp0[1] = 0;
+	temp0[2] = 0;
+	temp0[3] = 0;
+	int[4] temp;
+	temp[0] = intSet[17];
+	temp[1] = intSet[16];
+	temp[2] = intSet[15];
+	temp[3] = intSet[14];
+
+	// Initialize input data and variables
+    int[3] a;
+	a[0] = intSet[12];
+	a[1] = intSet[11];
+	a[2] = intSet[10];
+	
+    // Initialize input broadcast variables
+    CASPER_TRUE = true;
+    CASPER_FALSE = false;
+    loop0 = false;
+	b = intSet[13];
+	
+    // Initialize loop counters
+    int i0 = 0;
+	int i = intSet[9];
+
+	// Verification code
+	assert loopInvariant(a,temp0,temp0,i0,i0);
+	if(loopInvariant(a,temp,temp0,i,i0) && (i<3)) {
+		assert loopInvariant(a,int_setter(temp,i,(int_getter(a,i)*b)),temp0,(i+1),i0);
+		
+		if(mapExp_k0[0] && mapExp_v0[1] && mapExp_v1[0] && _term_flag_int_terminal0_map_k0[0] && _term_flag_int_terminal1_map_v0[0] && _term_flag_int_terminal0_map_v0[1] && _term_flag_int_terminal0_map_v1[0]) assert false;
+		if(mapExp_k0[0] && mapExp_v0[1] && mapExp_v1[0] && _term_flag_int_terminal0_map_k0[0] && _term_flag_int_terminal1_map_v0[1] && _term_flag_int_terminal0_map_v0[0] && _term_flag_int_terminal0_map_v1[0]) assert false;
+		
+	}
+	if(loopInvariant(a,temp,temp0,i,i0) && !(i<3)) {
+		assert postCondition(a,temp,temp0,i,0);
+	}
+}
+
+/******************************************************************************/
+/* Verification functions                                                     */
+
+bit postCondition(int[3] a, int[4] temp, int[4] temp0, int i, int i0){
+	int [4] casper_r;
+	casper_r[0] = temp[0];
+	casper_r[1] = temp[1];
+	casper_r[2] = temp[2];
+	casper_r[3] = temp[3];
+	return mapreduce_0(a, temp, temp0, i, i0) == casper_r;
+}
+
+bit loopInvariant(int[3] a, int[4] temp, int[4] temp0, int i, int i0){
+	int [4] casper_r;
+	casper_r[0] = temp[0];
+	casper_r[1] = temp[1];
+	casper_r[2] = temp[2];
+	casper_r[3] = temp[3];
+	return i0 <= i && i <= 3 && mapreduce_0(a, temp, temp0, i, i0) == casper_r;
+}
+
+/******************************************************************************/
+/* MapReduce Implementation                                                   */
+
+int [4] mapreduce_0 (int[3] a, int[4] temp, int[4] temp0, int i, int i0) {
+	int c = ??(1);
+	if(c==0) {
+		stageTypes[0] = 0;
+		return map_0(a, temp, temp0, i, i0);
+	} else {
+		stageTypes[0] = 1;
+		return reduce_0(a, temp, temp0, i, i0);
+	}
+}
+
+
+
+generator bit booleanMapGenerator_c0(int[3] a, int i){
+	bit _bit_terminal0;
+	int  _bit_terminal0c = ??(1);
+	if(_bit_terminal0c == 0) { _term_flag_bit_terminal0_map_c0[0] =  true; _bit_terminal0 = loop0; }
+	else if(_bit_terminal0c == 1) { _term_flag_bit_terminal0_map_c0[1] =  true; _bit_terminal0 = CASPER_FALSE; }
+	else { assert false; }
+	bit _bit_terminal1;
+	int  _bit_terminal1c = ??(1);
+	if(_bit_terminal1c == 0) { _term_flag_bit_terminal1_map_c0[0] =  true; _bit_terminal1 = loop0; }
+	else if(_bit_terminal1c == 1) { _term_flag_bit_terminal1_map_c0[1] =  true; _bit_terminal1 = CASPER_FALSE; }
+	else { assert false; }
+	int _int_terminal0;
+	int  _int_terminal0c = ??(2);
+	if(_int_terminal0c == 0) { _term_flag_int_terminal0_map_c0[0] =  true; _int_terminal0 = i; }
+	else if(_int_terminal0c == 1) { _term_flag_int_terminal0_map_c0[1] =  true; _int_terminal0 = b; }
+	else if(_int_terminal0c == 2) { _term_flag_int_terminal0_map_c0[2] =  true; _int_terminal0 = a[i]; }
+	else if(_int_terminal0c == 3) { _term_flag_int_terminal0_map_c0[3] =  true; _int_terminal0 = ??; assert _int_terminal0 != 0; }
+	else { assert false; }
+	int _int_terminal1;
+	int  _int_terminal1c = ??(2);
+	if(_int_terminal1c == 0) { _term_flag_int_terminal1_map_c0[0] =  true; _int_terminal1 = i; }
+	else if(_int_terminal1c == 1) { _term_flag_int_terminal1_map_c0[1] =  true; _int_terminal1 = b; }
+	else if(_int_terminal1c == 2) { _term_flag_int_terminal1_map_c0[2] =  true; _int_terminal1 = a[i]; }
+	else if(_int_terminal1c == 3) { _term_flag_int_terminal1_map_c0[3] =  true; _int_terminal1 = ??; assert _int_terminal1 != 0; }
+	else { assert false; }
+	int c = ??(0);
+	if(c==0){ mapExp_c0[0]=true; return (_bit_terminal0); }
+	else { assert false; }
+	
+}
+
+generator int intMapGenerator_k0(int[3] a, int i){
+	int _int_terminal0;
+	int  _int_terminal0c = ??(2);
+	if(_int_terminal0c == 0) { _term_flag_int_terminal0_map_k0[0] =  true; _int_terminal0 = i; }
+	else if(_int_terminal0c == 1) { _term_flag_int_terminal0_map_k0[1] =  true; _int_terminal0 = b; }
+	else if(_int_terminal0c == 2) { _term_flag_int_terminal0_map_k0[2] =  true; _int_terminal0 = a[i]; }
+	else if(_int_terminal0c == 3) { _term_flag_int_terminal0_map_k0[3] =  true; _int_terminal0 = ??; assert _int_terminal0 != 0; }
+	else { assert false; }
+	int _int_terminal1;
+	int  _int_terminal1c = ??(2);
+	if(_int_terminal1c == 0) { _term_flag_int_terminal1_map_k0[0] =  true; _int_terminal1 = i; }
+	else if(_int_terminal1c == 1) { _term_flag_int_terminal1_map_k0[1] =  true; _int_terminal1 = b; }
+	else if(_int_terminal1c == 2) { _term_flag_int_terminal1_map_k0[2] =  true; _int_terminal1 = a[i]; }
+	else if(_int_terminal1c == 3) { _term_flag_int_terminal1_map_k0[3] =  true; _int_terminal1 = ??; assert _int_terminal1 != 0; }
+	else { assert false; }
+	int c = ??(1);
+	if(c==0){ mapExp_k0[0]=true; return (_int_terminal0); }
+	else if(c==1){ mapExp_k0[1]=true; return ((_int_terminal0) * (_int_terminal1)); }
+	else { assert false; }
+	
+}
+
+generator int intMapGenerator_v0(int[3] a, int i){
+	int _int_terminal0;
+	int  _int_terminal0c = ??(2);
+	if(_int_terminal0c == 0) { _term_flag_int_terminal0_map_v0[0] =  true; _int_terminal0 = b; }
+	else if(_int_terminal0c == 1) { _term_flag_int_terminal0_map_v0[1] =  true; _int_terminal0 = a[i]; }
+	else if(_int_terminal0c == 2) { _term_flag_int_terminal0_map_v0[2] =  true; _int_terminal0 = ??; assert _int_terminal0 != 0; }
+	else { assert false; }
+	int _int_terminal1;
+	int  _int_terminal1c = ??(2);
+	if(_int_terminal1c == 0) { _term_flag_int_terminal1_map_v0[0] =  true; _int_terminal1 = b; }
+	else if(_int_terminal1c == 1) { _term_flag_int_terminal1_map_v0[1] =  true; _int_terminal1 = a[i]; }
+	else if(_int_terminal1c == 2) { _term_flag_int_terminal1_map_v0[2] =  true; _int_terminal1 = ??; assert _int_terminal1 != 0; }
+	else { assert false; }
+	int c = ??(1);
+	if(c==0){ mapExp_v0[0]=true; return (_int_terminal0); }
+	else if(c==1){ mapExp_v0[1]=true; return ((_int_terminal0) * (_int_terminal1)); }
+	else { assert false; }
+	
+}
+
+generator int intMapGenerator_v1(int[3] a, int i){
+	int _int_terminal0;
+	int  _int_terminal0c = ??(2);
+	if(_int_terminal0c == 0) { _term_flag_int_terminal0_map_v1[0] =  true; _int_terminal0 = b; }
+	else if(_int_terminal0c == 1) { _term_flag_int_terminal0_map_v1[1] =  true; _int_terminal0 = a[i]; }
+	else if(_int_terminal0c == 2) { _term_flag_int_terminal0_map_v1[2] =  true; _int_terminal0 = ??; assert _int_terminal0 != 0; }
+	else { assert false; }
+	int _int_terminal1;
+	int  _int_terminal1c = ??(2);
+	if(_int_terminal1c == 0) { _term_flag_int_terminal1_map_v1[0] =  true; _int_terminal1 = b; }
+	else if(_int_terminal1c == 1) { _term_flag_int_terminal1_map_v1[1] =  true; _int_terminal1 = a[i]; }
+	else if(_int_terminal1c == 2) { _term_flag_int_terminal1_map_v1[2] =  true; _int_terminal1 = ??; assert _int_terminal1 != 0; }
+	else { assert false; }
+	int c = ??(1);
+	if(c==0){ mapExp_v1[0]=true; return (_int_terminal0); }
+	else if(c==1){ mapExp_v1[1]=true; return ((_int_terminal0) * (_int_terminal1)); }
+	else { assert false; }
+	
+}
+
+
+
+void do_map_0 (int[3] a, int i, ref int[CASPER_NUM_OUTVARS] keys0, ref int[CASPER_NUM_OUTVARS] keys1, ref int[CASPER_NUM_OUTVARS] values0, ref int[CASPER_NUM_OUTVARS] values1)
+{
+  	int c0 = ??(1);
+	if(c0==0){
+		keys0[0] = ??;
+		keys1[0] = intMapGenerator_k0(a, i);
+		values0[0] = intMapGenerator_v0(a, i);
+	values1[0] = intMapGenerator_v1(a, i);
+	} else {
+		if(booleanMapGenerator_c0(a, i)){
+			keys0[0] = ??;
+			keys1[0] = intMapGenerator_k0(a, i);
+			values0[0] = intMapGenerator_v0(a, i);
+		values1[0] = intMapGenerator_v1(a, i);
+		}
+	}
+}
+
+
+generator int intReduceGenerator0(int val1, int val2, int val3, int val4){
+	int _int_terminal0;
+	int  _int_terminal0c = ??(3);
+	if(_int_terminal0c == 0) { _term_flag_int_terminal0_reduce0[0] =  true; _int_terminal0 = val1; }
+	else if(_int_terminal0c == 1) { _term_flag_int_terminal0_reduce0[1] =  true; _int_terminal0 = val2; }
+	else if(_int_terminal0c == 2) { _term_flag_int_terminal0_reduce0[2] =  true; _int_terminal0 = val3; }
+	else if(_int_terminal0c == 3) { _term_flag_int_terminal0_reduce0[3] =  true; _int_terminal0 = val4; }
+	else if(_int_terminal0c == 4) { _term_flag_int_terminal0_reduce0[4] =  true; _int_terminal0 = b; }
+	else if(_int_terminal0c == 5) { _term_flag_int_terminal0_reduce0[5] =  true; _int_terminal0 = ??; assert _int_terminal0 != 0; }
+	else { assert false; }
+	int _int_terminal1;
+	int  _int_terminal1c = ??(3);
+	if(_int_terminal1c == 0) { _term_flag_int_terminal1_reduce0[0] =  true; _int_terminal1 = val1; }
+	else if(_int_terminal1c == 1) { _term_flag_int_terminal1_reduce0[1] =  true; _int_terminal1 = val2; }
+	else if(_int_terminal1c == 2) { _term_flag_int_terminal1_reduce0[2] =  true; _int_terminal1 = val3; }
+	else if(_int_terminal1c == 3) { _term_flag_int_terminal1_reduce0[3] =  true; _int_terminal1 = val4; }
+	else if(_int_terminal1c == 4) { _term_flag_int_terminal1_reduce0[4] =  true; _int_terminal1 = b; }
+	else if(_int_terminal1c == 5) { _term_flag_int_terminal1_reduce0[5] =  true; _int_terminal1 = ??; assert _int_terminal1 != 0; }
+	else { assert false; }
+	int c = ??(1);
+	if(c==0){ reduceExp0[0]=true; return (_int_terminal0); }
+	else if(c==1){ reduceExp0[1]=true; return ((_int_terminal0) * (_int_terminal1)); }
+	else { assert false; }
+	
+}
+
+
+
+int init_temp(int temp0){
+	return {| 0 | 1 | temp0 |};
+}
+
+int reduce_0_temp(int val1, int val2, int val3, int val4){
+	return intReduceGenerator0(val1, val2, val3, val4);
+}
+
+int merge_temp(int val1, int val2){
+	return {| val1 | val1+val2 |};
+}
+
+
+int [4] map_0 (int[3] a, int[4] temp, int[4] temp0, int i, int i0) {
+	int [4] casper_r;
+	
+	for (int casper_i = i0; casper_i < i; ++casper_i)
+	{
+		int[CASPER_NUM_OUTVARS] keys0;
+		int[CASPER_NUM_OUTVARS] keys1;
+		int[CASPER_NUM_OUTVARS] values0;
+		int[CASPER_NUM_OUTVARS] values1;
+		
+		int num_pairs = CASPER_NUM_OUTVARS;
+		
+		do_map_0(a, casper_i, keys0, keys1, values0, values1);
+		
+		for (int casper_j = 0; casper_j < num_pairs; ++casper_j)
+		{ 
+	  		int key0 = keys0[casper_j];
+			int key1 = keys1[casper_j];
+			
+	  		if(key0 == 0) {	}
+	  		else if (key0 == 1 && key1 == 0){ casper_r[0] = values0[casper_j]; }
+			else if (key0 == 1 && key1 == 1){ casper_r[1] = values0[casper_j]; }
+			else if (key0 == 1 && key1 == 2){ casper_r[2] = values0[casper_j]; }
+			else if (key0 == 1 && key1 == 3){ casper_r[3] = values0[casper_j]; }
+			
+	  		else{ assert 0; }
+		} 
+	}
+	
+	return casper_r;
+}
+
+int [1] reduce_0 (int[3] a, int[4] temp, int[4] temp0, int i, int i0) {
+	int [1] casper_r;
+	casper_r[0] = init_temp(temp0[0]);
+	casper_r[1] = init_temp(temp0[1]);
+	casper_r[2] = init_temp(temp0[2]);
+	casper_r[3] = init_temp(temp0[3]);
+	
+	for (int casper_i = i0; casper_i < i; ++casper_i)
+	{
+		casper_r[0] = reduce_0_temp(casper_r[0], a[casper_i], 0, 0);
+	}
+	
+	casper_r[0] = merge_temp(casper_r[0],temp0[0]);
+	casper_r[1] = merge_temp(casper_r[1],temp0[1]);
+	casper_r[2] = merge_temp(casper_r[2],temp0[2]);
+	casper_r[3] = merge_temp(casper_r[3],temp0[3]);
+	
+	
+	return casper_r;
+}

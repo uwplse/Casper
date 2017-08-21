@@ -111,12 +111,9 @@ abstract public class CustomASTNode {
 		else if(exp instanceof ArrayAccess){
 			Expr arrayExpr = ((ArrayAccess) exp).array();
 			Expr indexExpr = ((ArrayAccess) exp).index();
-			System.err.println(arrayExpr);
-			System.err.println(arrayExpr.type());
-			System.err.println(arrayExpr.type().toString());
 			CustomASTNode array = convertToAST(arrayExpr);
 			CustomASTNode index = convertToAST(indexExpr);
-			node = new ArrayAccessNode(exp.toString(), array, index);
+			node = new ArrayAccessNode(arrayExpr.type().toString(), array, index);
 		}
 		else if(exp instanceof Unary){
 			String operator = ((Unary) exp).operator().toString();

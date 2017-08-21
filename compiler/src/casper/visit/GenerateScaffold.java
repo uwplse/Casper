@@ -18,9 +18,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import casper.Configuration;
+import casper.DafnyCodeGenerator;
 import casper.SketchCodeGenerator;
+import casper.SketchParser;
 import casper.ast.JavaExt;
 import casper.extension.MyWhileExt;
 import casper.types.Variable;
@@ -69,10 +73,8 @@ public class GenerateScaffold extends NodeVisitor{
 		this.conf.stageCount = 1;
 		this.conf.emitCount = 1;
 		this.conf.keyTupleSize = 1;
-		this.conf.valuesTupleSize = 1;
+		this.conf.valuesTupleSize = 2;
 		this.conf.recursionDepth = 2;
-		
-		this.solFound = new HashMap<String,Boolean>();
 	}
 	
 	public class SearchConfiguration{
@@ -96,19 +98,21 @@ public class GenerateScaffold extends NodeVisitor{
 			MyWhileExt ext = (MyWhileExt) JavaExt.ext(n);
 			
 			if(ext.interesting){
-				if(debug){
-					System.err.println("Attempting to translate code fragment:-");
-					System.err.println("");
-					
-					debugLog.print("Attempting to translate code fragment (Fragment ID: " + id + ")\n");
-				}
-				else{
-					System.err.println("==================================================================");
-					System.err.println("Attempting to translate code fragment (Fragment ID: " + id + ")\n");
-				}
-				
-				Set<String> handledTypes = new HashSet<String>();
 				try {
+					if(debug){
+						System.err.println("Attempting to translate code fragment:-");
+						System.err.println("");
+						
+						this.debugLog = new PrintWriter("debug.txt", "UTF-8");
+						this.debugLog.print("Attempting to translate code fragment (Fragment ID: " + id + ")\n");
+					}
+					else{
+						System.err.println("==================================================================");
+						System.err.println("Attempting to translate code fragment (Fragment ID: " + id + ")\n");
+					}
+					
+					Set<String> handledTypes = new HashSet<String>();
+					
 					for(Variable var : ext.outputVars){
 						String sketchReduceType = casper.Util.reducerType(var.getSketchType());
 						String reduceType = var.getReduceType();
@@ -154,8 +158,6 @@ public class GenerateScaffold extends NodeVisitor{
 						this.conf.emitCount = 1;
 						
 						if(log){
-							this.debugLog = new PrintWriter("debug.txt", "UTF-8");
-							
 							debugLog.print("Output type: " + var.varType + "\n\n");
 							debugLog.print("Simple Emits: "+ this.conf.simpleEmits + "\n");
 							debugLog.print("Tuples: "+ this.conf.tuplesAdded + "\n");
@@ -190,10 +192,8 @@ public class GenerateScaffold extends NodeVisitor{
 							int synthesizerExitCode = runSynthesizer("output/main_"+reduceType+"_"+id+".sk", ext, sketchReduceType);
 							
 							if(synthesizerExitCode == 0){
-								ext.generateCode.put(reduceType, false);
-								break;
 								/* Run theorem prover to verify summary */
-								/*SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, this.conf);
+								SketchParser.parseSolution("output/main_"+reduceType+"_"+id+".txt", sketchFilteredOutputVars, ext, this.conf);
 								
 								DafnyCodeGenerator.generateSummary(id, n, sketchFilteredOutputVars, reduceType, sketchReduceType, this.conf);
 								
@@ -201,26 +201,23 @@ public class GenerateScaffold extends NodeVisitor{
 								if(conf.valuesTupleSize == 1 && false)
 									CSGverifierExitCode = verifySummaryCSG("output/main_"+reduceType+"_"+id+"_CSG.dfy", sketchReduceType);
 								
-								if(debug || true){
+								if(debug){
 									System.err.println(ext.mapEmits);
 									System.err.println(ext.reduceExps);
 								}
 									
-								if(CSGverifierExitCode == 0 || true){
+								if(CSGverifierExitCode == 0){
 									int VerifierExitCode = verifySummary("output/main_"+reduceType+"_"+id+".dfy", sketchReduceType);
-									if(VerifierExitCode == 0 && false){
+									if(VerifierExitCode == 0){
 										ext.verifiedMapEmits.add(ext.mapEmits);
 										ext.verifiedInitExps.add(ext.initExps);
 										ext.verifiedReduceExps.add(ext.reduceExps);
 										ext.verifiedMergeExps.add(ext.mergeExps);
-										ext.verifiedSolKeyTypes.add(ext.candidateKeyTypes.get(ext.keyIndex));
+										ext.verifiedSolKeyTypes.add(this.conf.keyType);
 										ext.verifiedCSG.add(true);
 										ext.blocks.add(new ArrayList<String>());
 										ext.termValuesTemp.clear();
 										ext.outVarCount = sketchFilteredOutputVars.size();
-										
-										this.solFound.put(ext.keyIndex+","+ext.useConditionals+","+opsAdded,true);
-										this.solFound.put(ext.keyIndex+","+ext.useConditionals+","+ext.valCount+","+opsAdded,true);
 										
 										if(log){
 											debugLog.print("Solution Mappers: "+ext.mapEmits + "\n");
@@ -230,9 +227,12 @@ public class GenerateScaffold extends NodeVisitor{
 										}
 										
 										//ext.generateCode.put(reduceType, true);
-										//System.err.println("\nSearch Complete. Generating Spark Code.");
-										//debugLog.close();
-										//break;
+										ext.generateCode.put(reduceType, false);
+										System.err.println("\nSearch Complete. Generating Spark Code.");
+										
+										if(this.log) this.debugLog.close();
+										
+										break;
 									}
 									else{
 										Map<String,String> blockExprsNew = new HashMap<String,String>();
@@ -285,7 +285,7 @@ public class GenerateScaffold extends NodeVisitor{
 									ext.blockExprs.get(ext.blockExprs.size()-1).putAll(blockExprsNew);
 									ext.blocks.add(new ArrayList<String>());
 									ext.termValuesTemp.clear();
-								}*/
+								}
 							}
 							else if(synthesizerExitCode == 1){
 								if(log){
@@ -434,9 +434,13 @@ public class GenerateScaffold extends NodeVisitor{
         			this.conf.keyType = this.candidateKeyTypes.get(this.keyIndex);
         			
         			System.err.println("\nBuilding new grammar...");
-        			System.err.println("Keytype changed ("+this.candidateKeyTypes.get(this.keyIndex-1)+" -> "+this.conf.keyType +".\n");
+        			System.err.println("Keytype changed ("+this.candidateKeyTypes.get(this.keyIndex-1)+" -> "+this.conf.keyType +").\n");
         			
         			return 1;
+        		}
+        		else {
+        			this.keyIndex = 0;
+        			this.conf.keyType = this.candidateKeyTypes.get(this.keyIndex);
         		}
         	}
         	
@@ -459,14 +463,14 @@ public class GenerateScaffold extends NodeVisitor{
         		return 1;
         	}
         	// G3 -> G4
-        	if(!this.conf.opsAdded && this.conf.simpleEmits && this.conf.tuplesAdded){
+        	/*if(!this.conf.opsAdded && this.conf.simpleEmits && this.conf.tuplesAdded){
         		this.conf.opsAdded = true;
         		
     			System.err.println("\nBuilding new grammar...");
         		System.err.println("New operators enabled (G3 -> G4).\n");
         		
         		return 1;
-        	}
+        	}*/
         	
         	// Can recursive bounds be increased?
     		if(this.conf.recursionDepth < Configuration.maxRecursionDepth){

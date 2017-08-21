@@ -126,6 +126,15 @@ public class SketchCodeGenerator {
 		// 2. Assert loop invariant implies the post condition if the loop terminates: I && loop condition is false --> POST
 		verifCode += "if(" + invariant + " && " + loopCondFalse + ") {\n\t\tassert " + postC + ";\n\t}";
 	
+		// Generate map-reduce expression
+		String stagesGenerator = generateStagesGenerator(ext.inputDataSet, ext.loopCounters, sketchFilteredOutputVars, conf);
+		
+		// Generate map-reduce stages
+		String mrStages = generateMapReduceStages(ext.inputDataSet, ext.loopCounters, sketchFilteredOutputVars, conf);
+		
+		// Generate do-map functions
+		String domaps = generateDoMaps(conf);
+		
 		// Generate post condition args
 		String postConditionArgsDecl = generatePostConditionArgsDecl(ext.inputDataSet, sketchFilteredOutputVars, ext.loopCounters, ext.postConditionArgsOrder.get(reducerType));
 		
@@ -143,10 +152,10 @@ public class SketchCodeGenerator {
 		String mapGenerators = generateMapGenerators(sketchReducerType, blockArrays, sketchFilteredOutputVars, ext, conf);
 		
 		// Generate map function args declaration
-		String mapArgsDecl = generateMapArgsDecl(ext.inputDataSet, ext.loopCounters, ext.postConditionArgsOrder.get(reducerType), conf.keyTupleSize, conf.valuesTupleSize, sketchReducerType, conf.keyType);
+		String mapArgsDecl = generateMapArgsDecl(ext.inputDataSet, ext.loopCounters, ext.postConditionArgsOrder.get(reducerType), conf, sketchReducerType);
 		
 		// Generate map function emit code
-		String mapEmits = generateDomapEmits(sketchReducerType, ext, ext.inputDataSet, ext.loopCounters, conf.emitCount, conf.simpleEmits, conf.keyTupleSize, conf.valuesTupleSize, conf.keyType);
+		String mapEmits = generateDomapEmits(sketchReducerType, ext, conf);
 		
 		// Generate reduce/fold expression generator
 		String reduceGenerator = generateReduceGenerators(sketchReducerType, blockArrays, sketchFilteredOutputVars, ext, conf);
@@ -157,31 +166,28 @@ public class SketchCodeGenerator {
 		String casperRInit = generateCasperRInit(sketchFilteredOutputVars);
 		
 		// Declare key-value arrays in reduce
-		String declKeysVals = generateDeclKeysVals(sketchReducerType,conf.keyTupleSize, conf.valuesTupleSize, conf.keyType);
+		String declKeysVals = generateDeclKeysVals(sketchReducerType,conf);
 		
 		// Generate map function call args
-		String mapArgsCall = generateMapArgsCall(ext.inputDataSet, conf.keyTupleSize, conf.valuesTupleSize);
+		String mapArgsCall = generateMapArgsCall(ext.inputDataSet, conf);
 		
 		// Initialize key variables
-		String initKeys = generateInitKeys(conf.keyType, conf.keyTupleSize);
+		String initKeys = generateInitKeys(conf);
 		
 		// Generate code to fold values by key
-		String reduceByKey = generateReduceByKey(sketchFilteredOutputVars, conf.keyTupleSize, conf.valuesTupleSize);
+		String reduceByKey = generateReduceByKey(sketchFilteredOutputVars, conf);
 		
 		// Generate reduce functions
-		String reduceFunctions = generateReduceFunctions(sketchReducerType, sketchFilteredOutputVars, conf.keyTupleSize, conf.valuesTupleSize);
+		String reduceFunctions = generateReduceFunctions(sketchReducerType, sketchFilteredOutputVars, conf);
 		
 		// Generate merge functions
 		String mergeFunctions = generateMergeFunctions(sketchReducerType, sketchFilteredOutputVars, ext.methodOperators);
 		
 		// Generate code to merge output with initial values
-		String mergeOutput = generateMergeOutput(sketchFilteredOutputVars, conf.keyTupleSize);
-		
-		// Generate reduce args declaration
-		String reduceArgsDecl = generateReduceArgsDecl(ext.inputDataSet, sketchFilteredOutputVars,ext.loopCounters);
+		String mergeOutput = generateMergeOutput(sketchFilteredOutputVars);
 		
 		// Generate block bit arrays declaration
-		String declBlockArrays = generateDeclBlockArrays(blockArrays);
+		String declBlockArrays = generateDeclBlockArrays(blockArrays, conf);
 		
 		// Generate code to block generated solutions
 		String blockGenerated = generateBlockGenerated(ext);
@@ -192,6 +198,9 @@ public class SketchCodeGenerator {
 			csgTest = "";//generateCSGTestCode(sketchFilteredOutputVars);
 		
 		// Modify template
+		text = text.replace("<stages-generator>", stagesGenerator);
+		text = text.replace("<mr-stages>", mrStages);
+		text = text.replace("<domaps>", domaps);
 		text = text.replace("<decl-block-arrays>", declBlockArrays);
 		text = text.replace("<output-type>", sketchReducerType);
 		text = text.replace("<include-libs>",includeList);
@@ -222,13 +231,172 @@ public class SketchCodeGenerator {
 		text = text.replace("<reduce-functions>", reduceFunctions);
 		text = text.replace("<merge-functions>", mergeFunctions);
 		text = text.replace("<merge-r>", mergeOutput);
-		text = text.replace("<reduce-args-decl>", reduceArgsDecl);
 		text = text.replace("<block-solutions>", blockGenerated);
 		text = text.replace("<reduce-csg-test>", csgTest);
 		
 		// Save
 		writer.print(text);
 		writer.close();
+	}
+
+	private static String generateDoMaps(SearchConfiguration conf) {
+		String code = "";
+		for(int i=0; i<conf.stageCount; i++) {
+			code += "void do_map_"+i+" (<map-args-decl>)\n" + 
+					"{\n" + 
+					"  	<map-emits>\n" + 
+					"}\n\n";
+		}
+		return code;
+	}
+
+	private static String generateStagesGenerator(Variable inputDataSet, Set<Variable> loopCounters, Set<Variable> outVars, SearchConfiguration conf) {
+		String code = "";
+		
+		String argsDecl = generateReduceArgsDecl(inputDataSet, outVars, loopCounters);
+		
+		String args = inputDataSet.varName;
+		for(Variable var : outVars){
+			args += ", " + var.varName;
+			args += ", " + var.varName + "0";
+		}
+		for(Variable var : loopCounters){
+			args += ", " + var.varName;
+			args += ", " + var.varName + "0";
+		}
+		
+		for(int i=0; i<conf.stageCount; i++) {
+			if(conf.stageCount - i == 1) {
+				code += "<output-type> [<r-size>] mapreduce_"+i+" ("+argsDecl+") {\n" +  
+						"	int c = ??(1);\n" +
+						"	if(c==0) {\n" + 
+						"		stageTypes["+i+"] = 0;\n" +
+						"		return map_"+i+"("+args+");\n" + 
+						"	} else {\n" +
+						"		stageTypes["+i+"] = 1;\n" + 
+						"		return reduce_"+i+"("+args+");\n" + 
+						"	}\n" +
+						"}\n\n";
+			}
+			else {
+				code += "<output-type> [<r-size>] mapreduce_"+i+" ("+argsDecl+") {\n" +  
+						"	int c = ??(1);\n" +
+						"	if(c==0) {\n" + 
+						"		stageTypes["+i+"] = 0;\n" +
+						"		return map_"+i+"(mapreduce_"+(i+1)+"(data, count, count0, i, i0), count, count0, i, i0);\n" + 
+						"	} else {\n" +
+						"		stageTypes["+i+"] = 1;\n" + 
+						"		return reduce_"+i+"(mapreduce_"+(i+1)+"(data, count, count0, i, i0), count, count0, i, i0);\n" + 
+						"	}\n" +
+						"}\n\n";
+			}
+		}
+		
+		return code;
+	}
+
+	private static String foo(int remStages, int depth, Variable inputDataSet, Set<Variable> loopCounters, Set<Variable> outVars, SearchConfiguration conf) {
+		String code = "";
+		
+		String argsDecl = generateReduceArgsDecl(inputDataSet, outVars, loopCounters);
+		
+		if(depth == 0) {
+			if(remStages == 1) {
+				code +=	"<output-type> [<r-size>] map_"+depth+" ("+argsDecl+") {\n" + 
+						"	<output-type> [<r-size>] casper_r;\n" +
+						"	\n" + 
+						"	for (int casper_i = <lc>0; casper_i < <lc>; ++casper_i)\n" + 
+						"	{\n" + 
+						"		<init-keys-vals>\n" + 
+						"		int num_pairs = CASPER_NUM_OUTVARS;\n" + 
+						"		\n" + 
+						"		do_map_"+depth+"(<map-args-call>);\n" + 
+						"		\n" + 
+						"		for (int casper_j = 0; casper_j < num_pairs; ++casper_j)\n" + 
+						"		{ \n" + 
+						"	  		<init-keys>\n" + 
+						"	  		if(key0 == 0) {	}\n" + 
+						"	  		" + generateMap(inputDataSet, outVars) + "\n" + 
+						"	  		else{ assert 0; }\n" + 
+						"		} \n" + 
+						"	}\n" +  
+						"	\n" + 
+						"	return casper_r;\n" + 
+						"}\n\n";
+				
+				code +=	"<output-type> [1] reduce_"+depth+" ("+argsDecl+") {\n" +
+						"	<output-type> [1] casper_r;\n" + 
+						"	<casper-r-init>\n" + 
+						"	for (int casper_i = <lc>0; casper_i < <lc>; ++casper_i)\n" + 
+						"	{\n" + generateReduce(inputDataSet, outVars, depth, conf) + "\t}\n" +
+						"	\n" + 
+						"	<merge-r>\n" +
+						"	\n" + 
+						"	return casper_r;\n" + 
+						"}";
+			}
+		}
+		else {
+			code +=	"<output-type> [<r-size>] map"+depth+" (<reduce-args-decl>) {\n" + 
+					"	<output-type> [<r-size>] casper_r;\n" + 
+					"	<casper-r-init>\n" + 
+					"	for (int casper_i = <lc>0; casper_i < <lc>; ++casper_i)\n" + 
+					"	{\n" + 
+					"		<init-keys-vals>\n" + 
+					"		int num_pairs = CASPER_NUM_OUTVARS;\n" + 
+					"		\n" + 
+					"		do_map(<map-args-call>);\n" + 
+					"		\n" + 
+					"		for (int casper_j = 0; casper_j < num_pairs; ++casper_j)\n" + 
+					"		{ \n" + 
+					"	  		<init-keys>\n" + 
+					"	  		if(key0 == 0) {	}\n" + 
+					"	  		<reduce-by-key>\n" + 
+					"	  		else{ assert 0; }\n" + 
+					"		} \n" + 
+					"	}\n" + 
+					"	\n" + 
+					"	<merge-r>\n" + 
+					"	\n" + 
+					"	return casper_r;\n" + 
+					"}\n\n";
+		}
+		
+		return code;
+	}
+	
+	private static String generateMapReduceStages(Variable inputDataSet, Set<Variable> loopcounters, Set<Variable> sketchFilteredOutputVars, SearchConfiguration conf) {
+		return foo(conf.stageCount, 0, inputDataSet, loopcounters, sketchFilteredOutputVars, conf);
+	}
+	
+	private static String generateMap(Variable inputDataSet, Set<Variable> outVars) {
+		String code = "";
+		int index = 0;
+		int varID = 1;
+		for(Variable var : outVars){
+			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]")){
+				for(int i=0; i<Configuration.arraySizeBound; i++){
+					code += "else if (key0 == "+varID+" && key1 == "+i+"){ casper_r["+index+"] = values0[casper_j]; }\n\t\t\t";
+					index++;
+				}
+			}
+			else{
+				code += "else if (key0 == "+varID+"){ casper_r["+index+"] = values0[casper_j]; }\n\t\t\t";
+				index++;
+			}
+			varID++;
+		}
+		return code;
+	}
+
+	private static String generateReduce(Variable inputDataSet, Set<Variable> outVars, int depth, SearchConfiguration conf) {
+		String code = "";
+		for(Variable var : outVars) {
+			String args = ", "+inputDataSet.varName+"[casper_i]";
+			for(int i=2; i<conf.valuesTupleSize*2 && conf.tuplesAdded; i++) args += ", 0";
+			code += "\t\tcasper_r[0] = reduce_"+depth+"_"+var.varName+"(casper_r[0]"+args+");\n";
+		}
+		return code;
 	}
 
 	private static String generateSetterFunctions(Set<Variable> sketchFilteredOutputVars) {
@@ -253,7 +421,7 @@ public class SketchCodeGenerator {
 		if(code.length() > 0) code = code.substring(0,code.length()-2);
 		return code;
 	}
-
+	
 	private static String generateGetterFunctions(Set<Variable> sketchFilteredOutputVars, Set<Variable> inputVars) {
 		String code = "";
 		Set<String> handledTypes = new HashSet<String>();
@@ -316,6 +484,17 @@ public class SketchCodeGenerator {
 							"}\n\n";
 				}
 			}
+			else
+			{
+				if(!handledTypes.contains(v.getSketchType()))
+				{
+					handledTypes.add(v.getSketchType());
+					
+					code += v.getSketchType()+" "+v.getSketchType()+"_ite(bit condition, "+v.getSketchType()+" op1, "+v.getSketchType()+" op2){\n\t" +  
+							"	if(condition) return op1; else return op2;\n" + 
+							"}\n\n";
+				}
+			}
 		}
 		
 		for(Variable v : inputVars) {
@@ -336,6 +515,17 @@ public class SketchCodeGenerator {
 					handledTypes.add(v.getSketchType());
 					
 					code += v.getSketchType()+" "+v.getSketchArrayType()+"array_ite(bit condition, "+v.getSketchType()+" op1, "+v.getSketchType()+" op2){\n\t" +  
+							"	if(condition) return op1; else return op2;\n" + 
+							"}\n\n";
+				}
+			}
+			else
+			{
+				if(!handledTypes.contains(v.getSketchType()))
+				{
+					handledTypes.add(v.getSketchType());
+					
+					code += v.getSketchType()+" "+v.getSketchType()+"_ite(bit condition, "+v.getSketchType()+" op1, "+v.getSketchType()+" op2){\n\t" +  
 							"	if(condition) return op1; else return op2;\n" + 
 							"}\n\n";
 				}
@@ -855,7 +1045,7 @@ public class SketchCodeGenerator {
 			reduce_args += ", " + var.varName + "0";
 		}
 		
-		postCond += "return reduce("+reduce_args+") == casper_r;";
+		postCond += "return mapreduce_0("+reduce_args+") == casper_r;";
 		
 		return postCond;
 	}
@@ -885,7 +1075,7 @@ public class SketchCodeGenerator {
 		}
 		
 		for(Variable var : sketchLoopCounters){
-			inv += "return "+var.varName+"0 <= " + var.varName + " && " + var.varName + " <= " + (Configuration.arraySizeBound-1) + " && reduce("+reduce_args+") == casper_r;";
+			inv += "return "+var.varName+"0 <= " + var.varName + " && " + var.varName + " <= " + (Configuration.arraySizeBound-1) + " && mapreduce_0("+reduce_args+") == casper_r;";
 			break;
 		}
 		
@@ -893,7 +1083,7 @@ public class SketchCodeGenerator {
 	}
 	
 	// Generate do map grammars
-	public static String generateMapGrammarInlined(MyWhileExt ext, String type, String index, Map<String, String> blockArrays, SearchConfiguration conf) {
+	public static String generateMapGrammarInlined(MyWhileExt ext, String type, String index, Map<String, String> blockArrays, SearchConfiguration conf, boolean useIndex) {
 		String generator = "";
 		
 		String terminalType = type;
@@ -903,13 +1093,15 @@ public class SketchCodeGenerator {
 		/******** Generate terminal options *******/
 		Map<String,List<String>> terminals = new HashMap<String,List<String>>();
 		
-		for(Variable var : ext.loopCounters){
-			if(casper.Util.compatibleTypes(terminalType,var.getOriginalType()) == 1){
-				String keyType = "String";
-				if(!var.getOriginalType().replace("[]", "").equals("String"))
-					keyType = casper.Util.reducerType(var.getSketchType());
-				if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
-				terminals.get(keyType).add(var.varName);
+		if(useIndex){
+			for(Variable var : ext.loopCounters){
+				if(casper.Util.compatibleTypes(terminalType,var.getOriginalType()) == 1){
+					String keyType = "String";
+					if(!var.getOriginalType().replace("[]", "").equals("String"))
+						keyType = casper.Util.reducerType(var.getSketchType());
+					if(!terminals.containsKey(keyType)) terminals.put(keyType, new ArrayList());
+					terminals.get(keyType).add(var.varName);
+				}
 			}
 		}
 		for(Variable var : ext.inputVars){
@@ -1305,35 +1497,34 @@ public class SketchCodeGenerator {
 			buildExpressions(callarr,expr + callarr.get(i).get(j)+",",exprs,i+1);}
 	}
 
-	public static String generateMapArgsDecl(Variable inputDataSet, Set<Variable> sketchLoopCounters, List<String> postConditionArgsOrder, int keyCount, int valCount, String sketchReducerType, String keyType) {
+	public static String generateMapArgsDecl(Variable inputDataSet, Set<Variable> sketchLoopCounters, List<String> postConditionArgsOrder, SearchConfiguration conf, String sketchReducerType) {
 		String mapArgs = inputDataSet.getSketchType().replace(""+Configuration.arraySizeBound, ""+(Configuration.arraySizeBound-1)) + " " + inputDataSet.varName;
 		
 		for(Variable var : sketchLoopCounters){
 			mapArgs += ", int " + var.varName; break;
 		}
-		for(int i=0; i<keyCount; i++){
-			if(i==0)
-				mapArgs += ", ref int[CASPER_NUM_OUTVARS] keys"+i;
-			else
-				mapArgs += ", ref "+casper.Util.getSketchTypeFromRaw(keyType)+"[CASPER_NUM_OUTVARS] keys"+i;
+		mapArgs += ", ref int[CASPER_NUM_OUTVARS] keys0";
+		for(int i=1; i<conf.keyTupleSize && conf.tuplesAdded; i++){
+			mapArgs += ", ref "+casper.Util.getSketchTypeFromRaw(conf.keyType)+"[CASPER_NUM_OUTVARS] keys"+i;
 		}
-		for(int i=0; i<valCount; i++){
+		mapArgs += ", ref "+casper.Util.getSketchTypeFromRaw(sketchReducerType)+"[CASPER_NUM_OUTVARS] values0";
+		for(int i=1; i<conf.valuesTupleSize && conf.tuplesAdded; i++){
 			mapArgs += ", ref "+casper.Util.getSketchTypeFromRaw(sketchReducerType)+"[CASPER_NUM_OUTVARS] values"+i;
 		}
 		
 		return mapArgs;
 	}
 	
-	public static String generateDomapEmits(String type, MyWhileExt ext, Variable inputDataSet, Set<Variable> sketchLoopCounters, int emitCount, boolean simpleEmits, int keyCount, int valCount, String keyType) {
+	public static String generateDomapEmits(String type, MyWhileExt ext, SearchConfiguration conf) {
 		String emits = "";
 		
 		// Generate args for generator functions
 		String lcName = "";
-		for(Variable var : sketchLoopCounters){
+		for(Variable var : ext.loopCounters){
 			lcName = var.varName;
 			break;
 		}
-		String args = inputDataSet.varName + ", " + lcName;
+		String args = ext.inputDataSet.varName + ", " + lcName;
 		
 		String sketchType = type;
 		if(type == "String")
@@ -1344,20 +1535,18 @@ public class SketchCodeGenerator {
 			typeName = "bitInt";
 		
 		// Include conditionals?
-		if(simpleEmits){
-			int indexC = 0;
+		if(conf.simpleEmits){
 			int indexK = 0;
 			int indexV = 0;
 			// Generate emit code
-			for(int i=0; i<emitCount; i++){
-				for(int j=0; j<keyCount; j++){
-					if(j==0)
-						emits += "keys"+j+"["+i+"] = ??;\n\t";
-					else
-						emits += "keys"+j+"["+i+"] = "+keyType.toLowerCase()+"MapGenerator_k"+indexK+++"("+inputDataSet.varName+", "+lcName+");\n\t\t";
+			for(int i=0; i<conf.emitCount; i++){
+				emits += "keys0["+i+"] = ??;\n\t";
+				for(int j=1; j<conf.keyTupleSize && conf.tuplesAdded; j++){
+					emits += "keys"+j+"["+i+"] = "+Util.getSketchTypeFromRaw(conf.keyType).toLowerCase()+"MapGenerator_k"+indexK+++"("+ext.inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
-				for(int j=0; j<valCount; j++){
-					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator_v"+indexV+++"("+inputDataSet.varName+", "+lcName+");\n\t\t";
+				emits += "values0["+i+"] = "+typeName+"MapGenerator_v"+indexV+++"("+ext.inputDataSet.varName+", "+lcName+");\n\t\t";
+				for(int j=1; j<conf.valuesTupleSize && conf.tuplesAdded; j++){
+					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator_v"+indexV+++"("+ext.inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
 				emits = emits.substring(0,emits.length()-1);
 			}
@@ -1367,28 +1556,26 @@ public class SketchCodeGenerator {
 			int indexK = 0;
 			int indexV = 0;
 			// Generate emit code
-			for(int i=0; i<emitCount; i++){
+			for(int i=0; i<conf.emitCount; i++){
 				emits += "int c"+i+" = ??(1);\n\t";
 				emits += "if(c"+i+"==0){\n\t\t";
-				for(int j=0; j<keyCount; j++){
-					if(j==0)
-						emits += "keys"+j+"["+i+"] = ??;\n\t\t";
-					else
-						emits += "keys"+j+"["+i+"] = "+keyType.toLowerCase()+"MapGenerator_k"+(indexK+j)+"("+inputDataSet.varName+", "+lcName+");\n\t\t";
+				emits += "keys0["+i+"] = ??;\n\t\t";
+				for(int j=1; j<conf.keyTupleSize && conf.tuplesAdded; j++){
+					emits += "keys"+j+"["+i+"] = "+Util.getSketchTypeFromRaw(conf.keyType).toLowerCase()+"MapGenerator_k"+indexK+"("+ext.inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
-				for(int j=0; j<valCount; j++){
-					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator_v"+(indexV+j)+"("+inputDataSet.varName+", "+lcName+");\n\t";
+				emits += "values0["+i+"] = "+typeName+"MapGenerator_v"+(indexV+0)+"("+ext.inputDataSet.varName+", "+lcName+");\n\t";
+				for(int j=1; j<conf.valuesTupleSize && conf.tuplesAdded; j++){
+					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator_v"+(indexV+j)+"("+ext.inputDataSet.varName+", "+lcName+");\n\t";
 				}
 				emits += "} else {\n\t\t";
 				emits += 	"if(booleanMapGenerator_c"+indexC+++"("+args+")){\n\t\t\t";
-				for(int j=0; j<keyCount; j++){
-					if(j==0)
-						emits += "keys"+j+"["+i+"] = ??;\n\t\t\t";
-					else
-						emits += "keys"+j+"["+i+"] = "+keyType.toLowerCase()+"MapGenerator_k"+indexK+++"("+inputDataSet.varName+", "+lcName+");\n\t\t\t";
+				emits += "keys0["+i+"] = ??;\n\t\t\t";
+				for(int j=1; j<conf.keyTupleSize && conf.tuplesAdded; j++){
+					emits += "keys"+j+"["+i+"] = "+Util.getSketchTypeFromRaw(conf.keyType).toLowerCase()+"MapGenerator_k"+indexK+++"("+ext.inputDataSet.varName+", "+lcName+");\n\t\t\t";
 				}
-				for(int j=0; j<valCount; j++){
-					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator_v"+indexV+++"("+inputDataSet.varName+", "+lcName+");\n\t\t";
+				emits += "values0["+i+"] = "+typeName+"MapGenerator_v"+indexV+++"("+ext.inputDataSet.varName+", "+lcName+");\n\t\t";
+				for(int j=1; j<conf.valuesTupleSize && conf.tuplesAdded; j++){
+					emits += "values"+j+"["+i+"] = "+typeName+"MapGenerator_v"+indexV+++"("+ext.inputDataSet.varName+", "+lcName+");\n\t\t";
 				}
 				emits += "}\n\t";
 				emits += "}";
@@ -1406,7 +1593,8 @@ public class SketchCodeGenerator {
 		terminals.put(type, new ArrayList());
 		
 		terminals.get(type).add("val1");
-		for(int i=2; i<conf.valuesTupleSize+2; i++)
+		terminals.get(type).add("val2");
+		for(int i=3; i<conf.valuesTupleSize+3 && conf.tuplesAdded; i++)
 			terminals.get(type).add("val"+i);
 		
 		for(Variable var : ext.inputVars){
@@ -1488,8 +1676,8 @@ public class SketchCodeGenerator {
 		
 		/******** Generate args decl code *******/
 		
-		String argsDecl = type+" val1";
-		for(int i=2; i<conf.valuesTupleSize+2; i++)
+		String argsDecl = type+" val1, " + type+" val2";
+		for(int i=3; i<conf.valuesTupleSize+3 && conf.tuplesAdded; i++)
 			argsDecl += ", "+type+" val"+i;
 		
 		/******** Generate terminals code *******/
@@ -1629,68 +1817,71 @@ public class SketchCodeGenerator {
 		return code;
 	}
 		
-	private static String generateDeclKeysVals(String type, int keyCount, int valCount, String keyType) {
+	private static String generateDeclKeysVals(String type, SearchConfiguration conf) {
 		String code = "";
-		for(int i=0; i<keyCount; i++){
-			if(i==0)
-				code += "int[CASPER_NUM_OUTVARS] keys"+i+";\n\t\t";
-			else
-				code += casper.Util.getSketchTypeFromRaw(keyType)+"[CASPER_NUM_OUTVARS] keys"+i+";\n\t\t";
+		code += "int[CASPER_NUM_OUTVARS] keys0;\n\t\t";
+		for(int i=1; i<conf.keyTupleSize && conf.tuplesAdded; i++){
+			code += casper.Util.getSketchTypeFromRaw(conf.keyType)+"[CASPER_NUM_OUTVARS] keys"+i+";\n\t\t";
 		}
-		for(int i=0; i<valCount; i++){
+		code += type+"[CASPER_NUM_OUTVARS] values0;\n\t\t";
+		for(int i=1; i<conf.valuesTupleSize && conf.tuplesAdded; i++){
 			code += type+"[CASPER_NUM_OUTVARS] values"+i+";\n\t\t";
 		}
 		return code;
 	}
 
-	public static String generateMapArgsCall(Variable inputDataSet, int keyCount, int valCount) {
+	public static String generateMapArgsCall(Variable inputDataSet, SearchConfiguration conf) {
 		String mapArgs = inputDataSet.varName;
 		
-		mapArgs += ", casper_i";
-		
-		for(int i=0; i<keyCount; i++){
+		mapArgs += ", casper_i, keys0";
+
+		for(int i=1; i<conf.keyTupleSize && conf.tuplesAdded; i++){
 			mapArgs += ", keys" + i;
 		}
 		
-		for(int i=0; i<valCount; i++){
+		mapArgs += ", values0";
+		
+		for(int i=1; i<conf.valuesTupleSize && conf.tuplesAdded; i++){
 			mapArgs += ", values" + i;
 		}
 		
 		return mapArgs;
 	}
 	
-	public static String generateInitKeys(String type, int keyCount){
+	public static String generateInitKeys(SearchConfiguration conf){
 		String code = "";
 		
-		for(int i=0; i<keyCount; i++){
-			if(i==0){
-				code += "int key0 = keys0[casper_j];\n\t\t\t";
-			}
-			else{
-				code += casper.Util.getSketchTypeFromRaw(type) + " key"+i+" = keys"+i+"[casper_j];\n\t\t\t";
-			}
+		code += "int key0 = keys0[casper_j];\n\t\t\t";
+		for(int i=1; i<conf.keyTupleSize && conf.tuplesAdded; i++){
+			code += casper.Util.getSketchTypeFromRaw(conf.keyType) + " key"+i+" = keys"+i+"[casper_j];\n\t\t\t";
 		}
 		
 		return code;
 	}
 	
-	public static String generateReduceByKey(Set<Variable> sketchOutputVars, int keyCount, int valCount){
+	public static String generateReduceByKey(Set<Variable> sketchOutputVars, SearchConfiguration conf){
 		String code = "";
 		int index = 0;
 		int varID = 1;
 		for(Variable var : sketchOutputVars){
 			if(var.getSketchType().endsWith("["+Configuration.arraySizeBound+"]")){
 				for(int i=0; i<Configuration.arraySizeBound; i++){
-					String valargs = "";
-					for(int j=0; j<valCount; j++) valargs += "values"+j+"[casper_j],"; valargs = valargs.substring(0,valargs.length()-1);
+					String valargs = "values0[casper_j],";
+					for(int j=1; j<conf.valuesTupleSize && conf.tuplesAdded; j++) 
+						valargs += "values"+j+"[casper_j],"; 
+					valargs = valargs.substring(0,valargs.length()-1);
+					
 					code += "else if (key0 == "+varID+" && key1 == "+i+"){ casper_r["+index+"] = reduce_"+var.varName+"(casper_r["+index+"], "+valargs+"); }\n\t\t\t";
 					index++;
 				}
 			}
 			else{
-				String valargs = "";
-				for(int j=0; j<valCount; j++) valargs += "values"+j+"[casper_j],"; valargs = valargs.substring(0,valargs.length()-1);
-				if(keyCount == 1)
+				String valargs = "values0[casper_j],";
+				for(int j=1; j<conf.valuesTupleSize && conf.tuplesAdded; j++) 
+					valargs += "values"+j+"[casper_j],"; 
+				valargs = valargs.substring(0,valargs.length()-1);
+				
+				if(conf.keyTupleSize == 1)
 					code += "else if (key0 == "+varID+"){ casper_r["+index+"] = reduce_"+var.varName+"(casper_r["+index+"], "+valargs+"); }\n\t\t\t";
 				else
 					code += "else if (key0 == "+varID+" && key1 == 0){ casper_r["+index+"] = reduce_"+var.varName+"(casper_r["+index+"], "+valargs+"); }\n\t\t\t";
@@ -1702,16 +1893,18 @@ public class SketchCodeGenerator {
 		
 		
 	}
-	
-	private static String generateReduceFunctions(String type, Set<Variable> sketchOutputVars, int keyCount, int valCount) {
+		
+	private static String generateReduceFunctions(String type, Set<Variable> sketchOutputVars, SearchConfiguration conf) {
 		String code = "";
 		
 		int index = 0;
-		for(Variable var : sketchOutputVars){
-			String valargs = type + " val1";
-			String valargs2 = "val1";
-			for(int j=2; j<valCount+2; j++) { valargs += ", " + type + " val"+j; valargs2 += ", val"+j; }
-			code += type + " reduce_"+var.varName+"("+valargs+"){\n\treturn "+type.toLowerCase()+"ReduceGenerator"+index+++"("+valargs2+");\n}\n\n";
+		for(int i=0; i<conf.stageCount; i++) {
+			for(Variable var : sketchOutputVars){
+				String valargs = type + " val1, " + type + " val2";
+				String valargs2 = "val1, val2";
+				for(int j=3; j<conf.valuesTupleSize+3 && conf.tuplesAdded; j++) { valargs += ", " + type + " val"+j; valargs2 += ", val"+j; }
+				code += type + " reduce_"+i+"_"+var.varName+"("+valargs+"){\n\treturn "+type.toLowerCase()+"ReduceGenerator"+index+++"("+valargs2+");\n}\n\n";
+			}
 		}
 		
 		return code;
@@ -1750,7 +1943,7 @@ public class SketchCodeGenerator {
 		return  code;
 	}
 	
-	private static String generateMergeOutput(Set<Variable> sketchOutputVars, int keyCount) {
+	private static String generateMergeOutput(Set<Variable> sketchOutputVars) {
 		String code = "";
 		int index = 0;
 		for(Variable var : sketchOutputVars){
@@ -1814,14 +2007,15 @@ public class SketchCodeGenerator {
 		int indexV = 0;
 		for(int i=0; i<conf.emitCount; i++){
 			// Boolean exp generations for conditionals
-			mapGenerators += generateMapGrammarInlined(ext, "Boolean", "_c"+indexC++, blockArrays, conf) + "\n\n";
+			mapGenerators += generateMapGrammarInlined(ext, "Boolean", "_c"+indexC++, blockArrays, conf, true) + "\n\n";
 			// Generators for keys
-			for(int j=1; j<conf.keyTupleSize; j++){
-				mapGenerators += generateMapGrammarInlined(ext, conf.keyType, "_k"+indexK++, blockArrays, conf) + "\n\n";
+			for(int j=1; j<conf.keyTupleSize && conf.tuplesAdded; j++){
+				mapGenerators += generateMapGrammarInlined(ext, Util.getSketchTypeFromRaw(conf.keyType), "_k"+indexK++, blockArrays, conf, true) + "\n\n";
 			}
 			// Generators for values
-			for(int j=0; j<conf.valuesTupleSize; j++){
-				mapGenerators += generateMapGrammarInlined(ext, sketchReducerType, "_v"+indexV++, blockArrays, conf) + "\n\n";
+			mapGenerators += generateMapGrammarInlined(ext, sketchReducerType, "_v"+indexV++, blockArrays, conf, false) + "\n\n";
+			for(int j=1; j<conf.valuesTupleSize && conf.tuplesAdded; j++){
+				mapGenerators += generateMapGrammarInlined(ext, sketchReducerType, "_v"+indexV++, blockArrays, conf, false) + "\n\n";
 			}
 		}
 		//indexK = 0;
@@ -1841,9 +2035,10 @@ public class SketchCodeGenerator {
 		return reduceGenerators;
 	}
 
-	private static String generateDeclBlockArrays(Map<String, String> blockArrays) {
+	private static String generateDeclBlockArrays(Map<String, String> blockArrays, SearchConfiguration conf) {
 		String code = "";
 		
+		code += "int["+conf.stageCount+"] stageTypes = {0};\n";
 		for(String arrName : blockArrays.keySet()){
 			code += "bit["+blockArrays.get(arrName)+"] "+arrName+" = {false};\n";
 		}

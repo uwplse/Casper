@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import casper.JavaLibModel.SketchCall;
 import casper.extension.MyWhileExt;
+import casper.types.MRStage;
 import casper.types.Variable;
 import casper.visit.GenerateScaffold.SearchConfiguration;
 
@@ -259,9 +260,6 @@ public class SketchParser {
 					r = Pattern.compile("(^|\\s)"+Pattern.quote(index)+"\\b");
 					m = r.matcher(stmt[0]);
 					if(m.find()){
-						System.err.println(stmt[0]);
-						System.err.println(index);
-						System.err.println("ohonoes3");
 						return prefix + resolve(container+"["+stmt[1].trim()+"]",mapLines,i,ext) + postfix;
 					}
 				}
@@ -363,211 +361,234 @@ public class SketchParser {
 	    text = sb.toString();
 	    br.close();
 		
-		// Extract map function 
-		Pattern r = Pattern.compile("void map (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
-		Matcher m = r.matcher(text);
-		m.find();
-		String map = m.group(2); 
-		
-		List<String> mapLines = new ArrayList<String>();
-		for(String mapLine : map.split("\n")){
-			if(!mapLine.trim().equals(""))
-				mapLines.add(mapLine.trim());
-		}
-		
-		// Extract map emits
-		// First look for emits wrapped in if conditions
-		r = Pattern.compile("if(.*?)\\{(.*?)\\}",Pattern.DOTALL);
-		m = r.matcher(map);
-		Map<String,String> conditionals = new HashMap<String,String>();
-		while(m.find()){
-			conditionals.put(m.group(1).substring(1, m.group(1).lastIndexOf(")")),m.group(2));
-		}
-		
-		Map<String,List<KvPair>> mapEmits = new HashMap<String,List<KvPair>>();
-		
-		for(String conditional : conditionals.keySet()){
-			String conditional_res = conditional;
-			for(int i=0; i<mapLines.size(); i++){
-				if(mapLines.get(i).contains("if("+conditional+")")){
-					conditional_res = resolve(conditional,mapLines,i,ext);
-					break;
-				}
-			}
-			mapEmits.put(conditional_res,extractMapEmits(conditionals.get(conditional),mapLines,ext,conf.emitCount));
-		}
-		
-		// Remaining emits
-		List<KvPair> allEmits = extractMapEmits(map,mapLines,ext,conf.emitCount);
-		List<KvPair> filteredEmits = new ArrayList<KvPair>();
-		for(KvPair emit : allEmits){
-			boolean keep = true;
-			for(String conditional : mapEmits.keySet()){
-				if(mapEmits.get(conditional).contains(emit)){
-					keep = false;
-					break;
-				}
-			}
-			if(keep)
-				filteredEmits.add(emit);
-		}
-		mapEmits.put("noCondition",filteredEmits);
-		
-		// Extract map flags
-		r = Pattern.compile("mapExp(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
-		m = r.matcher(map);
 		ext.blockExprs.add(new HashMap<String,String>());
-		while(m.find()){
-			ext.blockExprs.get(ext.blockExprs.size()-1).put("mapExp"+m.group(1), ext.grammarExps.get("mapExp"+m.group(1)).get(Integer.parseInt(m.group(3))));
-		}
-
-		r = Pattern.compile("_term_flag(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
-		m = r.matcher(map);
-		while(m.find()){
-			ext.termValuesTemp.put("_term_flag"+m.group(1), m.group(3));
-		}
 		
-		// Extract reduce functions
-		Map<String,String> reduceExps = new HashMap<String,String>();
-		int index = 1;
-		for(Variable var : outputVars){
-			r = Pattern.compile("void "+Pattern.quote("reduce_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
-			m = r.matcher(text);
-			if(m.find()){
-				// Get reduce function for this output variable
-				String reduce = m.group(2);
+		// Build new solution
+		ext.solution = new ArrayList<MRStage>();
+	    
+	    // Extract all MR stages
+	    for(int i=0; i<conf.stageCount; i++) {
+	    	// Extract mapreduce function body
+	    	Pattern r = Pattern.compile("void mapreduce_"+i+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+			Matcher m = r.matcher(text);
+			m.find();
+			String mrbody = m.group(2);
+			
+			// Extract stage type from function body
+			int stageType = -1;
+			r = Pattern.compile("stageTypes(.*?)\\["+i+"\\] = (0|1|2|3);");
+			m = r.matcher(mrbody);
+			m.find();
+			stageType = Integer.parseInt(m.group(2));
+			
+			Map<String,List<KvPair>> mapEmits = new HashMap<String,List<KvPair>>();
+			if(stageType == 0) {
+				// Extract map function 
+				r = Pattern.compile("void do_map_"+i+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+				m = r.matcher(text);
+				m.find();
+				String map = m.group(2);
 				
-				// Split code to lines
-				List<String> reduceLines = new ArrayList<String>();
-				for(String reduceLine : reduce.split("\n")){
-					if(!reduceLine.trim().equals(""))
-						reduceLines.add(reduceLine.trim());
+				List<String> mapLines = new ArrayList<String>();
+				for(String mapLine : map.split("\n")){
+					if(!mapLine.trim().equals(""))
+						mapLines.add(mapLine.trim());
 				}
 				
-				for(int i=reduceLines.size()-1; i>=0; i--){
-					r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
-					m = r.matcher(reduceLines.get(i));
-					if(m.find()){
-						reduceExps.put(var.varName, "("+resolve(m.group(1),reduceLines,i,ext)+")");
-						break;
-					}
-				}
-				
-				// Extract reduce flags
-				r = Pattern.compile("reduceExp(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
-				m = r.matcher(reduce);
+				// Extract map emits
+				// First look for emits wrapped in if conditions
+				r = Pattern.compile("if(.*?)\\{(.*?)\\}",Pattern.DOTALL);
+				m = r.matcher(map);
+				Map<String,String> conditionals = new HashMap<String,String>();
 				while(m.find()){
-					ext.blockExprs.get(ext.blockExprs.size()-1).put("reduceExp"+m.group(1), ext.grammarExps.get("reduceExp"+m.group(1)).get(Integer.parseInt(m.group(3))));
-					for(int i=2; i<conf.valuesTupleSize+2; i++){
-						if(!reduceExps.get(var.varName).contains("val"+i)){
-							for(String conditional : mapEmits.keySet()){
-								for(KvPair kvp : mapEmits.get(conditional)){
-									if(kvp.keys.get(0).equals(Integer.toString(index))){
-										//ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
-										Map<String,String> temp = new HashMap<String,String>();
-										temp.putAll(ext.termValuesTemp);
-										for(String key : ext.termValuesTemp.keySet()){
-											if(key.contains("_map_v"+((kvp.index*conf.valuesTupleSize)+(i-2)))){
-											//	temp.remove(key);
+					conditionals.put(m.group(1).substring(1, m.group(1).lastIndexOf(")")),m.group(2));
+				}
+				
+				for(String conditional : conditionals.keySet()){
+					String conditional_res = conditional;
+					for(int j=0; j<mapLines.size(); j++){
+						if(mapLines.get(j).contains("if("+conditional+")")){
+							conditional_res = resolve(conditional,mapLines,j,ext);
+							break;
+						}
+					}
+					mapEmits.put(conditional_res,extractMapEmits(conditionals.get(conditional),mapLines,ext,conf.emitCount));
+				}
+				
+				// Remaining emits
+				List<KvPair> allEmits = extractMapEmits(map,mapLines,ext,conf.emitCount);
+				List<KvPair> filteredEmits = new ArrayList<KvPair>();
+				for(KvPair emit : allEmits){
+					boolean keep = true;
+					for(String conditional : mapEmits.keySet()){
+						if(mapEmits.get(conditional).contains(emit)){
+							keep = false;
+							break;
+						}
+					}
+					if(keep)
+						filteredEmits.add(emit);
+				}
+				mapEmits.put("noCondition",filteredEmits);
+				
+				// Extract map flags
+				r = Pattern.compile("mapExp(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
+				m = r.matcher(map);
+				while(m.find()){
+					ext.blockExprs.get(ext.blockExprs.size()-1).put("mapExp"+m.group(1), ext.grammarExps.get("mapExp"+m.group(1)).get(Integer.parseInt(m.group(3))));
+				}
+
+				r = Pattern.compile("_term_flag(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
+				m = r.matcher(map);
+				while(m.find()){
+					ext.termValuesTemp.put("_term_flag"+m.group(1), m.group(3));
+				}
+				
+
+				MRStage stage = new MRStage();
+				stage.stageType = stageType;
+				stage.mapEmits = mapEmits;
+				ext.solution.add(stage);
+			}
+			else if(stageType == 1){
+				// Extract reduce functions
+				Map<String,String> reduceExps = new HashMap<String,String>();
+				int index = 1;
+				for(Variable var : outputVars){
+					r = Pattern.compile("void "+Pattern.quote("reduce_"+i+"_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+					m = r.matcher(text);
+					if(m.find()){
+						// Get reduce function for this output variable
+						String reduce = m.group(2);
+						
+						// Split code to lines
+						List<String> reduceLines = new ArrayList<String>();
+						for(String reduceLine : reduce.split("\n")){
+							if(!reduceLine.trim().equals(""))
+								reduceLines.add(reduceLine.trim());
+						}
+						
+						for(int j=reduceLines.size()-1; j>=0; j--){
+							r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
+							m = r.matcher(reduceLines.get(j));
+							if(m.find()){
+								reduceExps.put(var.varName, "("+resolve(m.group(1),reduceLines,j,ext)+")");
+								break;
+							}
+						}
+						
+						// Extract reduce flags
+						r = Pattern.compile("reduceExp(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
+						m = r.matcher(reduce);
+						while(m.find()){
+							ext.blockExprs.get(ext.blockExprs.size()-1).put("reduceExp"+m.group(1), ext.grammarExps.get("reduceExp"+m.group(1)).get(Integer.parseInt(m.group(3))));
+							for(int j=2; j<conf.valuesTupleSize+2; j++){
+								if(!reduceExps.get(var.varName).contains("val"+j)){
+									for(String conditional : mapEmits.keySet()){
+										for(KvPair kvp : mapEmits.get(conditional)){
+											if(kvp.keys.get(0).equals(Integer.toString(index))){
+												//ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
+												Map<String,String> temp = new HashMap<String,String>();
+												temp.putAll(ext.termValuesTemp);
+												for(String key : ext.termValuesTemp.keySet()){
+													if(key.contains("_map_v"+((kvp.index*conf.valuesTupleSize)+(j-2)))){
+													//	temp.remove(key);
+													}
+												}
+												ext.termValuesTemp = temp;
+												//ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
 											}
 										}
-										ext.termValuesTemp = temp;
-										//ext.blockExprs.get(ext.blockExprs.size()-1).remove("mapExp_v"+((kvp.index*ext.valCount)+(i-2)));
 									}
 								}
 							}
 						}
+						
+						r = Pattern.compile("_term_flag(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
+						m = r.matcher(reduce);
+						while(m.find()){
+							ext.termValuesTemp.put("_term_flag"+m.group(1), m.group(3));
+						}
 					}
+					else {
+						if(debug)
+							System.err.println("Something unexpected happened in the parser.");
+					}
+					index++;
 				}
 				
-				r = Pattern.compile("_term_flag(.*?)__ANONYMOUS(.*?)\\[([0-9]+)\\] = 1;");
-				m = r.matcher(reduce);
-				while(m.find()){
-					ext.termValuesTemp.put("_term_flag"+m.group(1), m.group(3));
-				}
-			}
-			else {
-				if(debug)
-					System.err.println("Something unexpected happened in the parser.");
-			}
-			index++;
-		}
-		
-		// Extract init functions
-		Map<String,String> initExps = new HashMap<String,String>();
-		
-		for(Variable var : outputVars){
-			r = Pattern.compile("void "+Pattern.quote("init_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
-			m = r.matcher(text);
-			if(m.find()){
-				// Get init function for this output variable
-				String init = m.group(2);
+				// Extract init functions
+				Map<String,String> initExps = new HashMap<String,String>();
 				
-				// Split code to lines
-				List<String> initLines = new ArrayList<String>();
-				for(String initLine : init.split("\n")){
-					if(!initLine.trim().equals(""))
-						initLines.add(initLine.trim());
-				}
-				
-				for(int i=initLines.size()-1; i>=0; i--){
-					r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
-					m = r.matcher(initLines.get(i));
+				for(Variable var : outputVars){
+					r = Pattern.compile("void "+Pattern.quote("init_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+					m = r.matcher(text);
 					if(m.find()){
-						initExps.put(var.varName, resolve(m.group(1),initLines,i,ext));
-						break;
+						// Get init function for this output variable
+						String init = m.group(2);
+						
+						// Split code to lines
+						List<String> initLines = new ArrayList<String>();
+						for(String initLine : init.split("\n")){
+							if(!initLine.trim().equals(""))
+								initLines.add(initLine.trim());
+						}
+						
+						for(int j=initLines.size()-1; j>=0; j--){
+							r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
+							m = r.matcher(initLines.get(j));
+							if(m.find()){
+								initExps.put(var.varName, resolve(m.group(1),initLines,j,ext));
+								break;
+							}
+						}
 					}
-				}
-			}
-			else {
-				if(debug)
-					System.err.println("Something unexpected happened in the parser.");
-			}
-			 
-		}
-		
-		// Extract merge functions
-		Map<String,String> mergeExps = new HashMap<String,String>();
-		
-		for(Variable var : outputVars){
-			r = Pattern.compile("void "+Pattern.quote("merge_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
-			m = r.matcher(text);
-			if(m.find()){
-				// Get merge function for this output variable
-				String merge = m.group(2);
-				
-				// Split code to lines
-				List<String> mergeLines = new ArrayList<String>();
-				for(String mergeLine : merge.split("\n")){
-					if(!mergeLine.trim().equals(""))
-						mergeLines.add(mergeLine.trim());
+					else {
+						if(debug)
+							System.err.println("Something unexpected happened in the parser.");
+					}
+					 
 				}
 				
-				for(int i=mergeLines.size()-1; i>=0; i--){
-					r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
-					m = r.matcher(mergeLines.get(i));
+				// Extract merge functions
+				Map<String,String> mergeExps = new HashMap<String,String>();
+				
+				for(Variable var : outputVars){
+					r = Pattern.compile("void "+Pattern.quote("merge_"+var.varName)+" (.*?)\\{(.*?)\n\\}",Pattern.DOTALL);
+					m = r.matcher(text);
 					if(m.find()){
-						mergeExps.put(var.varName, resolve(m.group(1),mergeLines,i,ext));
-						break;
+						// Get merge function for this output variable
+						String merge = m.group(2);
+						
+						// Split code to lines
+						List<String> mergeLines = new ArrayList<String>();
+						for(String mergeLine : merge.split("\n")){
+							if(!mergeLine.trim().equals(""))
+								mergeLines.add(mergeLine.trim());
+						}
+						
+						for(int j=mergeLines.size()-1; j>=0; j--){
+							r = Pattern.compile(Pattern.quote("_out = ")+"(.*?);",Pattern.DOTALL);
+							m = r.matcher(mergeLines.get(j));
+							if(m.find()){
+								mergeExps.put(var.varName, resolve(m.group(1),mergeLines,j,ext));
+								break;
+							}
+						}
+					}
+					else {
+						if(debug)
+							System.err.println("Something unexpected happened in the parser.");
 					}
 				}
+				
+				MRStage stage = new MRStage();
+				stage.stageType = stageType;
+				stage.reduceExps = reduceExps;
+				stage.initExps  = initExps;
+				stage.mergeExps = mergeExps;
+				ext.solution.add(stage);
 			}
-			else {
-				if(debug)
-					System.err.println("Something unexpected happened in the parser.");
-			}
-		}
-		
-		ext.mapEmits = mapEmits;
-		ext.initExps = initExps;
-		ext.reduceExps = reduceExps;
-		ext.mergeExps = mergeExps;
-		
-		if(debug){
-			System.err.println(mapEmits);
-			System.err.println(initExps);
-			System.err.println(reduceExps);
-			System.err.println(mergeExps);
-		}
+	    }
 	}	
 }

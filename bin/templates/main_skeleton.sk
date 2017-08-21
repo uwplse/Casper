@@ -47,39 +47,15 @@ bit loopInvariant(<loop-inv-args-decl>){
 /******************************************************************************/
 /* MapReduce Implementation                                                   */
 
+<stages-generator>
+
 <map-generators>
 
-void map (<map-args-decl>)
-{
-  	<map-emits>
-}
-
+<domaps>
 <reduce-generator>
 
 <init-functions>
 
 <reduce-functions><merge-functions>
 
-<output-type> [<r-size>] reduce (<reduce-args-decl>) {
-	<output-type> [<r-size>] casper_r;
-	<casper-r-init>
-	for (int casper_i = <lc>0; casper_i < <lc>; ++casper_i)
-	{
-		<init-keys-vals>
-		int num_pairs = CASPER_NUM_OUTVARS;
-
-		map(<map-args-call>);
-
-		for (int casper_j = 0; casper_j < num_pairs; ++casper_j)
-		{ 
-	  		<init-keys>
-	  		if(key0 == 0) {	}
-	  		<reduce-by-key>
-	  		else{ assert 0; }
-		} 
-	}
-
-	<merge-r>
-
-	return casper_r;
-}
+<mr-stages>

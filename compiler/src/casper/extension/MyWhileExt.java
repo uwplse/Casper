@@ -22,6 +22,7 @@ import casper.JavaLibModel.SketchCall;
 import casper.SketchParser.KvPair;
 import casper.types.CustomASTNode;
 import casper.types.Expression;
+import casper.types.MRStage;
 import casper.types.Variable;
 import polyglot.ast.Node;
 import polyglot.util.Pair;
@@ -121,12 +122,15 @@ public class MyWhileExt extends MyStmtExt {
 	public Map<String,Boolean> generateCode = new HashMap<String,Boolean>();
 	
 	// Current generated Solution
+	public List<MRStage> solution = null;
 	public Map<String,List<KvPair>> mapEmits = null;
 	public Map<String,String> reduceExps = null;
 	public Map<String,String> initExps = null;
 	public Map<String,String> mergeExps = null;
 	
 	// List of verified solutions
+	public List<List<MRStage>> verifiedSolutions = new ArrayList<List<MRStage>>();
+	
 	public List<Map<String,List<KvPair>>> verifiedMapEmits = new ArrayList<Map<String,List<KvPair>>>();
 	public List<Map<String,String>> verifiedReduceExps = new ArrayList<Map<String,String>>();
 	public List<Map<String,String>> verifiedInitExps = new ArrayList<Map<String,String>>();

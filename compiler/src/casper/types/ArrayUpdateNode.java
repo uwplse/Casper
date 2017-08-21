@@ -3,6 +3,8 @@ package casper.types;
 import java.util.List;
 import java.util.Map;
 
+import casper.Util;
+
 public class ArrayUpdateNode  extends CustomASTNode{
 
 	public CustomASTNode array;
@@ -26,7 +28,7 @@ public class ArrayUpdateNode  extends CustomASTNode{
 	}
 	 
 	public String toString(){
-		return type+"_setter(" + array + ","+ index +"," + value + ")";
+		return Util.getSketchTypeFromRaw(type)+"_setter(" + array + ","+ index +"," + value + ")";
 	}
 
 	@Override

@@ -3,13 +3,22 @@ package casper.types;
 import java.util.List;
 import java.util.Map;
 
+import casper.Configuration;
+import casper.Util;
+
 public class ArrayAccessNode extends CustomASTNode{
 
 	public CustomASTNode array;
 	public CustomASTNode index;
 	
-	public ArrayAccessNode(String t, CustomASTNode a, CustomASTNode i) {
-		super(t+"_getter("+a+","+i+")");
+	private static String fixType(String t) {
+		return (Util.getSketchTypeFromRaw(t).endsWith("["+Configuration.arraySizeBound+"]") ? 
+					Util.getSketchTypeFromRaw(t).replace("["+Configuration.arraySizeBound+"]","") : 
+					Util.getSketchTypeFromRaw(t));
+	}
+	
+	public ArrayAccessNode(String t, CustomASTNode a, CustomASTNode i) {		
+		super(fixType(t)+"_getter("+a+","+i+")");
 		type = t;
 		array = a;
 		index = i;

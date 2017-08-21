@@ -46,8 +46,18 @@ function casper_math_ceil(val: int): int
 {
 	(val + 9) / 10
 }
-<setter-functions>
+function int_setter(arrayvar: seq<int>, index: int, value: int value) : seq<int> {
+	arrayvar[index := value]
+}
 
-<getter-functions>
+function int_getter(arrayvar: seq<int>, index: int) : int {
+	arrayvar[index]
+}
 
-<ite-functions>
+function int_ite(condition: bool, op1: int, op2: int) : int {
+	if condition then op1 else op2
+}
+
+function intarray_ite(condition: bool, op1: seq<int>, op2: seq<int>) : seq<int> {
+	if condition then op1 else op2
+}

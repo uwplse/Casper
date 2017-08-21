@@ -588,7 +588,7 @@ public class JavaLibModel {
 						break;	
 				}
 			default:
-				if(debug || true){
+				if(debug){
 					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
 				}
 		}
@@ -695,7 +695,7 @@ public class JavaLibModel {
 	    				}
 						break;
 					default:
-						if(debug || true){
+						if(debug){
 							System.err.println("Method " + id + " of java.util.Map not currently supported. Please extend the JavaLibModel.");
 						}
 						break;
@@ -732,7 +732,7 @@ public class JavaLibModel {
 				}
 				break;
 			default:
-				if(debug || true){
+				if(debug){
 					System.err.println("Container type " + targetTypeMain + " not currently supported. Please extend the JavaLibModel.");
 					System.exit(1);
 				}
