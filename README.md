@@ -1,3 +1,5 @@
+### Note: This project is bit-rotted and no longer actively maintained by the authors. If you're interested in exploring the techniques behind Casper or in building your own Verified Lifting compiler, check out [Metalift](https://github.com/metalift/metalift)!
+
 # Casper
 Casper is a compiler for automatically re-targeting sequential Java code fragments to Apache Spark. 
 Casper works by synthesizing high level MapReduce program specifications from raw un-annotated 
@@ -80,8 +82,7 @@ you run the tool as follows:
 ### Benchmarks
 To help you get started, we have added some example programs under `/bin/benchmarks`. In
 some cases the synthesizer may run for a very long time or require a significant amount of
-memory. Casper is currently under development and we are rolling out new features and bug
-fixes frequently. If you experience any difficulties, contact us through our [mailing-list](https://mailman.cs.washington.edu/mailman/listinfo/casper-users).
+memory.
 
 ### Contact
 Casper is written by [Maaz Ahmad](http://homes.cs.washington.edu/~maazsaf/) at the [University of Washington](http://www.washington.edu/).
