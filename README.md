@@ -1,4 +1,4 @@
-### Note: This project is bit-rotted and no longer actively maintained by the authors. If you're interested in exploring the techniques behind Casper or in building your own Verified Lifting compiler, check out [Metalift](https://github.com/metalift/metalift)!
+### Note: This project is a few years old and is not currently maintained. If you're interested in exploring the techniques behind Casper or in building your own Verified Lifting compiler, check out [Metalift](https://github.com/metalift/metalift)!
 
 # Casper
 Casper is a compiler for automatically re-targeting sequential Java code fragments to Apache Spark. 
